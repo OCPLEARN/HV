@@ -8,6 +8,7 @@ public class HvApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(HvApplication.class, args);
+		
 	}
 
 }
