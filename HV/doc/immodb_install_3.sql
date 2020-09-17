@@ -1,6 +1,19 @@
+#CREATE USER 'immodb'@'localhost' IDENTIFIED BY 'Pa$$w0rd';
+#CREATE USER 'immodb'@'127.0.0.1' IDENTIFIED BY 'Pa$$w0rd';
+
+#GRANT ALL ON immodb.* TO 'immodb'@'localhost';
+#GRANT ALL ON immodb.* TO 'immodb'@'127.0.0.1';
+
+#USE mysql;
+#SELECT * FROM db;
+
 DROP DATABASE IF EXISTS immodb;
 
 CREATE DATABASE immodb CHARACTER SET utf8 COLLATE utf8_general_ci; 
+
+#GRANT ALL PRIVILEGES ON immodb.* TO 'immodb'@'127.0.0.1' IDENTIFIED BY 'Pa$$w0rd';
+#immodb = user , immodb.* = alle Tabellen in DB
+
 
 USE immodb;
 
