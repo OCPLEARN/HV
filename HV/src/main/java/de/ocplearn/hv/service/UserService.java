@@ -1,6 +1,8 @@
 package de.ocplearn.hv.service;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.PropertyManager;
@@ -9,13 +11,16 @@ import de.ocplearn.hv.model.Tenant;
 /**
  * Create, update, delete, read and validate users
  */
+
 public interface UserService {
+	
+	
 
     /**
      * Finds user by login name
      * 
      * @param login name of user
-     * @return user instance or null, if not found
+     * @return LoginUser instance or null, if not found
      */
     LoginUser findUserByLoginUserName( String loginUserName );
 

@@ -8,5 +8,29 @@
 <body>
 	<h1>Welcome to ...</h1>
 	<img th:src="@{/images/TacoCloud.png}"/>
+	
+	<div th:switch="${LoginUserNamen}">
+		<div th:case="null"><strong>No LoginUserNamen on your list</strong></div>
+		<div th:case="*">
+		
+		<div th:if="${LoginUserNamen.empty}"><strong>No LoginUserNamen on your list</strong></div>
+                    <div th:each="LoginUser: ${LoginUserNamen}">
+					      <span th:text="${LoginUser.loginUserName}"></span>
+		 </div>			
+		</div>
+	</div>
+	
 </body>
 </html>
+
+
+
+         <main th:switch="${products}">
+                <div th:case="null"><strong>No products on your list</strong></div>
+                <div th:case="*">
+                    <div th:if="${products.empty}"><strong>No products on your list</strong></div>
+                    <div th:each="product: ${products}">
+                        
+                        <span th:text="${product.id}"></span>
+                        <span th:text="${product.name}"></span>
+                        <span th

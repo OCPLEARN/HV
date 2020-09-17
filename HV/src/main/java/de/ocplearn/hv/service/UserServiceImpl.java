@@ -22,6 +22,9 @@ import java.util.List;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class UserServiceImpl implements UserService {
 
     @Override
