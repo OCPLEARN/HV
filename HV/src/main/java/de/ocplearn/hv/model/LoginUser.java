@@ -243,13 +243,18 @@ public class LoginUser implements Comparable<LoginUser> {
                 u.setRole( Role.valueOf( result.getString("loginUserRole") )  );
                 u.setLocale(new Locale(result.getString("locale"))  );   
                 list.add(u);
-                
-                returnConnection(con);
             }
+            
+            returnConnection(con);
+            
         }catch( SQLException e ){
             e.printStackTrace();
             return null;
         }         
+        
+        if (list.isEmpty()) {
+        	list.add(null);
+        }
         
         return list;
     }
@@ -304,28 +309,7 @@ public class LoginUser implements Comparable<LoginUser> {
         return findByColumnName("loginUserRole", role.name());
     }   
     
-    /* get a connection from pool */
-    private static Connection getConnection() {
-    	if ( Config.useDBConnectionPool() ) {
-    		return pool.getConnection();	
-    	}else {
-    		try {
-				return ds.getConnection();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				return null;
-			}
-    	}
-    }
-    
-    /* return connection to poo */
-    private static void returnConnection( Connection connection ) {
-    	if ( Config.useDBConnectionPool() ) {
-    		pool.returnConnection(connection);	
-    	}
-    	
-    }    
-    
+ 
     /**
      * Validates credentials 
      * 
@@ -352,6 +336,8 @@ public class LoginUser implements Comparable<LoginUser> {
 
                 userMap = StaticHelpers.createHash( password, salt );
                 
+                returnConnection(con);
+                
             } catch (SQLException e) {
                 e.printStackTrace(); System.exit(-1);            
             }
@@ -370,16 +356,41 @@ public class LoginUser implements Comparable<LoginUser> {
                 stmt.setString(1, loginUserName  );
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()){
-                    return true;
+                	returnConnection(con);
+                	return true;
                 }else{
+                	returnConnection(con);
                     return false;
                 }
+                
             } catch (SQLException e) {
                 e.printStackTrace(); System.exit(-1);            
             }            
         
         return false;
     }
-   
+    
+    /* get a connection from pool */
+    private static Connection getConnection() {
+    	if ( Config.useDBConnectionPool() ) {
+    		return pool.getConnection();	
+    	}else {
+    		try {
+				return ds.getConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return null;
+			}
+    	}
+    }
+    
+    /* return connection to poo */
+    private static void returnConnection( Connection connection ) {
+    	if ( Config.useDBConnectionPool() ) {
+    		pool.returnConnection(connection);	
+    	}
+    	
+    }    
+    
 }
 

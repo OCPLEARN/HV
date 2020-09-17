@@ -10,12 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.service.UserService;
+import de.ocplearn.hv.service.UserServiceImpl;
 
 @Controller
 public class HomeController {
 	
-	@Autowired
-	private UserService userService;
+	//@Autowired
+	private UserService userService = new UserServiceImpl();
 	
 	@GetMapping("/")
 	public String home(Model model) {

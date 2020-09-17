@@ -188,6 +188,16 @@ public class DBConnectionPool {
 	 * @param con 
 	 * */
 	public void returnConnection( Connection con ) {
+		
+		try {
+			if ( con.isClosed() ) {
+				System.out.println("returned sql connection is closed!");
+				logger.log(Level.WARNING, "returned sql connection is closed!");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		this.connListUsed.remove(con);
 		this.connList.add(con);
 		checkPoolSize();
