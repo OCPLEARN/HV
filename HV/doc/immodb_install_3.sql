@@ -256,5 +256,5 @@ CREATE TABLE building (
 		REFERENCES unit ( id )          
  );
  
- INSERT INTO loginUser (id,loginUserName,passwHash,salt,loginUserRole,locale) VALUE (null,'admin','40, -103, -54, -81, 71, 54, 60, 99, 80, -111, -77, -74, -32, -8, 54, 5','65, 120, 14, -58, -105, -71, -10, -58, 75, 72, 122, -42, 112, 93, -112, -74, 12, -9, 10, 87, 95, -57, 61, -2, -9, 20, 22, -54, 68, -31, -33, 58','ADMIN','en_US');
+ INSERT INTO loginUser (id,loginUserName,passwHash,salt,loginUserRole,locale) VALUE (null,'admin',x'DAABCAD4BF38345219D82F6ABBB48527',x'54531AECA828837A01839EF38D52F1466A363A3F09FB634FD5B461D2BB638E22','ADMIN','de_DE');
  
