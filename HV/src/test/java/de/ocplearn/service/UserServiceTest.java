@@ -7,12 +7,16 @@ package de.ocplearn.service;
 
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import javax.sql.DataSource;
 
 import org.junit.jupiter.api.Assertions;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import de.ocplearn.hv.dto.LoginUserDto;
+import de.ocplearn.hv.mapper.LoginUserMapper;
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.service.UserService;
@@ -23,18 +27,22 @@ import de.ocplearn.hv.util.MySQLDataSourceFactory;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 /**
- *
- * @author Andreas Mann (lokal)
+ * Tests for UserService
  */
 public class UserServiceTest {
     
-    private UserService us = new UserServiceImpl();  
+	private LoginUserMapper loginUserMapper;
+	
+	private static UserService userService;
+	
+	private static UserServiceImpl userServiceImpl;
+	
+	private static DataSource dataSource;
+	
+    private Supplier<LoginUserDto> loginUserDtoSuppl = LoginUserDto::new;
     
-    private Supplier<LoginUser> loginUserSuppl = LoginUser::new;
+    // -------------------------------------------------------------------------
     
-    private static DataSource ds;
-    
-        
     @org.junit.jupiter.api.AfterAll
     public static void tearDownClass() throws Exception {
     }
@@ -51,12 +59,16 @@ public class UserServiceTest {
     @org.junit.jupiter.api.BeforeAll
     public static void setUpClass() throws Exception {
     	
+    	userServiceImpl = new UserServiceImpl();
     	
-    	System.out.println("useDBConnectionPool() = " + Config.useDBConnectionPool());
-    	Config.useDBConnectionPool();
+    	userServiceImpl.loginUserMapper = LoginUserMapper.INSTANCE;
     	
-    	MySQLDataSourceFactory.initDS();
-    	ds = MySQLDataSourceFactory.getMySQLDataSource();
+    	userService = userServiceImpl;
+    	
+    	//System.out.println("useDBConnectionPool() = " + Config.useDBConnectionPool());
+    	
+    	//MySQLDataSourceFactory.initDS();
+    	//dataSource = MySQLDataSourceFactory.getMySQLDataSource();
     }    
     
     /**
@@ -66,15 +78,14 @@ public class UserServiceTest {
     public void testCreateUser() {
         System.out.println("testing UserService insert ...");
         
-        us = new UserServiceImpl();
+        LoginUserDto adminUser = getLoginUser();
         
-        LoginUser adminUser = getLoginUser();
+        Optional<LoginUserDto> opt = userService.createUser(adminUser, "Pa$$w0rd");
         
-        boolean result = us.createUser(adminUser, "Pa$$w0rd");
-        Assertions.assertEquals(true, result);
+        Assertions.assertEquals(true, opt.isPresent());
         
         boolean idIsSet = true;
-        boolean value = adminUser.getId() > 0 ;
+        boolean value = opt.get().getId() > 0 ;
         Assertions.assertEquals(idIsSet, value);
         
     }    
@@ -86,20 +97,19 @@ public class UserServiceTest {
     public void testUpdateUser() {
         System.out.println("testing UserService update ...");
         
-        us = new UserServiceImpl();
-        
         // Given
         //LoginUser u = us.findUserById(1);
-        LoginUser u = us.findUserByLoginUserName("admin");
-        if ( u != null ) {
+        LoginUserDto loginUserDto = userService.findUserByLoginUserName("admin");
+        if ( loginUserDto != null ) {
             // When
-        	Role role = u.getRole();
-            u.setRole(Role.OWNER);
-            u.save();
-            u.setRole(role);
-            u.save();
-            // Then
-            Assertions.assertEquals(role, u.getRole());        	
+        	Role role = loginUserDto.getRole();	// remember current role
+        	loginUserDto.setRole(Role.OWNER);	// set to owner
+        	userService.updateUser(loginUserDto);
+        	//loginUserDto.save();
+        	loginUserDto.setRole(role);			// set to previous role
+        	userService.updateUser(loginUserDto);
+            // Then								
+            Assertions.assertEquals(role, loginUserDto.getRole());    // both should be same    	
         }else {
         	System.out.println("!!! check findUserById(1) !!! table empty?");
         	Assertions.assertEquals(true, false);
@@ -108,12 +118,13 @@ public class UserServiceTest {
         
     }
 
-    private LoginUser getLoginUser() {
-    	
-    	us = new UserServiceImpl();
+    /*
+     * create an admin class loginUser with german locale
+     * */
+    private LoginUserDto getLoginUser() {
         
         String loginUserName = "admin" + System.currentTimeMillis();
-        LoginUser adminUser = loginUserSuppl.get();
+        LoginUserDto adminUser = loginUserDtoSuppl.get();
         
         adminUser.setLoginUserName(loginUserName);
         adminUser.setRole(Role.ADMIN);

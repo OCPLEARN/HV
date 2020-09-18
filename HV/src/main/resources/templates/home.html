@@ -2,12 +2,47 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="ISO-8859-1">
-<title>Taco Cloud</title>
+
+	<title>Taco Cloud</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!--     <link rel="stylesheet" type="text/css" media="all" href="../../css/gtvg.css" th:href="@{/css/gtvg.css}" /> -->
+    <link rel="stylesheet" type="text/css" media="all" href="/bootstrap/css/bootstrap.min.css" th:href="@{/bootstrap/css/bootstrap.min.css}" />
+    
+	<!-- JS -->
+	<script src="/jquery/jquery-3.5.1.min.js" th:src="@{/jquery/jquery-3.5.1.min.js}"></script>
+	<script src="/bootstrap/js/bootstrap.bundle.min.js" th:src="@{/bootstrap/js/bootstrap.bundle.min.js}"></script>    
+
 </head>
 <body>
+<!-- #### container begin #################################################  -->
+<div class="container">
+
 	<h1>Welcome to ...</h1>
-	<img th:src="@{/images/TacoCloud.png}"/>
+<!-- 	<img th:src="@{/images/TacoCloud.png}"/> -->
+	
+	<p th:text="${loginUserName}">Authenticated ?</p>
+	
+	<table class="table table-striped table-hover table-sm">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">loginUserName</th>
+          <th scope="col">role</th>
+          <th scope="col">-</th>
+        </tr>
+      </thead>	
+
+      <tbody th:remove="all-but-first">
+        <tr th:each="user : ${LoginUserNamen}" th:class="${userStat.odd}? 'odd'">
+          <td th:text="${user.id}">id</td>
+          <td th:text="${user.loginUserName}">Onions</td>
+          <td th:text="${user.role}">2.41</td>
+          <td></td>
+        </tr>      
+      </tbody>      
+      
+	</table>
 	
 	<div th:switch="${LoginUserNamen}">
 		<div th:case="null"><strong>No LoginUserNamen on your list</strong></div>
@@ -20,5 +55,8 @@
 		</div>
 	</div>
 	
+
+<!-- #### container end ###################################################  -->
+</div>	
 </body>
 </html>                 

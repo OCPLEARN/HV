@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		lang = "en">
+  <head>
+    <title>immo test</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!--     <link rel="stylesheet" type="text/css" media="all" href="../../css/gtvg.css" th:href="@{/css/gtvg.css}" /> -->
+    <link rel="stylesheet" type="text/css" media="all" href="../../bootstrap/css/bootstrap.min.css" th:href="@{/bootstrap/css/bootstrap.min.css}" />
+    
+	<!-- JS -->
+	<script src="../../jquery/jquery-3.5.1.min.js" th:src="@{/jquery/jquery-3.5.1.min.js}"></script>
+	<script src="../../bootstrap/js/bootstrap.bundle.min.js" th:src="@{/bootstrap/js/bootstrap.bundle.min.js}"></script>    
+    
+  </head>
+<body>
+
+<!-- #### container begin #################################################  -->
+<div class="container">
+
+<!-- 	<img src="../../images/3-tropical-paradise-rawpixel.jpg" class="img-fluid" alt="Responsive image" th:src="@{/images/3-tropical-paradise-rawpixel.jpg}"> -->
+
+	<h1>OCPlearn - immo - demo </h1>
+
+
+	<div class="alert alert-dark" role="alert">
+		<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-exclamation-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+		  <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+		  <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+		</svg>		
+	  <span th:text="${ loginMsg }"></span>
+	</div>
+
+	<form action="validate" method="post">
+	<table class="table">
+		
+		<tr>
+			<td>loginUserName :</td>
+			<td><input type="text" name="loginUserName"></td>
+		</tr>
+		
+		<tr>
+			<td>password :</td>
+			<td><input type="password" name="password"></td>			
+		</tr>
+		
+		<tr>
+			<td></td>
+			<td><input class="btn btn-primary" type="submit" value="Submit"></td>
+		</tr>
+
+	</table>		
+	</form>
+
+
+<!-- #### container end ###################################################  -->
+</div>
+</body>
+</html>

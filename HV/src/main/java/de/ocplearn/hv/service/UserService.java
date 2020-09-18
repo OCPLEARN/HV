@@ -1,8 +1,10 @@
 package de.ocplearn.hv.service;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.PropertyManager;
@@ -22,7 +24,7 @@ public interface UserService {
      * @param login name of user
      * @return LoginUser instance or null, if not found
      */
-    LoginUser findUserByLoginUserName( String loginUserName );
+    LoginUserDto findUserByLoginUserName( String loginUserName );
 
     /**
      * Finds user by id
@@ -30,7 +32,7 @@ public interface UserService {
      * @param id
      * @return user instance or null, if not found
      */
-    LoginUser findUserById( int id );
+    LoginUserDto findUserById( int id );
     
     /**
      * Returns all users assigned the given role
@@ -38,7 +40,7 @@ public interface UserService {
      * @param role
      * @return List of matched users
      */
-    List<LoginUser> findAllByRole( Role role );
+    List<LoginUserDto> findAllByRole( Role role );
     
     /**
      * Returns all tenants assigned to this property manager
@@ -61,7 +63,7 @@ public interface UserService {
      * 
      * @param loginUser
      */
-    boolean createUser( LoginUser loginUser, String password );
+    Optional<LoginUserDto> createUser( LoginUserDto loginUserDto, String password );
     
     /**
      * Deletes a user
@@ -77,7 +79,7 @@ public interface UserService {
      * @param user to update
      * @return true, if successful
      */
-    boolean updateUser( LoginUser loginUser );
+    boolean updateUser( LoginUserDto loginUserDto );
     
     /**
      * Validates user with password
@@ -86,14 +88,14 @@ public interface UserService {
      * @param password 
      * @return true, if user was validated
      */
-    boolean validateUserPassword( String loginUserName, String password );
+    Optional<LoginUserDto>  validateUserPassword( String loginUserName, String password );
     
     /**
      * Returns list of all registered users
      * 
      * @return List of Login User
      */
-    List<LoginUser> getAllLoginUsers();
+    List<LoginUserDto> getAllLoginUsers();
     
 
 }
