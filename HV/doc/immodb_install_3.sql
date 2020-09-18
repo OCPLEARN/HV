@@ -22,8 +22,8 @@ CREATE TABLE loginUser (
 	timeStmpAdd timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     timeStmpEdit timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     loginUserName varchar(50) UNIQUE,
-    passwHash varbinary(32),
-    salt varbinary(32),
+    passwHash varbinary(512),
+    salt varbinary(512),
     loginUserRole varchar(50),
     locale varchar(20)
 );
