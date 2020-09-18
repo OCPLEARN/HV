@@ -82,28 +82,31 @@ public class UserServiceTest {
     /**
      * Test of values method, of class Role.
      */
-//    @org.junit.jupiter.api.Test
-//    public void testUpdateUser() {
-//        System.out.println("testing UserService update ...");
-//        
-//        us = new UserServiceImpl();
-//        
-//        LoginUser u = us.findUserById(1);
-//        if ( u != null ) {
-//            Role role = u.getRole();
-//            u.setRole(Role.OWNER);
-//            u.save();
-//            u.setRole(role);
-//            u.save();
-//            
-//            Assertions.assertEquals(role, u.getRole());        	
-//        }else {
-//        	System.out.println("!!! check findUserById(1) !!! table empty?");
-//        	Assertions.assertEquals(true, false);
-//        }
-//
-//        
-//    }
+    @org.junit.jupiter.api.Test
+    public void testUpdateUser() {
+        System.out.println("testing UserService update ...");
+        
+        us = new UserServiceImpl();
+        
+        // Given
+        //LoginUser u = us.findUserById(1);
+        LoginUser u = us.findUserByLoginUserName("admin");
+        if ( u != null ) {
+            // When
+        	Role role = u.getRole();
+            u.setRole(Role.OWNER);
+            u.save();
+            u.setRole(role);
+            u.save();
+            // Then
+            Assertions.assertEquals(role, u.getRole());        	
+        }else {
+        	System.out.println("!!! check findUserById(1) !!! table empty?");
+        	Assertions.assertEquals(true, false);
+        }
+
+        
+    }
 
     private LoginUser getLoginUser() {
     	
