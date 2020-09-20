@@ -1,7 +1,9 @@
 package de.ocplearn.hv.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -20,4 +22,11 @@ public class WebMVCConfig implements WebMvcConfigurer {
             .addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
     }	
 	
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/login").setViewName("login");
+        //registry.addViewController("/logout").setViewName("logout");
+        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+    }    
+    
 }

@@ -29,8 +29,18 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		
+		if ( authentication == null ) {
+			System.out.println("+++ auth is null");
+			return null;
+		}
+		
 		String loginUserName = authentication.getName();
 		Object credentials = authentication.getCredentials();
+		
+		if ( credentials == null ) {
+			System.out.println("+++ creds are null");
+			return null;
+		}
 		
 		System.out.println("credentials class: " + credentials.getClass());
 	    if (!(credentials instanceof String)) {

@@ -2,6 +2,8 @@ package de.ocplearn.hv.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -24,10 +26,11 @@ public class HomeController {
 	private UserService userService;
 	
 	@GetMapping("/")
-	public String home(Model model) {
+	public String home(HttpSession session,  Model model) {
 		
 		Authentication auth = SecurityContextHolder	.getContext()
 													.getAuthentication();
+		
 		model.addAttribute("loginUserName", auth.getName());
 		
 		List<LoginUserDto> allLoginUsers = userService.findAllByRole(Role.ADMIN);
@@ -36,5 +39,14 @@ public class HomeController {
 		return "home";
 	}
 	
-
+//	@GetMapping("/logout")
+//	public String logout() {
+//		
+//		Authentication auth = SecurityContextHolder	.getContext()
+//				.getAuthentication();		
+//		
+//		auth.setAuthenticated(false);
+//		
+//		return "home";
+//	}
 }
