@@ -47,6 +47,6 @@ public class HomeController {
 //		
 //		auth.setAuthenticated(false);
 //		
-//		return "home";
+//		return "login";
 //	}
 }

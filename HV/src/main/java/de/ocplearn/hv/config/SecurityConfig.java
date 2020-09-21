@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -24,23 +25,28 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 	
 	 @Override
 	  protected void configure(HttpSecurity http) throws Exception {
-	      http.authorizeRequests()
+	      http
+	      
+	        .authorizeRequests()
 
-	        //.antMatchers("/**").hasRole("ADMIN")
-	      	//.antMatchers("/", "/home", "/js/**", "/css/**").permitAll()
-	        //.antMatchers("/static/**","/login","/logout","/bootstrap/**" ,"/jquery/**", "/js/**", "/css/**").permitAll()
-	      	.antMatchers("/static/**","/login","/logout")
-	      		.permitAll()
+	      	//.antMatchers("/**")
+	        .antMatchers("/admin**").hasRole("ADMIN")
+	        .antMatchers("/user**").hasRole("USER")
+	        //.antMatchers("/", "/home", "/js/**", "/css/**").permitAll()
+	        .antMatchers("/static/**","/login","/logout","/bootstrap/**" ,"/jquery/**", "/js/**", "/css/**").permitAll()
+	      	//.antMatchers("/static/**","/login*","/logout*")
+	      		//.permitAll()
+	        .antMatchers("/public**").permitAll()
 	        .anyRequest().authenticated()
-	        .and()
+	        	.and()
 	        .formLogin().loginPage("/login")
 	        	.permitAll()
-	        .and()
+	        	.and()
 	        .logout()
-	        	.permitAll()	        	
-	        .invalidateHttpSession(true)
-	        .deleteCookies("JSESSIONID")
-	        
+	        	.logoutUrl("/logout_page")		        	
+	        	.deleteCookies("JSESSIONID")
+	        	.invalidateHttpSession(true)
+	        	.permitAll()
 	        ;
 	      
 	      
