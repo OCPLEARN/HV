@@ -14,7 +14,15 @@
 	<script src="/bootstrap/js/bootstrap.bundle.min.js" th:src="@{/bootstrap/js/bootstrap.bundle.min.js}"></script>    
 
 </head>
+
+
 <body>
+
+<div th:replace="~{fragments/header :: header}">Header</div>
+
+
+
+
 <!-- #### container begin #################################################  -->
 <div class="container">
 
@@ -97,5 +105,10 @@
 
 <!-- #### container end ###################################################  -->
 </div>	
+
+<!-- FOOTER -->
+
+	<div th:insert="fragments/footer :: footer" >nicht angezeigt</div>
+
 </body>
 </html>                 

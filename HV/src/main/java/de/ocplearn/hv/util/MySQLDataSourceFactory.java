@@ -25,6 +25,8 @@ public class MySQLDataSourceFactory {
 	 * Initializes the DataSource from jdbc_con.properties on classpath
 	 * 
 	 * */
+	
+	
 	public static void initDS() {
 		
 		if (mysqlDS == null) {
@@ -52,6 +54,7 @@ public class MySQLDataSourceFactory {
 				e.printStackTrace();;
 			}			
 		}
+		
 	}
 	
 	static {
