@@ -2,10 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org"
 		lang = "en">
   <head>
-    <title>immo test</title>
+    <title>Sign In</title>
+    
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<!--     <link rel="stylesheet" type="text/css" media="all" href="../../css/gtvg.css" th:href="@{/css/gtvg.css}" /> -->
     <link rel="stylesheet" type="text/css" media="all" href="/bootstrap/css/bootstrap.min.css" th:href="@{/bootstrap/css/bootstrap.min.css}" />
     
 	<!-- JS -->
@@ -13,6 +13,7 @@
 	<script src="/bootstrap/js/bootstrap.bundle.min.js" th:src="@{/bootstrap/js/bootstrap.bundle.min.js}"></script>    
     
   </head>
+  
 <body>
 
 <!-- #### container begin #################################################  -->
@@ -31,7 +32,7 @@
 	  <span th:text="${ loginMsg }"></span>
 	</div>
 
-	<form name="f" th:action="@{/login}" method="post">
+	<form name="f" th:action="@{/signin}" method="post">
 	<table class="table">
 		
 		<tr>

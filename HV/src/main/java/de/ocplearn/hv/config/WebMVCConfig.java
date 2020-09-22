@@ -13,7 +13,8 @@ public class WebMVCConfig implements WebMvcConfigurer {
             "classpath:/META-INF/resources/",
             "classpath:/resources/",
             "classpath:/static/",
-            "classpath:/public/" 
+            "classpath:/public/",
+            "classpath:/signin"
             };
 
     @Override
@@ -24,7 +25,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
 	
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/login").setViewName("login");
+        registry.addViewController("/signin").setViewName("/signin/signin");
         //registry.addViewController("/logout_page").setViewName("logout_page");
         //registry.addViewController("/logout").setViewName("logout");
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);

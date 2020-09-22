@@ -29,17 +29,12 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 	      
 	        .authorizeRequests()
 
-	      	//.antMatchers("/**")
-	        .antMatchers("/admin**").hasRole("ADMIN")
-	        .antMatchers("/user**").hasRole("USER")
-	        //.antMatchers("/", "/home", "/js/**", "/css/**").permitAll()
-	        .antMatchers("/static/**","/login","/logout","/bootstrap/**" ,"/jquery/**", "/js/**", "/css/**").permitAll()
-	      	//.antMatchers("/static/**","/login*","/logout*")
-	      		//.permitAll()
-	        .antMatchers("/public**").permitAll()
+	        .antMatchers("/**","/public/**","/static/**","/bootstrap/**" ,"/jquery/**", "/js/**", "/css/**").permitAll()
+	        .antMatchers("/admin/**").hasRole("ADMIN")
+	        .antMatchers("/user/**").hasRole("USER")
 	        .anyRequest().authenticated()
 	        	.and()
-	        .formLogin().loginPage("/login")
+	        .formLogin().loginPage("/signin")
 	        	.permitAll()
 	        	.and()
 	        .logout()
@@ -48,8 +43,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 	        	.invalidateHttpSession(true)
 	        	.permitAll()
 	        ;
-	      
-	      
+
 	  }
 
 	  @Override

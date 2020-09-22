@@ -26,18 +26,22 @@ public class HomeController {
 	private UserService userService;
 	
 	@GetMapping("/")
-	public String home(HttpSession session,  Model model) {
+	public String home(Model model) {
 		
-		Authentication auth = SecurityContextHolder	.getContext()
-													.getAuthentication();
-		
-		model.addAttribute("loginUserName", auth.getName());
-		
-		List<LoginUserDto> allLoginUsers = userService.findAllByRole(Role.ADMIN);
-		model.addAttribute("LoginUserNamen", allLoginUsers);
-
-		return "home";
+		Authentication authentication = SecurityContextHolder	.getContext()
+				.getAuthentication();		
+		model.addAttribute("loginUserName", authentication.getName());
+		return "public/home";
 	}
+	
+	@GetMapping("/page2")
+	public String page2() {
+		return "public/page2";
+	}
+	
+	
+
+	
 	
 //	@GetMapping("/logout")
 //	public String logout() {

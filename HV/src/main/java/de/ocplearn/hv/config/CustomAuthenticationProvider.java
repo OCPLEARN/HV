@@ -61,7 +61,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	        
 	    String role = opt.get().getRole().toString();
 	    
-	    grantedAuthorities.add(new SimpleGrantedAuthority( role ) );
+	    grantedAuthorities.add(new SimpleGrantedAuthority( "ROLE_" + role ) );
 	        
 		Authentication auth = new UsernamePasswordAuthenticationToken(opt.get().getLoginUserName(), password, grantedAuthorities);
 	        
