@@ -19,10 +19,9 @@
 <!-- #### container begin #################################################  -->
 <div class="container">
 
-<!-- 	<img src="../../images/3-tropical-paradise-rawpixel.jpg" class="img-fluid" alt="Responsive image" th:src="@{/images/3-tropical-paradise-rawpixel.jpg}"> -->
-
-	<h1>OCPlearn - immo - demo </h1>
-
+	<div th:replace="~{fragments/header :: header}">Header</div>
+	<div th:replace="~{fragments/navbar :: navbar}">Navibarr</div>
+	
 
 	<div class="alert alert-dark" role="alert">
 		<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-exclamation-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

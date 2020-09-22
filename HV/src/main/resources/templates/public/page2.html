@@ -5,8 +5,11 @@
 <title>PAGE 2</title>
 </head>
 <body>
+<div class="container">
 
-<h1>Page2</h1>
-
+	<div th:replace="~{fragments/header :: header}">Header</div>
+	<div th:replace="~{fragments/navbar :: navbar}">Navibarr</div>
+		<h1>Page2</h1>
+</div>
 </body>
 </html>
