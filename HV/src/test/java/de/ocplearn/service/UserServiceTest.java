@@ -19,6 +19,8 @@ import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.mapper.LoginUserMapper;
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.Role;
+import de.ocplearn.hv.model2.LoginUserDaoJdbc;
+import de.ocplearn.hv.model2.LoginUserMapper2;
 import de.ocplearn.hv.service.UserService;
 import de.ocplearn.hv.service.UserServiceImpl;
 import de.ocplearn.hv.util.Config;
@@ -63,7 +65,11 @@ public class UserServiceTest {
     	
     	userServiceImpl.loginUserMapper = LoginUserMapper.INSTANCE;
     	
+    	userServiceImpl.loginUserMapper2 = LoginUserMapper2.INSTANCE;
+    	
     	userService = userServiceImpl;
+    	
+    	userServiceImpl.loginUserDao = new LoginUserDaoJdbc();
     	
     	//System.out.println("useDBConnectionPool() = " + Config.useDBConnectionPool());
     	
@@ -90,6 +96,25 @@ public class UserServiceTest {
         
     }    
 
+    /**
+     * Test of values method, of class Role.
+     */
+    @org.junit.jupiter.api.Test
+    public void testCreateUser2() {
+        System.out.println("testing UserService insert [model2] ...");
+        
+        LoginUserDto adminUser = getLoginUser();
+        
+        Optional<LoginUserDto> opt = userService.createUser2(adminUser, "Pa$$w0rd");
+        
+        Assertions.assertEquals(true, opt.isPresent());
+        
+        boolean idIsSet = true;
+        boolean value = opt.get().getId() > 0 ;
+        Assertions.assertEquals(idIsSet, value);
+        
+    }       
+    
     /**
      * Test of values method, of class Role.
      */

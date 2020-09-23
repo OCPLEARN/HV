@@ -143,6 +143,7 @@ public class LoginUser implements Comparable<LoginUser> {
         return this.getLoginUserName().compareTo(o.getLoginUserName());
     }
     
+    
     /**
      * Stores LoginUser in database.
      * 

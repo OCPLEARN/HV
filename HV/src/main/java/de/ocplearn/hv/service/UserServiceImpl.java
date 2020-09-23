@@ -7,33 +7,30 @@ import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.PropertyManager;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.model.Tenant;
+import de.ocplearn.hv.model2.LoginUserDao;
 import de.ocplearn.hv.util.StaticHelpers;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
 
 	@Autowired
+	@Qualifier("LoginUserDaoJdbc")
+	public LoginUserDao loginUserDao;
+	
+	@Autowired
 	public LoginUserMapper loginUserMapper;
+
+	@Autowired
+	public de.ocplearn.hv.model2.LoginUserMapper2 loginUserMapper2;	
 	
     @Override
     public LoginUserDto findUserByLoginUserName(String loginUserName) {
@@ -85,6 +82,28 @@ public class UserServiceImpl implements UserService {
          
     }
 
+    @Override
+    public Optional<LoginUserDto> createUser2(LoginUserDto loginUserDto, String password) {
+     
+    	de.ocplearn.hv.model2.LoginUser loginUser = loginUserMapper2.loginUserDtoToLoginUser(loginUserDto);
+    	
+    	// (1) 
+        if ( loginUserDao.userAlreadyExists(loginUser.getLoginUserName()) ){
+            return Optional.empty();
+        }
+        
+        HashMap<String, byte[]> hm = StaticHelpers.createHash(password, null);
+        loginUser.setPasswHash( hm.get("hash") );
+        loginUser.setSalt(hm.get("salt") );
+        // (2)
+        if ( loginUserDao.save(loginUser) ) {
+        	return Optional.of(loginUserMapper2.loginUserToLoginUserDto(loginUser) );	
+        }else {
+        	return Optional.empty();
+        }
+         
+    }    
+    
     @Override
     public boolean deleteUser(String loginUserName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
