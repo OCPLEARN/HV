@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.model.LoginUser;
@@ -27,12 +28,9 @@ public class HomeController {
 	
 	@GetMapping("/")
 	public String home(Model model) {
-		
-		Authentication authentication = SecurityContextHolder	.getContext()
-				.getAuthentication();		
-		model.addAttribute("loginUserName", authentication.getName());
 		return "public/home";
 	}
+	
 	
 	@GetMapping("/page2")
 	public String page2() {
@@ -40,7 +38,20 @@ public class HomeController {
 	}
 	
 	
+	@GetMapping("/signin")
+	public String signIn() {
+		return "/signin/signin";
+	}
+	
+	@ModelAttribute
+	public void addAttributes(Model model) {
 
+		Authentication authentication = SecurityContextHolder	.getContext()
+				.getAuthentication();		
+		
+		model.addAttribute("loginUserName", authentication.getName() == null ? "X" : authentication.getName());
+	}
+}
 	
 	
 //	@GetMapping("/logout")
@@ -53,4 +64,16 @@ public class HomeController {
 //		
 //		return "login";
 //	}
-}
+	
+	//Spring geht zuerst in addAttributes siehe Link
+	// https://www.baeldung.com/spring-mvc-and-the-modelattribute-annotation
+	
+//	@ModelAttribute
+//	public void addAttributes(Model model) {
+//
+//		Authentication authentication = SecurityContextHolder	.getContext()
+//				.getAuthentication();		
+//		
+//		model.addAttribute("loginUserName", authentication.getName() == null ? "X" : authentication.getName());
+//	}
+
