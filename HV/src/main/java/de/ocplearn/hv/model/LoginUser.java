@@ -13,7 +13,7 @@ import java.util.Objects;
 public class LoginUser implements Comparable<LoginUser> {
 
     private int id;
-    private String loginUserName;
+    private String loginUserName;    
     private Role role;
     private byte [] passwHash;
     private byte [] salt;

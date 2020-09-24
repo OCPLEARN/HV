@@ -15,12 +15,11 @@ import javax.sql.DataSource;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import de.ocplearn.hv.dao.LoginUserDaoJdbc;
 import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.mapper.LoginUserMapper;
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.Role;
-import de.ocplearn.hv.model2.LoginUserDaoJdbc;
-import de.ocplearn.hv.model2.LoginUserMapper2;
 import de.ocplearn.hv.service.UserService;
 import de.ocplearn.hv.service.UserServiceImpl;
 import de.ocplearn.hv.util.Config;
@@ -64,9 +63,7 @@ public class UserServiceTest {
     	userServiceImpl = new UserServiceImpl();
     	
     	userServiceImpl.loginUserMapper = LoginUserMapper.INSTANCE;
-    	
-    	userServiceImpl.loginUserMapper2 = LoginUserMapper2.INSTANCE;
-    	
+    	    	
     	userService = userServiceImpl;
     	
     	userServiceImpl.loginUserDao = new LoginUserDaoJdbc();
@@ -77,6 +74,7 @@ public class UserServiceTest {
     	//dataSource = MySQLDataSourceFactory.getMySQLDataSource();
     }    
     
+
     /**
      * Test of values method, of class Role.
      */
@@ -86,31 +84,12 @@ public class UserServiceTest {
         
         LoginUserDto adminUser = getLoginUser();
         
-        Optional<LoginUserDto> opt = userService.createUser(adminUser, "Pa$$w0rd");
+        boolean userCreateOk = userService.createUser(adminUser, "Pa$$w0rd");
         
-        Assertions.assertEquals(true, opt.isPresent());
-        
-        boolean idIsSet = true;
-        boolean value = opt.get().getId() > 0 ;
-        Assertions.assertEquals(idIsSet, value);
-        
-    }    
-
-    /**
-     * Test of values method, of class Role.
-     */
-    @org.junit.jupiter.api.Test
-    public void testCreateUser2() {
-        System.out.println("testing UserService insert [model2] ...");
-        
-        LoginUserDto adminUser = getLoginUser();
-        
-        Optional<LoginUserDto> opt = userService.createUser2(adminUser, "Pa$$w0rd");
-        
-        Assertions.assertEquals(true, opt.isPresent());
+        Assertions.assertEquals(true, userCreateOk);
         
         boolean idIsSet = true;
-        boolean value = opt.get().getId() > 0 ;
+        boolean value = adminUser.getId() > 0 ;
         Assertions.assertEquals(idIsSet, value);
         
     }       

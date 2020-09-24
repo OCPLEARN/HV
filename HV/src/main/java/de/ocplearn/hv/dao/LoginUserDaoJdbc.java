@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -18,6 +20,7 @@ import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.util.Config;
 import de.ocplearn.hv.util.DBConnectionPool;
+import de.ocplearn.hv.util.StaticHelpers;
 
 
 /**
@@ -195,6 +198,44 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 	}
 
 	
+	
+	/**
+     * Validates credentials 
+     * 
+     * @return
+     * */
+    public boolean validateUser( String loginUserName, String password ){
+
+        HashMap<String,byte[]> userMap = null;
+        byte[] hash = null;
+        byte[] salt = null;
+    
+        // read user from database
+        try(Connection connection = getConnection(); ) {
+                PreparedStatement stmt = connection.prepareStatement( "SELECT * FROM loginUser WHERE loginUserName = ?;" );
+                stmt.setString(1, loginUserName  );
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()){
+                    hash = rs.getBytes("passwHash");
+                    salt = rs.getBytes("salt");
+                }else{
+                    System.out.println("user not found!");
+                    return false;
+                }
+
+                userMap = StaticHelpers.createHash( password, salt );
+                
+                returnConnection(connection);
+                
+            } catch (SQLException e) {
+                e.printStackTrace(); System.exit(-1);            
+            }
+        return  Arrays.equals(userMap.get("hash"), hash );
+    }    
+    
+	
+	// STATIC METHODS
+	
     /* get a connection from pool */
     private static Connection getConnection() {
     	if ( Config.useDBConnectionPool() ) {
@@ -216,4 +257,6 @@ public class LoginUserDaoJdbc implements LoginUserDao {
     	}
     	
     }   	
+    
+    
 }

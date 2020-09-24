@@ -67,4 +67,13 @@ public interface LoginUserDao {
 	 * @return boolean true if name already in use
 	 * */
 	boolean userAlreadyExists( String loginUserName );
+	
+	/**
+	 * Checks, if LoginUser exists and if password is correct
+	 * 
+	 * @param loginUserName
+	 * @param password
+	 * @return boolean
+	 */
+	public boolean validateUser( String loginUserName, String password );
 }

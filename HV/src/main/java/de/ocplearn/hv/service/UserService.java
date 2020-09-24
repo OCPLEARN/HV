@@ -62,16 +62,10 @@ public interface UserService {
      * Creates new LoginUser
      * 
      * @param loginUser
+     * @return boolean
      */
-    Optional<LoginUserDto> createUser( LoginUserDto loginUserDto, String password );
-    
-    /**
-     * Creates new LoginUser
-     * 
-     * @param loginUser
-     */
-    Optional<LoginUserDto> createUser2( LoginUserDto loginUserDto, String password );
-        
+    boolean createUser( LoginUserDto loginUserDto, String password );
+ 
     
     /**
      * Deletes a user
