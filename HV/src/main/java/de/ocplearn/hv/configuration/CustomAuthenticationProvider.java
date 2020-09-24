@@ -1,4 +1,4 @@
-package de.ocplearn.hv.config;
+package de.ocplearn.hv.configuration;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package de.ocplearn.hv.config;
+package de.ocplearn.hv.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;

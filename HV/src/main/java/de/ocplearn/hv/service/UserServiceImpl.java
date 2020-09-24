@@ -1,5 +1,6 @@
 package de.ocplearn.hv.service;
 
+import de.ocplearn.hv.dao.LoginUserDao;
 import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.mapper.LoginUserMapper;
 import de.ocplearn.hv.model.Building;
@@ -7,7 +8,6 @@ import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.PropertyManager;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.model.Tenant;
-import de.ocplearn.hv.model2.LoginUserDao;
 import de.ocplearn.hv.util.StaticHelpers;
 
 import java.util.HashMap;
@@ -29,12 +29,15 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	public LoginUserMapper loginUserMapper;
 
-	@Autowired
-	public de.ocplearn.hv.model2.LoginUserMapper2 loginUserMapper2;	
 	
     @Override
     public LoginUserDto findUserByLoginUserName(String loginUserName) {
-        return loginUserMapper.loginUserToLoginUserDto( LoginUser.findUserByLoginUserName(loginUserName) )  ;
+    	
+    	Optional<LoginUser> loginUser = loginUserDao.findUserByLoginUserName(loginUserName);
+    	if (loginUser.isPresent()) 
+    			return loginUserMapper.loginUserToLoginUserDto(loginUser.get());
+    	
+        return loginUserMapper.loginUserToLoginUserDto(  )  ;
     }
 
     @Override

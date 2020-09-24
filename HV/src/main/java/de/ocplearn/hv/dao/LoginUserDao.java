@@ -1,10 +1,10 @@
-package de.ocplearn.hv.model2;
+package de.ocplearn.hv.dao;
 
 import java.util.List;
 import java.util.Optional;
 
-import de.ocplearn.hv.model2.LoginUser;
-import de.ocplearn.hv.model2.Role;
+import de.ocplearn.hv.model.LoginUser;
+import de.ocplearn.hv.model.Role;
 
 /**
  * DAO for LoginUser
@@ -48,7 +48,7 @@ public interface LoginUserDao {
 	 * Search by LoginUserName
 	 * 
 	 * @param String loginUserName
-	 * @return Optional<LoginUser>
+	 * @return Optional<'LoginUser'>
 	 * */
 	Optional<LoginUser> findUserByLoginUserName(String loginUserName);
 	

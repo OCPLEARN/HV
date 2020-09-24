@@ -1,4 +1,4 @@
-package de.ocplearn.hv.config;
+package de.ocplearn.hv.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.reactive.PathRequest;

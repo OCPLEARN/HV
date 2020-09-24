@@ -1,4 +1,4 @@
-package de.ocplearn.hv.model2;
+package de.ocplearn.hv.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,12 +13,12 @@ import java.util.Optional;
 import javax.sql.DataSource;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
-import de.ocplearn.hv.model2.LoginUser;
-import de.ocplearn.hv.model2.Role;
+import de.ocplearn.hv.model.LoginUser;
+import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.util.Config;
 import de.ocplearn.hv.util.DBConnectionPool;
+
 
 /**
  * LoginUserDao implementation for jdbc access
@@ -112,7 +112,7 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 		return false;
 	}
 
-    private static List<de.ocplearn.hv.model2.LoginUser> findByColumnName (String columnName, Object value){
+    private static List<LoginUser> findByColumnName (String columnName, Object value){
         List<LoginUser> list = new ArrayList<>();
         
 //        Object o;
@@ -158,17 +158,17 @@ public class LoginUserDaoJdbc implements LoginUserDao {
     }	
 	
 	@Override
-	public Optional<de.ocplearn.hv.model2.LoginUser> findUserById(int id) {
+	public Optional<LoginUser> findUserById(int id) {
 		return Optional.of( findByColumnName("id", id).get(0) );
 	}
 
 	@Override
-	public Optional<de.ocplearn.hv.model2.LoginUser> findUserByLoginUserName(String loginUserName) {
+	public Optional<LoginUser> findUserByLoginUserName(String loginUserName) {
 		return Optional.of(findByColumnName("loginUserName", loginUserName).get(0));
 	}
 
 	@Override
-	public List<de.ocplearn.hv.model2.LoginUser> findAllByRole(Role role) {
+	public List<LoginUser> findAllByRole(Role role) {
 		return findByColumnName("loginUserRole", role.name());
 	}
 
