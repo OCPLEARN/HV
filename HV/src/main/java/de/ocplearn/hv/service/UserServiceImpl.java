@@ -1,5 +1,8 @@
 package de.ocplearn.hv.service;
 
+import de.ocplearn.hv.dao.LoginUserDao;
+import de.ocplearn.hv.dto.LoginUserDto;
+import de.ocplearn.hv.mapper.LoginUserMapper;
 import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.PropertyManager;
@@ -7,39 +10,56 @@ import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.model.Tenant;
 import de.ocplearn.hv.util.StaticHelpers;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class UserServiceImpl implements UserService {
 
+	@Autowired
+	@Qualifier("LoginUserDaoJdbc")
+	public LoginUserDao loginUserDao;
+	
+	@Autowired
+	public LoginUserMapper loginUserMapper;
+
+	
     @Override
-    public LoginUser findUserByLoginUserName(String loginUserName) {
-        return LoginUser.findUserByLoginUserName(loginUserName);
+    public LoginUserDto findUserByLoginUserName(String loginUserName) {
+    	
+    	Optional<LoginUser> loginUser = loginUserDao.findUserByLoginUserName(loginUserName);
+    	
+    	if (loginUser.isPresent()) 
+    			return loginUserMapper.loginUserToLoginUserDto(loginUser.get());
+    	
+        return null;
     }
 
     @Override
-    public LoginUser findUserById(int id) {
-        return LoginUser.findUserById(id);
+    public LoginUserDto findUserById(int id) {
+    	
+ 	Optional<LoginUser> loginUser = loginUserDao.findUserById(id);
+    	
+    	if (loginUser.isPresent()) 
+    			return loginUserMapper.loginUserToLoginUserDto(loginUser.get());
+    	
+        return null;
     }
 
     @Override
-    public List<LoginUser> findAllByRole(Role role) {
-        return LoginUser.findAllByRole(role);
+    public List<LoginUserDto> findAllByRole(Role role) {
+    	
+    	return loginUserDao.findAllByRole(role)
+    			.stream()
+    			.map( loginUser -> loginUserMapper.loginUserToLoginUserDto(loginUser) )
+    			.collect(Collectors.toList());
     }
 
     @Override
@@ -52,10 +72,13 @@ public class UserServiceImpl implements UserService {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+
     @Override
-    public boolean createUser(LoginUser loginUser, String password) {
+    public boolean createUser(LoginUserDto loginUserDto, String password) {
      
-        if ( LoginUser.userAlreadyExists(loginUser.getLoginUserName()) ){
+    	LoginUser loginUser = loginUserMapper.loginUserDtoToLoginUser(loginUserDto);
+    	
+        if ( loginUserDao.userAlreadyExists(loginUser.getLoginUserName()) ){
             return false;
         }
         
@@ -63,26 +86,38 @@ public class UserServiceImpl implements UserService {
         loginUser.setPasswHash( hm.get("hash") );
         loginUser.setSalt(hm.get("salt") );
         
-        return loginUser.save();
-    }
-
+        if ( loginUserDao.save(loginUser) ) {
+        	loginUserDto.setId(loginUser.getId());
+        	return true;	
+        }else {
+        	return false;
+        }
+         
+    }    
+    
+    
     @Override
     public boolean deleteUser(String loginUserName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean updateUser(LoginUser loginUser) {
-        return loginUser.save();
+    public boolean updateUser(LoginUserDto loginUserDto) {
+        return loginUserDao.save(loginUserMapper.loginUserDtoToLoginUser(loginUserDto));
     }
 
     @Override
-    public boolean validateUserPassword(String loginUserName, String password) {
-        return LoginUser.validateUser(loginUserName, password);
+    public Optional<LoginUserDto> validateUserPassword(String loginUserName, String password) {
+    	
+        if (loginUserDao.validateUser(loginUserName, password)) {
+        	return Optional.of(loginUserMapper.loginUserToLoginUserDto(loginUserDao.findUserByLoginUserName(loginUserName).get()));       
+        }else {
+        	return Optional.empty();
+        }
     }
 
     @Override
-    public List<LoginUser> getAllLoginUsers() {
+    public List<LoginUserDto> getAllLoginUsers() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

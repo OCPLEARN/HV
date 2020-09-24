@@ -1,0 +1,54 @@
+[neuer Eintrag hier]
+--------------------------------------------------------------------------------
+Datum
+
+
+
+--------------------------------------------------------------------------------
+2020-09-18
+Spring Security
+
+	https://www.marcobehler.com/guides/spring-security#_authentication_with_spring_security
+	https://www.logicbig.com/tutorials/spring-framework/spring-security/custom-authentication-provider.html
+	https://www.codejava.net/frameworks/spring-boot/form-authentication-with-jdbc-and-mysql
+
+Einbau Mapstruct für spring boot
+	- siehe pom.xml
+	- package de.ocplearn.hv.mapper sowie Mapper für LoginUser
+	- https://www.credera.com/insights/mapping-domain-data-transfer-objects-in-spring-boot-with-mapstruct/
+	- https://hellokoding.com/spring-boot/mapstruct/
+	- @Mapper(componentModel = "spring") !!!
+	dann 
+	..
+	@Autowired
+	public LoginUserMapper loginUserMapper;
+	..
+
+loginUser Umbau für dto mapper 
+	- Interface geändert
+	- Impl angepasst
+	
+HomeController, jetzt Dto verwenden
+	- List<LoginUserDto> allLoginUsers = userService.findAllByRole(Role.ADMIN);	
+	
+- UserServiceTest
+	- testUpdateUser() : loginUserDto kann sich nicht selbst speichern ;-)
+	
+- Optional<LoginUserDto> createUser( LoginUserDto loginUserDto, String password );	
+
+- Spring context nicht bei unit tests verfügbar!!!
+	..
+	    	userServiceImpl = new UserServiceImpl();
+	    	
+	    	userServiceImpl.loginUserMapper = LoginUserMapper.INSTANCE;
+	    	
+	    	userService = userServiceImpl;
+	..
+    
+Custom login page    
+https://docs.spring.io/spring-security/site/docs/5.0.3.RELEASE/guides/html5/form-javaconfig.html    	
+    	
+https://www.baeldung.com/spring-security-logout    	
+https://spring.io/guides/tutorials/spring-security-and-angular-js/
+    	
+    	

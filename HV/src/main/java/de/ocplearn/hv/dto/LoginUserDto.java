@@ -1,27 +1,24 @@
-package de.ocplearn.hv.model;
+package de.ocplearn.hv.dto;
 
 import java.util.Locale;
 import java.util.Objects;
 
+import de.ocplearn.hv.model.LoginUser;
+import de.ocplearn.hv.model.Role;
 
-
-
-/**
- * A LoginUser can log into the application with a specific role
- * 
- * */
-public class LoginUser implements Comparable<LoginUser> {
-
+@lombok.Data
+public class LoginUserDto implements Comparable<LoginUserDto> {
+	
     private int id;
-    private String loginUserName;    
+    private String loginUserName;
     private Role role;
     private byte [] passwHash;
     private byte [] salt;
-    private Locale locale;	
-	
-    public LoginUser(){}
+    private Locale locale;
+
+    public LoginUserDto(){}
     
-    public LoginUser(String loginUserName, Role role, byte[] passwHash, byte[] salt, Locale locale) {
+    public LoginUserDto(String loginUserName, Role role, byte[] passwHash, byte[] salt, Locale locale) {
         this.loginUserName = loginUserName;
         this.role = role;
         this.passwHash = passwHash;
@@ -75,7 +72,9 @@ public class LoginUser implements Comparable<LoginUser> {
 
     public void setLocale(Locale locale) {
         this.locale = locale;
-    }    
+    }
+
+ 
     
     @Override
     public int hashCode() {
@@ -96,7 +95,7 @@ public class LoginUser implements Comparable<LoginUser> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final LoginUser other = (LoginUser) obj;
+        final LoginUserDto other = (LoginUserDto) obj;
         if (this.id != other.id) {
             return false;
         }
@@ -106,8 +105,16 @@ public class LoginUser implements Comparable<LoginUser> {
         return true;
     }
 
+    
+    /**
+     * Compares by loginUserName
+     * */
     @Override
-    public int compareTo(LoginUser o) {
+    public int compareTo(LoginUserDto o) {
         return this.getLoginUserName().compareTo(o.getLoginUserName());
-    }    
+    }
+    
+
+    
+    
 }
