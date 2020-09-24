@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import de.ocplearn.hv.dao.LoginUserDaoInMemory;
 import de.ocplearn.hv.dao.LoginUserDaoJdbc;
 import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.mapper.LoginUserMapper;
@@ -66,8 +67,8 @@ public class UserServiceTest {
     	    	
     	userService = userServiceImpl;
     	
-    	userServiceImpl.loginUserDao = new LoginUserDaoJdbc();
-    	
+    	//userServiceImpl.loginUserDao = new LoginUserDaoJdbc();
+    	userServiceImpl.loginUserDao = new LoginUserDaoInMemory();
     	//System.out.println("useDBConnectionPool() = " + Config.useDBConnectionPool());
     	
     	//MySQLDataSourceFactory.initDS();

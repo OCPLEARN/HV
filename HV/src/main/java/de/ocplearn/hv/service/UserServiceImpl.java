@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	@Qualifier("LoginUserDaoJdbc")
+	@Qualifier("LoginUserDaoInMemory")
 	public LoginUserDao loginUserDao;
 	
 	@Autowired
