@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import de.ocplearn.hv.dao.LoginUserDaoInMemory;
 import de.ocplearn.hv.dao.LoginUserDaoJdbc;
@@ -24,13 +25,14 @@ import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.service.UserService;
 import de.ocplearn.hv.service.UserServiceImpl;
 import de.ocplearn.hv.util.Config;
-import de.ocplearn.hv.util.MySQLDataSourceFactory;
+//import de.ocplearn.hv.util.MySQLDataSourceFactory;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 /**
  * Tests for UserService
  */
+@SpringBootTest
 public class UserServiceTest {
     
 	private LoginUserMapper loginUserMapper;

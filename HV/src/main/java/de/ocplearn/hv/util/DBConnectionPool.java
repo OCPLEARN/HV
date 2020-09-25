@@ -30,7 +30,8 @@ public class DBConnectionPool {
 	private static String dbName = "immodb";
 	
 	// jdbcUrl
-	private static String jdbcUrl = "jdbc:mysql://localhost:3306/" + dbName;
+	private static String jdbcUrl = "jdbc:mysql://localhost:3306/" +  dbName + "?serverTimezone=Europe/Rome";
+	
 	
 	// database user + password
 	private static String dbUser = "immodb";
