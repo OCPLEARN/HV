@@ -28,9 +28,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 	      http
 	      
 	        .authorizeRequests()
-	        ///////   /** kann durch /* ersetzt werden
-	//      .antMatchers("/**","/public/**","/static/**","/bootstrap/**" ,"/jquery/**", "/js/**", "/css/**").permitAll()
-
+	
 	        .antMatchers("/*","/public/**","/static/**","/bootstrap/**" ,"/jquery/**", "/js/**", "/css/**").permitAll()
 	        .antMatchers("/admin/**").hasRole("ADMIN")
 	        .antMatchers("/user/**").hasRole("USER")

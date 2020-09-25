@@ -28,6 +28,8 @@ public class WebMVCConfig implements WebMvcConfigurer {
         //registry.addViewController("/signin").setViewName("/signin/signin");
         //registry.addViewController("/logout_page").setViewName("logout_page");
         //registry.addViewController("/logout").setViewName("logout");
+    	//registry.addRedirectViewController("/page2", "/page2");  			//leitet um
+        //registry.addViewController("/page2").setViewName("page2"); 		//liefert aus
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
     }    
     
