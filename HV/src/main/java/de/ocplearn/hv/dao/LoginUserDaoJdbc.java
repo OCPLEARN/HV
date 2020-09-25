@@ -14,6 +14,8 @@ import java.util.Optional;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import de.ocplearn.hv.model.LoginUser;
@@ -32,8 +34,10 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 
 	// jdbc 
 	private static DBConnectionPool pool = DBConnectionPool.getInstance();
-	// sql data source
-	private static DataSource ds;	
+	
+    @Qualifier("datasource1")
+    @Autowired
+	private DataSource datasource;	
 	
 	@Override
 	public boolean save(LoginUser loginUser) {
@@ -42,7 +46,6 @@ public class LoginUserDaoJdbc implements LoginUserDao {
         }else{
             return this.update(loginUser);
         }
-
 	}
 
     private boolean insert(LoginUser loginUser){
@@ -115,7 +118,7 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 		return false;
 	}
 
-    private static List<LoginUser> findByColumnName (String columnName, Object value){
+    private List<LoginUser> findByColumnName (String columnName, Object value){
         List<LoginUser> list = new ArrayList<>();
         
 //        Object o;
@@ -237,26 +240,27 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 	// STATIC METHODS
 	
     /* get a connection from pool */
-    private static Connection getConnection() {
+    private Connection getConnection()  {
+    	
     	if ( Config.useDBConnectionPool() ) {
     		return pool.getConnection();	
     	}else {
     		try {
-				return ds.getConnection();
+				return datasource.getConnection();
 			} catch (SQLException e) {
 				e.printStackTrace();
 				return null;
 			}
     	}
+		//return null;
     }
     
     /* return connection to poo */
-    private static void returnConnection( Connection connection ) {
+    private void returnConnection( Connection connection ) {
     	if ( Config.useDBConnectionPool() ) {
     		pool.returnConnection(connection);	
     	}
     	
     }   	
-    
     
 }

@@ -1,5 +1,6 @@
 package de.ocplearn.hv.controller;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -7,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,6 +50,9 @@ public class HomeController {
 
 		Authentication authentication = SecurityContextHolder	.getContext()
 				.getAuthentication();		
+		
+		Collection<? extends GrantedAuthority > granted =  authentication.getAuthorities();
+		// Collection<? extends GrantedAuthority>
 		
 		model.addAttribute("loginUserName", authentication.getName() == null ? "X" : authentication.getName());
 	}

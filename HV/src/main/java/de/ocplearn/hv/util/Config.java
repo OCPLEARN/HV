@@ -28,7 +28,7 @@ public class Config {
 	// ref to immo app
 //	private static ImmoApplication application;	
 	// use DB ConnectionPool
-	private static final boolean useDBConnectionPool = true;
+	private static final boolean useDBConnectionPool = false;
 	
 	/**
 	 * Indicates if DBConnectionPool is provided

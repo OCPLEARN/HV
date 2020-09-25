@@ -24,6 +24,7 @@ import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.service.UserService;
 import de.ocplearn.hv.service.UserServiceImpl;
+//import de.ocplearn.hv.service.UserServiceImpl;
 import de.ocplearn.hv.util.Config;
 //import de.ocplearn.hv.util.MySQLDataSourceFactory;
 
@@ -35,13 +36,14 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 @SpringBootTest
 public class UserServiceTest {
     
-	private LoginUserMapper loginUserMapper;
+	//private LoginUserMapper loginUserMapper;
 	
-	private static UserService userService;
+	@Autowired
+	private UserService userService;
 	
-	private static UserServiceImpl userServiceImpl;
+	private UserServiceImpl userServiceImpl;
 	
-	private static DataSource dataSource;
+	//private static DataSource dataSource;
 	
     private Supplier<LoginUserDto> loginUserDtoSuppl = LoginUserDto::new;
     
@@ -63,14 +65,15 @@ public class UserServiceTest {
     @org.junit.jupiter.api.BeforeAll
     public static void setUpClass() throws Exception {
     	
-    	userServiceImpl = new UserServiceImpl();
+    	// see @SpringBootTest
+//    	userServiceImpl = new UserServiceImpl();
+//    	userServiceImpl.loginUserMapper = LoginUserMapper.INSTANCE;
+//    	userServiceImpl.loginUserDao = new LoginUserDaoJdbc();
     	
-    	userServiceImpl.loginUserMapper = LoginUserMapper.INSTANCE;
-    	    	
-    	userService = userServiceImpl;
+//    	userService = userServiceImpl;
+//    	
     	
-    	//userServiceImpl.loginUserDao = new LoginUserDaoJdbc();
-    	userServiceImpl.loginUserDao = new LoginUserDaoInMemory();
+    	
     	//System.out.println("useDBConnectionPool() = " + Config.useDBConnectionPool());
     	
     	//MySQLDataSourceFactory.initDS();
