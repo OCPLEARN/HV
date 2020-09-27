@@ -22,7 +22,6 @@ import de.ocplearn.hv.service.UserServiceImpl;
 @Controller
 public class HomeController {
 
-	//private UserService userService = new UserServiceImpl();
 	@Autowired
 	private UserService userService;
 	

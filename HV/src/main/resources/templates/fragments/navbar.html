@@ -33,45 +33,39 @@
         </div>
       </li>
       
+       <li class="nav-item">
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+      </li>
        
        
              <!-- TEST DROPDOWN Signin / LoginName / Signout Dropdown    -->
-   <!--    
-     <li class="nav-item dropdown">
-     
-           
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:if="${loginUserName == 'anonymousUser'}" th:insert="~{fragments/loginbutton :: loginbutton}">
-          Dropdown User
+    
+
+
+ 	<li class="nav-item dropdown">
+        <a class="nav-link" id="signinbuttoninnavbar" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:if="${loginUserName == 'anonymousUser'}" th:insert="~{fragments/loginbutton :: loginbutton}">
+          only SignIn button
+        </a>
+     	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:unless="${loginUserName == 'anonymousUser'}" th:text="${loginUserName}">
+          UserName and Dropdown menu
         </a>
         
-          
-     	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:unless="${loginUserName == 'anonymousUser'}" th:text="${loginUserName}">
-          Dropdown User
-        </a>
-  		 
-   
-   
-       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-       -->     
-       <!--        <a class="dropdown-item nav-link" href="#"  aria-labelledby="navbarDropdown"  th:insert="~{fragments/loginbutton :: loginbutton}"></a>
-      -->
-       <!-- 
-       <a class="dropdown-item nav-link" href="#"  aria-labelledby="navbarDropdown"  th:unless="~{fragments/loginbutton :: loginbutton}"></a>
-       -->
-       <!-- 
-       </div>
-     	
+<!--         menu items when logged in -->
+         <div class="dropdown-menu" aria-labelledby="navbarDropdown" th:if="${loginUserName != 'anonymousUser'}" th:insert="~{fragments/loginbutton :: loginbutton}">
+         </div>
+        
      </li>
- -->
-   
+    
+     
+     
+
+			<!--    END OF TEST -->
      
       
        
-       <!-- Sichere Variante Login / Logout -->
       
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-      </li>
+             <!-- Sichere Variante Login / Logout -->
+      
       <li class="nav-link" th:insert="~{fragments/loginbutton :: loginbutton}">loginbutton
       </li>
       <li class="nav-link" th:unless="${loginUserName == 'anonymousUser'}" th:text="'Du ' + ${loginUserName}">

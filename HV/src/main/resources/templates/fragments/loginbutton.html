@@ -7,7 +7,29 @@
 <body>
 	<div th:fragment="loginbutton">
 	
-	<!--  
+	
+	   
+<!--        <u> is an inline element and produces no additional line // <div> is a block element and produces new line	 -->
+       	  <u th:if="${#authorization.expression('!isAuthenticated()')}">
+              <a href="/signin" th:href="@{/signin}">
+                <i class="btn" aria-hidden="true"></i>&nbsp;Sign in
+              </a>
+            </u>
+            <u th:if="${#authorization.expression('isAuthenticated()') }">
+              <a href="/logout" th:href="@{#}" onclick="$('#form').submit();">
+                <i class="btn" aria-hidden="true"></i>&nbsp;Logout
+              </a>
+             <form style="visibility: hidden" id="form" method="post" action="#" th:action="@{/logout_page}"></form>
+            </u>
+       	
+       	
+    </div>    	
+</body>
+</html>
+
+
+
+<!--  
 		<p th:if="${loginUserName == 'anonymousUser'}">
 			<p><a  href="/signin"><button type="button" class="btn btn-primary">Login</button></a></p>
 		</p>
@@ -22,21 +44,3 @@
 	    </p>
 	    
 	   -->   
-	   
-       	
-       	  <div th:if="${#authorization.expression('!isAuthenticated()')}">
-              <a href="/signin" th:href="@{/signin}">
-                <span class="btn" aria-hidden="true"></span>&nbsp;Sign in
-              </a>
-            </div>
-            <div th:if="${#authorization.expression('isAuthenticated()') }">
-              <a href="/logout" th:href="@{#}" onclick="$('#form').submit();">
-                <span class="btn" aria-hidden="true"></span>&nbsp;Logout
-              </a>
-             <form style="visibility: hidden" id="form" method="post" action="#" th:action="@{/logout_page}"></form>
-            </div>
-       	
-       	
-    </div>    	
-</body>
-</html>
