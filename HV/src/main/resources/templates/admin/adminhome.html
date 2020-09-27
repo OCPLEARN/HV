@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
 
-	<title>Admin Home</title>
+	<title>Home</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!--     <link rel="stylesheet" type="text/css" media="all" href="../../css/gtvg.css" th:href="@{/css/gtvg.css}" /> -->
     <link rel="stylesheet" type="text/css" media="all" href="/bootstrap/css/bootstrap.min.css" th:href="@{/bootstrap/css/bootstrap.min.css}" />
     
 	<!-- JS -->
@@ -16,8 +16,7 @@
 </head>
 
 
-<body sec:authorize="hasRole('ADMIN')">
-	      Authenticated as <span sec:authentication="name"></span>>
+<body>
 
 <!-- <div sec:authorize="hasRole('ADMIN')"> -->
 <!-- 	      Authenticated as <span sec:authentication="name"></span></div> -->
@@ -29,12 +28,6 @@
 	<div th:replace="~{fragments/header :: header}">Header</div>
 	<div th:replace="~{fragments/navbar :: navbar}">Navibarr</div>
 	
-	
-<h1>Admin Home</h1>
-	
-	<span th:text="${ ld }">13 February 2011</span>
-
-
 		
 	<div class="alert alert-dark" role="alert">
 		<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-exclamation-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -44,6 +37,12 @@
 	  <span th:text="${ msgInfo }">-</span>
 	</div>  
 	
+		
+<h1>Admin Home</h1>
+	<p sec:authorize="hasRole('ADMIN')">
+	      Authenticated as <span sec:authentication="name"></span>
+	</p>
+	<span th:text="${ ld }">13 February 2011</span>
 
 <hr>
 	

@@ -16,26 +16,32 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
+    
+<!--       <li class="nav-item"> -->
+<!--         <a class="nav-link" href="#">Link</a> -->
+<!--       </li> -->
+      
+      
+<!--        <li class="nav-item"> -->
+<!--         <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> -->
+<!--       </li> -->
       
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
+          Testing Pages
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         
           <a class="dropdown-item nav-link" href="#" th:href=@{/page2}>Page2</a>
-          <a class="dropdown-item nav-link" href="#" >Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
+<!--           toggle item page3 only shown when logged in as admin -->
+          <a class="dropdown-item nav-link" href="#" th:if="${loginUserName == 'admin'}"  th:href=@{/admin/page3}>Page3</a>
+          
+<!--           <a class="dropdown-item nav-link" href="#" >Another action</a> -- >
+<!--           <div class="dropdown-divider"></div> -->
+<!--           <a class="dropdown-item" href="#">Something else here</a> -->
         </div>
       </li>
       
-       <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-      </li>
        
        
              <!-- TEST DROPDOWN Signin / LoginName / Signout Dropdown    -->
@@ -43,20 +49,37 @@
 
 
  	<li class="nav-item dropdown">
-        <a class="nav-link" id="signinbuttoninnavbar" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:if="${loginUserName == 'anonymousUser'}" th:insert="~{fragments/loginbutton :: loginbutton}">
+ 	
+        <a class="nav-link" id="signinbuttoninnavbar"  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:if="${loginUserName == 'anonymousUser'}" th:insert="~{fragments/loginbutton :: loginbutton}">
           only SignIn button
         </a>
      	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:unless="${loginUserName == 'anonymousUser'}" th:text="${loginUserName}">
           UserName and Dropdown menu
         </a>
         
-<!--         menu items when logged in -->
+<!--         menu items shown when logged in -->
          <div class="dropdown-menu" aria-labelledby="navbarDropdown" th:if="${loginUserName != 'anonymousUser'}" th:insert="~{fragments/loginbutton :: loginbutton}">
          </div>
         
      </li>
-    
      
+<!--      Variante mit sec:authorize -->
+
+<!--   <li sec:authorize="isAnonymous()"><a class="nav-link" th:insert="~{fragments/loginbutton :: loginbutton}">Login</a></li> -->
+  
+<!--   <li sec:authorize="isAuthenticated()"> -->
+<!--   		<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="${loginUserName}"> -->
+<!--           UserName and Dropdown menu -->
+<!--         </a> -->
+<!--          <div class="dropdown-menu" aria-labelledby="navbarDropdown" th:if="${loginUserName != 'anonymousUser'}" th:insert="~{fragments/loginbutton :: loginbutton}"> -->
+<!--          </div> -->
+<!--    </li> -->
+    
+    
+    
+<!--   <li sec:authorize="isAnonymous()"><a class="nav-link" href="/login">Login</a></li> -->
+<!--   <li sec:authorize="isAuthenticated()"><a class="nav-link" href="/logout">Logout</a></li> -->
+<!--   <li sec:authorize="isAuthenticated()">Wellcome, <span sec:authentication="name"></span></li> -->
      
 
 			<!--    END OF TEST -->

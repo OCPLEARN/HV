@@ -14,13 +14,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AdminController {
 	
+
+	// diese Variante erlaubt Zugriff ohne Login auf /admin/home
+	// in Security Config ist /* auf permit all gestellt, damit Seiten wie page2 ohne Login laufen
 	@GetMapping
+	public String adminHomeGeneral() {
+		return "/admin/adminhome";
+	}
+	
+	@GetMapping("/")
 	public String adminHome(Model model) {
 		return "/admin/adminhome";
 	}
 	
+	
+	
 	@GetMapping("/page3")
-	public String adminPage3(Model model){
+	public String adminPage3(){
 		return "/admin/page3";
 	}
 	
