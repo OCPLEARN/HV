@@ -37,6 +37,34 @@
 	  <span th:text="${ msgInfo }">-</span>
 	</div>  
 	
+
+	
+	
+	
+	<table class="table table-striped table-hover table-sm">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">loginUserName</th>
+          <th scope="col">role</th>
+          <th scope="col">-</th>
+        </tr>
+      </thead>	
+
+      <tbody th:remove="all-but-first">
+        <tr th:each="user : ${loginUsers}" th:class="${userStat.odd}? 'odd'">
+          <td th:text="${user.id}">id</td>
+          <td th:text="${user.loginUserName}">Onions</td>
+          <td th:text="${user.role}">2.41</td>
+          <td></td>
+        </tr>      
+      </tbody>      
+      
+	</table>
+	
+<!-- 	<div th:switch="${LoginUserNamen}"> -->
+<!-- 		<div th:case="null"><strong>No LoginUserNamen on your list</strong></div> -->
+<!-- 		<div th:case="*"> -->
 		
 <h1>Admin Home</h1>
 	<p sec:authorize="hasRole('ADMIN')">
@@ -45,7 +73,7 @@
 	<span th:text="${ ld }">13 February 2011</span>
 
 <hr>
-	
+
    
     
 <!-- FOOTER -->

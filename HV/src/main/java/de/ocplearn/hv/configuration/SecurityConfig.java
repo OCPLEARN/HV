@@ -31,6 +31,9 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 	        
 		    // start with more specific 
 	        .antMatchers("/admin/","/admin/**").hasRole("ADMIN")
+	
+	        .antMatchers("/*","/public/**","/static/**","/bootstrap/**" ,"/jquery/**", "/js/**", "/css/**").permitAll()
+	        .antMatchers("/admin","/admin/**").hasRole("ADMIN")
 	        .antMatchers("/user/**").hasRole("USER")
 	        .antMatchers("/*","/public/**","/static/**","/bootstrap/**" ,"/jquery/**", "/js/**", "/css/**").permitAll()
 
@@ -43,8 +46,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 	        	.logoutUrl("/logout_page")		        	
 	        	.deleteCookies("JSESSIONID")
 	        	.invalidateHttpSession(true)
-	        	.permitAll()
-	        ;
+	        	.permitAll();
 
 	  }
 
