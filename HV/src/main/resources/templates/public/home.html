@@ -25,10 +25,6 @@
 	<div th:replace="~{fragments/header :: header}">Header</div>
 	<div th:replace="~{fragments/navbar :: navbar}">Navibarr</div>
 	
-	
-
-	
-	<span th:text="${ ld }">13 February 2011</span>
 
 
 		
@@ -40,8 +36,13 @@
 	  <span th:text="${ msgInfo }">-</span>
 	</div>  
 	
-
+	<p sec:authorize="hasRole('ADMIN')">
+	      Authenticated as <span sec:authentication="name"></span>
+	</p>
+	<span th:text="${ ld }">13 February 2011</span>
+	
 <hr>
+
 	
    
     

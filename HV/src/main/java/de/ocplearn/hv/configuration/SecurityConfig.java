@@ -28,10 +28,12 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 	      http
 	      
 	        .authorizeRequests()
-	
-	        .antMatchers("/*","/public/**","/static/**","/bootstrap/**" ,"/jquery/**", "/js/**", "/css/**").permitAll()
-	        .antMatchers("/admin/**").hasRole("ADMIN")
+	        
+		    // start with more specific 
+	        .antMatchers("/admin/","/admin/**").hasRole("ADMIN")
 	        .antMatchers("/user/**").hasRole("USER")
+	        .antMatchers("/*","/public/**","/static/**","/bootstrap/**" ,"/jquery/**", "/js/**", "/css/**").permitAll()
+
 	        .anyRequest().authenticated()
 	        	.and()
 	        .formLogin().loginPage("/signin")
