@@ -23,13 +23,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-	@Autowired
-	@Qualifier("LoginUserDaoJdbc")
+	//@Autowired
+	//@Qualifier("LoginUserDaoJdbc")
 	public LoginUserDao loginUserDao;
 	
-	@Autowired
+	//@Autowired
 	public LoginUserMapper loginUserMapper;
 
+	public UserServiceImpl( LoginUserMapper loginUserMapper, @Qualifier("LoginUserDaoJdbc") LoginUserDao loginUserDao ) {
+		this.loginUserMapper = loginUserMapper;
+		this.loginUserDao = loginUserDao;
+	}
+	
     @Override
     public LoginUserDto findUserByLoginUserName(String loginUserName) {
     	
