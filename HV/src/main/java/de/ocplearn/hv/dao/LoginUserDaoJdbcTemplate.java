@@ -31,11 +31,16 @@ import de.ocplearn.hv.util.StaticHelpers;
 @Component("LoginUserDaoJdbcTemplate")
 public class LoginUserDaoJdbcTemplate implements LoginUserDao {
 
-    @Qualifier("datasource1")
-    @Autowired
+    //@Qualifier("datasource1")
+    //@Autowired
 	private DataSource datasource;		
 	
 	private JdbcTemplate jdbc = new JdbcTemplate(datasource);
+	
+	@Autowired
+	public LoginUserDaoJdbcTemplate(@Qualifier("datasource1") DataSource datasource ) {
+		this.datasource = datasource;
+	}
 	
 	@Override
 	public boolean save(LoginUser loginUser) {
