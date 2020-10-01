@@ -24,12 +24,14 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
 	//@Autowired
-	//@Qualifier("LoginUserDaoJdbc")
+	//@Qualifier("LoginUserDaoJdbcTemplate")
 	public LoginUserDao loginUserDao;
 	
 	//@Autowired
 	public LoginUserMapper loginUserMapper;
 
+	// LoginUserDaoJdbcTemplate LoginUserDaoJdbc
+	@Autowired
 	public UserServiceImpl( LoginUserMapper loginUserMapper, @Qualifier("LoginUserDaoJdbc") LoginUserDao loginUserDao ) {
 		this.loginUserMapper = loginUserMapper;
 		this.loginUserDao = loginUserDao;

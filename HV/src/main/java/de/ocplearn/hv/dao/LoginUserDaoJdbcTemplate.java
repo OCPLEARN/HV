@@ -35,38 +35,44 @@ public class LoginUserDaoJdbcTemplate implements LoginUserDao {
     //@Autowired
 	private DataSource datasource;		
 	
-	private JdbcTemplate jdbc = new JdbcTemplate(datasource);
+	private JdbcTemplate jdbc;// = new JdbcTemplate(datasource);
 	
 	@Autowired
 	public LoginUserDaoJdbcTemplate(@Qualifier("datasource1") DataSource datasource ) {
 		this.datasource = datasource;
+		jdbc = new JdbcTemplate(datasource);
 	}
 	
 	@Override
 	public boolean save(LoginUser loginUser) {
 		if (loginUser.getId()>0) {
-			return insert( loginUser );
+			return update( loginUser );
 		} else{
-			return update ( loginUser );
+			return insert( loginUser );
 		}
 	}
 
 	private boolean insert( LoginUser loginUser ) {
 		
-		PreparedStatementCreator psc = new PreparedStatementCreatorFactory(
+		PreparedStatementCreatorFactory psFactory = new PreparedStatementCreatorFactory(
 				"INSERT INTO loginUser (id,loginUserName,passwHash,salt,loginUserRole,locale) VALUE (null,?,?,?,?,?);",
-				Types.INTEGER,Types.VARCHAR,Types.VARBINARY,Types.BINARY,Types.VARCHAR,Types.VARCHAR
-			).newPreparedStatementCreator(
-					Arrays.asList(
-							loginUser.getLoginUserName(),
-							loginUser.getPasswHash(),
-							loginUser.getSalt(),
-							loginUser.getRole().name(),
-							loginUser.getLocale().toString()
-							)
-					);		
+				Types.VARCHAR,Types.VARBINARY,Types.VARBINARY,Types.VARCHAR,Types.VARCHAR
+			);
+		psFactory.setReturnGeneratedKeys(true);
+		
+		PreparedStatementCreator psc = psFactory.newPreparedStatementCreator(
+				Arrays.asList(
+						loginUser.getLoginUserName(),
+						loginUser.getPasswHash(),
+						loginUser.getSalt(),
+						loginUser.getRole().name(),
+						loginUser.getLocale().toString()
+						)			
+			);
+
 		KeyHolder keyHolder = new GeneratedKeyHolder();
-		int rowCount = jdbc.update(psc,keyHolder);
+		int rowCount = 
+				jdbc.update(psc,keyHolder);
 		loginUser.setId(keyHolder.getKey().intValue());
 		return rowCount == 1 ? true : false;
 	}
@@ -75,7 +81,7 @@ public class LoginUserDaoJdbcTemplate implements LoginUserDao {
 
 		PreparedStatementCreator psc = new PreparedStatementCreatorFactory(
 				"UPDATE loginUser SET loginUserName = ?, passwHash = ?, salt = ?, loginUserRole = ?, locale = ? WHERE id = ?;",
-				Types.VARCHAR,Types.VARBINARY,Types.BINARY,Types.VARCHAR,Types.VARCHAR,Types.INTEGER
+				Types.VARCHAR,Types.VARBINARY,Types.VARBINARY,Types.VARCHAR,Types.VARCHAR,Types.INTEGER
 			).newPreparedStatementCreator(
 					Arrays.asList(
 							loginUser.getLoginUserName(),
@@ -93,7 +99,7 @@ public class LoginUserDaoJdbcTemplate implements LoginUserDao {
 	public boolean delete(LoginUser loginUser) {
 
 		PreparedStatementCreator psc = new PreparedStatementCreatorFactory(
-				"DELETE FROM loginUser WHERE id = '?';",
+				"DELETE FROM loginUser WHERE id = ?;",
 				Types.INTEGER
 			).newPreparedStatementCreator(
 					Arrays.asList(
@@ -106,7 +112,7 @@ public class LoginUserDaoJdbcTemplate implements LoginUserDao {
 	@Override
 	public boolean delete(String loginUserName) {
 		PreparedStatementCreator psc = new PreparedStatementCreatorFactory(
-				"DELETE FROM loginUser WHERE loginUserName = '?';",
+				"DELETE FROM loginUser WHERE loginUserName = ?;",
 				Types.VARCHAR
 			).newPreparedStatementCreator(
 					Arrays.asList(
@@ -133,14 +139,15 @@ public class LoginUserDaoJdbcTemplate implements LoginUserDao {
 	@Override
 	public Optional<LoginUser> findUserByLoginUserName(String loginUserName) {
 		PreparedStatementCreator psc = new PreparedStatementCreatorFactory(
-				"SELECT * FROM loginUser WHERE loginUserName = '?';",
-				Types.INTEGER
+				"SELECT * FROM loginUser WHERE loginUserName = ?;",
+				Types.VARCHAR
 			).newPreparedStatementCreator(
 					Arrays.asList(loginUserName)
 					);
 		// jdbc.query(psc, this::mapRowToLoginUser);
 		List<LoginUser> list = jdbc.query(psc, this::mapRowToLoginUser);
-		return Optional.of(list.get(0));
+		if ( list.size() == 0 ) list.add(null);
+		return Optional.ofNullable(list.get(0));
 	}
 
 	@Override

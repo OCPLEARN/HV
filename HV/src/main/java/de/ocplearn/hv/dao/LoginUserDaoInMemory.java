@@ -17,6 +17,7 @@ import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.util.StaticHelpers;
 
+
 /**
  * LoginUserDao implementation for an in memory Set
  * 
@@ -59,8 +60,7 @@ public class LoginUserDaoInMemory implements LoginUserDao {
 
 	@Override
 	public boolean delete(LoginUser loginUser) {
-		data.remove(loginUser);
-		return false;
+		return data.remove(loginUser);
 	}
 
 	@Override

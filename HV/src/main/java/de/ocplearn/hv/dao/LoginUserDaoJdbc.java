@@ -39,6 +39,7 @@ public class LoginUserDaoJdbc implements LoginUserDao {
     //@Autowired
 	private DataSource datasource;	
 	
+	@Autowired
     public LoginUserDaoJdbc(@Qualifier("datasource1") DataSource datasource ) {
     	this.datasource = datasource;
     }
@@ -174,7 +175,8 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 
 	@Override
 	public Optional<LoginUser> findUserByLoginUserName(String loginUserName) {
-		return Optional.of(findByColumnName("loginUserName", loginUserName).get(0));
+		
+		return Optional.ofNullable(findByColumnName("loginUserName", loginUserName).get(0));
 	}
 
 	@Override

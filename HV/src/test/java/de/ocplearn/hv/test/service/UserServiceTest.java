@@ -5,7 +5,6 @@
  */
 package de.ocplearn.hv.test.service;
 
-
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -24,6 +23,7 @@ import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.service.UserService;
 import de.ocplearn.hv.service.UserServiceImpl;
+import de.ocplearn.hv.test.dao.LoginUserDaoTest;
 //import de.ocplearn.hv.service.UserServiceImpl;
 import de.ocplearn.hv.util.Config;
 //import de.ocplearn.hv.util.MySQLDataSourceFactory;
@@ -125,15 +125,15 @@ public class UserServiceTest {
         	Assertions.assertEquals(true, false);
         }
 
-        
     }
 
     /*
      * create an admin class loginUser with german locale
      * */
-    private LoginUserDto getLoginUser() {
+    public LoginUserDto getLoginUser() {
         
-        String loginUserName = "admin" + System.currentTimeMillis();
+        //String loginUserName = "admin" + System.currentTimeMillis();
+    	String loginUserName = LoginUserDaoTest.getRandomName();
         LoginUserDto adminUser = loginUserDtoSuppl.get();
         
         adminUser.setLoginUserName(loginUserName);
