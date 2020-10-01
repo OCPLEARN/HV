@@ -15,6 +15,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
             "classpath:/static/",
             "classpath:/public/",
             "classpath:/signin"
+
             };
 
     @Override
@@ -25,6 +26,8 @@ public class WebMVCConfig implements WebMvcConfigurer {
 	
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
+        //registry.addViewController("/admin").setViewName("/admin/adminhome");
+
         //registry.addViewController("/signin").setViewName("/signin/signin");
         //registry.addViewController("/logout_page").setViewName("logout_page");
         //registry.addViewController("/logout").setViewName("logout");

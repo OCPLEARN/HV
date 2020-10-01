@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -16,66 +18,50 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
+    
+<!--       <li class="nav-item"> -->
+<!--         <a class="nav-link" href="#">Link</a> -->
+<!--       </li> -->
+      
+      
+<!--        <li class="nav-item"> -->
+<!--         <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> -->
+<!--       </li> -->
       
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
+          Testing Pages
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         
           <a class="dropdown-item nav-link" href="#" th:href=@{/page2}>Page2</a>
-          <a class="dropdown-item nav-link" href="#" >Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
+<!--           toggle item page3 only shown when logged in as admin -->
+          <a class="dropdown-item nav-link" href="#" th:if="${loginUserName == 'admin'}"  th:href=@{/admin/page3}>Page3</a>
+          
+<!--           <a class="dropdown-item nav-link" href="#" >Another action</a> -- >
+<!--           <div class="dropdown-divider"></div> -->
+<!--           <a class="dropdown-item" href="#">Something else here</a> -->
         </div>
       </li>
       
-       
-       
-             <!-- TEST DROPDOWN Signin / LoginName / Signout Dropdown    -->
-   <!--    
-     <li class="nav-item dropdown">
-     
-           
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:if="${loginUserName == 'anonymousUser'}" th:insert="~{fragments/loginbutton :: loginbutton}">
-          Dropdown User
-        </a>
-        
-          
-     	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:unless="${loginUserName == 'anonymousUser'}" th:text="${loginUserName}">
-          Dropdown User
-        </a>
-  		 
-   
-   
-       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-       -->     
-       <!--        <a class="dropdown-item nav-link" href="#"  aria-labelledby="navbarDropdown"  th:insert="~{fragments/loginbutton :: loginbutton}"></a>
-      -->
-       <!-- 
-       <a class="dropdown-item nav-link" href="#"  aria-labelledby="navbarDropdown"  th:unless="~{fragments/loginbutton :: loginbutton}"></a>
-       -->
-       <!-- 
-       </div>
-     	
+ 
+
+ 	<li class="nav-item dropdown">	      	
+      	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:if=${#authorization.expression('isAuthenticated()')} sec:authentication="name">
+          UserName
+        </a>       
+      	<a href="/signin" th:href="@{/signin}" th:if=${#authorization.expression('!isAuthenticated()')}>
+      	  <i class="btn" aria-hidden="true"></i>&nbsp;Sign in 
+      	</a>  
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">    
+	           <a class="dropdown-item nav-link" href="/logout" th:href="@{#}" onclick="$('#form').submit();">
+	             <i class="btn" aria-hidden="true"></i>&nbsp;Logout
+	           </a>
+	           <form style="visibility: hidden" id="form" method="post" action="#" th:action="@{/logout_page}"></form>
+        </div>
      </li>
- -->
-   
      
-      
-       
-       <!-- Sichere Variante Login / Logout -->
-      
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-      </li>
-      <li class="nav-link" th:insert="~{fragments/loginbutton :: loginbutton}">loginbutton
-      </li>
-      <li class="nav-link" th:unless="${loginUserName == 'anonymousUser'}" th:text="'Du ' + ${loginUserName}">
-      </li>
+    
     </ul>
     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">

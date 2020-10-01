@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
 
-	<title>Admin Home</title>
+	<title>Home</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <!--     <link rel="stylesheet" type="text/css" media="all" href="../../css/gtvg.css" th:href="@{/css/gtvg.css}" /> -->
@@ -18,26 +18,17 @@
 
 <body>
 
+<!-- <div sec:authorize="hasRole('ADMIN')"> -->
+<!-- 	      Authenticated as <span sec:authentication="name"></span></div> -->
+
+	
 <!-- #### container begin #################################################  -->
 <div class="container">
 
-
 	<div th:replace="~{fragments/header :: header}">Header</div>
 	<div th:replace="~{fragments/navbar :: navbar}">Navibarr</div>
-
-	<a class="btn btn-light" href="home.html" th:href="@{/}">
-	 	 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-house-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-		  	<path fill-rule="evenodd" d="M8 3.293l6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
-		  	<path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/>
-		</svg>	
-	</a>
-	<span th:text="${ ld }">13 February 2011</span>
-
-
-<!--   	<h1 th:utext="#{home.welcome(${session.loginUser.loginUserName})}" >bla</h1> -->
-<h1>-</h1>
-<!--     <p th:utext="#{home.welcome(${session.loginUser.loginUserName})}">Welcome to our grocery store, Sebastian!</p> -->
-
+	
+		
 	<div class="alert alert-dark" role="alert">
 		<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-exclamation-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 		  <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -46,7 +37,7 @@
 	  <span th:text="${ msgInfo }">-</span>
 	</div>  
 	
-	
+
 	
 	
 	
@@ -75,28 +66,23 @@
 <!-- 		<div th:case="null"><strong>No LoginUserNamen on your list</strong></div> -->
 <!-- 		<div th:case="*"> -->
 		
-<!-- 		<div th:if="${LoginUserNamen.empty}"><strong>No LoginUserNamen on your list</strong></div> -->
-<!--                     <div th:each="LoginUser: ${LoginUserNamen}"> -->
-<!-- 					      <span th:text="${LoginUser.loginUserName}"></span> -->
-<!-- 		 </div>			 -->
-<!-- 		</div> -->
-<!-- 	</div> -->
-	
-	
+<h1>Admin Home</h1>
+	<p sec:authorize="hasRole('ADMIN')">
+	      Authenticated as <span sec:authentication="name"></span>
+	</p>
+	<span th:text="${ ld }">13 February 2011</span>
 
-      	
-      
-      	
+<hr>
+
+   
     
-	
-	<span th:text="${loginUserName}">Authenticated ?</span>
-
 <!-- FOOTER -->
 
 	<div th:insert="fragments/footer :: footer" >nicht angezeigt</div>
 
 <!-- #### container end ###################################################  -->
 </div>	
+
 
 
 </body>

@@ -1,5 +1,16 @@
 package de.ocplearn.hv.controller;
 
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+//import de.ocplearn.hv.service.UserService;
+
+
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -26,7 +37,7 @@ import de.ocplearn.hv.service.UserService;
 
 
 @Controller
-@RequestMapping("/admin/")
+@RequestMapping("/admin")
 public class AdminController {
 
 	@Autowired
@@ -129,5 +140,15 @@ public class AdminController {
         
 		return "admin/adminhome";
 	}	
+	
+	@GetMapping("/")
+	public String adminHome(Model model) {
+		return "/admin/adminhome";
+	}
+	
+	@GetMapping("/page3")
+	public String adminPage3(){
+		return "/admin/page3";
+	}
 	
 }

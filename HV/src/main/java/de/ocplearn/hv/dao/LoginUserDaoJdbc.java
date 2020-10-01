@@ -35,10 +35,14 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 	// jdbc 
 	private static DBConnectionPool pool = DBConnectionPool.getInstance();
 	
-    @Qualifier("datasource1")
-    @Autowired
+    //@Qualifier("datasource1")
+    //@Autowired
 	private DataSource datasource;	
 	
+    public LoginUserDaoJdbc(@Qualifier("datasource1") DataSource datasource ) {
+    	this.datasource = datasource;
+    }
+    
 	@Override
 	public boolean save(LoginUser loginUser) {
         if (loginUser.getId() == 0){
