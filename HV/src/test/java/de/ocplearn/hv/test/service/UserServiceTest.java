@@ -6,15 +6,22 @@
 package de.ocplearn.hv.test.service;
 
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Supplier;
 
 import javax.sql.DataSource;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.Assert;
 
 import de.ocplearn.hv.dao.LoginUserDaoInMemory;
 import de.ocplearn.hv.dao.LoginUserDaoJdbc;
@@ -35,56 +42,40 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
  */
 @SpringBootTest
 public class UserServiceTest {
-    
-	//private LoginUserMapper loginUserMapper;
 	
 	@Autowired
 	private UserService userService;
 	
-	private UserServiceImpl userServiceImpl;
-	
-	//private static DataSource dataSource;
-	
+//	@Autowired
+//	public UserServiceTest(UserService userService) {
+//		this.userService = userService;
+//	}
+			
     private Supplier<LoginUserDto> loginUserDtoSuppl = LoginUserDto::new;
-    
-    // -------------------------------------------------------------------------
-    
-    @org.junit.jupiter.api.AfterAll
+        
+    @AfterAll
     public static void tearDownClass() throws Exception {
     }
 
-    @org.junit.jupiter.api.BeforeEach
+    @BeforeEach
     public void setUp() throws Exception {
 
     }
 
-    @org.junit.jupiter.api.AfterEach
+    @AfterEach
     public void tearDown() throws Exception {
     }
 
-    @org.junit.jupiter.api.BeforeAll
+    @BeforeAll
     public static void setUpClass() throws Exception {
     	
-    	// see @SpringBootTest
-//    	userServiceImpl = new UserServiceImpl();
-//    	userServiceImpl.loginUserMapper = LoginUserMapper.INSTANCE;
-//    	userServiceImpl.loginUserDao = new LoginUserDaoJdbc();
-    	
-//    	userService = userServiceImpl;
-//    	
-    	
-    	
-    	//System.out.println("useDBConnectionPool() = " + Config.useDBConnectionPool());
-    	
-    	//MySQLDataSourceFactory.initDS();
-    	//dataSource = MySQLDataSourceFactory.getMySQLDataSource();
     }    
     
 
     /**
      * Test of values method, of class Role.
      */
-    @org.junit.jupiter.api.Test
+    @Test
     public void testCreateUser() {
         System.out.println("testing UserService insert ...");
         
@@ -103,7 +94,7 @@ public class UserServiceTest {
     /**
      * Test of values method, of class Role.
      */
-    @org.junit.jupiter.api.Test
+    @Test
     public void testUpdateUser() {
         System.out.println("testing UserService update ...");
         
@@ -141,6 +132,36 @@ public class UserServiceTest {
         adminUser.setLocale( Locale.GERMANY );
         
         return adminUser; 	
+    }
+    
+    @Test
+    public void testfindAllLoginUsers_sortedByName_sortedAscending() {
+    	
+    	// Given
+    	
+    	LoginUserDto loginUser1 = loginUserDtoSuppl.get();
+    	LoginUserDto loginUser2 = loginUserDtoSuppl.get();
+    	LoginUserDto loginUser3 = loginUserDtoSuppl.get();
+    	
+    	loginUser1.setLoginUserName("Alberta" + System.currentTimeMillis());
+    	loginUser2.setLoginUserName("Berta"   + System.currentTimeMillis());
+    	loginUser3.setLoginUserName("Cesar"   + System.currentTimeMillis());
+    	
+    	userService.createUser(loginUser1, "Pa$$w0rd");
+    	userService.createUser(loginUser2, "Pa$$w0rd");
+    	userService.createUser(loginUser3, "Pa$$w0rd");
+    	
+    	int id1 = loginUser1.getId();
+    	int id2 = loginUser1.getId();
+    	int id3 = loginUser1.getId();
+    	
+    	//When
+    	List<LoginUserDto> loginUserDtoList = userService.findAllLoginUsers(id1, 3, "LoginUserName", "ASC");
+  
+    	//Then
+    	
+    	Assertions.assertTrue(loginUserDtoList.get(0).getLoginUserName().contains("Alberta"));
+    	Assertions.assertTrue(loginUserDtoList.get(2).getLoginUserName().contains("Cesar"));
     }
     
 }

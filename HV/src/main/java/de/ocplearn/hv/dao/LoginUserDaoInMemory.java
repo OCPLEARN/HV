@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import de.ocplearn.hv.dto.LoginUserDto;
+import de.ocplearn.hv.exceptions.DataAccessException;
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.util.StaticHelpers;
@@ -131,6 +132,13 @@ public class LoginUserDaoInMemory implements LoginUserDao {
         userMap = StaticHelpers.createHash( password, salt );
         
         return  Arrays.equals(userMap.get("hash"), hash );
+	}
+
+	@Override
+	public List<LoginUser> findAllLoginUsers(int indexStart, int rowCount, String orderBy, String orderDirection)
+			throws DataAccessException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

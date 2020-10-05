@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
@@ -18,10 +20,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import de.ocplearn.hv.configuration.DataSourceConfig;
+import de.ocplearn.hv.dto.LoginUserDto;
+import de.ocplearn.hv.exceptions.DataAccessException;
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.util.Config;
 import de.ocplearn.hv.util.DBConnectionPool;
+import de.ocplearn.hv.util.LoggerBuilder;
 import de.ocplearn.hv.util.StaticHelpers;
 
 
@@ -32,6 +38,8 @@ import de.ocplearn.hv.util.StaticHelpers;
 @Component("LoginUserDaoJdbc")
 public class LoginUserDaoJdbc implements LoginUserDao {
 
+	private Logger logger = LoggerBuilder.getInstance().build(LoginUserDaoJdbc.class);
+	
 	// jdbc 
 	private static DBConnectionPool pool = DBConnectionPool.getInstance();
 	
@@ -265,6 +273,41 @@ public class LoginUserDaoJdbc implements LoginUserDao {
     		pool.returnConnection(connection);	
     	}
     	
-    }   	
+    }
+
+	@Override
+	public List<LoginUser> findAllLoginUsers(int indexStart, int rowCount, String orderBy, String orderDirection) throws DataAccessException {
+     
+		 List<LoginUser> loginUserList = new ArrayList<>();
+
+		 try(Connection connection = getConnection(); ) {
+             PreparedStatement stmt = connection.prepareStatement( "SELECT * FROM loginUser ORDER BY ? ? LIMIT ?, ?;" );
+             stmt.setString(1, orderBy  );
+             stmt.setString(2, orderDirection);
+             stmt.setInt(3, indexStart);
+             stmt.setInt(4, rowCount);
+
+             ResultSet resultSet = stmt.executeQuery();          
+             
+             while (resultSet.next()) {
+            	 LoginUser loginUser = new LoginUser();
+            	 loginUser.setId(resultSet.getInt("id"));
+            	 loginUser.setLoginUserName(resultSet.getString("loginUserName"));
+            	 loginUser.setRole(Role.valueOf(resultSet.getString("loginUserRole")));
+            	 loginUser.setPasswHash(resultSet.getBytes("passwHash"));
+            	 loginUser.setSalt(resultSet.getBytes("salt"));
+            	 
+            	 loginUserList.add(loginUser);
+             }
+          
+         } catch (SQLException e) {
+             e.printStackTrace(); 
+             logger.log(Level.WARNING, e.getMessage());
+             throw new DataAccessException("Unable to get Data from DB.");
+         }            
+     
+		
+		return loginUserList;
+	}   	
     
 }

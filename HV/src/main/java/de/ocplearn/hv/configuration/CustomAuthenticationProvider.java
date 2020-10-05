@@ -23,8 +23,13 @@ import de.ocplearn.hv.service.UserService;
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-	@Autowired
+	
 	private UserService userService;
+	
+	@Autowired
+	public CustomAuthenticationProvider(UserService userService) {
+		this.userService = userService;
+	}
 	
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {

@@ -1,8 +1,10 @@
 package de.ocplearn.hv.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+import de.ocplearn.hv.exceptions.DataAccessException;
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.Role;
 
@@ -56,9 +58,22 @@ public interface LoginUserDao {
 	 * Search by role
 	 * 
 	 * @param Role role
-	 * @return List<LoginUser>
+	 * @return List<'LoginUser'>
 	 * */
 	List<LoginUser> findAllByRole(Role role);
+	
+	/**
+	 * Find all
+	 * 
+	 * @param int indexStart
+	 * @param int rowCount
+	 * @param String orderBy
+	 * @param String orderDirection
+	 * @return List<'LoginUser'>
+	 * @throws DataAccessException
+	 * */
+	List<LoginUser> findAllLoginUsers(int indexStart, int rowCount, String orderBy, String orderDirection ) throws DataAccessException;
+
 	
 	/**
 	 * Checks, if loginUserName is already used

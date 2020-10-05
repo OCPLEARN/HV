@@ -19,6 +19,9 @@ public class LoginUser implements Comparable<LoginUser> {
     private byte [] salt;
     private Locale locale;	
 	
+    //attributes for Spring security - User details interface
+    //private boolean enabled;
+    
     public LoginUser(){}
     
     public LoginUser(String loginUserName, Role role, byte[] passwHash, byte[] salt, Locale locale) {

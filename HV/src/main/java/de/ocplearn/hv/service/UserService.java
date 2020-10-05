@@ -16,7 +16,10 @@ import de.ocplearn.hv.model.Tenant;
 
 public interface UserService {
 	
-	
+	/**
+	 * Max number of selected rows in DB query, if not other specified.
+	 */
+	int ROW_COUNT = 10; 
 
     /**
      * Finds user by login name
@@ -98,6 +101,20 @@ public interface UserService {
      * @return List of Login User
      */
     List<LoginUserDto> getAllLoginUsers();
+    
+    
+    /**
+     * Finds and sorts all LoginUsers by table parameters and returns a list of LoginUserDtos.
+     * Starting at row indexStart.
+     * 
+     * @param indexStart
+     * @param rowCount
+     * @param orderBy
+     * @param orderDirection
+     * @return List<'LoginUserDto'>
+     */
+    List<LoginUserDto> findAllLoginUsers(int indexStart, int rowCount, String orderBy, String orderDirection );  
+
     
 
 }

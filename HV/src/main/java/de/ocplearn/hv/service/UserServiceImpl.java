@@ -23,11 +23,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-	//@Autowired
-	//@Qualifier("LoginUserDaoJdbc")
+	
 	public LoginUserDao loginUserDao;
 	
-	//@Autowired
 	public LoginUserMapper loginUserMapper;
 
 	public UserServiceImpl( LoginUserMapper loginUserMapper, @Qualifier("LoginUserDaoJdbc") LoginUserDao loginUserDao ) {
@@ -102,7 +100,8 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public boolean deleteUser(String loginUserName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    	
+    	return loginUserDao.delete(loginUserName);
     }
 
     @Override
@@ -121,10 +120,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<LoginUserDto> getAllLoginUsers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<LoginUserDto> getAllLoginUsers() {   
+    		    	  
+    		return loginUserDao.findAllLoginUsers(1, UserService.ROW_COUNT, "loginUserName", "ASC").stream()
+    	   			.map(loginUser -> {return loginUserMapper.loginUserToLoginUserDto(loginUser);})
+    	   			.collect(Collectors.toList()); 
     }
     
+    @Override
+    public List<LoginUserDto> findAllLoginUsers(int indexStart, int rowCount, String orderBy, String orderDirection ) {   
+    		    	  
+    		return loginUserDao.findAllLoginUsers(indexStart, rowCount, orderBy, orderDirection).stream()
+    	   			.map(loginUser -> {return loginUserMapper.loginUserToLoginUserDto(loginUser);})
+    	   			.collect(Collectors.toList()); 
+    } 
     
     
    

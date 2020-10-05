@@ -24,8 +24,12 @@ import de.ocplearn.hv.service.UserServiceImpl;
 @Controller
 public class HomeController {
 
-	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	public HomeController(UserService userService) {
+		this.userService = userService;
+	}
 	
 	@GetMapping("/")
 	public String home(Model model) {

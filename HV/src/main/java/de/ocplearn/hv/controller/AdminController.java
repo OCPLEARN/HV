@@ -40,8 +40,12 @@ import de.ocplearn.hv.service.UserService;
 @RequestMapping("/admin")
 public class AdminController {
 
-	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	public AdminController(UserService userService) {
+		this.userService = userService;
+	}
 	
 	@GetMapping
 	public String home(HttpServletRequest request, Model model) {
