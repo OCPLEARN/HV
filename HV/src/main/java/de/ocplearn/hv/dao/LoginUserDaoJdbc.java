@@ -64,8 +64,9 @@ public class LoginUserDaoJdbc implements LoginUserDao {
         
         String sql = "INSERT INTO loginUser (id,loginUserName,passwHash,salt,loginUserRole,locale) VALUE (null,?,?,?,?,?);";
         
-        try(Connection con = getConnection() ) {
-                PreparedStatement stmt = con.prepareStatement(sql , Statement.RETURN_GENERATED_KEYS );
+        try(Connection con = getConnection();  
+        		PreparedStatement stmt = con.prepareStatement(sql , Statement.RETURN_GENERATED_KEYS ); ) {
+               
                 stmt.setString(1, loginUser.getLoginUserName()  );
                 stmt.setBytes(2, loginUser.getPasswHash() );
                 stmt.setBytes(3, loginUser.getSalt() );
@@ -81,8 +82,9 @@ public class LoginUserDaoJdbc implements LoginUserDao {
                 //System.out.println("r = " + r);
                 returnConnection(con);
             } catch (SQLException e) {
-                e.printStackTrace(); 
-                return false;
+            	 e.printStackTrace(); 
+                 logger.log(Level.WARNING, e.getMessage());
+                 throw new DataAccessException("Unable to get Data from DB.");
             }         
         
         return true;
@@ -93,8 +95,9 @@ public class LoginUserDaoJdbc implements LoginUserDao {
         // ? (id,loginUserName,passwHash,salt,loginUserRole,locale) VALUE (null,?,?,?,?,?)
         String sql = "UPDATE loginUser SET loginUserName = ?, passwHash = ?, salt = ?, loginUserRole = ?, locale = ? WHERE id = ?;";
         
-        try(Connection con = getConnection() ) {
-                PreparedStatement stmt = con.prepareStatement(sql);
+        try(Connection con = getConnection();
+        		 PreparedStatement stmt = con.prepareStatement(sql);) {
+               
 
                 stmt.setString(1, loginUser.getLoginUserName()  );
                 stmt.setBytes(2, loginUser.getPasswHash() );
@@ -111,8 +114,9 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 
                 returnConnection(con);
             } catch (SQLException e) {
-                e.printStackTrace(); 
-                return false;
+            	 e.printStackTrace(); 
+                 logger.log(Level.WARNING, e.getMessage());
+                 throw new DataAccessException("Unable to get Data from DB.");
             }            
         
         return true;
@@ -120,14 +124,29 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 	
 	@Override
 	public boolean delete(LoginUser loginUser) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		return delete(loginUser.getLoginUserName());
 	}
 
 	@Override
 	public boolean delete(String loginUserName) {
 		
-		if 
+		if (userAlreadyExists(loginUserName)) {
+		
+	        try(Connection con = getConnection();
+	        		PreparedStatement stmt = con.prepareStatement( "DELETE FROM loginUser WHERE loginUserName = ?;" );) {
+	                
+	                stmt.setString(1, loginUserName  );
+	                
+	            return (stmt.executeUpdate()==1)?true:false;
+	               
+	                
+	            } catch (SQLException e) {
+	            	 e.printStackTrace(); 
+	                 logger.log(Level.WARNING, e.getMessage());
+	                 throw new DataAccessException("Unable to get Data from DB.");            
+	            }            
+		}
 
 		
 		
@@ -168,8 +187,9 @@ public class LoginUserDaoJdbc implements LoginUserDao {
             returnConnection(con);
             
         }catch( SQLException e ){
-            e.printStackTrace();
-            return null;
+        	 e.printStackTrace(); 
+             logger.log(Level.WARNING, e.getMessage());
+             throw new DataAccessException("Unable to get Data from DB.");
         }         
         
         if (list.isEmpty()) {
@@ -197,8 +217,9 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 	@Override
 	public boolean userAlreadyExists(String loginUserName) {
 		// read user from database
-        try(Connection con = getConnection(); ) {
-                PreparedStatement stmt = con.prepareStatement( "SELECT * FROM loginUser WHERE loginUserName = ?;" );
+        try(Connection con = getConnection();
+        		PreparedStatement stmt = con.prepareStatement( "SELECT * FROM loginUser WHERE loginUserName = ?;" );) {
+                
                 stmt.setString(1, loginUserName  );
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()){
@@ -210,10 +231,12 @@ public class LoginUserDaoJdbc implements LoginUserDao {
                 }
                 
             } catch (SQLException e) {
-                e.printStackTrace(); System.exit(-1);            
+            	 e.printStackTrace(); 
+                 logger.log(Level.WARNING, e.getMessage());
+                 throw new DataAccessException("Unable to get Data from DB.");        
             }            
         
-        return false;
+        
 	}
 
 	
@@ -230,8 +253,9 @@ public class LoginUserDaoJdbc implements LoginUserDao {
         byte[] salt = null;
     
         // read user from database
-        try(Connection connection = getConnection(); ) {
-                PreparedStatement stmt = connection.prepareStatement( "SELECT * FROM loginUser WHERE loginUserName = ?;" );
+        try(Connection connection = getConnection();
+        	PreparedStatement stmt = connection.prepareStatement( "SELECT * FROM loginUser WHERE loginUserName = ?;" );) {
+               
                 stmt.setString(1, loginUserName  );
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()){
@@ -247,7 +271,9 @@ public class LoginUserDaoJdbc implements LoginUserDao {
                 returnConnection(connection);
                 
             } catch (SQLException e) {
-                e.printStackTrace(); System.exit(-1);            
+            	 e.printStackTrace(); 
+                 logger.log(Level.WARNING, e.getMessage());
+                 throw new DataAccessException("Unable to validate.");         
             }
         return  Arrays.equals(userMap.get("hash"), hash );
     }    
@@ -284,8 +310,13 @@ public class LoginUserDaoJdbc implements LoginUserDao {
      
 		 List<LoginUser> loginUserList = new ArrayList<>();
 
-		 try(Connection connection = getConnection(); ) {
-             PreparedStatement stmt = connection.prepareStatement( "SELECT * FROM loginUser ORDER BY " + orderBy + " " + orderDirection + " LIMIT ?, ?;" );
+		 try(Connection connection = getConnection(); 
+			 PreparedStatement stmt = connection.prepareStatement( "SELECT * FROM loginUser ORDER BY " 
+					 + orderBy 
+					 + " " 
+					 + orderDirection 
+					 + " LIMIT ?, ?;" );) {
+             
 
              // SQL sorts different than Java 
              // Prepared Statements in SQL don´t accept ? on column name and sort order
