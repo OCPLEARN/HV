@@ -103,7 +103,14 @@ public class UserServiceImpl implements UserService {
     	
     	return loginUserDao.delete(loginUserName);
     }
+    
+    @Override
+    public boolean deleteUser(LoginUserDto loginUserDto) {
+    	
+    	return loginUserDao.delete(loginUserMapper.loginUserDtoToLoginUser(loginUserDto));
+    }
 
+    
     @Override
     public boolean updateUser(LoginUserDto loginUserDto) {
         return loginUserDao.save(loginUserMapper.loginUserDtoToLoginUser(loginUserDto));

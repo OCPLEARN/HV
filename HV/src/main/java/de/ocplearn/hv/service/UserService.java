@@ -79,6 +79,14 @@ public interface UserService {
     boolean deleteUser( String loginUserName );
     
     /**
+     * Deletes a user
+     * 
+     * @param LoginUser
+     * @return true, if successful
+     */
+    boolean deleteUser( LoginUserDto loginUserDto );
+    
+    /**
      * Updates an existing user
      * 
      * @param user to update

@@ -132,6 +132,44 @@ public class UserServiceTest {
 		return adminUser;
 	}
 
+	
+	
+	@Test
+	public void testDelete_loginUserByLoginUserName_booleanTrue() {
+		
+		// Given
+		LoginUserDto loginUser = loginUserDtoSuppl.get();
+		loginUser.setLoginUserName("ABCDEFGHÖKYJBFVPHYD BFPÖYH DOOF");
+		loginUser.setRole(Role.OWNER);
+		loginUser.setLocale(Locale.FRENCH);
+		userService.createUser(loginUser, "Pa$$w0rd");
+		
+		// Then
+		Assertions.assertTrue(userService.deleteUser(loginUser.getLoginUserName()));
+		}
+	
+	@Test
+	public void testDelete_loginUserByLoginUser_booleanTrue() {
+		
+		// Given
+		LoginUserDto loginUser = loginUserDtoSuppl.get();
+		loginUser.setLoginUserName("ABCDEFGHÖKYJBFVPHYD BFPÖYH DOOF");
+		loginUser.setRole(Role.OWNER);
+		loginUser.setLocale(Locale.FRENCH);
+		userService.createUser(loginUser, "Pa$$w0rd");
+		
+		// Then
+		Assertions.assertTrue(userService.deleteUser(loginUser));
+		}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@Test
 	public void testfindAllLoginUsers_sortedByName_sortedAscending() {
 
