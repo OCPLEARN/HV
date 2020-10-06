@@ -163,8 +163,8 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 //            case "Integer":;
 //        }
         
-        try(    Connection con = getConnection();
-                Statement stmt = con.createStatement();
+        try(    Connection connection = getConnection();
+                Statement stmt = connection.createStatement();
                 ){
             
             String sql = "SELECT * FROM loginUser WHERE "+ columnName +" = '" + value + "';";
@@ -173,18 +173,18 @@ public class LoginUserDaoJdbc implements LoginUserDao {
             ResultSet result =  stmt.executeQuery( sql );
             
             while( result.next() ){
-                LoginUser u = new LoginUser();
+                LoginUser loginUser = new LoginUser();
 
-                u.setId( result.getInt("id") );
-                u.setLoginUserName(result.getString("loginUserName"));
-                u.setPasswHash(result.getBytes("passwHash"));
-                u.setSalt(result.getBytes("salt"));
-                u.setRole( Role.valueOf( result.getString("loginUserRole") )  );
-                u.setLocale(new Locale(result.getString("locale"))  );   
-                list.add(u);
+                loginUser.setId( result.getInt("id") );
+                loginUser.setLoginUserName(result.getString("loginUserName"));
+                loginUser.setPasswHash(result.getBytes("passwHash"));
+                loginUser.setSalt(result.getBytes("salt"));
+                loginUser.setRole( Role.valueOf( result.getString("loginUserRole") )  );
+                loginUser.setLocale(new Locale(result.getString("locale"))  );   
+                list.add(loginUser);
             }
             
-            returnConnection(con);
+            returnConnection(connection);
             
         }catch( SQLException e ){
         	 e.printStackTrace(); 

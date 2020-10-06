@@ -101,7 +101,7 @@ public interface UserService {
      * @param password 
      * @return true, if user was validated
      */
-    Optional<LoginUserDto>  validateUserPassword( String loginUserName, String password );
+    Optional<LoginUserDto> validateUserPassword( String loginUserName, String password );
     
     /**
      * Returns list of all registered users
