@@ -47,14 +47,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			return null;
 		}
 		
-		System.out.println("credentials class: " + credentials.getClass());
+		//System.out.println("credentials class: " + credentials.getClass());
 	    if (!(credentials instanceof String)) {
 	            return null;
 	    }
 	    
 	    String password = credentials.toString();
 
-	    System.out.println("+++ authenticate, loginUserName = " + loginUserName + ", password = " + password);
+	    //System.out.println("+++ authenticate, loginUserName = " + loginUserName + ", password = " + password);
 	    
 	    Optional<LoginUserDto> opt = userService.validateUserPassword(loginUserName,password);
 	        
@@ -72,7 +72,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	        
 		//auth.setAuthenticated(true);	// Cannot set this token to trusted - use constructor which takes a GrantedAuthority list instead
 		
-		System.out.println("+++ auth.setAuthenticated(true)");
+		//System.out.println("+++ auth.setAuthenticated(true)");
 		
 		return auth;
 		

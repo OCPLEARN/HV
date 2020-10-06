@@ -123,6 +123,11 @@ public interface UserService {
      */
     List<LoginUserDto> findAllLoginUsers(int indexStart, int rowCount, String orderBy, String orderDirection );  
 
+    /**
+     * 
+     * @return int number of LoginUser objects in datastore
+     * */
+    int getLoginUserCount();
     
 
 }

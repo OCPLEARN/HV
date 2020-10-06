@@ -140,7 +140,12 @@ public class UserServiceImpl implements UserService {
     		return loginUserDao.findAllLoginUsers(offset, rowCount, orderBy, orderDirection).stream()
     	   			.map(loginUser -> {return loginUserMapper.loginUserToLoginUserDto(loginUser);})
     	   			.collect(Collectors.toList()); 
-    } 
+    }
+
+	@Override
+	public int getLoginUserCount() {
+		return loginUserDao.getLoginUserCount();
+	} 
     
    
    

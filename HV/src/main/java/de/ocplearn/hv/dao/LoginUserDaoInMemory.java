@@ -141,4 +141,10 @@ public class LoginUserDaoInMemory implements LoginUserDao {
 		return null;
 	}
 
+	@Override
+	public int getLoginUserCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

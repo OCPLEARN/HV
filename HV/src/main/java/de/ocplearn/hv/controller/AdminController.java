@@ -147,6 +147,25 @@ public class AdminController {
 	
 	@GetMapping("/")
 	public String adminHome(Model model) {
+		
+		int pageSize = 15;
+		int totalCountLoginUser = this.userService.getLoginUserCount();
+		int totalPages = totalCountLoginUser / pageSize;
+		String sortField = "loginUserName";
+		String sortDir = "ASC";
+		
+		List<LoginUserDto> loginUserDtos = this.userService.findAllLoginUsers(0, pageSize, sortField, sortDir);
+		
+		model.addAttribute("currentPage", 1);
+		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("totalItems", totalCountLoginUser);
+		
+		model.addAttribute("sortField", sortField);
+		model.addAttribute("sortDir", sortDir);
+		model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc" );
+		
+		model.addAttribute("loginUsers", loginUserDtos);		
+		
 		return "/admin/adminhome";
 	}
 	

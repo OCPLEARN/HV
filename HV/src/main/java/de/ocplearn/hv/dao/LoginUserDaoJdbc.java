@@ -279,31 +279,7 @@ public class LoginUserDaoJdbc implements LoginUserDao {
     }    
     
 	
-	// STATIC METHODS
-	
-    /* get a connection from pool */
-    private Connection getConnection()  {
-    	
-    	if ( Config.useDBConnectionPool() ) {
-    		return pool.getConnection();	
-    	}else {
-    		try {
-				return datasource.getConnection();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				return null;
-			}
-    	}
-		//return null;
-    }
-    
-    /* return connection to poo */
-    private void returnConnection( Connection connection ) {
-    	if ( Config.useDBConnectionPool() ) {
-    		pool.returnConnection(connection);	
-    	}
-    	
-    }
+
 
 	@Override
 	public List<LoginUser> findAllLoginUsers(int indexStart, int rowCount, String orderBy, String orderDirection) throws DataAccessException {
@@ -337,7 +313,7 @@ public class LoginUserDaoJdbc implements LoginUserDao {
             	 loginUser.setSalt(resultSet.getBytes("salt"));
             	 
             	 loginUserList.add(loginUser);
-            	 System.out.println(loginUser.getLoginUserName());
+            	 //System.out.println(loginUser.getLoginUserName());
 
              }
           
@@ -351,4 +327,53 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 		return loginUserList;
 	}   	
     
+	/**
+     * 
+     * @return int number of LoginUser objects in datastore
+     * */
+	public int getLoginUserCount() {
+        try(Connection connection = getConnection();
+            	PreparedStatement stmt = connection.prepareStatement( "SELECT COUNT(id) AS total FROM loginUser;" );) {
+
+			ResultSet resultSet = stmt.executeQuery();
+			resultSet.next();
+			int count = resultSet.getInt("total");
+			
+			
+	        returnConnection(connection);
+	        return count;
+	    } catch (SQLException e) {
+	    	 e.printStackTrace(); 
+	         logger.log(Level.WARNING, e.getMessage());
+	         throw new DataAccessException("Unable to validate.");         
+	    }		
+	}    
+	
+	
+	// STATIC METHODS
+	
+    /* get a connection from pool */
+    private Connection getConnection()  {
+    	
+    	if ( Config.useDBConnectionPool() ) {
+    		return pool.getConnection();	
+    	}else {
+    		try {
+				return datasource.getConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return null;
+			}
+    	}
+		//return null;
+    }
+    
+    /* return connection to poo */
+    private void returnConnection( Connection connection ) {
+    	if ( Config.useDBConnectionPool() ) {
+    		pool.returnConnection(connection);	
+    	}
+    	
+    }	
+	
 }
