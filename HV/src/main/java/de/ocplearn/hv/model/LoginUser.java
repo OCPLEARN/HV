@@ -3,6 +3,8 @@ package de.ocplearn.hv.model;
 import java.util.Locale;
 import java.util.Objects;
 
+import lombok.NonNull;
+
 
 
 

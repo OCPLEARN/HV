@@ -3,10 +3,13 @@ package de.ocplearn.hv.dto;
 import java.util.Locale;
 import java.util.Objects;
 
+import javax.validation.Valid;
+
+import org.springframework.lang.NonNull;
+
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.Role;
 
-@lombok.Data
 public class LoginUserDto implements Comparable<LoginUserDto> {
 	
     private int id;
@@ -14,7 +17,14 @@ public class LoginUserDto implements Comparable<LoginUserDto> {
     private Role role;
     private byte [] passwHash;
     private byte [] salt;
-    private Locale locale;
+    @Override
+	public String toString() {
+		return "LoginUserDto [id=" + id + ", loginUserName=" + loginUserName + ", role=" + role + ", locale=" + locale
+				+ "]";
+	}
+
+
+	private Locale locale;
 
     public LoginUserDto(){}
     

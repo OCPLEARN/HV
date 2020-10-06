@@ -122,22 +122,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<LoginUserDto> getAllLoginUsers() {   
     		    	  
-    		return loginUserDao.findAllLoginUsers(1, UserService.ROW_COUNT, "loginUserName", "ASC").stream()
+    		return loginUserDao.findAllLoginUsers(0, UserService.ROW_COUNT, "loginUserName", "ASC").stream()
     	   			.map(loginUser -> {return loginUserMapper.loginUserToLoginUserDto(loginUser);})
     	   			.collect(Collectors.toList()); 
     }
     
     @Override
-    public List<LoginUserDto> findAllLoginUsers(int indexStart, int rowCount, String orderBy, String orderDirection ) {   
+    public List<LoginUserDto> findAllLoginUsers(int offset, int rowCount, String orderBy, String orderDirection ) {   
     		    	  
-    		return loginUserDao.findAllLoginUsers(indexStart, rowCount, orderBy, orderDirection).stream()
+    		return loginUserDao.findAllLoginUsers(offset, rowCount, orderBy, orderDirection).stream()
     	   			.map(loginUser -> {return loginUserMapper.loginUserToLoginUserDto(loginUser);})
     	   			.collect(Collectors.toList()); 
     } 
     
-    
    
-    
    
     
     
