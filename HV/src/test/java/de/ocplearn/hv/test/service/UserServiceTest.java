@@ -43,13 +43,12 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 @SpringBootTest
 public class UserServiceTest {
 
-	@Autowired
 	private UserService userService;
 
-//	@Autowired
-//	public UserServiceTest(UserService userService) {
-//		this.userService = userService;
-//	}
+	@Autowired
+	public UserServiceTest(UserService userService) {
+		this.userService = userService;
+	}
 
 	private Supplier<LoginUserDto> loginUserDtoSuppl = LoginUserDto::new;
 
@@ -133,7 +132,6 @@ public class UserServiceTest {
 	}
 
 	
-	
 	@Test
 	public void testDelete_loginUserByLoginUserName_booleanTrue() {
 		
@@ -161,14 +159,6 @@ public class UserServiceTest {
 		// Then
 		Assertions.assertTrue(userService.deleteUser(loginUser));
 		}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	@Test
 	public void testfindAllLoginUsers_sortedByName_sortedAscending() {
