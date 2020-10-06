@@ -126,7 +126,11 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 
 	@Override
 	public boolean delete(String loginUserName) {
-		// TODO Auto-generated method stub
+		
+		if 
+
+		
+		
 		return false;
 	}
 
@@ -281,11 +285,15 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 		 List<LoginUser> loginUserList = new ArrayList<>();
 
 		 try(Connection connection = getConnection(); ) {
-             PreparedStatement stmt = connection.prepareStatement( "SELECT * FROM loginUser ORDER BY ? ? LIMIT ?, ?;" );
-             stmt.setString(1, orderBy  );
-             stmt.setString(2, orderDirection);
-             stmt.setInt(3, indexStart);
-             stmt.setInt(4, rowCount);
+             PreparedStatement stmt = connection.prepareStatement( "SELECT * FROM loginUser ORDER BY " + orderBy + " " + orderDirection + " LIMIT ?, ?;" );
+
+             // SQL sorts different than Java 
+             // Prepared Statements in SQL don´t accept ? on column name and sort order
+             
+//             stmt.setString(1, orderBy  );
+//             stmt.setString(2, orderDirection);
+             stmt.setInt(1, indexStart);
+             stmt.setInt(2, rowCount);
 
              ResultSet resultSet = stmt.executeQuery();          
              
@@ -298,6 +306,8 @@ public class LoginUserDaoJdbc implements LoginUserDao {
             	 loginUser.setSalt(resultSet.getBytes("salt"));
             	 
             	 loginUserList.add(loginUser);
+            	 System.out.println(loginUser.getLoginUserName());
+
              }
           
          } catch (SQLException e) {

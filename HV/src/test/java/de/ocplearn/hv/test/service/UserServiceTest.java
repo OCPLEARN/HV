@@ -141,9 +141,9 @@ public class UserServiceTest {
 		LoginUserDto loginUser2 = loginUserDtoSuppl.get();
 		LoginUserDto loginUser3 = loginUserDtoSuppl.get();
 
-		loginUser1.setLoginUserName("Alberta" + System.currentTimeMillis());
-		loginUser2.setLoginUserName("Berta" + System.currentTimeMillis());
-		loginUser3.setLoginUserName("Cesar" + System.currentTimeMillis());
+		loginUser1.setLoginUserName("alberto"/* + System.currentTimeMillis()*/);
+		loginUser2.setLoginUserName("bert" );
+		loginUser3.setLoginUserName("cesaria");
 
 		loginUser1.setRole(Role.ADMIN);
 		loginUser1.setLocale(Locale.FRENCH);
@@ -162,15 +162,29 @@ public class UserServiceTest {
 
 		// When
 		
-		List<LoginUserDto> loginUserDtoList = userService.findAllLoginUsers(0, 25, "loginUserName", "ASC");
+				List<LoginUserDto> loginUserDtoList = userService.findAllLoginUsers(0, 300, "loginUserName", "ASC");
 		
-		System.out.print(loginUserDtoList.toString());
+		System.out.print(loginUserDtoList.toString().toLowerCase());
 		System.out.println("XXXXXX");
-		System.out.print(loginUserDtoList.stream().sorted().collect(Collectors.toList()).toString());
+		
+		List<LoginUserDto> loginUserDtoList2 = loginUserDtoList.stream()
+				.sorted((T1,T2)->{return T1.getLoginUserName().toLowerCase().compareTo(T2.getLoginUserName().toLowerCase());}).collect(Collectors.toList());
+		
+		System.out.println(loginUserDtoList2);
+		
+		//System.out.print(loginUserDtoList.stream().sorted().collect(Collectors.toList()).toString().toLowerCase());
+		
+		
+		
 		
 		// Then
 		
-		Assertions.assertTrue(loginUserDtoList.stream().sorted().collect(Collectors.toList()).equals(loginUserDtoList));
+//		List<LoginUserDto> loginUserDtoList2 = loginUserDtoList.stream()
+//				.sorted((T1,T2)->{return T1.getLoginUserName().toLowerCase().compareTo(T2.getLoginUserName().toLowerCase());}).collect(Collectors.toList());
+//		
+		Assertions.assertTrue(loginUserDtoList.equals(loginUserDtoList2));
+		
+		//Assertions.assertTrue(loginUserDtoList.stream().sorted().collect(Collectors.toList()).equals(loginUserDtoList));
 
 //		Assertions.assertTrue(loginUserDtoList.get(0).getLoginUserName().contains("Alberta"));
 //		Assertions.assertTrue(loginUserDtoList.get(2).getLoginUserName().contains("Cesar"));
