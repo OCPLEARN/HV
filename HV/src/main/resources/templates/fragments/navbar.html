@@ -36,7 +36,8 @@
         
           <a class="dropdown-item nav-link" href="#" th:href=@{/page2}>Page2</a>
 <!--           toggle item page3 only shown when logged in as admin -->
-          <a class="dropdown-item nav-link" href="#" th:if="${loginUserName == 'admin'}"  th:href=@{/admin/page3}>Page3</a>
+          <a class="dropdown-item nav-link" href="#" sec:authorize="isAuthenticated()"  th:href=@{/admin/page3}>Page3</a>
+          <a class="dropdown-item nav-link" href="#" sec:authorize="isAuthenticated()"  th:href=@{/admin/users}>Users</a>
           
 <!--           <a class="dropdown-item nav-link" href="#" >Another action</a> -- >
 <!--           <div class="dropdown-divider"></div> -->

@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
 
-	<title>Home</title>
+	<title>Users</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <!--     <link rel="stylesheet" type="text/css" media="all" href="../../css/gtvg.css" th:href="@{/css/gtvg.css}" /> -->
@@ -44,9 +44,9 @@
 	<table class="table table-striped table-responsive-md table-hover">
       <thead class="thead-dark">
         <tr>
-          <th scope="col">#</th>
-          <th scope="col">loginUserName</th>
-          <th scope="col">role</th>
+          <th scope="col"><a th:href="@{'/admin/users/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir} }">ID</a></th>
+          <th scope="col"><a th:href="@{'/admin/users/' + ${currentPage} + '?sortField=loginusername&sortDir=' + ${reverseSortDir} }">LoginUserName</a></th>
+          <th scope="col"><a th:href="@{'/admin/users/' + ${currentPage} + '?sortField=loginuserrole&sortDir=' + ${reverseSortDir} }">Role</a></th>
           <th scope="col">Actions</th>
         </tr>
       </thead>	
@@ -56,7 +56,7 @@
           <td th:text="${user.id}">id</td>
           <td th:text="${user.loginUserName}">Onions</td>
           <td th:text="${user.role}">2.41</td>
-          <td></td>
+          <td><a th:href="@{/admin/users/delete/{loginusername}(loginusername=${user.loginUserName})}" class="btn btn-danger">Delete</a></td>
         </tr>      
       </tbody>      
       
@@ -70,16 +70,16 @@
 			</div>
 			<div class="col-sm-2">
 				<span th:each="i: ${#numbers.sequence(1, totalPages)}">
-					<a th:if="${currentPage != i}" th:href="@{'/admin/' + ${i} +'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }">[[${i}]]</a>
+					<a th:if="${currentPage != i}" th:href="@{'/admin/users/' + ${i} +'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }">[[${i}]]</a>
 					<span th:unless="${currentPage != i}" >[[${i}]]</span>&nbsp; &nbsp;
 				</span>
 			</div>
 			<div class="col-sm-1">
-				<a th:if="${currentPage < totalPages}" th:href="@{'/admin/' + ${currentPage + 1} +'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }" >Next</a>
+				<a th:if="${currentPage < totalPages}" th:href="@{'/admin/users/' + ${currentPage + 1} +'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }" >Next</a>
 				<span th:unless="${currentPage < totalPages} ">Next</span>
 			</div>
 			<div class="col-sm-1">
-				<a th:if="${currentPage < totalPages}" th:href="@{'/admin/' + ${totalPages} +'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }">Last</a>
+				<a th:if="${currentPage < totalPages}" th:href="@{'/admin/users/' + ${totalPages} +'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }">Last</a>
 				<span th:unless="${currentPage < totalPages }">Last</span>
 			</div>
 		</div>

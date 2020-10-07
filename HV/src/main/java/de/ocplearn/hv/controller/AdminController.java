@@ -5,7 +5,9 @@ package de.ocplearn.hv.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 //import de.ocplearn.hv.service.UserService;
 
@@ -46,117 +48,27 @@ public class AdminController {
 	public AdminController(UserService userService) {
 		this.userService = userService;
 	}
+		
+	@GetMapping("/users")
+	public String startUserList(Model model) {
+		
+		return pagingUserList(model, 1, "loginUserName", "ASC");
+	}
 	
-	@GetMapping
-	public String home(HttpServletRequest request, Model model) {
+	@GetMapping("/users/{pageNumber}")
+	public String pagingUserList(Model model,
+							@PathVariable(value = "pageNumber") int pageNumber, 
+							@RequestParam("sortField") String sortField,
+							@RequestParam("sortDir") String sortDir) {
 		
-		HttpSession session = request.getSession();
-		
-    	// #####################################################################
-		Map<String, String[]> map = request.getParameterMap();
-		String beginIndex = "0";
-		String rowCount = "20";
-		if ( map.containsKey("beginIndex") ) { 
-			beginIndex = map.get("beginIndex")[0];
-		}else {
-			if ( session.getAttribute("users.beginIndex") != null ) { beginIndex = (String)session.getAttribute("users.beginIndex"); } else { beginIndex = "0"; }
-			
-		}
-		session.setAttribute("users.beginIndex", beginIndex);
-		
-		if ( map.containsKey("rowCount") ) {
-			rowCount = map.get("rowCount")[0];
-		}else {
-			if ( session.getAttribute("users.rowCount") != null ) { rowCount = (String)session.getAttribute("users.rowCount"); } else { rowCount = "20"; }
-		}
-		session.setAttribute("users.rowCount", rowCount);
-		
-		
-		// /home?vUsers=Next
-		String vUsers = "next";
-		if (  map.containsKey("vUsers") && map.get("vUsers")[0] != null ) {
-			vUsers = map.get("vUsers")[0];
-		}
-    	
-		System.out.println("-- nav -- vUsers = " + vUsers);
-		
-		int rowCountInt = Integer.valueOf(rowCount);
-		
-		switch( vUsers ) {
-			case "next": {
-			}
-			case "next1": {
-				int beginIndexInt = Integer.valueOf(beginIndex); 
-				beginIndex = "" + (beginIndexInt + rowCountInt);
-				System.out.println("-- nav -- beginIndex NEW = " + beginIndex);
-				break;
-			}	
-			case "next2": {
-				int beginIndexInt = Integer.valueOf(beginIndex); 
-				beginIndex = "" + (beginIndexInt +  2 * rowCountInt);
-				System.out.println("-- nav -- beginIndex NEW = " + beginIndex);
-				break;
-			}	
-			case "next3": {
-				int beginIndexInt = Integer.valueOf(beginIndex); 
-				beginIndex = "" + (beginIndexInt + 3 * rowCountInt);
-				System.out.println("-- nav -- beginIndex NEW = " + beginIndex);
-				break;
-			}			
-			case "prev": {
-				int beginIndexInt = Integer.valueOf(beginIndex); 
-				if ( (beginIndexInt - rowCountInt) < 0 ) {
-					beginIndexInt = 0; beginIndex = "0";
-				} 
-				else {
-					beginIndex = "" + (beginIndexInt - rowCountInt);	
-				}
-				System.out.println("-- nav -- prev, beginIndex NEW = " + beginIndex + ", rowCount = " + rowCount);
-				break;
-			}
-			case "selectRCount":{
-				
-				if ( map.containsKey("inlineFormCustomSelect") ) { 
-					rowCount = map.get("inlineFormCustomSelect")[0];
-				}
-				System.out.println("-- nav -- selectRCount = " + rowCount);
-				session.setAttribute("users.rowCount", rowCount);
-				break;
-			}
-		}
-		session.setAttribute("users.beginIndex", beginIndex);
-		System.out.println("-- nav -- beginIndex = " + beginIndex + " ");
-		
-    	//DBConnectionPool pool = DBConnectionPool.getInstance();
-    	//Connection con = pool.getConnection();
-    	List<LoginUserDto> users = userService.findAllByRole(Role.ADMIN) ;
-    			//userService.getAllLoginUsers();
-
-    	
-    	
-    	// #####################################################################		
-
-        model.addAttribute("msgInfo","-");
-        model.addAttribute("beginIndex",beginIndex);
-        model.addAttribute("rowCount",rowCount);
-        model.addAttribute("ld",LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
-        model.addAttribute("loginUsers",users);
-        
-		return "admin/adminhome";
-	}	
-	
-	@GetMapping("/")
-	public String adminHome(Model model) {
-		
-		int pageSize = 15;
+		int pageSize = 10;
 		int totalCountLoginUser = this.userService.getLoginUserCount();
-		int totalPages = totalCountLoginUser / pageSize;
-		String sortField = "loginUserName";
-		String sortDir = "ASC";
+		int totalPages = ((totalCountLoginUser % pageSize) == 0)? (totalCountLoginUser / pageSize): (totalCountLoginUser / pageSize)+1;
+		int offset = (pageNumber * pageSize) - pageSize;
+
+		List<LoginUserDto> loginUserDtos = this.userService.findAllLoginUsers(offset, pageSize, sortField, sortDir);
 		
-		List<LoginUserDto> loginUserDtos = this.userService.findAllLoginUsers(0, pageSize, sortField, sortDir);
-		
-		model.addAttribute("currentPage", 1);
+		model.addAttribute("currentPage", pageNumber);
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("totalItems", totalCountLoginUser);
 		
@@ -166,12 +78,19 @@ public class AdminController {
 		
 		model.addAttribute("loginUsers", loginUserDtos);		
 		
-		return "/admin/adminhome";
+		return "/admin/users";
 	}
 	
 	@GetMapping("/page3")
 	public String adminPage3(){
 		return "/admin/page3";
 	}
+	
+	@GetMapping("/users/delete/{loginusername}")
+	public String deleteUserFromList( ) {
+		
+		return "redirect:/users?delete=succes";
+	}
+	
 	
 }
