@@ -92,7 +92,8 @@ public class AdminController {
 	@GetMapping("/users/delete")
 	public String deleteUserFromList( @RequestParam("loginusername") String loginUserName) {
 		
-		String msg;
+		String msg = "";
+		
 //		Infos und Warnmeldungen für die Infoschaltfläche in der Navbar	
 //		msg = "msg=neutrale Info";
 //		msg = "msgWarn=Warnung";
@@ -108,24 +109,23 @@ public class AdminController {
 	@GetMapping("/users/edit")
 	public String editUserFromList( @RequestParam("loginusername") String loginUserName, Model model) {
 		
-		LoginUserDto loginUserDto = userService.findUserByLoginUserName(loginUserName);
+		LoginUserDto loginUserDto = userService.findUserByLoginUserName(loginUserName); 
 		model.addAttribute("loginUser", loginUserDto); //Definition of variable for Thymeleaf
-		
 		
 		return "/admin/usersedit";
 		
 	}
 	
 	@PostMapping("/users/save")
-	public String saveUserFromList(@ModelAttribute("loginUser") LoginUserDto loginUserDto) {
+	public String saveUserFromList(@ModelAttribute("loginUser") LoginUserDto loginUserDtoUpdate) {
 		
-		System.out.println(loginUserDto.getRole());
-		
-		
-		String msg;
-//		Infos und Warnmeldungen für die Infoschaltfläche in der Navbar	
-//		msg = "msg=neutrale Info";
-//		msg = "msgWarn=Warnung";
+		String msg = "";
+
+		LoginUserDto loginUserDto = this.userService.findUserByLoginUserName(loginUserDtoUpdate.getLoginUserName());
+				
+		if(loginUserDtoUpdate.getRole() != null && !(loginUserDto.getRole().equals(loginUserDtoUpdate.getRole()))) {
+			loginUserDto.setRole(loginUserDtoUpdate.getRole());
+		}
 		
 		if (userService.updateUser(loginUserDto)) {
 			msg = "msgSuccess=User wurde aktualisiert!";
@@ -133,8 +133,6 @@ public class AdminController {
 			msg = "msgFail=User konnte nicht aktualisiert werden.";
 		}
 		return "redirect:/admin/users?" + msg; 
-		
-	
 	}
 	
 	
