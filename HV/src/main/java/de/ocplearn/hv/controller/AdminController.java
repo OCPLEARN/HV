@@ -99,7 +99,7 @@ public class AdminController {
 //		msg = "msgWarn=Warnung";
 		
 		if (userService.deleteUser(loginUserName)) {
-			msg = "msgSuccess=User gelöscht!";
+			msg = "msgSuccess_user_deleted";
 		} else {
 			msg = "msgFail=User konnte nicht gelöscht werden.";
 		}

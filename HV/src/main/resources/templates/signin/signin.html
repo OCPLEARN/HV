@@ -39,18 +39,18 @@
 	
 				
 		<tr>
-			<td th:Text="#{username} + ' :'">username :</td>
+			<td th:Text="#{username} + ': '">username :</td>
 			<td><input type="text" name="username"></td>
 		</tr>
 	
 		<tr>
-			<td th:Text="#{password} + ' :'">password :</td>
+			<td th:Text="#{password} + ': '">password :</td>
 			<td><input type="password" name="password"></td>			
 		</tr>
 		
 		<tr>
 			<td></td>
-			<td><input class="btn btn-primary" type="submit" value="Submit"></td>
+			<td><input class="btn btn-primary" type="submit" th:value="#{submit}"></td>
 		</tr>
 
 	</table>		
