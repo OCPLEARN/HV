@@ -7,6 +7,9 @@
 <body>
     <footer th:fragment="footer">
     <h1>  <p>&copy; my Footer</p> </h1>
+    	<p sec:authorize="hasRole('ADMIN')">
+	      Authenticated as <span sec:authentication="name"></span>
+		</p>
          <p>&copy; Contact Data</p>
              
            

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import de.ocplearn.hv.dto.ContactDto;
@@ -17,7 +18,11 @@ import de.ocplearn.hv.model.Contact.ContactBuilder;
 @SpringBootTest
 public class ContactTest {
 	
-	ContactMapper contactMapper = ContactMapper.INSTANCE; 
+	@Autowired
+	ContactMapper contactMapper; 
+	
+	//wenn ContactMapper das ComponentModel "spring" hat, kann Autogewired werden
+	//ContactMapper contactMapper = ContactMapper.INSTANCE;
 
 	@Test
 	public void test_createContact_contactCreated() {

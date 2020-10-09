@@ -5,7 +5,7 @@ import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.mapper.LoginUserMapper;
 import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.LoginUser;
-import de.ocplearn.hv.model.PropertyManager;
+import de.ocplearn.hv.model.PropertyManagement;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.model.Tenant;
 import de.ocplearn.hv.util.StaticHelpers;
@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Tenant> findTenantsByPropertyManager(PropertyManager propertyManager) {
+    public List<Tenant> findTenantsByPropertyManager(PropertyManagement propertyManager) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

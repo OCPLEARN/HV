@@ -45,7 +45,7 @@ public class HomeController {
 	
 	@GetMapping("/signin")
 	public String signIn() {
-		return "/signin/signin";
+		return "/public/signin";
 	}
 	
 	@ModelAttribute

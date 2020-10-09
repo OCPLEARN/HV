@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.LoginUser;
-import de.ocplearn.hv.model.PropertyManager;
+import de.ocplearn.hv.model.PropertyManagement;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.model.Tenant;
 /**
@@ -51,7 +51,7 @@ public interface UserService {
      * @param propertyManager instance
      * @return List of Tenant instances
      */
-    List<Tenant> findTenantsByPropertyManager( PropertyManager propertyManager );
+    List<Tenant> findTenantsByPropertyManager( PropertyManagement propertyManager );
     
     /**
      * Returns all Tenant instances in units assigned to this Building instance

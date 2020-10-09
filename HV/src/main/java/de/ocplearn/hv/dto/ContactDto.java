@@ -2,7 +2,7 @@ package de.ocplearn.hv.dto;
 
 public class ContactDto implements Comparable<ContactDto>{
 
-	private long id;
+	private int id;
 	private String sex;
 	private String firstName;
 	private String lastName;
@@ -18,7 +18,7 @@ public class ContactDto implements Comparable<ContactDto>{
 		
 		// Artikel zum Thema: https://dzone.com/articles/design-patterns-the-builder-pattern
 		
-		private long id;
+		private int id;
 		private String sex;
 		private String firstName;
 		private String lastName;
@@ -63,7 +63,7 @@ public class ContactDto implements Comparable<ContactDto>{
 		/**
 		 * @param id the id to set
 		 */
-		public ContactBuilder setId(long id) {
+		public ContactBuilder setId(int id) {
 			this.id = id;
 			return this;
 		}

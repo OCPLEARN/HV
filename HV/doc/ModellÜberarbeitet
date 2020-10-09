@@ -1,0 +1,19 @@
+1. Signin 		-> create Login User (neuer Kunde legt einen LoginUser an) 
+				-primaryLoginUser (Rolle wird zugewiesen), pw und Username
+				-inkl. Prüfung, ob LoginUserName schon in DB vorhanden
+				-FirmenContact angeben (das wird unsere Rechnungsadresse)
+				-PrimaryContact anlegen (als Fa mit einer natürl. Person)
+				-Bestätigung
+				-Endpunkt /signin
+
+2. Anmeldung	-> Userspace (abhängig von der Rolle)
+				- Building anlegen
+				- Renter anlegen
+				- 
+
+
+
+
+2. Building Anlegen	-> create neues Building mit neuen Units
+
+3. Renter anlegen	-> 
