@@ -243,16 +243,16 @@ public class Contact implements Comparable<Contact>{
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object object) {
+		if (this == object)
 			return true;
-		if (obj == null)
+		if (object == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (getClass() != object.getClass())
 			return false;
-		Contact other = (Contact) obj;
+		Contact other = (Contact) object;
 
-		if (id != other.id)
+		if (this.id != other.id)
 			return false;
 	
 		return true;

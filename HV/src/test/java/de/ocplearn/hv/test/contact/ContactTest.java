@@ -1,5 +1,8 @@
 package de.ocplearn.hv.test.contact;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -7,22 +10,32 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.util.ResourceUtils;
 
 import de.ocplearn.hv.dto.ContactDto;
 import de.ocplearn.hv.mapper.ContactMapper;
 import de.ocplearn.hv.model.Contact;
 import de.ocplearn.hv.model.Contact.ContactBuilder;
 
-
+import org.json.*;
 @SpringBootTest
 public class ContactTest {
 	
-	@Autowired
-	ContactMapper contactMapper; 
-	
+
 	//wenn ContactMapper das ComponentModel "spring" hat, kann Autogewired werden
 	//ContactMapper contactMapper = ContactMapper.INSTANCE;
+	
+	@Autowired
+	ContactMapper contactMapper; 	
+	
+	//Interface Resourceloader lädt Resource aus Verzeichnis mit relativem Pfad
+	
+	@Autowired
+	ResourceLoader resourceLoader;
 
 	@Test
 	public void test_createContact_contactCreated() {
@@ -72,5 +85,32 @@ public class ContactTest {
 		Assertions.assertTrue(contactDto.getFirstName().equals(contact1.getFirstName()));
 		
 	}
+	
+	
+
+	
+	@Test
+	public void test_getResourceFromClasspath_Resource() throws IOException{
+	
+		Resource resource = resourceLoader.getResource("classpath:static/countrycodes/Country.json");
+		File file = resource.getFile();
+				
+		Assertions.assertTrue(file.exists());
+	}
+	
+	
+	@Test
+	public void test_loadCountryList_countryListJson() {
+		
+		Resource resource = resourceLoader.getResource("classpath:static/countrycodes/Country.json");
+		File file = resource.getFile();
+
+		try{
+			
+			
+		}		
+	}
+	
+	
 
 }
