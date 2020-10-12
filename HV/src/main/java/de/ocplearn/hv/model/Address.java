@@ -1,6 +1,5 @@
 package de.ocplearn.hv.model;
 
-import java.util.Locale;
 
 public class Address implements Comparable<Address> {
 	
@@ -9,22 +8,14 @@ public class Address implements Comparable<Address> {
 	private int houseNumber;
 	private String apartment;
 	private String city;
+	private String zipCode;
 	private String province;
-	//Country.Json in static/countrycodes from 
-	//https://unstats.un.org/unsd/amaapi/api/Country
-	private String country;
+	private String country; //Country.Json in static/countrycodes from: https://unstats.un.org/unsd/amaapi/api/Country
 	
-	//latitude longitude
-	//double mit 6 Nachkommastellen
-	//1.Latitude 2. Longitude, 
-	//Norden +, Süden -
-	//Osten +, Westen -
-	//Datumsgrenze 180
-	
+	//latitude longitude double mit 6 Nachkommastellen
+	//1.Latitude (Norden +, Süden -) 2. Longitude (Osten +, Westen -), Datumsgrenze 180 bzw. -180
 	private double latitude;
 	private double longitude;
-	
-	
 
 	public Address() {
 		super();
@@ -168,6 +159,7 @@ public class Address implements Comparable<Address> {
 		result = prime * result + houseNumber;
 		result = prime * result + id;
 		result = prime * result + ((street == null) ? 0 : street.hashCode());
+		result = prime * result + ((apartment == null) ? 0 : apartment.hashCode());
 		return result;
 	}
 	@Override
@@ -207,7 +199,6 @@ public class Address implements Comparable<Address> {
 		if (this.getCountry().equalsIgnoreCase(o.getCountry())) {
 			if(this.getCity().equalsIgnoreCase(o.getCity())) {
 				if (this.getStreet().equalsIgnoreCase(o.getStreet())) {
-					
 					if(this.getHouseNumber()==o.getHouseNumber()) {
 						if(this.getApartment()!=null&&o.getApartment()!=null) {
 							return (this.getApartment().compareTo(o.getApartment()));
@@ -220,16 +211,12 @@ public class Address implements Comparable<Address> {
 				}else {
 					return (this.getStreet().compareToIgnoreCase(o.getStreet()));
 				}
-						
 			}else {
 				return (this.getCity().compareToIgnoreCase(o.getCity()));
 			}
-						
 		}else {
 			return (this.getCountry().compareToIgnoreCase(o.getCountry()));
 		}
-		
-		
 	}
 	
 }

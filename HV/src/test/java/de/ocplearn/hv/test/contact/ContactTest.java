@@ -2,6 +2,7 @@ package de.ocplearn.hv.test.contact;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -22,6 +23,9 @@ import de.ocplearn.hv.model.Contact;
 import de.ocplearn.hv.model.Contact.ContactBuilder;
 
 import org.json.*;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 @SpringBootTest
 public class ContactTest {
 	
@@ -101,15 +105,29 @@ public class ContactTest {
 	
 	@Test
 	public void test_loadCountryList_countryListJson() {
-		
+				
 		Resource resource = resourceLoader.getResource("classpath:static/countrycodes/Country.json");
-		File file = resource.getFile();
+		File file;
+		try {
+			file = resource.getFile();
+			
+			try (FileReader fileReader = new FileReader(file);){
+				JSONParser parser = new JSONParser();
+				JSONArray jsonArray = (JSONArray) parser.parse(fileReader);
+				System.out.println(jsonArray);
+				Assertions.assertFalse(jsonArray.isEmpty());
+				
+			} catch(IOException | ParseException e) {
+				e.getStackTrace();
+			} 
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+		
 
-		try{
-			
-			
-		}		
 	}
+	
+		
 	
 	
 
