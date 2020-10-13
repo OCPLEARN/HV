@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.ResourceUtils;
@@ -21,6 +22,7 @@ import de.ocplearn.hv.dto.ContactDto;
 import de.ocplearn.hv.mapper.ContactMapper;
 import de.ocplearn.hv.model.Contact;
 import de.ocplearn.hv.model.Contact.ContactBuilder;
+import de.ocplearn.hv.util.CountryList;
 
 import org.json.*;
 import org.json.simple.JSONArray;
@@ -41,6 +43,9 @@ public class ContactTest {
 	@Autowired
 	ResourceLoader resourceLoader;
 
+	@Autowired
+	ApplicationContext applicationContext;
+	
 	@Test
 	public void test_createContact_contactCreated() {
 
@@ -114,7 +119,6 @@ public class ContactTest {
 			try (FileReader fileReader = new FileReader(file);){
 				JSONParser parser = new JSONParser();
 				JSONArray jsonArray = (JSONArray) parser.parse(fileReader);
-				System.out.println(jsonArray);
 				Assertions.assertFalse(jsonArray.isEmpty());
 				
 			} catch(IOException | ParseException e) {
@@ -123,11 +127,21 @@ public class ContactTest {
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
-		
-
 	}
 	
+	
+	@Test
+	public void test_reloadCountryListJSON_booleanNewCount() {
 		
+		CountryList countryList = (CountryList) applicationContext.getBean("CountrylistJSON");
+		int loadCountbefore = countryList.getLoadCount();
+		countryList.loadCountryListJSON();
+		int loadCountafter = countryList.getLoadCount();
+
+		Assertions.assertTrue(loadCountbefore +1 == loadCountafter);
+		
+	}
+	
 	
 	
 
