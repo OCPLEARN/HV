@@ -1,5 +1,6 @@
 package de.ocplearn.hv.test.contact;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -7,6 +8,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -24,7 +29,7 @@ import de.ocplearn.hv.model.Contact;
 import de.ocplearn.hv.model.Contact.ContactBuilder;
 import de.ocplearn.hv.util.CountryList;
 
-import org.json.*;
+import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -142,7 +147,89 @@ public class ContactTest {
 		
 	}
 	
+	@Test
+	public void test_loadCountryList_countryListJson2() throws ParseException {
+		Resource resource = resourceLoader.getResource("classpath:static/countrycodes/Country.json");
+		File file = null;
+		try {
+			file = resource.getFile();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		Set<String> countryNames = new TreeSet<>();
 	
+		try( BufferedReader br = new BufferedReader( new FileReader(file) ); ){
+			JSONParser parser = new JSONParser();
+			org.json.simple.JSONArray jsonArray = (org.json.simple.JSONArray) parser.parse(br);
+			
+			Stream<org.json.simple.JSONObject> stream = null;
+			
+			stream = jsonArray.stream();
+			
+			countryNames =
+			
+			stream.flatMap( jo -> {
+				String value = (String)jo.get("countryName");
+				return Stream.of(value);
+			} )
+			.collect( Collectors.toSet() );
+
+			System.out.println( "count countries" + countryNames.size() );
+			
+		}catch( IOException e ) {
+			e.printStackTrace();
+		}
+	}	
+	
+	@Test
+	public void test_loadCountryList_countryListJson3() {
+				
+		Resource resource = resourceLoader.getResource("classpath:static/countrycodes/Country.json");
+		File file = null;
+		try {
+			file = resource.getFile();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		// [{"countryCode":4,"countryName":"Afghanistan","currencyName":"Afghani","isCountry":true},
+		
+		Set<String> countryNames = new TreeSet<>(); 
+		
+		try( BufferedReader br = new BufferedReader( new FileReader(file) ); ){
+			
+			StringBuilder sb = new StringBuilder();
+			String str = "";
+			while( ( str = br.readLine() ) != null ) {
+				sb.append(str);
+			}
+			org.json.JSONArray ja = null;
+			try {
+				ja = new org.json.JSONArray( sb.toString() );
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
+			int length = ja.length();
+			for ( int i = 0; i < length; i++ ) {
+				try {
+					org.json.JSONObject obj = ja.getJSONObject(i);
+					countryNames.add(obj.getString("countryName"));
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+
+			}
+			
+		}catch( IOException e ) {
+			e.printStackTrace();
+		}
+			
+		System.out.println(countryNames);
+		
+
+	}	
 	
 
 }
