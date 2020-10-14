@@ -22,6 +22,31 @@
 	<div th:replace="~{fragments/header :: header}">Header</div>
 	<div th:replace="~{fragments/navbar :: navbar}">Navibarr</div>
 	
+	
+		<form name="f" th:object="${loginUserDto}" th:action="@{/register}" method="post">
+	<table class="table">
+		
+		<tr>
+			<td th:Text="#{username} + ': '">username :</td>
+			<td>
+			  <input type="text" name="username" th:field="*{loginUserName}">
+			  <span class="validationError" th:if="${#fields.hasErrors('loginUserName')}" th:errors="*{loginUserName}">Name Error</span>
+			</td> 
+			
+		</tr>
+	
+<!-- 		<tr> -->
+<!-- 			<td th:Text="#{password} + ': '">password :</td> -->
+<!-- 			<td><input type="password" name="password"></td>			 -->
+<!-- 		</tr> -->
+		
+		<tr>
+			<td></td>
+			<td><input class="btn btn-primary" type="submit" th:value="#{submit}"></td>
+		</tr>
+
+	</table>		
+	</form>
 
 
    

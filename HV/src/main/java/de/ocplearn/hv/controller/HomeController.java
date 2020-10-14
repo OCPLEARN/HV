@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -13,8 +14,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.model.LoginUser;
@@ -69,12 +72,28 @@ public class HomeController {
 	@GetMapping("/register")
 	public String register(Model model) {
 		
+		LoginUserDto loginUserDto = new LoginUserDto();
+		
 		CountryList countryList = this.applicationContext.getBean(CountryList.class);
-		
 		model.addAttribute("countryList", countryList.getCountryNames());
-		
+		model.addAttribute("loginUserDto", loginUserDto);
 		return "/public/register";
 	}
+	
+	
+	@PostMapping("/register")
+	public String createLoginUserDto(@Valid LoginUserDto loginUserDto,BindingResult bindingResult ,Model model) {
+		
+		if(bindingResult.hasErrors()) {
+				bindingResult.getFieldError();	
+				return 	"/public/register";
+		} 	else {
+				userService.createUser(loginUserDto, "test123");
+				return "/public/signin";
+		}
+	}
+	
+	
 }
 
 	

@@ -4,6 +4,9 @@ import java.util.Locale;
 import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.springframework.lang.NonNull;
 
@@ -12,9 +15,14 @@ import de.ocplearn.hv.model.Role;
 
 public class LoginUserDto implements Comparable<LoginUserDto> {
 	
+	
     private int id;
+    @NotNull
+    @Size(min=5, message="{username.tooshort}")
+    @Size(max=50, message="{username.toolong}")
     private String loginUserName;
     private Role role;
+    @NotNull
     private byte [] passwHash;
     private byte [] salt;
     @Override
