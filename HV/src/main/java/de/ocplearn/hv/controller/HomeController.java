@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,16 +21,21 @@ import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.service.UserService;
 import de.ocplearn.hv.service.UserServiceImpl;
+import de.ocplearn.hv.util.CountryList;
 
 @Controller
 public class HomeController {
 
 	private UserService userService;
 	
+	private ApplicationContext applicationContext;
+	
 	@Autowired
-	public HomeController(UserService userService) {
+	public HomeController(UserService userService, ApplicationContext applicationContext) {
 		this.userService = userService;
+		this.applicationContext = applicationContext;
 	}
+	
 	
 	@GetMapping("/")
 	public String home(Model model) {
@@ -39,7 +45,7 @@ public class HomeController {
 	
 	@GetMapping("/page2")
 	public String page2() {
-		return "public/page2";
+		return "/public/page2";
 	}
 	
 	
@@ -59,7 +65,19 @@ public class HomeController {
 		
 		model.addAttribute("loginUserName", authentication.getName() == null ? "X" : authentication.getName());
 	}
+	
+	@GetMapping("/register")
+	public String register(Model model) {
+		
+		CountryList countryList = this.applicationContext.getBean(CountryList.class);
+		
+		model.addAttribute("countryList", countryList.getCountryNames());
+		
+		return "/public/register";
+	}
 }
+
+	
 	
 	
 //	@GetMapping("/logout")

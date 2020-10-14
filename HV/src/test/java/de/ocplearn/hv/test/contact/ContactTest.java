@@ -135,17 +135,7 @@ public class ContactTest {
 	}
 	
 	
-	@Test
-	public void test_reloadCountryListJSON_booleanNewCount() {
-		
-		CountryList countryList = (CountryList) applicationContext.getBean("CountrylistJSON");
-		int loadCountbefore = countryList.getLoadCount();
-		countryList.loadCountryListJSON();
-		int loadCountafter = countryList.getLoadCount();
-
-		Assertions.assertTrue(loadCountbefore +1 == loadCountafter);
-		
-	}
+	
 	
 	@Test
 	public void test_loadCountryList_countryListJson2() throws ParseException {
@@ -153,15 +143,15 @@ public class ContactTest {
 		File file = null;
 		try {
 			file = resource.getFile();
-		} catch (IOException e1) {
-			e1.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 		Set<String> countryNames = new TreeSet<>();
 	
-		try( BufferedReader br = new BufferedReader( new FileReader(file) ); ){
+		try( BufferedReader bufferedReader = new BufferedReader( new FileReader(file) ); ){
 			JSONParser parser = new JSONParser();
-			org.json.simple.JSONArray jsonArray = (org.json.simple.JSONArray) parser.parse(br);
+			org.json.simple.JSONArray jsonArray = (org.json.simple.JSONArray) parser.parse(bufferedReader);
 			
 			Stream<org.json.simple.JSONObject> stream = null;
 			
@@ -169,67 +159,76 @@ public class ContactTest {
 			
 			countryNames =
 			
-			stream.flatMap( jo -> {
-				String value = (String)jo.get("countryName");
-				return Stream.of(value);
-			} )
-			.collect( Collectors.toSet() );
-
-			System.out.println( "count countries" + countryNames.size() );
+					stream	.filter(t -> (boolean)t.get("isCountry"))
+							.flatMap( jsonObject -> {
+								String value = (String)jsonObject.get("countryName"); // [{"countryCode":4,"countryName":"Afghanistan","currencyName":"Afghani","isCountry":true},
+								return Stream.of(value);
+								} )
+							.collect( Collectors.toSet() );
+			
+			//System.out.println( "count countries" + countryNames.size() );
 			
 		}catch( IOException e ) {
 			e.printStackTrace();
 		}
+		Assertions.assertFalse( countryNames.contains("Europe") );
 	}	
 	
-	@Test
-	public void test_loadCountryList_countryListJson3() {
-				
-		Resource resource = resourceLoader.getResource("classpath:static/countrycodes/Country.json");
-		File file = null;
-		try {
-			file = resource.getFile();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		
-		// [{"countryCode":4,"countryName":"Afghanistan","currencyName":"Afghani","isCountry":true},
-		
-		Set<String> countryNames = new TreeSet<>(); 
-		
-		try( BufferedReader br = new BufferedReader( new FileReader(file) ); ){
-			
-			StringBuilder sb = new StringBuilder();
-			String str = "";
-			while( ( str = br.readLine() ) != null ) {
-				sb.append(str);
-			}
-			org.json.JSONArray ja = null;
-			try {
-				ja = new org.json.JSONArray( sb.toString() );
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			
-			int length = ja.length();
-			for ( int i = 0; i < length; i++ ) {
-				try {
-					org.json.JSONObject obj = ja.getJSONObject(i);
-					countryNames.add(obj.getString("countryName"));
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-
-			}
-			
-		}catch( IOException e ) {
-			e.printStackTrace();
-		}
-			
-		System.out.println(countryNames);
-		
-
-	}	
+	
+	//Zweiter Test mit org.json.JSONArray statt org.json.simple
+//	@Test
+//	public void test_loadCountryList_countryListJson3() {
+//				
+//		Resource resource = resourceLoader.getResource("classpath:static/countrycodes/Country.json");
+//		File file = null;
+//		try {
+//			file = resource.getFile();
+//		} catch (IOException e1) {
+//			e1.printStackTrace();
+//		}
+//		
+//		// [{"countryCode":4,"countryName":"Afghanistan","currencyName":"Afghani","isCountry":true},
+//		
+//		Set<String> countryNames = new TreeSet<>(); 
+//		
+//		try( BufferedReader bufferedReader = new BufferedReader( new FileReader(file) ); ){
+//			
+//			StringBuilder sb = new StringBuilder();
+//			String str = "";
+//			while( ( str = bufferedReader.readLine() ) != null ) {
+//				sb.append(str); 
+//				System.out.println(str);
+//			}
+//			//sb.toString - hat das die Zeilentrenner noch?
+//			System.out.println(sb.toString());
+//			
+//			//org.json.JSONArray ist NICHT org.json.simple
+//			org.json.JSONArray jsonArray = null;
+//			try {
+//				jsonArray = new org.json.JSONArray( sb.toString() );
+//			} catch (JSONException e1) {
+//				e1.printStackTrace();
+//			}
+//			
+//			int length = jsonArray.length();
+//			for ( int i = 0; i < length; i++ ) {
+//				try {
+//					org.json.JSONObject jsonObject = jsonArray.getJSONObject(i);
+//					countryNames.add(jsonObject.getString("countryName"));
+//				} catch (JSONException e2) {
+//					e2.printStackTrace();
+//				}
+//
+//			}
+//			
+//		}catch( IOException e ) {
+//			e.printStackTrace();
+//		}
+//			
+//		System.out.println(countryNames);
+//		
+//
+//	}	
 	
 
 }
