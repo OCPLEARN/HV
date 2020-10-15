@@ -5,3 +5,10 @@ https://www.surasint.com/spring-boot-with-multiple-databases-example/
 
 ant Matchers
 https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/util/AntPathMatcher.html
+
+Validation nach JSR 303 
+https://www.baeldung.com/spring-custom-validation-message-source (mit eigenen messages files für localization)
+https://medium.com/@grokwich/spring-boot-thymeleaf-html-form-handling-part-2-b4c9e83a189c
+
+Javax Annotation @Size etc, Customize Validation Message:
+https://docs.oracle.com/javaee/6/tutorial/doc/gkahi.html
