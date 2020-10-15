@@ -87,12 +87,12 @@ public class HomeController {
 	
 	@PostMapping("/register")
 	public String createLoginUserDto(
-					@Valid PropertyManagementRegistrationFormCommand propertyManagementRegistrationFormCommand,
+					@Valid @ModelAttribute ("PropertyManagementRegistrationFormCommand") PropertyManagementRegistrationFormCommand propertyManagementRegistrationFormCommand,
 					BindingResult bindingResult,
 					Model model) {
-		
-//		if ( !( propertyManagementRegistrationFormCommand.getInitialPassword().equals(propertyManagementRegistrationFormCommand.getRepeatedPassword())) ) 
-//			bindingResult.rejectValue("repeatedPassword", "register.password.validation.repeaterror", "Repeated password doesn´t match first password.");
+				
+		if ( !( propertyManagementRegistrationFormCommand.getInitialPassword().equals(propertyManagementRegistrationFormCommand.getRepeatedPassword())) ) 
+			bindingResult.rejectValue("repeatedPassword", "register.password.validation.repeaterror", "Repeated password doesn´t match first password.");
 		
 		//return "/public/register";
 		
