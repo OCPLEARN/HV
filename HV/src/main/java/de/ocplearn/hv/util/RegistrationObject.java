@@ -8,6 +8,11 @@ public class RegistrationObject {
 	
 	// Password Patterns: see doc folder linklist file
 	
+	 @NotNull
+	 @Size(min=6, message="{username.tooshort}")
+	 @Size(max=50, message="{username.toolong}")
+	 private String loginUserName;
+	
 	@NotNull
 	@Size(min=8)
 	@Size(max=128)
@@ -28,6 +33,7 @@ public class RegistrationObject {
 		this.repeatedPassword = repeatedPassword.trim();
 	}
 
+	// Getters and Setters
 	public String getIntialPassword() {
 		return intialPassword;
 	}
@@ -42,6 +48,14 @@ public class RegistrationObject {
 
 	public void setRepeatedPassword(String repeatedPassword) {
 		this.repeatedPassword = repeatedPassword.trim();
+	}
+
+	public String getLoginUserName() {
+		return loginUserName;
+	}
+
+	public void setLoginUserName(String loginUserName) {
+		this.loginUserName = loginUserName;
 	}
 	
 	

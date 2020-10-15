@@ -23,7 +23,7 @@
 	<div th:replace="~{fragments/navbar :: navbar}">Navigation Bar</div>
 	
 	
-		<form name="f" th:object="${loginUserDto}" th:action="@{/register}" method="post">
+		<form name="f" th:object="${PropertyManagementRegistrationFormCommand}" th:action="@{/register}" method="post">
 	<table class="table">
 		<tr>
 			<td th:Text=#{register.choose}>Please choose</td>
@@ -40,13 +40,21 @@
 	
 		<tr>
 			<td th:Text="#{password} + ': '">password :</td>
-			<td><input type="password" name="password"></td>			
+			<td><input type="password" name="initialpassword" th:field="*{initialPassword}"></td>			
+		</tr>
+		
+		
+		<tr>
+			<td th:Text="#{password} + ': '">repeat password :</td>
+			<td><input type="password" name="repeat	password" th:field="*{repeatedPassword}"></td>			
 		</tr>
 		
 		<tr>
 			<td></td>
 			<td><input class="btn btn-primary" type="submit" th:value="#{submit}"></td>
 		</tr>
+
+
 
 	</table>		
 	</form>

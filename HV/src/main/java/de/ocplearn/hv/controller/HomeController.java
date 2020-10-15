@@ -20,12 +20,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import de.ocplearn.hv.controller.command.PropertyManagementRegistrationFormCommand;
 import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.service.UserService;
 import de.ocplearn.hv.service.UserServiceImpl;
 import de.ocplearn.hv.util.CountryList;
+import de.ocplearn.hv.util.RegistrationObject;
 
 @Controller
 public class HomeController {
@@ -73,28 +75,41 @@ public class HomeController {
 	@GetMapping("/register")
 	public String register(Model model) {
 		
-		LoginUserDto loginUserDto = new LoginUserDto();
+		PropertyManagementRegistrationFormCommand propertyManagementRegistrationFormCommand = new PropertyManagementRegistrationFormCommand();
+		
 		
 		CountryList countryList = this.applicationContext.getBean(CountryList.class);
 		model.addAttribute("countryList", countryList.getCountryNames());
-		model.addAttribute("loginUserDto", loginUserDto);
-		model.addAttribute("registrationObject", new RegistrationObject());
+		model.addAttribute("PropertyManagementRegistrationFormCommand", propertyManagementRegistrationFormCommand);
+		
 		return "/public/register";
 	}
 	
-	
 	@PostMapping("/register")
-	public String createLoginUserDto(@Valid LoginUserDto loginUserDto,Errors bindingResult ,Model model) {
+	public String createLoginUserDto(
+					@Valid PropertyManagementRegistrationFormCommand propertyManagementRegistrationFormCommand,
+					BindingResult bindingResult,
+					Model model) {
+		
+//		if ( !( propertyManagementRegistrationFormCommand.getInitialPassword().equals(propertyManagementRegistrationFormCommand.getRepeatedPassword())) ) 
+//			bindingResult.rejectValue("repeatedPassword", "register.password.validation.repeaterror", "Repeated password doesn´t match first password.");
+		
+		//return "/public/register";
 		
 		if(bindingResult.hasErrors()) {
-				
 				return 	"/public/register";
+				
 		} 	else {
-				loginUserDto.setLoginUserName(loginUserDto.getLoginUserName().trim());
-				loginUserDto.set
-				userService.createUser(loginUserDto, "test123");
+					createPropertyManagement(propertyManagementRegistrationFormCommand);
+			
 				return "/public/signin";
 		}
+	}
+	
+	private void createPropertyManagement(PropertyManagementRegistrationFormCommand propertyManagementRegistrationFormCommand) {
+		LoginUserDto loginUserDto = new LoginUserDto();
+		loginUserDto.setLoginUserName(propertyManagementRegistrationFormCommand.getLoginUserName());
+		userService.createUser(loginUserDto, propertyManagementRegistrationFormCommand.getInitialPassword());
 	}
 	
 	
