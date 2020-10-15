@@ -16,9 +16,10 @@ import de.ocplearn.hv.model.Role;
 public class LoginUserDto implements Comparable<LoginUserDto> {
 	
 	
+	
     private int id;
     @NotNull
-    @Size(min=5, message="{username.tooshort}")
+    @Size(min=6, message="{username.tooshort}")
     @Size(max=50, message="{username.toolong}")
     private String loginUserName;
     private Role role;

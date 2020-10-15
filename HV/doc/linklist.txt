@@ -10,5 +10,32 @@ Validation nach JSR 303
 https://www.baeldung.com/spring-custom-validation-message-source (mit eigenen messages files für localization)
 https://medium.com/@grokwich/spring-boot-thymeleaf-html-form-handling-part-2-b4c9e83a189c
 
+https://beanvalidation.org/1.0/spec/#validationapi-message
+
 Javax Annotation @Size etc, Customize Validation Message:
 https://docs.oracle.com/javaee/6/tutorial/doc/gkahi.html
+
+
+==== UTF 8 Probleme ====
+
+hier solution 3
+https://stackoverflow.com/questions/31143923/eclipse-wrong-java-properties-utf-8-encoding
+propteries file öffnen -> edit -> Set encoding - > utf8 (datei reparieren und neu laden)
+
+=== Password Regex ===
+
+https://regexr.com/
+our Pattern:
+^(?=.*[0-9]{1})(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&§():;<>,.?/~_+\-=|'´`]).{8,128}$
+
+^start expression
+$ end expression
+(?=) positive Lookahead muss enthalten sein, 
+(?!) negative Lookahead darf nicht enthalten sein
+.*  mindestens eins oder mehr
+[]	ZeichenGruppe
+{}	Anzahl Zeichen {min} bzw. {min, max} je Gruppe bzw. für den gesamten Ausdruck
+
+
+
+====

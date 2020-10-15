@@ -78,6 +78,7 @@ public class HomeController {
 		CountryList countryList = this.applicationContext.getBean(CountryList.class);
 		model.addAttribute("countryList", countryList.getCountryNames());
 		model.addAttribute("loginUserDto", loginUserDto);
+		model.addAttribute("registrationObject", new RegistrationObject());
 		return "/public/register";
 	}
 	
@@ -89,6 +90,8 @@ public class HomeController {
 				
 				return 	"/public/register";
 		} 	else {
+				loginUserDto.setLoginUserName(loginUserDto.getLoginUserName().trim());
+				loginUserDto.set
 				userService.createUser(loginUserDto, "test123");
 				return "/public/signin";
 		}

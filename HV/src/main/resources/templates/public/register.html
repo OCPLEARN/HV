@@ -20,11 +20,14 @@
 <div class="container">
 
 	<div th:replace="~{fragments/header :: header}">Header</div>
-	<div th:replace="~{fragments/navbar :: navbar}">Navibarr</div>
+	<div th:replace="~{fragments/navbar :: navbar}">Navigation Bar</div>
 	
 	
 		<form name="f" th:object="${loginUserDto}" th:action="@{/register}" method="post">
 	<table class="table">
+		<tr>
+			<td th:Text=#{register.choose}>Please choose</td>
+		</tr>
 		
 		<tr>
 			<td th:Text="#{username} + ': '">username :</td>
@@ -35,10 +38,10 @@
 			
 		</tr>
 	
-<!-- 		<tr> -->
-<!-- 			<td th:Text="#{password} + ': '">password :</td> -->
-<!-- 			<td><input type="password" name="password"></td>			 -->
-<!-- 		</tr> -->
+		<tr>
+			<td th:Text="#{password} + ': '">password :</td>
+			<td><input type="password" name="password"></td>			
+		</tr>
 		
 		<tr>
 			<td></td>
