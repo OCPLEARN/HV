@@ -21,7 +21,7 @@ public interface AddressDao {
 	 * @param Address
 	 * @return boolean true, if successful
 	 */
-	boolean save(Address address);	
+	Address save(Address address);	
 	
 	/**
 	 * deletes an address 

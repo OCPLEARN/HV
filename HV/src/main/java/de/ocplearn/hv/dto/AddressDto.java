@@ -145,7 +145,19 @@ public class AddressDto implements Comparable<AddressDto> {
 			this.longitude = longitude;
 		}
 
-
+		/**
+		 * @return the zipCode
+		 */
+		public String getZipCode() {
+			return zipCode;
+		}
+		/**
+		 * @param zipCode 
+		 */
+		public void setZipCode(String zipCode) {
+			this.zipCode = zipCode;
+		}
+		
 		@Override
 		public String toString() {
 			return "Address [street=" + street + ", houseNumber=" + houseNumber + ", apartment=" + apartment + ", city="
