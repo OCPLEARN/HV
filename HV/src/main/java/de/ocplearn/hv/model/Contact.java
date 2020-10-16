@@ -2,6 +2,20 @@ package de.ocplearn.hv.model;
 
 public class Contact implements Comparable<Contact>{
 
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	private int id;
 	private String sex;
 	private String firstName;
@@ -59,6 +73,13 @@ public class Contact implements Comparable<Contact>{
 		}
 		
 		
+
+		/**
+		 * @return the id
+		 */
+		public int getId() {
+			return id;
+		}
 
 		/**
 		 * @param id the id to set
