@@ -14,6 +14,20 @@ public class ContactDto implements Comparable<ContactDto>{
 	private String website;
 	private String email;
 	
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public static class ContactBuilder{
 		
 		// Artikel zum Thema: https://dzone.com/articles/design-patterns-the-builder-pattern
