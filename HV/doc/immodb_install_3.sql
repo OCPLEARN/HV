@@ -256,5 +256,22 @@ CREATE TABLE building (
 		REFERENCES unit ( id )          
  );
  
+   CREATE TABLE propertyManagementLoginUserLink (
+		id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+		timeStmpAdd timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		timeStmpEdit timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+		propertyManagementId INT NOT NULL,
+		loginUserId INT NOT NULL,
+		
+		
+		CONSTRAINT fk_propertyManagementLoginUserLink_propertyManagementId					/* fk = foreignKey Benennung des Constraint*/
+		FOREIGN KEY ( propertyManagementId )												/* Spaltenname des ForeignKey */
+		REFERENCES propertyManagement ( id), 												/*aus der Referenztabelle*/
+		
+		CONSTRAINT fk_propertyManagementLoginUserLink_loginUserId 			/* fk = foreignKey*/
+		FOREIGN KEY ( loginUserId )										/* Spaltenname des ForeignKey */
+		REFERENCES loginUser ( id ) 										/*Referenztabelle*/
+	);
+ 
  INSERT INTO loginUser (id,loginUserName,passwHash,salt,loginUserRole,locale) VALUE (null,'admin',x'DAABCAD4BF38345219D82F6ABBB48527',x'54531AECA828837A01839EF38D52F1466A363A3F09FB634FD5B461D2BB638E22','ADMIN','de_DE');
  
