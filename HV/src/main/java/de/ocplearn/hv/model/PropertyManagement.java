@@ -11,14 +11,11 @@ public class PropertyManagement {
 	private List<LoginUser> loginUsers;
 	
 	
-	
 	public PropertyManagement() {
-	
 	}
 
 	public PropertyManagement(LoginUser primaryLoginUser, Contact primaryContact, String paymentType,
 			List<LoginUser> loginUsers) {
-		super();
 		this.primaryLoginUser = primaryLoginUser;
 		this.primaryContact = primaryContact;
 		this.paymentType = paymentType;
@@ -63,6 +60,9 @@ public class PropertyManagement {
 	public int getId() {
 		return id;
 	}
+	public void setId(int id) {
+		 this.id=id;
+	}
 
 	
 	// hashCode & equals
@@ -88,9 +88,6 @@ public class PropertyManagement {
 			return false;
 		return true;
 	} 
-	
-	
-	
 	
 	
 	
