@@ -4,6 +4,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+
+
 public class PropertyManagementRegistrationFormCommand {
 	
 	// Password Patterns: see doc folder linklist file
@@ -15,14 +17,11 @@ public class PropertyManagementRegistrationFormCommand {
 	
 	@NotNull
 	@Size(min=8)
-	@Size(max=128)
-	//@Pattern(message= "{register.password.validation.regex}" , regexp = "^(?=.*[0-9]{1})(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&§():;<>,.?/~_+\\-=|'´`]).{8,128}$")
+	@Size(max=128/*, message="{register.password.validation.size}" */)
+	@Pattern(message= "{register.password.validation.regex}" , regexp = "^(?=.*[0-9]{1})(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&§():;<>,.?/~_+\\-=|'´`]).{8,128}$")
 	private String initialPassword;
 	
-	@Size(min=8)
-	@Size(max=128)
 	@NotNull
-	//@Pattern(message="{register.password.validation.regex}", regexp = "^(?=.*[0-9]{1})(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&§():;<>,.?/~_+\\-=|'´`]).{8,128}$")
 	private String repeatedPassword;
 
 	

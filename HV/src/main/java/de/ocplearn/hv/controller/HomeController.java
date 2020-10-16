@@ -101,7 +101,6 @@ public class HomeController {
 				
 		} 	else {
 					createPropertyManagement(propertyManagementRegistrationFormCommand);
-			
 				return "/public/signin";
 		}
 	}

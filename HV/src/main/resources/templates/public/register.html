@@ -40,7 +40,9 @@
 	
 		<tr>
 			<td th:Text="#{password} + ': '">password :</td>
-			<td><input type="password" name="initialpassword" th:field="*{initialPassword}"></td>			
+			<td><input type="password" name="initialpassword" th:field="*{initialPassword}">	
+			<span class="validationError" th:if="${#fields.hasErrors('initialPassword')}" th:errors="*{initialPassword}">Password Error</span>		
+			</td>
 		</tr>
 		
 		
