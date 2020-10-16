@@ -95,7 +95,7 @@ public class HomeController {
 					Model model) {
 		
 		if(userService.loginUserExists(propertyManagementRegistrationFormCommand.getLoginUserName())) {
-			bindingResult.rejectValue("userNameAlreadyExists", "register.username.validation.usernameexists", "Username is already registered.");
+			bindingResult.rejectValue("loginUserName", "register.username.validation.usernameexists", "Username is already registered.");
 			return "/public/register";
 		}
 		

@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public LoginUserDto findUserByLoginUserName(String loginUserName) {
     	
-    	Optional<LoginUser> loginUser = loginUserDao.findUserByLoginUserName(loginUserName);
+    	Optional <LoginUser>  loginUser = loginUserDao.findUserByLoginUserName(loginUserName);
     	
     	if (loginUser.isPresent()) 
     			return loginUserMapper.loginUserToLoginUserDto(loginUser.get());

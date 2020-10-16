@@ -201,12 +201,12 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 	
 	@Override
 	public Optional<LoginUser> findUserById(int id) {
-		return Optional.of( findByColumnName("id", id).get(0) );
+		return Optional.ofNullable( findByColumnName("id", id).get(0) );
 	}
 
 	@Override
 	public Optional<LoginUser> findUserByLoginUserName(String loginUserName) {
-		return Optional.of(findByColumnName("loginUserName", loginUserName).get(0));
+		return Optional.ofNullable( findByColumnName("loginUserName", loginUserName).get(0) );
 	}
 
 	@Override

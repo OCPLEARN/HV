@@ -23,7 +23,6 @@
 <!--         <a class="nav-link" href="#">Link</a> -->
 <!--       </li> -->
       
-      
 <!--        <li class="nav-item"> -->
 <!--         <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> -->
 <!--       </li> -->
@@ -35,17 +34,10 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         
           <a class="dropdown-item nav-link" href="#" th:href=@{/page2}>Page2</a>
-<!--           toggle item page3 only shown when logged in as admin -->
-          <a class="dropdown-item nav-link" href="#" sec:authorize="isAuthenticated()"  th:href=@{/admin/page3}>Page3</a>
-          <a class="dropdown-item nav-link" href="#" sec:authorize="isAuthenticated()"  th:href=@{/admin/users}>Users</a>
-          
-<!--           <a class="dropdown-item nav-link" href="#" >Another action</a> -- >
-<!--           <div class="dropdown-divider"></div> -->
-<!--           <a class="dropdown-item" href="#">Something else here</a> -->
         </div>
       </li>
       
-       <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+       <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Admin Pages
         </a>
@@ -55,6 +47,16 @@
         </div>
       </li>
       
+ 
+    <li class="nav-item dropdown" sec:authorize="hasRole('PROPERTY_MANAGER')">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          PM Pages
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item nav-link" href="#"   th:href=@{/admin/page3}>Page3</a>
+          <a class="dropdown-item nav-link" href="#" th:href=@{/admin/users}>Users</a>
+        </div>
+      </li>
  
 
  	<li class="nav-item dropdown">	      	
