@@ -1,6 +1,7 @@
 package de.ocplearn.hv.controller;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -8,6 +9,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,6 +30,7 @@ import de.ocplearn.hv.service.UserService;
 import de.ocplearn.hv.service.UserServiceImpl;
 import de.ocplearn.hv.util.CountryList;
 import de.ocplearn.hv.util.RegistrationObject;
+import de.ocplearn.hv.util.StaticHelpers;
 
 @Controller
 public class HomeController {
@@ -90,11 +93,17 @@ public class HomeController {
 					@Valid @ModelAttribute ("PropertyManagementRegistrationFormCommand") PropertyManagementRegistrationFormCommand propertyManagementRegistrationFormCommand,
 					BindingResult bindingResult,
 					Model model) {
-				
-		if ( !( propertyManagementRegistrationFormCommand.getInitialPassword().equals(propertyManagementRegistrationFormCommand.getRepeatedPassword())) ) 
-			bindingResult.rejectValue("repeatedPassword", "register.password.validation.repeaterror", "Repeated password doesn´t match first password.");
 		
-		//return "/public/register";
+		if(userService.loginUserExists(propertyManagementRegistrationFormCommand.getLoginUserName())) {
+			bindingResult.rejectValue("userNameAlreadyExists", "register.username.validation.usernameexists", "Username is already registered.");
+			return "/public/register";
+		}
+		
+		if ( !( propertyManagementRegistrationFormCommand.getInitialPassword().equals(propertyManagementRegistrationFormCommand.getRepeatedPassword())) ) {
+			bindingResult.rejectValue("repeatedPassword", "register.password.validation.repeaterror", "Repeated password doesn´t match first password");
+		
+			return "/public/register";
+		}
 		
 		if(bindingResult.hasErrors()) {
 				return 	"/public/register";
@@ -106,15 +115,31 @@ public class HomeController {
 	}
 	
 	private void createPropertyManagement(PropertyManagementRegistrationFormCommand propertyManagementRegistrationFormCommand) {
+		HashMap<String, byte[]> passwordHashMap = StaticHelpers.createHash(propertyManagementRegistrationFormCommand.getInitialPassword(), null);
+		
 		LoginUserDto loginUserDto = new LoginUserDto();
 		loginUserDto.setLoginUserName(propertyManagementRegistrationFormCommand.getLoginUserName());
-		userService.createUser(loginUserDto, propertyManagementRegistrationFormCommand.getInitialPassword());
+		loginUserDto.setRole(Role.PROPERTY_MANAGER);
+		loginUserDto.setLocale(LocaleContextHolder.getLocale());
+		loginUserDto.setPasswHash(passwordHashMap.get("hash"));
+		loginUserDto.setSalt(passwordHashMap.get("salt"));
+				
+		userService.createUser(loginUserDto);
+		
 	}
-	
 	
 }
 
 	
+
+
+
+
+
+
+
+
+
 	
 	
 //	@GetMapping("/logout")

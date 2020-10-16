@@ -22,11 +22,27 @@ hier solution 3
 https://stackoverflow.com/questions/31143923/eclipse-wrong-java-properties-utf-8-encoding
 propteries file öffnen -> edit -> Set encoding - > utf8 (datei reparieren und neu laden)
 
-=== Password Regex ===
+=== Password REGEX  ===
 
 https://regexr.com/
 our Pattern:
+
+^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&§():;<>,.?/~_+\\-=|'´`]).{1,}$
+
+Besonderheit: 	.{1,} -> mindestens 1 Zeichen
+				.{1} -> genau 1 Zeichen
+				.{8, 128} -> mindestens 8 maximal 128 Zeichen
+
+				Die Regex braucht eine Längenangabe,
+				Da wir 4 Gruppen haben und aus jeder mind. 1 Zeichen brauchen, müsste die Längenangabe eigtl. .{4,} sein
+				Wir wollen die Fehlermessages für Länge und Zeichenart getrennt halten, deswegen
+				.{1,} -> mindestens 1 Zeichen
+				=> keine Prüfung auf die Länge des Passworts. Das wird komplett im @Size erledigt
+				
+
 ^(?=.*[0-9]{1})(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&§():;<>,.?/~_+\-=|'´`]).{8,128}$
+
+
 
 ^start expression
 $ end expression

@@ -29,6 +29,15 @@ public interface UserService {
      */
     LoginUserDto findUserByLoginUserName( String loginUserName );
 
+    
+    /**
+     * Tests if user exists
+     * 
+     * @param login name of user
+     * @return boolean
+     */
+    boolean loginUserExists( String loginUserName );
+    
     /**
      * Finds user by id
      * 
@@ -62,13 +71,22 @@ public interface UserService {
     List<Tenant> findTenantsByBuilding( Building building );
     
     /**
-     * Creates new LoginUser
+     * Creates new LoginUser from LoginUserDto with password as String
      * 
      * @param loginUser
+     * @param password
      * @return boolean
      */
     boolean createUser( LoginUserDto loginUserDto, String password );
  
+    /**
+     * Creates new LoginUser from LoginUserDto
+     * 
+     * @param loginUser
+     * @return boolean
+     */
+    boolean createUser( LoginUserDto loginUserDto ); 
+    
     
     /**
      * Deletes a user

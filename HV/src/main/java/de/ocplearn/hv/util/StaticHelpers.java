@@ -18,7 +18,7 @@ public class StaticHelpers {
      * @param salt set it to null, for new hash
      */
     public static HashMap<String,byte[]> createHash( String password, byte [] salt ){
-        HashMap<String,byte[]> r = new HashMap<>();
+        HashMap<String,byte[]> passwordHashMap = new HashMap<>();
 
         byte[] hash = null;
         if ( salt == null ){
@@ -51,10 +51,10 @@ public class StaticHelpers {
 //        System.out.println( "hash : " + Arrays.toString(hash) );
 //        System.out.println( "salt : " + Arrays.toString(salt) );            
         
-        r.put("salt", salt);
-        r.put("hash", hash);
+        passwordHashMap.put("salt", salt);
+        passwordHashMap.put("hash", hash);
         
-        return r;
+        return passwordHashMap;
     }    
     
 

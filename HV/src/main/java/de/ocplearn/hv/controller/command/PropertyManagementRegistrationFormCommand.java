@@ -15,10 +15,11 @@ public class PropertyManagementRegistrationFormCommand {
 	 @Size(max=50, message="{username.toolong}")
 	 private String loginUserName;
 	
+	 
+	// Regex Patterns: see doc folder linklist file !!!
 	@NotNull
-	@Size(min=8)
-	@Size(max=128/*, message="{register.password.validation.size}" */)
-	@Pattern(message= "{register.password.validation.regex}" , regexp = "^(?=.*[0-9]{1})(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&§():;<>,.?/~_+\\-=|'´`]).{8,128}$")
+	@Size(min=8, max=128, message="{register.password.validation.size}")		
+	@Pattern(message= "{register.password.validation.regex}" , regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&§():;<>,.?/~_+\\-=|'´`]).{1,}$")
 	private String initialPassword;
 	
 	@NotNull

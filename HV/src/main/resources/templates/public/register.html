@@ -48,7 +48,9 @@
 		
 		<tr>
 			<td th:Text="#{password} + ': '">repeat password :</td>
-			<td><input type="password" name="repeat	password" th:field="*{repeatedPassword}"></td>			
+			<td><input type="password" name="repeat	password" th:field="*{repeatedPassword}">
+			<span class="validationError" th:if="${#fields.hasErrors('repeatedPassword')}" th:errors="*{repeatedPassword}">Password Error</span>
+			</td>			
 		</tr>
 		
 		<tr>

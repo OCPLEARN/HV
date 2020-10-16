@@ -43,6 +43,17 @@ public class UserServiceImpl implements UserService {
     	
         return null;
     }
+    
+    @Override
+    public boolean loginUserExists(String loginUserName) {
+
+    	Optional<LoginUser> loginUser = loginUserDao.findUserByLoginUserName(loginUserName);
+    	if(loginUser.isPresent()) {
+    		return true;
+    	} else {
+    	return false;
+    	}
+    }
 
     @Override
     public LoginUserDto findUserById(int id) {
@@ -96,6 +107,20 @@ public class UserServiceImpl implements UserService {
         }
          
     }    
+    @Override
+    public boolean createUser(LoginUserDto loginUserDto) {
+    	LoginUser loginUser = loginUserMapper.loginUserDtoToLoginUser(loginUserDto);
+    	
+        if ( loginUserDao.userAlreadyExists(loginUser.getLoginUserName()) ){
+            return false;
+        }
+        
+        if ( loginUserDao.save(loginUser) ) {
+        	loginUserDto.setId(loginUser.getId());
+        	return true;	
+        }
+    	return false;
+    }
     
     
     @Override
