@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -55,7 +56,7 @@ public class AddressDaoJdbc implements AddressDao {
 	private Address insert(Address address){
 		
 		String sql = "INSERT INTO address (id,street,houseNumber,adrline1,"
-				+ "adrline2,city,zip,province,country,coordinate) VALUE ( null, ?,?,?,?,?,?,?,?,? );";
+				+ "adrline2,city,zip,province,country,coordinate) VALUE ( null, ?,?,?,?,?,?,?,?,ST_GeomFromText('POINT(? ?)' );";
 		//INSERT INTO address (id,street,houseNumber,adrline1,adrline2,city,zip,province,country,coordinate)  
 		//VALUE ( null, 'Platz der Republik','1','adrline1','adrline2','Berlin','11011','Berlin','DE',POINT(52.518672, 13.376118) );
 		
@@ -70,7 +71,8 @@ public class AddressDaoJdbc implements AddressDao {
             stmt.setString(6, address.getZipCode() );
             stmt.setString(7, address.getProvince() );
             stmt.setString(8, address.getCountry() );
-            stmt.setString(9, (address.getLatitude() +  ", " + address.getLongitude()) );
+            stmt.setDouble(9, address.getLatitude() );
+            stmt.setDouble(10, address.getLatitude() );
             
             // get generated key
             int rowsAffected = stmt.executeUpdate();
@@ -94,7 +96,7 @@ public class AddressDaoJdbc implements AddressDao {
 	private Address update(Address address){
 		
 		String sql = "UPDATE address SET street = ?, houseNumber = ?, adrline1 = ?,"
-				+ " adrline2 = ?, city = ?, zip = ?, province = ?, country = ?, coordinate = ? WHERE id = ?;";
+				+ " adrline2 = ?, city = ?, zip = ?, province = ?, country = ?, coordinate = ST_GeomFromText('POINT(? ?)' WHERE id = ?;";
 		
 		  try(Connection con = this.datasource.getConnection();
 				PreparedStatement stmt = con.prepareStatement(sql);) {
@@ -107,8 +109,9 @@ public class AddressDaoJdbc implements AddressDao {
 	            stmt.setString(6, address.getZipCode() );
 	            stmt.setString(7, address.getProvince() );
 	            stmt.setString(8, address.getCountry() );
-	            stmt.setString(9, (address.getLatitude() +  ", " + address.getLongitude()) );
-	            stmt.setInt(10,address.getId());
+	            stmt.setDouble(9, address.getLatitude()) ;
+	            stmt.setDouble(10, address.getLatitude()) ;
+	            stmt.setInt(11,address.getId());
 	                
                 int rowsAffected = stmt.executeUpdate();
                 
@@ -128,14 +131,37 @@ public class AddressDaoJdbc implements AddressDao {
 
 	@Override
 	public boolean delete(Address address) {
-		// TODO Auto-generated method stub
-		return false;
+		try(	
+				Connection con =  this.datasource.getConnection();
+	        	PreparedStatement stmt = con.prepareStatement( "DELETE FROM address WHERE id = ?;" );
+			)
+		{
+			stmt.setInt(1, address.getId()  );
+	        return (stmt.executeUpdate()==1)?true:false;	                
+	    } catch (SQLException e) {
+	    	e.printStackTrace(); 
+	        logger.log(Level.WARNING, e.getMessage());
+	        throw new DataAccessException("Unable to get Data from DB.");            
+	    }
 	}
 
 	@Override
-	public Address findById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<Address> findById(int id) {
+
+		try(
+				Connection con = this.datasource.getConnection();
+				PreparedStatement stmt = con.prepareStatement( "SELECT *, ST_X(coordinate),ST_Y(coordinate) FROM address WHERE id = ?;" );
+				)
+		{
+			stmt.setInt(1, id );
+			ResultSet resultSet = stmt.executeQuery();
+			return resultSet.next() ? Optional.of(this.mapRowToAddress(resultSet)) : Optional.empty();
+		}
+		catch (SQLException e) {
+	    	e.printStackTrace(); 
+	        logger.log(Level.WARNING, e.getMessage());
+	        throw new DataAccessException("Unable to get Data from DB.");            
+	    }		
 	}
 
 	@Override
@@ -144,4 +170,20 @@ public class AddressDaoJdbc implements AddressDao {
 		return null;
 	}
 
+	
+	private Address mapRowToAddress (ResultSet resultSet) throws SQLException {
+		// id,street,houseNumber,adrline1,adrline2,city,zip,province,country,coordinate
+		Address address = new Address();
+		address.setId( resultSet.getInt("id") );
+		address.setHouseNumber( resultSet.getInt("houseNumber") );
+		address.setApartment( resultSet.getString("adrline1") );
+		//address.set???( resultSet.getString("adrline2") );
+		address.setCity( resultSet.getString("city") );
+		address.setZipCode( resultSet.getString("zip") );
+		address.setProvince(resultSet.getString("province") );
+		address.setCountry( resultSet.getString("country") );
+		address.setLatitude( resultSet.getDouble("ST_X(coordinate)") ); // ST_X(coordinate)
+		address.setLongitude( resultSet.getDouble("ST_Y(coordinate)") ); // ST_Y(coordinate)
+		return address;
+	}
 }

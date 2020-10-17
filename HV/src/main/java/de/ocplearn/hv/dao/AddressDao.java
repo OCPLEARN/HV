@@ -4,6 +4,7 @@
 package de.ocplearn.hv.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import de.ocplearn.hv.model.Address;
 import de.ocplearn.hv.model.LoginUser;
@@ -37,7 +38,7 @@ public interface AddressDao {
 	 * @param id
 	 * @return Address
 	 */
-	Address findById(int id);		
+	Optional<Address> findById(int id);		
 	
 	/**
 	 * find an all addresses by a contact id
