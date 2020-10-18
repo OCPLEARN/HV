@@ -7,17 +7,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import de.ocplearn.hv.dto.ContactDto;
 import de.ocplearn.hv.service.ContactService;
 
-@SpringBootTest
+//@SpringBootTest
 public class ContactServiceTest {
 	
 	private ContactService contactService;
 	
-	@Autowired
+	//@Autowired
 	public ContactServiceTest(ContactService contactService) {
 		
 	}
 
-	@Test
+	//@Test
 	public void testCreateContact() {
 		ContactDto testContact = new ContactDto();
 		testContact.setFirstName("Test");

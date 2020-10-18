@@ -22,13 +22,14 @@ public class AddressDto implements Comparable<AddressDto> {
 		public AddressDto() {
 			super();
 		}
-		public AddressDto(String street, int houseNumber, String apartment, String city, String province, String country,
+		public AddressDto(String street, int houseNumber, String apartment, String city,String zipCode, String province, String country,
 				double latitude, double longitude) {
 			super();
 			this.street = street;
 			this.houseNumber = houseNumber;
 			this.apartment = apartment;
 			this.city = city;
+			this.zipCode = zipCode;
 			this.province = province;
 			this.country = country;
 			this.latitude = latitude;

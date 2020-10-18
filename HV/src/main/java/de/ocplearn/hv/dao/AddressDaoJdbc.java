@@ -56,12 +56,14 @@ public class AddressDaoJdbc implements AddressDao {
 	private Address insert(Address address){
 		
 		String sql = "INSERT INTO address (id,street,houseNumber,adrline1,"
-				+ "adrline2,city,zip,province,country,coordinate) VALUE ( null, ?,?,?,?,?,?,?,?,ST_GeomFromText('POINT(? ?)' );";
+				+ "adrline2,city,zip,province,country,coordinate) VALUE ( null,?,?,?,?,?,?,?,?,POINT(?,?) );";
 		//INSERT INTO address (id,street,houseNumber,adrline1,adrline2,city,zip,province,country,coordinate)  
 		//VALUE ( null, 'Platz der Republik','1','adrline1','adrline2','Berlin','11011','Berlin','DE',POINT(52.518672, 13.376118) );
 		
         try(Connection con = this.datasource.getConnection();  
         	PreparedStatement stmt = con.prepareStatement(sql , Statement.RETURN_GENERATED_KEYS );) {	
+        	
+        	//String coordinate = "POINT("+address.getLatitude()+", "+address.getLongitude()+"";
         	
             stmt.setString(1, address.getStreet()  );
             stmt.setInt(2, address.getHouseNumber()  );
@@ -72,7 +74,10 @@ public class AddressDaoJdbc implements AddressDao {
             stmt.setString(7, address.getProvince() );
             stmt.setString(8, address.getCountry() );
             stmt.setDouble(9, address.getLatitude() );
-            stmt.setDouble(10, address.getLatitude() );
+            stmt.setDouble(10, address.getLongitude() );
+            //stmt.setString(9, coordinate );
+            
+            //System.out.println(sql);
             
             // get generated key
             int rowsAffected = stmt.executeUpdate();
@@ -96,11 +101,13 @@ public class AddressDaoJdbc implements AddressDao {
 	private Address update(Address address){
 		
 		String sql = "UPDATE address SET street = ?, houseNumber = ?, adrline1 = ?,"
-				+ " adrline2 = ?, city = ?, zip = ?, province = ?, country = ?, coordinate = ST_GeomFromText('POINT(? ?)' WHERE id = ?;";
+				+ " adrline2 = ?, city = ?, zip = ?, province = ?, country = ?, coordinate = POINT(?,?) WHERE id = ?;";
 		
 		  try(Connection con = this.datasource.getConnection();
 				PreparedStatement stmt = con.prepareStatement(sql);) {
 
+			  //String coordinate = "POINT("+address.getLatitude()+", "+address.getLongitude()+"";
+			  
 	            stmt.setString(1, address.getStreet()  );
 	            stmt.setInt(2, address.getHouseNumber()  );
 	            stmt.setString(3, address.getApartment() );
@@ -109,8 +116,8 @@ public class AddressDaoJdbc implements AddressDao {
 	            stmt.setString(6, address.getZipCode() );
 	            stmt.setString(7, address.getProvince() );
 	            stmt.setString(8, address.getCountry() );
-	            stmt.setDouble(9, address.getLatitude()) ;
-	            stmt.setDouble(10, address.getLatitude()) ;
+	            stmt.setDouble(9, address.getLatitude());
+	            stmt.setDouble(10, address.getLongitude());
 	            stmt.setInt(11,address.getId());
 	                
                 int rowsAffected = stmt.executeUpdate();
