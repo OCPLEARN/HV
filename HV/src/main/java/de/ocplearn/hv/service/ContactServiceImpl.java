@@ -6,6 +6,8 @@ import de.ocplearn.hv.dto.AddressDto;
 import de.ocplearn.hv.dto.ContactDto;
 import de.ocplearn.hv.model.Address;
 import de.ocplearn.hv.model.Contact;
+import de.ocplearn.hv.model.Unit;
+import de.ocplearn.hv.util.TablePageViewData;
 
 public class ContactServiceImpl implements ContactService{
 
@@ -16,25 +18,31 @@ public class ContactServiceImpl implements ContactService{
 	}
 
 	@Override
-	public List<ContactDto> findContactsByLastName(String lastName) {
+	public List<ContactDto> findContactsByLastName(String lastName, TablePageViewData tablePageViewData) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<ContactDto> findContactsIsCompany(boolean isCompany) {
+	public List<ContactDto> findContactsOfUnit(Unit unit, TablePageViewData tablePageViewData) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<ContactDto> findContactsByCompanyName(String companyName) {
+	public List<ContactDto> findContactsIsCompany(boolean isCompany, TablePageViewData tablePageViewData) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<ContactDto> getAllContacts() {
+	public List<ContactDto> findContactsByCompanyName(String companyName, TablePageViewData tablePageViewData) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ContactDto> getAllContacts(TablePageViewData tablePageViewData) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -56,6 +64,7 @@ public class ContactServiceImpl implements ContactService{
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 
 
 }

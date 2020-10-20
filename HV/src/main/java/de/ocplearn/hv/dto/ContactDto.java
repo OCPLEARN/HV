@@ -7,7 +7,7 @@ public class ContactDto implements Comparable<ContactDto>{
 	private String firstName;
 	private String lastName;
 	private boolean isCompany;
-	private String compayName;
+	private String companyName;
 	private String phone;
 	private String mobilePhone;
 	private String fax;
@@ -37,7 +37,7 @@ public class ContactDto implements Comparable<ContactDto>{
 		private String firstName;
 		private String lastName;
 		private boolean isCompany;
-		private String compayName;
+		private String companyName;
 		private String phone;
 		private String mobilePhone;
 		private String fax;
@@ -55,7 +55,7 @@ public class ContactDto implements Comparable<ContactDto>{
 			contact.firstName = firstName;
 			contact.lastName = lastName;
 			contact.isCompany = isCompany;
-			contact.compayName = compayName;
+			contact.companyName = companyName;
 			contact.phone = phone;
 			contact.mobilePhone = mobilePhone;
 			contact.fax = fax;
@@ -107,10 +107,10 @@ public class ContactDto implements Comparable<ContactDto>{
 		}
 
 		/**
-		 * @param compayName the compayName to set
+		 * @param companyName the companyName to set
 		 */
-		public ContactBuilder setCompayName(String compayName) {
-			this.compayName = compayName;
+		public ContactBuilder setcompanyName(String companyName) {
+			this.companyName = companyName;
 			return this;
 		}
 
@@ -162,14 +162,14 @@ public class ContactDto implements Comparable<ContactDto>{
 		
 	}
 	
-	public ContactDto(String sex, String firstName, String lastName, boolean isCompany, String compayName, String phone,
+	public ContactDto(String sex, String firstName, String lastName, boolean isCompany, String companyName, String phone,
 			String mobilePhone, String fax, String website, String email) {
 		super();
 		this.sex = sex;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.isCompany = isCompany;
-		this.compayName = compayName;
+		this.companyName = companyName;
 		this.phone = phone;
 		this.mobilePhone = mobilePhone;
 		this.fax = fax;
@@ -200,11 +200,11 @@ public class ContactDto implements Comparable<ContactDto>{
 	public void setCompany(boolean isCompany) {
 		this.isCompany = isCompany;
 	}
-	public String getCompayName() {
-		return compayName;
+	public String getCompanyName() {
+		return companyName;
 	}
-	public void setCompayName(String compayName) {
-		this.compayName = compayName;
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 	public String getPhone() {
 		return phone;
@@ -241,7 +241,7 @@ public class ContactDto implements Comparable<ContactDto>{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((compayName == null) ? 0 : compayName.hashCode());
+		result = prime * result + ((companyName == null) ? 0 : companyName.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
@@ -252,7 +252,7 @@ public class ContactDto implements Comparable<ContactDto>{
 	@Override
 	public String toString() {
 		return "Contact [sex=" + sex + ", firstName=" + firstName + ", lastName=" + lastName + ", isCompany="
-				+ isCompany + ", compayName=" + compayName + ", phone=" + phone + ", mobilePhone=" + mobilePhone
+				+ isCompany + ", companyName=" + companyName + ", phone=" + phone + ", mobilePhone=" + mobilePhone
 				+ ", fax=" + fax + ", website=" + website + ", email=" + email + "]";
 	}
 
@@ -275,7 +275,7 @@ public class ContactDto implements Comparable<ContactDto>{
 	@Override
 	public int compareTo(ContactDto o) {
 		if(isCompany()) {
-			return this.getCompayName().compareTo(o.getCompayName());
+			return this.getCompanyName().compareTo(o.getCompanyName());
 		}else {
 			if(this.getLastName().equalsIgnoreCase(o.getLastName())){
 				//Vergleiche firstName
