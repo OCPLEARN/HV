@@ -32,7 +32,7 @@ import de.ocplearn.hv.util.TablePageViewData;
 public class AddressDaoJdbc implements AddressDao {
 
 	/* logger */
-	private Logger logger = LoggerBuilder.getInstance().build(LoginUserDaoJdbc.class);
+	private Logger logger = LoggerBuilder.getInstance().build(AddressDaoJdbc.class);
 	
 	/* A factory for connections to the physical data source that this DataSource object represents. */
 	private DataSource datasource;	

@@ -2,12 +2,12 @@ package de.ocplearn.hv.model;
 
 import java.util.List;
 
-public class PropertyManagement {
+public class PropertyManagement implements Comparable<PropertyManagement> {
     
 	private int id;
 	private LoginUser primaryLoginUser;
 	private Contact primaryContact;
-	private String paymentType;
+	private PaymentType paymentType;
 	private List<LoginUser> loginUsers;
 	
 	
@@ -16,7 +16,7 @@ public class PropertyManagement {
 	
 	}
 
-	public PropertyManagement(LoginUser primaryLoginUser, Contact primaryContact, String paymentType,
+	public PropertyManagement(LoginUser primaryLoginUser, Contact primaryContact, PaymentType paymentType,
 			List<LoginUser> loginUsers) {
 		super();
 		this.primaryLoginUser = primaryLoginUser;
@@ -44,11 +44,11 @@ public class PropertyManagement {
 		this.primaryContact = primaryContact;
 	}
 
-	public String getPaymentType() {
+	public PaymentType getPaymentType() {
 		return paymentType;
 	}
 
-	public void setPaymentType(String paymentType) {
+	public void setPaymentType(PaymentType paymentType) {
 		this.paymentType = paymentType;
 	}
 
@@ -62,6 +62,10 @@ public class PropertyManagement {
 
 	public int getId() {
 		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	
@@ -87,6 +91,12 @@ public class PropertyManagement {
 		if (id != other.id)
 			return false;
 		return true;
+	}
+
+	@Override
+	public int compareTo(PropertyManagement o) {
+		// TODO Auto-generated method stub
+		return 0;
 	} 
 	
 	
