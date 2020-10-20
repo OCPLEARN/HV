@@ -2,6 +2,7 @@ package de.ocplearn.hv.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import de.ocplearn.hv.model.PropertyManagement;
-import de.ocplearn.hv.service.PropertyManagementDao;
 import de.ocplearn.hv.util.LoggerBuilder;
 
 
@@ -38,7 +38,9 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 		
 		
 		if (propertyManagement.getId() == 0) {
-			this.insert(propertyManagement);
+			return this.insert(propertyManagement);
+			
+			 
 		}
 		
 		
@@ -53,6 +55,10 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 
 	@Override
 	public Optional<PropertyManagement> findById( PropertyManagement propertyManagement ) {
+		
+		// ResultSet = Daten aus der DB in Tabellenform
+		// Nummer aus dem ResultSet entspr. Nummer des Eintrags
+		
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -77,6 +83,16 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 			stmt.setString( 2, propertyManagement.getPaymentType().toString() );
 			stmt.setInt( 3, propertyManagement.getPrimaryContact().getId() );
 
+			if (stmt.executeUpdate() == 0) return false;
+			
+			else {
+				ResultSet resultSet = stmt.getGeneratedKeys();	
+				resultSet.next();
+				propertyManagement.setId(resultSet.getInt(1)); 
+										
+				return true;
+			}
+			
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -1,4 +1,4 @@
-package de.ocplearn.hv.service;
+package de.ocplearn.hv.dao;
 
 import java.util.Optional;
 
