@@ -60,6 +60,13 @@ public class PropertyManagementDto implements Comparable<PropertyManagement>{
 		this.loginUsers = loginUsers;
 	}
 
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public int getId() {
 		return id;
 	}

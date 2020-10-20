@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import de.ocplearn.hv.dao.PropertyManagementDao;
 import de.ocplearn.hv.dto.PropertyManagementDto;
+import de.ocplearn.hv.mapper.PropertyManagementMapper;
 import de.ocplearn.hv.model.PropertyManagement;
 
 
@@ -15,19 +16,24 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	private PropertyManagementDao propertyManagementDao;
 	
-	private
+	private PropertyManagementMapper propertyManagementMapper;
 	
 	@Autowired
-	public PropertyManagementServiceImpl ( PropertyManagementDao propertyManagementDao ) {
+	public PropertyManagementServiceImpl ( PropertyManagementDao propertyManagementDao, PropertyManagementMapper propertyManagementMapper ) {
 		this.propertyManagementDao = propertyManagementDao;
+		this.propertyManagementMapper = propertyManagementMapper;
+		
 	}
 	
 	
 	@Override
 	public boolean createPropertyManagement(PropertyManagementDto propertyManagementDto) {
 		
-		PropertyManagement propertyManagement = propertyManagement
-		propertyManagementDao.save(propertyManagement)
+		PropertyManagement propertyManagement = PropertyManagementMapper.INSTANCE.propertyManagementDtoToPropertyManagement(propertyManagementDto);
+	if(	propertyManagementDao.save(propertyManagement)) {
+		propertyManagementDto.setId(propertyManagement.getId());
+		return true;
+	}else
 		return false;
 	}
 
