@@ -1,5 +1,10 @@
 package de.ocplearn.hv.test.service;
 
+import java.util.List;
+
+import javax.swing.text.TabExpander;
+import javax.validation.constraints.AssertTrue;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +18,7 @@ import de.ocplearn.hv.model.PropertyManagement;
 import de.ocplearn.hv.service.ContactService;
 import de.ocplearn.hv.service.PropertyManagementService;
 import de.ocplearn.hv.service.UserService;
+import de.ocplearn.hv.util.TablePageViewData;
 
 @SpringBootTest
 public class ContactServiceTest {
@@ -35,12 +41,7 @@ public class ContactServiceTest {
 
 	@Test
 	public void testCreateContact() {
-		
-
-		
-		
-		
-		
+				
 		ContactDto testContact = new ContactDto();
 		testContact.setFirstName("CREATE");
 		testContact.setLastName("TEST");
@@ -62,8 +63,67 @@ public class ContactServiceTest {
 		propertyManagementDto.setPrimaryContact(testContact);
 		propertyManagementService.createPropertyManagement(propertyManagementDto);
 		System.out.println(propertyManagementDto);
+			
+	}
 	
+	@Test
+	public void testUpdateContact() {
+		ContactDto testContact = new ContactDto();
+		testContact.setFirstName("UPDATE");
+		testContact.setLastName("TEST");
+		testContact.setSex("SEXTEST");
+		testContact.setCompany(false);
+		testContact.setEmail("UPDATETest@Testing.com");
+		testContact.setWebsite("UPDATETest.com");
+		testContact.setPhone("+49123456789");
+		testContact.setMobilePhone("49123456789");
+		testContact.setFax("49123456789");
+		contactService.createContact(testContact);
 		
+		testContact.setFirstName("SUCCESSFUL");
+		testContact.setLastName("UPDATETEST");
+		contactService.updateContact(testContact);
+		ContactDto updateTest = contactService.findContactById(testContact.getId());
+		Assertions.assertEquals(testContact.getLastName(), updateTest.getLastName());
+	}
+	
+	@Test
+	public void testFindContactById() {
+		ContactDto contactDto = contactService.findContactById(1);
+		Assertions.assertTrue(contactDto.getFirstName().equals("Tester"));
+	}
+	
+	@Test
+	public void testDeleteContact() {
+		
+		ContactDto testContact = new ContactDto();
+		testContact.setFirstName("UPDATE");
+		testContact.setLastName("TEST");
+		testContact.setSex("SEXTEST");
+		testContact.setCompany(false);
+		testContact.setEmail("UPDATETest@Testing.com");
+		testContact.setWebsite("UPDATETest.com");
+		testContact.setPhone("+49123456789");
+		testContact.setMobilePhone("49123456789");
+		testContact.setFax("49123456789");
+		contactService.createContact(testContact);
+		int id=testContact.getId();
+		
+		Assertions.assertTrue(contactService.deleteContactById(id));
+		
+		
+	}
+	@Test
+	public void testFindAllContacts() {
+		TablePageViewData tablePageViewData = new TablePageViewData();
+		tablePageViewData.setOffset(1);
+		tablePageViewData.setOrderBy("lastName");
+		tablePageViewData.setOrderByDirection("ASC");
+		tablePageViewData.setRowCount(10);
+		List <ContactDto> contactList = contactService.getAllContacts(tablePageViewData);
+		System.out.println(contactList);
+		System.out.println("HOW MANY: "+contactList.size());
+		Assertions.assertTrue(contactList!= null);
 		
 	}
 	

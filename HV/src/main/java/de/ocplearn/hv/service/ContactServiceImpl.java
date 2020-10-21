@@ -1,6 +1,9 @@
 package de.ocplearn.hv.service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,9 +32,13 @@ public class ContactServiceImpl implements ContactService{
 	}
 
 	@Override
-	public Contact findContactById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public ContactDto findContactById(int id) {
+		Optional<Contact> contact= contactDao.findContactById(id);
+		if (contact.isPresent()) {
+			return contactMapper.contactToContactDto(contact.get());
+		}else {
+			return null;
+		}
 	}
 
 	@Override
@@ -60,8 +67,7 @@ public class ContactServiceImpl implements ContactService{
 
 	@Override
 	public List<ContactDto> getAllContacts(TablePageViewData tablePageViewData) {
-		// TODO Auto-generated method stub
-		return null;
+		return contactDao.getAllContacts(tablePageViewData).stream().map(contact -> contactMapper.contactToContactDto(contact)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -74,14 +80,12 @@ public class ContactServiceImpl implements ContactService{
 
 	@Override
 	public boolean updateContact(ContactDto contactDto) {
-		// TODO Auto-generated method stub
-		return false;
+		return contactDao.save(contactMapper.contactDtoToContact(contactDto));
 	}
 
 	@Override
 	public boolean deleteContactById(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		return contactDao.deleteContactById(id);
 	}
 
 

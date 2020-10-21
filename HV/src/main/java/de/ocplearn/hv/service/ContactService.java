@@ -9,7 +9,7 @@ import de.ocplearn.hv.util.TablePageViewData;
 
 public interface ContactService {
 	
-	Contact findContactById(int id);
+	ContactDto findContactById(int id);
 	
 	List<ContactDto> findContactsByLastName(String lastName, TablePageViewData tablePageViewData);
 	List<ContactDto> findContactsOfUnit(Unit unit, TablePageViewData tablePageViewData);
