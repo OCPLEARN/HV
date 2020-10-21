@@ -2,14 +2,31 @@ package de.ocplearn.hv.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import de.ocplearn.hv.dao.ContactDao;
 import de.ocplearn.hv.dto.AddressDto;
 import de.ocplearn.hv.dto.ContactDto;
+import de.ocplearn.hv.mapper.ContactMapper;
 import de.ocplearn.hv.model.Address;
 import de.ocplearn.hv.model.Contact;
 import de.ocplearn.hv.model.Unit;
 import de.ocplearn.hv.util.TablePageViewData;
 
+@Service
 public class ContactServiceImpl implements ContactService{
+
+	private ContactDao contactDao;
+	
+	private ContactMapper contactMapper;
+	
+	@Autowired
+	public ContactServiceImpl(ContactDao contactDao, ContactMapper contactMapper) {
+		super();
+		this.contactDao = contactDao;
+		this.contactMapper=contactMapper;
+	}
 
 	@Override
 	public Contact findContactById(int id) {
@@ -49,8 +66,10 @@ public class ContactServiceImpl implements ContactService{
 
 	@Override
 	public boolean createContact(ContactDto contactDto) {
-		// TODO Auto-generated method stub
-		return false;
+		Contact contact = contactMapper.contactDtoToContact(contactDto);
+		boolean result = contactDao.save(contact);
+		contactDto.setId(contact.getId());
+		return result;
 	}
 
 	@Override

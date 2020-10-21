@@ -116,7 +116,7 @@ public class Contact implements Comparable<Contact>{
 		/**
 		 * @param companyName the companyName to set
 		 */
-		public ContactBuilder setcompanyName(String companyName) {
+		public ContactBuilder setCompanyName(String companyName) {
 			this.companyName = companyName;
 			return this;
 		}
@@ -207,10 +207,10 @@ public class Contact implements Comparable<Contact>{
 	public void setCompany(boolean isCompany) {
 		this.isCompany = isCompany;
 	}
-	public String getcompanyName() {
+	public String getCompanyName() {
 		return companyName;
 	}
-	public void setcompanyName(String companyName) {
+	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
 	public String getPhone() {
@@ -282,7 +282,7 @@ public class Contact implements Comparable<Contact>{
 	@Override
 	public int compareTo(Contact o) {
 		if(isCompany()) {
-			return this.getcompanyName().compareTo(o.getcompanyName());
+			return this.getCompanyName().compareTo(o.getCompanyName());
 		}else {
 			if(this.getLastName().equalsIgnoreCase(o.getLastName())){
 				//Vergleiche firstName

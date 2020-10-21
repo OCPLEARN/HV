@@ -2,6 +2,9 @@ package de.ocplearn.hv.model;
 
 import java.util.List;
 
+import de.ocplearn.hv.dto.ContactDto;
+import de.ocplearn.hv.dto.LoginUserDto;
+
 public class PropertyManagement implements Comparable<PropertyManagement> {
     
 	private int id;

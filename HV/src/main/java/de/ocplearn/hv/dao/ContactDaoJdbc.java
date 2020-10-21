@@ -12,14 +12,19 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 
 import de.ocplearn.hv.exceptions.DataAccessException;
 import de.ocplearn.hv.model.Contact;
+import de.ocplearn.hv.model.Unit;
 import de.ocplearn.hv.util.Config;
 import de.ocplearn.hv.util.DBConnectionPool;
 import de.ocplearn.hv.util.LoggerBuilder;
+import de.ocplearn.hv.util.TablePageViewData;
 
+@Repository
 public class ContactDaoJdbc implements ContactDao {
 
 	private Logger logger = LoggerBuilder.getInstance().build(ContactDaoJdbc.class);
@@ -31,6 +36,7 @@ public class ContactDaoJdbc implements ContactDao {
     //@Autowired
 	private DataSource datasource;	
 	
+	@Autowired
 	public ContactDaoJdbc(@Qualifier("datasource1") DataSource datasource ) {
 	    	this.datasource = datasource;
 	    }
@@ -38,8 +44,10 @@ public class ContactDaoJdbc implements ContactDao {
 	
 	@Override
 	public boolean save(Contact contact) {
-		// TODO Auto-generated method stub
-		return false;
+		if (contact.getId()==0) {
+			return insert(contact);
+		}else	
+			return update(contact);
 	}
 	
 	private boolean insert(Contact contact) {
@@ -52,7 +60,7 @@ public class ContactDaoJdbc implements ContactDao {
 			  stmt.setString(2, contact.getFirstName());
 			  stmt.setString(3, contact.getLastName());
 			  stmt.setBoolean(4, contact.isCompany());
-			  stmt.setString(5, contact.getCompayName());
+			  stmt.setString(5, contact.getCompanyName());
 			  stmt.setString(6, contact.getPhone());
 			  stmt.setString(7, contact.getMobilePhone());
 			  stmt.setString(8, contact.getFax());
@@ -60,6 +68,9 @@ public class ContactDaoJdbc implements ContactDao {
 			  stmt.setString(10, contact.getEmail());
 			  
 			  int key= stmt.executeUpdate();
+			  if(key ==0) {
+				  return false;
+			  }
 			  ResultSet rs = stmt.getGeneratedKeys();
 			  rs.next();
 			  contact.setId(rs.getInt(1));
@@ -101,29 +112,7 @@ public class ContactDaoJdbc implements ContactDao {
 		return null;
 	}
 
-	@Override
-	public List<Contact> findContactsByLastName(String lastName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Contact> findContactsIsCompany(boolean isCompany) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Contact> findContactsByCompanyName(String companyName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Contact> getAllContacts() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 
 	
@@ -151,5 +140,40 @@ public class ContactDaoJdbc implements ContactDao {
     		pool.returnConnection(connection);	
     	}
     	
-    }	
+    }
+
+
+	@Override
+	public List<Contact> findContactsByLastName(String lastName, TablePageViewData tablePageViewData) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<Contact> findContactsOfUnit(Unit unit, TablePageViewData tablePageViewData) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<Contact> findContactsIsCompany(boolean isCompany, TablePageViewData tablePageViewData) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<Contact> findContactsByCompanyName(String companyName, TablePageViewData tablePageViewData) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<Contact> getAllContacts(TablePageViewData tablePageViewData) {
+		// TODO Auto-generated method stub
+		return null;
+	}	
 }

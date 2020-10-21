@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import de.ocplearn.hv.model.Contact;
 import de.ocplearn.hv.model.LoginUser;
+import de.ocplearn.hv.model.PaymentType;
 import de.ocplearn.hv.model.PropertyManagement;
 
 public class PropertyManagementDto implements Comparable<PropertyManagement>{
@@ -13,50 +14,50 @@ public class PropertyManagementDto implements Comparable<PropertyManagement>{
 	private int id;
 	
 	@NotNull
-	private LoginUser primaryLoginUser;
+	private LoginUserDto primaryLoginUser;
 	
 	@NotNull
-	private Contact primaryContact;
+	private ContactDto primaryContact;
 	
 	@NotNull
-	private String paymentType;
+	private PaymentType paymentType;
 	
-	private List<LoginUser> loginUsers;
+	private List<LoginUserDto> loginUsers;
 	
 	
 	
 	
 	// Getters & Setters
 
-	public LoginUser getPrimaryLoginUser() {
+	public LoginUserDto getPrimaryLoginUser() {
 		return primaryLoginUser;
 	}
 
-	public void setPrimaryLoginUser(LoginUser primaryLoginUser) {
+	public void setPrimaryLoginUser(LoginUserDto primaryLoginUser) {
 		this.primaryLoginUser = primaryLoginUser;
 	}
 
-	public Contact getPrimaryContact() {
+	public ContactDto getPrimaryContact() {
 		return primaryContact;
 	}
 
-	public void setPrimaryContact(Contact primaryContact) {
+	public void setPrimaryContact(ContactDto primaryContact) {
 		this.primaryContact = primaryContact;
 	}
 
-	public String getPaymentType() {
+	public PaymentType getPaymentType() {
 		return paymentType;
 	}
 
-	public void setPaymentType(String paymentType) {
+	public void setPaymentType(PaymentType paymentType) {
 		this.paymentType = paymentType;
 	}
 
-	public List<LoginUser> getLoginUsers() {
+	public List<LoginUserDto> getLoginUsers() {
 		return loginUsers;
 	}
 
-	public void setLoginUsers(List<LoginUser> loginUsers) {
+	public void setLoginUsers(List<LoginUserDto> loginUsers) {
 		this.loginUsers = loginUsers;
 	}
 

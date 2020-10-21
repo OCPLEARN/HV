@@ -29,7 +29,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	@Override
 	public boolean createPropertyManagement(PropertyManagementDto propertyManagementDto) {
 		
-		PropertyManagement propertyManagement = PropertyManagementMapper.INSTANCE.propertyManagementDtoToPropertyManagement(propertyManagementDto);
+		PropertyManagement propertyManagement = propertyManagementMapper.propertyManagementDtoToPropertyManagement(propertyManagementDto);
 	if(	propertyManagementDao.save(propertyManagement)) {
 		propertyManagementDto.setId(propertyManagement.getId());
 		return true;

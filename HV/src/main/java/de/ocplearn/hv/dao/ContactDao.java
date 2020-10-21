@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import de.ocplearn.hv.dto.ContactDto;
 import de.ocplearn.hv.model.Contact;
+import de.ocplearn.hv.model.Unit;
+import de.ocplearn.hv.util.TablePageViewData;
 
 public interface ContactDao {
 
@@ -15,10 +17,11 @@ public interface ContactDao {
 	
 	Optional<Contact> findContactById(int id);
 	
-	List<Contact> findContactsByLastName(String lastName);
-	List<Contact> findContactsIsCompany(boolean isCompany);
-	List<Contact> findContactsByCompanyName(String companyName);
-	List<Contact> getAllContacts();
+	List<Contact> findContactsByLastName(String lastName, TablePageViewData tablePageViewData);
+	List<Contact> findContactsOfUnit(Unit unit, TablePageViewData tablePageViewData);
+	List<Contact> findContactsIsCompany(boolean isCompany, TablePageViewData tablePageViewData);
+	List<Contact> findContactsByCompanyName(String companyName, TablePageViewData tablePageViewData);
+	List<Contact> getAllContacts( TablePageViewData tablePageViewData);
 	
 	
 	
