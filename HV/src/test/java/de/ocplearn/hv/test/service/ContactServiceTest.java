@@ -36,13 +36,7 @@ public class ContactServiceTest {
 	@Test
 	public void testCreateContact() {
 		
-//		LoginUserDto loginUserDto = userService.findUserById(1);
-//		System.out.println(loginUserDto);
-//		PropertyManagementDto propertyManagementDto= new PropertyManagementDto();
-//		propertyManagementDto.setPaymentType(PaymentType.FREE);
-//		propertyManagementDto.setPrimaryLoginUser(loginUserDto);
-//		propertyManagementService.createPropertyManagement(propertyManagementDto);
-//		System.out.println(propertyManagementDto);
+
 		
 		
 		
@@ -59,6 +53,15 @@ public class ContactServiceTest {
 		testContact.setFax("49123456789");
 		Assertions.assertTrue(contactService.createContact(testContact));
 		System.out.println(testContact);
+		
+		LoginUserDto loginUserDto = userService.findUserById(1);
+		System.out.println(loginUserDto);
+		PropertyManagementDto propertyManagementDto= new PropertyManagementDto();
+		propertyManagementDto.setPaymentType(PaymentType.FREE);
+		propertyManagementDto.setPrimaryLoginUser(loginUserDto);
+		propertyManagementDto.setPrimaryContact(testContact);
+		propertyManagementService.createPropertyManagement(propertyManagementDto);
+		System.out.println(propertyManagementDto);
 	
 		
 		

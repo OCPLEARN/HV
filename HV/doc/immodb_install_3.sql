@@ -275,3 +275,7 @@ CREATE TABLE building (
  
  INSERT INTO loginUser (id,loginUserName,passwHash,salt,loginUserRole,locale) VALUE (null,'admin',x'DAABCAD4BF38345219D82F6ABBB48527',x'54531AECA828837A01839EF38D52F1466A363A3F09FB634FD5B461D2BB638E22','ADMIN','de_DE');
  
+ #CHANGE:
+ALTER TABLE contact DROP FOREIGN KEY fk_contact_propertyManagerId;
+ALTER TABLE contact DROP COLUMN propertyManagement;
+ 

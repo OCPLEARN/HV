@@ -51,8 +51,7 @@ public class ContactDaoJdbc implements ContactDao {
 	}
 	
 	private boolean insert(Contact contact) {
-		String sql = "Insert into contact(id, propertyManagerId, sex, firstName, lastName, isCompany, companyName, phone, mobilePhone, fax, website, email"
-				+ " value 				(null, null, ?,?,?,?,?,?,?,?,?,?);";
+		String sql = "Insert into contact(id, sex, firstName, lastName, isCompany, companyName, phone, mobilePhone, fax, website, email) value (null, ?,?,?,?,?,?,?,?,?,?);";
 		  try(Connection con = getConnection();  
 	        		PreparedStatement stmt = con.prepareStatement(sql , Statement.RETURN_GENERATED_KEYS ); ) {
 			  
