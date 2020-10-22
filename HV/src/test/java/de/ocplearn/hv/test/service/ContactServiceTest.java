@@ -5,6 +5,7 @@ import java.util.List;
 import javax.swing.text.TabExpander;
 import javax.validation.constraints.AssertTrue;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,7 +126,9 @@ public class ContactServiceTest {
 		
 		
 	}
+	
 	@Test
+	@AfterAll
 	public void testFindAllContacts() {
 		TablePageViewData tablePageViewData = new TablePageViewData();
 		tablePageViewData.setOffset(1);
