@@ -106,7 +106,7 @@ public class HomeController {
 		}
 		
 		if(bindingResult.hasErrors()) {
-				return 	"/public/register";
+			return 	"/public/register";
 				
 		} 	else {
 					createPropertyManagement(propertyManagementRegistrationFormCommand);

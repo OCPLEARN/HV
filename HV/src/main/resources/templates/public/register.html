@@ -23,12 +23,15 @@
 	<div th:replace="~{fragments/navbar :: navbar}">Navigation Bar</div>
 	
 	
+	
 		<form name="f" th:object="${PropertyManagementRegistrationFormCommand}" th:action="@{/register}" method="post">
 	<table class="table">
 		<tr>
 			<td th:Text=#{register.choose}>Please choose</td>
 		</tr>
 		
+<!-- 		LOGIN USER -->
+
 		<tr>
 			<td th:Text="#{username} + ': '">username :</td>
 			<td>
@@ -53,6 +56,27 @@
 			</td>			
 		</tr>
 		
+<!-- 		COMPANY CONTACT check if new user is company-->
+		<tr>
+			<td th:Text="#{register.company} + ' '"> Company?</td>
+			<td><input type="checkbox" id="companyCheck" onclick="isCompanyFunction()"></td>
+			
+		
+		</tr>
+
+
+<!-- 		PRIMARY CONTACT -->
+
+		
+<!-- 		PAYMENT TYPE -->
+
+
+<!-- 		LEGAL INFORMATION z.B. AGB Doc -->
+		
+		
+		
+<!-- 		SUBMIT BUTTON -->
+		 
 		<tr>
 			<td></td>
 			<td><input class="btn btn-primary" type="submit" th:value="#{submit}"></td>
@@ -63,7 +87,23 @@
 	</table>		
 	</form>
 
+<!-- 	CHECKBOX FUNCTION -->
+<script type="text/javascript">
+	function myFunction() {
+  // Get the checkbox
+  var checkBox = document.getElementById("companyCheck");
+  // Get the output text
+  var text = document.getElementById("text");
 
+  // If the checkbox is checked, display the output text
+  if (checkBox.checked == true){
+    text.style.display = "block";
+  } else {
+	  
+    text.style.display = "none";
+  }
+} 
+	</script>
    
     
 <!-- FOOTER -->
