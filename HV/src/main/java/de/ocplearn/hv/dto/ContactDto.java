@@ -1,5 +1,10 @@
 package de.ocplearn.hv.dto;
 
+import java.util.List;
+
+import de.ocplearn.hv.model.Address;
+import de.ocplearn.hv.model.Contact.ContactBuilder;
+
 public class ContactDto implements Comparable<ContactDto>{
 
 	private int id;
@@ -13,6 +18,8 @@ public class ContactDto implements Comparable<ContactDto>{
 	private String fax;
 	private String website;
 	private String email;
+	private List<Address> addresses;
+
 	
 	/**
 	 * @return the id
@@ -43,7 +50,8 @@ public class ContactDto implements Comparable<ContactDto>{
 		private String fax;
 		private String website;
 		private String email;
-		
+		private List<Address> addresses;
+
 		public ContactBuilder() {
 			
 		}
@@ -61,7 +69,8 @@ public class ContactDto implements Comparable<ContactDto>{
 			contact.fax = fax;
 			contact.website = website;
 			contact.email = email;
-			
+			contact.addresses = addresses;
+
 			return contact;
 		}
 		
@@ -153,6 +162,14 @@ public class ContactDto implements Comparable<ContactDto>{
 			this.email = email;
 			return this;
 		}
+		/**
+		 * @param List<Address> the addresses to set
+		 */
+		public ContactBuilder setAddressList(List<Address> addresses) {
+			this.addresses = addresses;
+			return this;
+		}
+
 		
 		
 	}
@@ -163,7 +180,7 @@ public class ContactDto implements Comparable<ContactDto>{
 	}
 	
 	public ContactDto(String sex, String firstName, String lastName, boolean isCompany, String companyName, String phone,
-			String mobilePhone, String fax, String website, String email) {
+			String mobilePhone, String fax, String website, String email, List<Address> addresses) {
 		super();
 		this.sex = sex;
 		this.firstName = firstName;
@@ -253,7 +270,7 @@ public class ContactDto implements Comparable<ContactDto>{
 	public String toString() {
 		return "Contact [sex=" + sex + ", firstName=" + firstName + ", lastName=" + lastName + ", isCompany="
 				+ isCompany + ", companyName=" + companyName + ", phone=" + phone + ", mobilePhone=" + mobilePhone
-				+ ", fax=" + fax + ", website=" + website + ", email=" + email + "]";
+				+ ", fax=" + fax + ", website=" + website + ", email=" + email + "Addresses=" + addresses + "]";
 	}
 
 	@Override

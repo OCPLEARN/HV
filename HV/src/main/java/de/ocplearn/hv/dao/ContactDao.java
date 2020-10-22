@@ -22,6 +22,7 @@ public interface ContactDao {
 	List<Contact> findContactsIsCompany(boolean isCompany, TablePageViewData tablePageViewData);
 	List<Contact> findContactsByCompanyName(String companyName, TablePageViewData tablePageViewData);
 	List<Contact> getAllContacts( TablePageViewData tablePageViewData);
+	List<Contact> findAddressesByContactId(int id, TablePageViewData tablePageViewData);
 	
 	
 	

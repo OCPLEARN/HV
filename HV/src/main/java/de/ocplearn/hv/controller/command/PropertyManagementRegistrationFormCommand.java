@@ -24,11 +24,80 @@ public class PropertyManagementRegistrationFormCommand {
 	
 	@NotNull
 	private String repeatedPassword;
+	
+	// CompanyContact Object
+	
+	private String companyName;
+	
+	private String companyPhone;
+	
+	private String companyMobilePhone;
+	
+	private String companyFax;
+	
+	private String companyWebsite;
+	
+	private String companyEmail;
+	
+	
+	// CompanyAddress
+	
+	
+	private String companyStreet;
+	
+	private String companyHouseNumber;
+	
+	private String companyApartment;
+	
+	private String companyCity;
+	
+	private String companyProvince;
+	
+	private String companyCountry;
+	
+	
+	
+	// PrimaryContact Object
+	
+	private String primaryName;
+	
+	private String primaryPhone;
+	
+	private String primaryMobilePhone;
+	
+	private String primaryFax;
+	
+	private String primaryWebsite;
+	
+	private String primaryEmail;
+	
+	
+	// PrimaryAddress
+	
+	
+	private String primaryStreet;
+	
+	private String primaryHouseNumber;
+	
+	private String primaryApartment;
+	
+	private String primaryCity;
+	
+	private String primaryProvince;
+	
+	private String primaryCountry;	
+	
+	
+	
 
 	
 	public PropertyManagementRegistrationFormCommand(){
 		
 	}
+	
+	
+	
+	
 
 	// Getters and Setters
 	

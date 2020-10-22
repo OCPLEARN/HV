@@ -24,10 +24,19 @@ public class PropertyManagementDto implements Comparable<PropertyManagement>{
 	
 	private List<LoginUserDto> loginUsers;
 	
-	
+	@NotNull
+	private ContactDto companyContact; //HQ
 	
 	
 	// Getters & Setters
+
+	public ContactDto getCompanyContact() {
+		return companyContact;
+	}
+
+	public void setCompanyContact(ContactDto companyContact) {
+		this.companyContact = companyContact;
+	}
 
 	public LoginUserDto getPrimaryLoginUser() {
 		return primaryLoginUser;

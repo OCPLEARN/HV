@@ -9,7 +9,8 @@ public class PropertyManagement implements Comparable<PropertyManagement> {
     
 	private int id;
 	private LoginUser primaryLoginUser;
-	private Contact primaryContact;
+	private Contact primaryContact; //Prokura
+	private Contact companyContact; //HQ
 	private PaymentType paymentType;
 	private List<LoginUser> loginUsers;
 	
@@ -19,11 +20,12 @@ public class PropertyManagement implements Comparable<PropertyManagement> {
 	
 	}
 
-	public PropertyManagement(LoginUser primaryLoginUser, Contact primaryContact, PaymentType paymentType,
+	public PropertyManagement(LoginUser primaryLoginUser, Contact primaryContact, Contact companyContact, PaymentType paymentType,
 			List<LoginUser> loginUsers) {
 		super();
 		this.primaryLoginUser = primaryLoginUser;
 		this.primaryContact = primaryContact;
+		this.companyContact = companyContact;
 		this.paymentType = paymentType;
 		this.loginUsers = loginUsers;
 	}
@@ -69,6 +71,13 @@ public class PropertyManagement implements Comparable<PropertyManagement> {
 	
 	public void setId(int id) {
 		this.id = id;
+	}
+	public Contact getCompanyContact() {
+		return companyContact;
+	}
+
+	public void setCompanyContact(Contact companyContact) {
+		this.companyContact = companyContact;
 	}
 
 	

@@ -62,6 +62,10 @@ public class ContactServiceTest {
 		propertyManagementDto.setPaymentType(PaymentType.FREE);
 		propertyManagementDto.setPrimaryLoginUser(loginUserDto);
 		propertyManagementDto.setPrimaryContact(testContact);
+		System.out.println("testContact.getId() " + testContact.getId());
+		propertyManagementDto.setCompanyContact(testContact);
+		System.out.println("propertyManagementDto.getCompanyContact().getId() :" + propertyManagementDto.getCompanyContact().getId());
+
 		propertyManagementService.createPropertyManagement(propertyManagementDto);
 		System.out.println(propertyManagementDto);
 			
@@ -128,7 +132,7 @@ public class ContactServiceTest {
 	}
 	
 	@Test
-	@AfterAll
+	//@AfterAll
 	public void testFindAllContacts() {
 		TablePageViewData tablePageViewData = new TablePageViewData();
 		tablePageViewData.setOffset(1);

@@ -79,7 +79,7 @@ public class ContactDaoJdbc implements ContactDao {
           } catch (SQLException e) {
           	 e.printStackTrace(); 
                logger.log(Level.WARNING, e.getMessage());
-               throw new DataAccessException("Unable to get Data from DB.");
+               throw new DataAccessException("Unable to get Data from DB. " + e.getMessage());	
           }         
       
       return true;
@@ -291,6 +291,11 @@ public class ContactDaoJdbc implements ContactDao {
 		}
 	}
 
+	@Override
+	public List<Contact> findAddressesByContactId(int id, TablePageViewData tablePageViewData) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	
 	// STATIC METHODS

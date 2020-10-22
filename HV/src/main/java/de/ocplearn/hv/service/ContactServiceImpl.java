@@ -71,6 +71,12 @@ public class ContactServiceImpl implements ContactService{
 	}
 
 	@Override
+	public List<AddressDto> findAddressesByContactId(int id, TablePageViewData tablePageViewData) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
 	public boolean createContact(ContactDto contactDto) {
 		Contact contact = contactMapper.contactDtoToContact(contactDto);
 		boolean result = contactDao.save(contact);

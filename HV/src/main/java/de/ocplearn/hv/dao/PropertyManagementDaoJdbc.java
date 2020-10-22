@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.sql.DataSourceDefinition;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import de.ocplearn.hv.exceptions.DataAccessException;
 import de.ocplearn.hv.model.PropertyManagement;
 import de.ocplearn.hv.util.LoggerBuilder;
 
@@ -74,7 +76,7 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 	
 	private boolean insert (PropertyManagement propertyManagement ) {
 		
-		String sql = "INSERT INTO propertymanagement (id, primaryLoginUserId, paymentType, primaryContactId) VALUES (null, ?, ?, ?)";
+		String sql = "INSERT INTO propertymanagement (id, primaryLoginUserId, paymentType, primaryContactId, companyContactId) VALUES (null, ?, ?, ?, ?)";
 		
 		try ( Connection connection = this.dataSource.getConnection(); 
 			  PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); ){
@@ -82,6 +84,7 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 			stmt.setInt( 1, propertyManagement.getPrimaryLoginUser().getId() );
 			stmt.setString( 2, propertyManagement.getPaymentType().toString() );
 			stmt.setInt( 3, propertyManagement.getPrimaryContact().getId() );
+			stmt.setInt( 4, propertyManagement.getCompanyContact().getId() );
 
 			if (stmt.executeUpdate() == 0) return false;
 			
@@ -96,10 +99,11 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+			logger.log(Level.WARNING, e.getMessage());
+			throw new DataAccessException("Unable to get Data from DB. " + e.getMessage());		
+        }
 		
 		
-		return false;
 	}
 	
 	

@@ -1,5 +1,7 @@
 package de.ocplearn.hv.model;
 
+import java.util.List;
+
 public class Contact implements Comparable<Contact>{
 
 	/**
@@ -27,6 +29,7 @@ public class Contact implements Comparable<Contact>{
 	private String fax;
 	private String website;
 	private String email;
+	private List<Address> addresses;
 	
 	public static class ContactBuilder{
 		
@@ -43,6 +46,9 @@ public class Contact implements Comparable<Contact>{
 		private String fax;
 		private String website;
 		private String email;
+		private List<Address> addresses;
+		
+		
 		
 		public ContactBuilder() {
 			
@@ -61,6 +67,7 @@ public class Contact implements Comparable<Contact>{
 			contact.fax = fax;
 			contact.website = website;
 			contact.email = email;
+			contact.addresses = addresses;
 			
 			return contact;
 		}
@@ -161,6 +168,16 @@ public class Contact implements Comparable<Contact>{
 			return this;
 		}
 		
+		/**
+		 * @param List<Address> the addresses to set
+		 */
+		public ContactBuilder setAddressList(List<Address> addresses) {
+			this.addresses = addresses;
+			return this;
+		}
+
+		
+		
 		
 	}
 	
@@ -170,7 +187,7 @@ public class Contact implements Comparable<Contact>{
 	}
 	
 	public Contact(String sex, String firstName, String lastName, boolean isCompany, String companyName, String phone,
-			String mobilePhone, String fax, String website, String email) {
+			String mobilePhone, String fax, String website, String email, List<Address> addresses) {
 		super();
 		this.sex = sex;
 		this.firstName = firstName;
@@ -182,6 +199,7 @@ public class Contact implements Comparable<Contact>{
 		this.fax = fax;
 		this.website = website;
 		this.email = email;
+		this.addresses = addresses;
 	}
 	public String getSex() {
 		return sex;
@@ -243,6 +261,9 @@ public class Contact implements Comparable<Contact>{
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	public void setAddresses(List<Address> addresses) {
+		this.addresses = addresses;
+	}
 
 	@Override
 	public int hashCode() {
@@ -260,7 +281,7 @@ public class Contact implements Comparable<Contact>{
 	public String toString() {
 		return "Contact [sex=" + sex + ", firstName=" + firstName + ", lastName=" + lastName + ", isCompany="
 				+ isCompany + ", companyName=" + companyName + ", phone=" + phone + ", mobilePhone=" + mobilePhone
-				+ ", fax=" + fax + ", website=" + website + ", email=" + email + "]";
+				+ ", fax=" + fax + ", website=" + website + ", email=" + email + "Addresses=" + addresses + "]";
 	}
 
 	@Override

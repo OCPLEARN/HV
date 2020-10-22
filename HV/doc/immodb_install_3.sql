@@ -1,3 +1,20 @@
+#################################################################################
+##### Befehl zum Export des DB-Schemas ohne Daten
+##### mysqldump --no-data -u someuser -p mydatabase
+
+
+##### Datenbank mit Daten exportieren  (vorher Datenbank stoppen) // backup
+##### mysqldump -u root -p[root_password] [database_name] > dumpfilename.sql
+##### mysqldump -u root -pPa$$w0rd  immodb > c:\tmp\immodb_20201022.sql
+
+##### Datenbank mit Daten importieren
+##### mysql -u root -p[root_password] [database_name] < dumpfilename.sql
+##### mysql -u root -pPa$$w0rd immodb < c:\tmp\immodb_20201022.sql
+#################################################################################
+
+
+
+
 #CREATE USER 'immodb'@'localhost' IDENTIFIED BY 'Pa$$w0rd';
 #CREATE USER 'immodb'@'127.0.0.1' IDENTIFIED BY 'Pa$$w0rd';
 
@@ -277,5 +294,11 @@ CREATE TABLE building (
  
  #CHANGE:
 ALTER TABLE contact DROP FOREIGN KEY fk_contact_propertyManagerId;
-ALTER TABLE contact DROP COLUMN propertyManagement;
- 
+ALTER TABLE contact DROP COLUMN propertyManagerId;
+ALTER TABLE propertyManagement ADD COLUMN companyContactId int not null AFTER paymentType;
+ALTER TABLE propertyManagement ADD CONSTRAINT fk_propertyManagement_companyContactId FOREIGN KEY (companyContactId) REFERENCES contact (id) ;
+ALTER TABLE propertyManagement MODIFY primaryLoginUserId int not null unique;
+
+
+
+
