@@ -182,12 +182,15 @@ public class ContactDaoJdbc implements ContactDao {
 
 	@Override
 	public List<Contact> findContactsByLastName(String lastName, TablePageViewData tablePageViewData) {
+		
+		
+		
 		try(Connection connection = datasource.getConnection();
 				PreparedStatement stmt = connection.prepareStatement("SELECT * FROM contact "
 						+ "ORDER BY ? ?"
 						+ "LIMIT ?,?"
 						+ "WHERE lastName = ?;");){
-			String i1 = tablePageViewData.getOrderByDirection();
+			String i1 = tablePageViewData.getOrderBy();
 			String i2 = tablePageViewData.getOrderByDirection();
 			stmt.setString(1, i1);
 			stmt.setString(2, i2);
