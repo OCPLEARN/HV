@@ -89,8 +89,20 @@ public class ContactServiceTest {
 	
 	@Test
 	public void testFindContactById() {
-		ContactDto contactDto = contactService.findContactById(1);
-		Assertions.assertTrue(contactDto.getFirstName().equals("Tester"));
+		ContactDto testContact = new ContactDto();
+		testContact.setFirstName("FIND");
+		testContact.setLastName("TEST");
+		testContact.setSex("SEXTEST");
+		testContact.setCompany(false);
+		testContact.setEmail("FIND@Testing.com");
+		testContact.setWebsite("UPDATETest.com");
+		testContact.setPhone("+49123456789");
+		testContact.setMobilePhone("49123456789");
+		testContact.setFax("49123456789");
+		contactService.createContact(testContact);
+		int id = testContact.getId();
+		ContactDto contactDto = contactService.findContactById(id);
+		Assertions.assertTrue(contactDto.getFirstName().equals("FIND"));
 	}
 	
 	@Test
