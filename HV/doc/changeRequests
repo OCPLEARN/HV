@@ -6,3 +6,13 @@ Ressourcebundles für MAC OSX
 Bei Eingabe der Daten in PropertyManagementRegistrationFormCommand latitude und longitude von openstreetmap.org ziehen und anzeigen
 --->>> http://sites.tufts.edu/gis/files/2013/11/OpenStreetMap.pdf
 
+/// Ansatz für Eingabe Formular bei register.html
+Firma	Häkchen 	=> CompanyName 		(FirmenName)
+					=> PrimaryContactName 	(Ansprechpartner)
+					=> CompanyAddress	(Strasse, Hnr, "Apartment? Stockwerk!"
+			
+
+
+	keinHäkchen 	=> kein Feld für CompanyName
+					=> PrimaryContactName (Ansprechpartner bzw Kunde?!)
+					=> PrimaryContactAddress (Strasse, Hnr, "Apartment!")
