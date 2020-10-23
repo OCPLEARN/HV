@@ -66,7 +66,7 @@ public class AddressDaoJdbc implements AddressDao {
         	//String coordinate = "POINT("+address.getLatitude()+", "+address.getLongitude()+"";
         	
             stmt.setString(1, address.getStreet()  );
-            stmt.setInt(2, address.getHouseNumber()  );
+            stmt.setString(2, address.getHouseNumber()  );
             stmt.setString(3, address.getApartment() );
             stmt.setString(4, "" );
             stmt.setString(5, address.getCity() );
@@ -109,7 +109,7 @@ public class AddressDaoJdbc implements AddressDao {
 			  //String coordinate = "POINT("+address.getLatitude()+", "+address.getLongitude()+"";
 			  
 	            stmt.setString(1, address.getStreet()  );
-	            stmt.setInt(2, address.getHouseNumber()  );
+	            stmt.setString(2, address.getHouseNumber()  );
 	            stmt.setString(3, address.getApartment() );
 	            stmt.setString(4, "" );
 	            stmt.setString(5, address.getCity() );
@@ -182,7 +182,7 @@ public class AddressDaoJdbc implements AddressDao {
 		// id,street,houseNumber,adrline1,adrline2,city,zip,province,country,coordinate
 		Address address = new Address();
 		address.setId( resultSet.getInt("id") );
-		address.setHouseNumber( resultSet.getInt("houseNumber") );
+		address.setHouseNumber( resultSet.getString("houseNumber") );
 		address.setApartment( resultSet.getString("adrline1") );
 		//address.set???( resultSet.getString("adrline2") );
 		address.setCity( resultSet.getString("city") );

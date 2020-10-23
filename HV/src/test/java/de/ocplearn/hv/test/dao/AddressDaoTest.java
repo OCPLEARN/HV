@@ -31,7 +31,7 @@ public class AddressDaoTest {
 	private static int addr1Id;
 	
 	private Supplier<AddressDto> testAddressDtoSupplier = () -> {
-		return new AddressDto("Poststraße", 3, "Hauptbahnhof",
+		return new AddressDto("Poststraße", " 3", "Hauptbahnhof",
 				"Frankfurt am Main","60329","Hessen","DE", 50.106825, 8.663707);
 	};
 	
@@ -70,7 +70,7 @@ public class AddressDaoTest {
 		
 		// change values
 		addr1Saved.setStreet("Europaplatz");
-		addr1Saved.setHouseNumber(1);
+		addr1Saved.setHouseNumber("1");
 		addr1Saved.setApartment("Hauptbahnhof");
 		addr1Saved.setCity("Berlin");
 		addr1Saved.setZipCode("10551");
