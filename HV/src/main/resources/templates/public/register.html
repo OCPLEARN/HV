@@ -42,7 +42,7 @@
 		</tr>
 	
 		<tr>
-			<td th:Text="#{password} + ': '">password :</td>
+			<td th:Text="#{register.password} + ': '">password :</td>
 			<td><input type="password" name="initialpassword" th:field="*{initialPassword}">	
 			<span class="validationError" th:if="${#fields.hasErrors('initialPassword')}" th:errors="*{initialPassword}">Password Error</span>		
 			</td>
@@ -50,7 +50,7 @@
 		
 		
 		<tr>
-			<td th:Text="#{password} + ': '">repeat password :</td>
+			<td th:Text="#{register.repeat.password} + ': '">repeat password :</td>
 			<td><input type="password" name="repeat	password" th:field="*{repeatedPassword}">
 			<span class="validationError" th:if="${#fields.hasErrors('repeatedPassword')}" th:errors="*{repeatedPassword}">Password Error</span>
 			</td>			
@@ -58,11 +58,27 @@
 		
 <!-- 		COMPANY CONTACT check if new user is company-->
 		<tr>
-			<td th:Text="#{register.company} + ' '"> Company?</td>
-			<td><input type="checkbox" id="companyCheck" onclick="isCompanyFunction()"></td>
-			
-		
+			<td th:Text="#{register.company} + ' ' "></td>
+			<td><input type="checkbox" id="companyCheck" onclick="isCompanyFunction()" checked></td>
 		</tr>
+	</table>
+		
+		<table class="table" id="companyInput">
+			<tr>
+				<td th:Text="#{register.company.name} + ' ' ">Company</td>
+				<td><input type="text" name="companyName" th:field="*{companyName}"></td>	
+			</tr>
+		</table>
+		
+		<table class="table">
+		<tr>
+			<td th:Text="#{register.primary.name} + ' ' ">Primaryname</td>
+			<td ><input type="text" name="primaryName" th:field="*{primaryName}"></td>	
+		</tr>
+	
+		
+		
+		
 
 
 <!-- 		PRIMARY CONTACT -->
@@ -87,24 +103,25 @@
 	</table>		
 	</form>
 
-<!-- 	CHECKBOX FUNCTION -->
-<script type="text/javascript">
-	function myFunction() {
-  // Get the checkbox
-  var checkBox = document.getElementById("companyCheck");
-  // Get the output text
-  var text = document.getElementById("text");
-
-  // If the checkbox is checked, display the output text
-  if (checkBox.checked == true){
-    text.style.display = "block";
-  } else {
-	  
-    text.style.display = "none";
-  }
+<!-- 		CHECKBOX FUNCTION -->
+	
+	<script type="text/javascript">
+		function isCompanyFunction() {
+		  // Get the checkbox
+		  var checkBox = document.getElementById("companyCheck");
+		  // Get the output text
+		  var text = document.getElementById("companyInput");
+		  // If the checkbox is checked, display the output text
+		  if (checkBox.checked == true){
+		    text.style.display = "block";
+		  } else {
+			  
+	    	text.style.display = "none";
+	  }
 } 
 	</script>
    
+	
     
 <!-- FOOTER -->
 
