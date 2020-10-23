@@ -24,45 +24,48 @@
 	
 	
 	
-		<form name="f" th:object="${PropertyManagementRegistrationFormCommand}" th:action="@{/register}" method="post">
-	<table class="table">
-		<tr>
-			<td th:Text=#{register.choose}>Please choose</td>
-		</tr>
-		
-<!-- 		LOGIN USER -->
-
-		<tr>
-			<td th:Text="#{username} + ': '">username :</td>
-			<td>
-			  <input type="text" name="username" th:field="*{loginUserName}">
-			  <span class="validationError" th:if="${#fields.hasErrors('loginUserName')}" th:errors="*{loginUserName}">Name Error</span>
-			</td> 
-			
-		</tr>
+	<form name="f" th:object="${PropertyManagementRegistrationFormCommand}" th:action="@{/register}" method="post">
 	
-		<tr>
-			<td th:Text="#{register.password} + ': '">password :</td>
-			<td><input type="password" name="initialpassword" th:field="*{initialPassword}">	
-			<span class="validationError" th:if="${#fields.hasErrors('initialPassword')}" th:errors="*{initialPassword}">Password Error</span>		
-			</td>
-		</tr>
+		<table class="table">
+			<tr>
+				<td th:Text=#{register.choose}>Please choose</td>
+			</tr>
+			
+	<!-- 		LOGIN USER -->
+	
+			<tr>
+				<td th:Text="#{username} + ': '">username :</td>
+				<td>
+				  <input type="text" name="username" th:field="*{loginUserName}">
+				  <span class="validationError" th:if="${#fields.hasErrors('loginUserName')}" th:errors="*{loginUserName}">Name Error</span>
+				</td> 
+			</tr>
+		
+			<tr>
+				<td th:Text="#{register.password} + ': '">password :</td>
+				<td><input type="password" name="initialpassword" th:field="*{initialPassword}">	
+				<span class="validationError" th:if="${#fields.hasErrors('initialPassword')}" th:errors="*{initialPassword}">Password Error</span>		
+				</td>
+			</tr>
+			
+			<tr>
+				<td th:Text="#{register.repeat.password} + ': '">repeat password :</td>
+				<td><input type="password" name="repeat	password" th:field="*{repeatedPassword}">
+				<span class="validationError" th:if="${#fields.hasErrors('repeatedPassword')}" th:errors="*{repeatedPassword}">Password Error</span>
+				</td>			
+			</tr>
+			
+	<!-- 		COMPANY CONTACT check if new user is company-->
+			<tr>
+				<td th:Text="#{register.company} + ' ' "></td>
+				<td><input type="checkbox" id="companyCheck" onclick="isCompanyFunction()" checked></td>
+			</tr>
+		
+		</table>
 		
 		
-		<tr>
-			<td th:Text="#{register.repeat.password} + ': '">repeat password :</td>
-			<td><input type="password" name="repeat	password" th:field="*{repeatedPassword}">
-			<span class="validationError" th:if="${#fields.hasErrors('repeatedPassword')}" th:errors="*{repeatedPassword}">Password Error</span>
-			</td>			
-		</tr>
-		
-<!-- 		COMPANY CONTACT check if new user is company-->
-		<tr>
-			<td th:Text="#{register.company} + ' ' "></td>
-			<td><input type="checkbox" id="companyCheck" onclick="isCompanyFunction()" checked></td>
-		</tr>
-	</table>
-		
+<!-- 		TABLE FOR COMPANY DATA	 -->
+
 		<table class="table" id="companyInput">
 			<tr>
 				<td th:Text="#{register.company.name} + ' ' ">Company</td>
@@ -70,20 +73,16 @@
 			</tr>
 		</table>
 		
+		
+<!-- 		TABLE FOR PRIMARY CONTACT -->
+
 		<table class="table">
-		<tr>
-			<td th:Text="#{register.primary.name} + ' ' ">Primaryname</td>
-			<td ><input type="text" name="primaryName" th:field="*{primaryName}"></td>	
-		</tr>
-	
-		
-		
-		
-
-
-<!-- 		PRIMARY CONTACT -->
-
-		
+			<tr >
+				<td th:Text="#{register.primary.name} + ' ' ">Primaryname</td>
+				<td ><input type="text" name="primaryName" th:field="*{primaryName}"></td>	
+			</tr>
+		</table>
+				
 <!-- 		PAYMENT TYPE -->
 
 
@@ -92,15 +91,13 @@
 		
 		
 <!-- 		SUBMIT BUTTON -->
-		 
-		<tr>
-			<td></td>
-			<td><input class="btn btn-primary" type="submit" th:value="#{submit}"></td>
-		</tr>
-
-
-
-	</table>		
+		<table class="table">
+			<tr>
+				<td></td>
+				<td><input class="btn btn-primary" type="submit" th:value="#{submit}"></td>
+			</tr>
+		</table>	
+			
 	</form>
 
 <!-- 		CHECKBOX FUNCTION -->
@@ -109,15 +106,18 @@
 		function isCompanyFunction() {
 		  // Get the checkbox
 		  var checkBox = document.getElementById("companyCheck");
+		  		  
 		  // Get the output text
-		  var text = document.getElementById("companyInput");
+		  var companyInput = document.getElementById("companyInput");
+		  
 		  // If the checkbox is checked, display the output text
 		  if (checkBox.checked == true){
-		    text.style.display = "block";
+			 companyInput.style.display = "block";
+
 		  } else {
 			  
-	    	text.style.display = "none";
-	  }
+			companyInput.style.display = "none";
+			}
 } 
 	</script>
    
