@@ -58,7 +58,7 @@
 	<!-- 		COMPANY CONTACT check if new user is company-->
 			<tr>
 				<td th:Text="#{register.company} + ' ' "></td>
-				<td><input type="checkbox" id="companyCheck" onclick="isCompanyFunction()" checked></td>
+				<td><input type="checkbox" id="companyCheck" onclick="isCompanyFunction()" th:checked="*{company}"></td>
 			</tr>
 		
 		</table>
@@ -67,10 +67,27 @@
 <!-- 		TABLE FOR COMPANY DATA	 -->
 
 		<table class="table" id="companyInput">
-			<tr>
-				<td th:Text="#{register.company.name} + ' ' ">Company</td>
+			<tr >
+				<td th:Text="#{register.company.name} + ' ' ">Company name</td>
 				<td><input type="text" name="companyName" th:field="*{companyName}"></td>	
+				
 			</tr>
+			<tr >
+				<td th:Text="#{register.company.phone} + ' ' ">Company phone</td>
+				<td><input type="text" name="companyPhone" th:field="*{companyPhone}"></td>	
+			</tr>
+			<tr >
+				<td th:Text="#{register.company.email} + ' ' ">Company email</td>
+				<td><input type="text" name="companyEmail" th:field="*{companyEmail}"></td>	
+			</tr>
+			<tr >
+				<td th:Text="#{register.company.website} + ' ' ">Company website</td>
+				<td><input type="text" name="companyWebsite" th:field="*{companyWebsite}"></td>	
+			</tr>
+			
+			
+			
+			
 		</table>
 		
 		
@@ -78,9 +95,57 @@
 
 		<table class="table">
 			<tr >
-				<td th:Text="#{register.primary.name} + ' ' ">Primaryname</td>
-				<td ><input type="text" name="primaryName" th:field="*{primaryName}"></td>	
+				<td th:Text="#{register.primary.first.name} + ' ' ">First name</td>
+				<td ><input type="text" name="primaryFirstName" th:field="*{primaryFirstName}"></td>	
 			</tr>
+			<tr >
+				<td th:Text="#{register.primary.last.name} + ' ' ">Last name</td>
+				<td ><input type="text" name="primaryLastName" th:field="*{primaryLastName}"></td>	
+			</tr>
+			<tr >
+				<td th:Text="#{register.primary.email} + ' ' ">Email</td>
+				<td ><input type="text" name="primaryEmail" th:field="*{primaryEmail}"></td>	
+			</tr>
+			<tr >
+				<td th:Text="#{register.primary.phone} + ' ' ">Phone</td>
+				<td ><input type="text" name="primaryPhone" th:field="*{primaryPhone}"></td>	
+			</tr>
+			
+			
+			
+			
+			<tr >
+				<td th:Text="#{register.company.street} + ' ' ">Street name</td>
+				<td ><input type="text" name="companyStreet" th:field="*{companyStreet}"></td>	
+			</tr>
+			<tr >
+				<td th:Text="#{register.company.housenumber} + ' ' ">House number</td>
+				<td ><input type="text" name="companyHouseNumber" th:field="*{companyHouseNumber}"></td>	
+			</tr>
+			<tr >
+				<td th:Text="#{register.company.apartment} + ' ' ">Apartment</td>
+				<td ><input type="text" name="companyApartment" th:field="*{companyApartment}"></td>	
+			</tr>
+			<tr >
+				<td th:Text="#{register.company.city} + ' ' ">City</td>
+				<td ><input type="text" name="companyCity" th:field="*{companyCity}"></td>	
+			</tr>
+			<tr >
+				<td th:Text="#{register.company.province} + ' ' ">Province</td>
+				<td ><input type="text" name="companyProvince" th:field="*{companyProvince}"></td>	
+			</tr>
+			<tr >
+				<td th:Text="#{register.company.country} + ' ' ">Country</td>
+				<td ><input type="text" name="companyCountry" th:field="*{companyCountry}"></td>	
+			</tr>
+			<tr >
+				<td th:Text="#{register.company.zipcode} + ' ' ">Zip Code</td>
+				<td ><input type="text" name="companyZipCode" th:field="*{companyZipCode}"></td>	
+			</tr>
+			
+			
+			
+			
 		</table>
 				
 <!-- 		PAYMENT TYPE -->

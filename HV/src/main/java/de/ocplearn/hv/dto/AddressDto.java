@@ -7,7 +7,7 @@ public class AddressDto implements Comparable<AddressDto> {
 			
 		private int id;
 		private String street;
-		private int houseNumber;
+		private String houseNumber;
 		private String apartment;
 		private String city;
 		private String zipCode;
@@ -22,7 +22,7 @@ public class AddressDto implements Comparable<AddressDto> {
 		public AddressDto() {
 			super();
 		}
-		public AddressDto(String street, int houseNumber, String apartment, String city,String zipCode, String province, String country,
+		public AddressDto(String street, String houseNumber, String apartment, String city,String zipCode, String province, String country,
 				double latitude, double longitude) {
 			super();
 			this.street = street;
@@ -64,13 +64,13 @@ public class AddressDto implements Comparable<AddressDto> {
 		/**
 		 * @return the houseNumber
 		 */
-		public int getHouseNumber() {
+		public String getHouseNumber() {
 			return houseNumber;
 		}
 		/**
 		 * @param houseNumber the houseNumber to set
 		 */
-		public void setHouseNumber(int houseNumber) {
+		public void setHouseNumber(String houseNumber) {
 			this.houseNumber = houseNumber;
 		}
 		/**
@@ -171,7 +171,6 @@ public class AddressDto implements Comparable<AddressDto> {
 			int result = 1;
 			result = prime * result + ((city == null) ? 0 : city.hashCode());
 			result = prime * result + ((country == null) ? 0 : country.hashCode());
-			result = prime * result + houseNumber;
 			result = prime * result + id;
 			result = prime * result + ((street == null) ? 0 : street.hashCode());
 			result = prime * result + ((apartment == null) ? 0 : apartment.hashCode());
@@ -221,7 +220,7 @@ public class AddressDto implements Comparable<AddressDto> {
 								return (this.getId()-o.getId());
 							}
 						}else {
-							return (this.getHouseNumber()-o.getHouseNumber());
+							return (this.getHouseNumber().compareTo(o.getHouseNumber()));
 						}
 					}else {
 						return (this.getStreet().compareToIgnoreCase(o.getStreet()));

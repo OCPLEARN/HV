@@ -47,10 +47,18 @@ public class PropertyManagementRegistrationFormCommand {
 	
 	private String companyEmail;
 	
+	private boolean company = true;
+	
 	
 	// CompanyAddress
 	
 	
+	
+
+
+
+
+
 	private String companyStreet;
 	
 	private String companyHouseNumber;
@@ -63,11 +71,30 @@ public class PropertyManagementRegistrationFormCommand {
 	
 	private String companyCountry;
 	
+	private String companyZipCode;
 	
 	
 	// PrimaryContact Object
 	
-	private String primaryName;
+	public String getCompanyZipCode() {
+		return companyZipCode;
+	}
+
+
+
+
+
+	public void setCompanyZipCode(String companyZipCode) {
+		this.companyZipCode = companyZipCode;
+	}
+
+
+
+
+
+	private String primaryLastName;
+	
+	private String primaryFirstName;
 	
 	private String primaryPhone;
 	
@@ -81,19 +108,19 @@ public class PropertyManagementRegistrationFormCommand {
 	
 	
 	// PrimaryAddress
-	
-	
-	private String primaryStreet;
-	
-	private String primaryHouseNumber;
-	
-	private String primaryApartment;
-	
-	private String primaryCity;
-	
-	private String primaryProvince;
-	
-	private String primaryCountry;	
+//	
+//	
+//	private String primaryStreet;
+//	
+//	private String primaryHouseNumber;
+//	
+//	private String primaryApartment;
+//	
+//	private String primaryCity;
+//	
+//	private String primaryProvince;
+//	
+//	private String primaryCountry;	
 	
 	
 	
@@ -105,18 +132,15 @@ public class PropertyManagementRegistrationFormCommand {
 
 
 
-
-
 	public PropertyManagementRegistrationFormCommand(
 			@NotNull @Size(min = 6, message = "{username.tooshort}") @Size(max = 50, message = "{username.toolong}") String loginUserName,
 			@NotNull @Size(min = 8, max = 128, message = "{register.password.validation.size}") @Pattern(message = "{register.password.validation.regex}", regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&§():;<>,.?/~_+\\-=|'´`]).{1,}$") String initialPassword,
-			@NotNull String repeatedPassword, @NotNull PaymentType paymentType, String companyName, String companyPhone,
-			String companyMobilePhone, String companyFax, String companyWebsite, String companyEmail,
+			@NotNull String repeatedPassword, PaymentType paymentType, String companyName, String companyPhone,
+			String companyMobilePhone, String companyFax, String companyWebsite, String companyEmail, boolean company,
 			String companyStreet, String companyHouseNumber, String companyApartment, String companyCity,
-			String companyProvince, String companyCountry, String primaryName, String primaryPhone,
-			String primaryMobilePhone, String primaryFax, String primaryWebsite, String primaryEmail,
-			String primaryStreet, String primaryHouseNumber, String primaryApartment, String primaryCity,
-			String primaryProvince, String primaryCountry) {
+			String companyProvince, String companyCountry, String companyZipCode, String primaryLastName,
+			String primaryFirstName, String primaryPhone, String primaryMobilePhone, String primaryFax,
+			String primaryWebsite, String primaryEmail) {
 		super();
 		this.loginUserName = loginUserName;
 		this.initialPassword = initialPassword;
@@ -128,24 +152,21 @@ public class PropertyManagementRegistrationFormCommand {
 		this.companyFax = companyFax;
 		this.companyWebsite = companyWebsite;
 		this.companyEmail = companyEmail;
+		this.company = company;
 		this.companyStreet = companyStreet;
 		this.companyHouseNumber = companyHouseNumber;
 		this.companyApartment = companyApartment;
 		this.companyCity = companyCity;
 		this.companyProvince = companyProvince;
 		this.companyCountry = companyCountry;
-		this.primaryName = primaryName;
+		this.companyZipCode = companyZipCode;
+		this.primaryLastName = primaryLastName;
+		this.primaryFirstName = primaryFirstName;
 		this.primaryPhone = primaryPhone;
 		this.primaryMobilePhone = primaryMobilePhone;
 		this.primaryFax = primaryFax;
 		this.primaryWebsite = primaryWebsite;
 		this.primaryEmail = primaryEmail;
-		this.primaryStreet = primaryStreet;
-		this.primaryHouseNumber = primaryHouseNumber;
-		this.primaryApartment = primaryApartment;
-		this.primaryCity = primaryCity;
-		this.primaryProvince = primaryProvince;
-		this.primaryCountry = primaryCountry;
 	}
 
 
@@ -408,16 +429,32 @@ public class PropertyManagementRegistrationFormCommand {
 
 
 
-	public String getPrimaryName() {
-		return primaryName;
+	public String getPrimaryLastName() {
+		return primaryLastName;
 	}
 
 
 
 
 
-	public void setPrimaryName(String primaryName) {
-		this.primaryName = primaryName;
+	public void setPrimaryLastName(String primaryLastName) {
+		this.primaryLastName = primaryLastName;
+	}
+
+
+
+
+
+	public String getPrimaryFirstName() {
+		return primaryFirstName;
+	}
+
+
+
+
+
+	public void setPrimaryFirstName(String primaryFirstName) {
+		this.primaryFirstName = primaryFirstName;
 	}
 
 
@@ -502,101 +539,40 @@ public class PropertyManagementRegistrationFormCommand {
 
 
 
-
-
-	public String getPrimaryStreet() {
-		return primaryStreet;
+	public boolean isCompany() {
+		return company;
 	}
 
 
 
 
 
-	public void setPrimaryStreet(String primaryStreet) {
-		this.primaryStreet = primaryStreet;
+	public void setCompany(boolean company) {
+		this.company = company;
 	}
 
-
-
-
-
-	public String getPrimaryHouseNumber() {
-		return primaryHouseNumber;
-	}
-
-
-
-
-
-	public void setPrimaryHouseNumber(String primaryHouseNumber) {
-		this.primaryHouseNumber = primaryHouseNumber;
-	}
-
-
-
-
-
-	public String getPrimaryApartment() {
-		return primaryApartment;
-	}
-
-
-
-
-
-	public void setPrimaryApartment(String primaryApartment) {
-		this.primaryApartment = primaryApartment;
-	}
-
-
-
-
-
-	public String getPrimaryCity() {
-		return primaryCity;
-	}
-
-
-
-
-
-	public void setPrimaryCity(String primaryCity) {
-		this.primaryCity = primaryCity;
-	}
-
-
-
-
-
-	public String getPrimaryProvince() {
-		return primaryProvince;
-	}
-
-
-
-
-
-	public void setPrimaryProvince(String primaryProvince) {
-		this.primaryProvince = primaryProvince;
-	}
-
-
-
-
-
-	public String getPrimaryCountry() {
-		return primaryCountry;
-	}
-
-
-
-
-
-	public void setPrimaryCountry(String primaryCountry) {
-		this.primaryCountry = primaryCountry;
-	}
 	
-	// Getters and Setters
+
+
+
+
+	@Override
+	public String toString() {
+		return "PropertyManagementRegistrationFormCommand [loginUserName=" + loginUserName + ", initialPassword="
+				+ initialPassword + ", repeatedPassword=" + repeatedPassword + ", paymentType=" + paymentType
+				+ ", companyName=" + companyName + ", companyPhone=" + companyPhone + ", companyMobilePhone="
+				+ companyMobilePhone + ", companyFax=" + companyFax + ", companyWebsite=" + companyWebsite
+				+ ", companyEmail=" + companyEmail + ", companyStreet=" + companyStreet + ", companyHouseNumber="
+				+ companyHouseNumber + ", companyApartment=" + companyApartment + ", companyCity=" + companyCity
+				+ ", companyProvince=" + companyProvince + ", companyCountry=" + companyCountry + ", companyZipCode="
+				+ companyZipCode + ", primaryLastName=" + primaryLastName + ", primaryFirstName=" + primaryFirstName
+				+ ", primaryPhone=" + primaryPhone + ", primaryMobilePhone=" + primaryMobilePhone + ", primaryFax="
+				+ primaryFax + ", primaryWebsite=" + primaryWebsite + ", primaryEmail=" + primaryEmail + "]";
+	}
+
+
+
+	
 	
 	
 	

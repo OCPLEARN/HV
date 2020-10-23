@@ -54,7 +54,7 @@ public class LoginUserDaoTest {
     /*
      * create an admin class loginUser with german locale
      * */
-    private LoginUserDto getLoginUser() {
+    public LoginUserDto getLoginUser() {
         
         //String loginUserName = "admin" + System.currentTimeMillis();
     	String loginUserName = LoginUserDaoTest.getRandomName();

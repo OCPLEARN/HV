@@ -23,9 +23,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import de.ocplearn.hv.controller.command.PropertyManagementRegistrationFormCommand;
+import de.ocplearn.hv.dto.AddressDto;
+import de.ocplearn.hv.dto.ContactDto;
 import de.ocplearn.hv.dto.LoginUserDto;
+import de.ocplearn.hv.dto.PropertyManagementDto;
+import de.ocplearn.hv.model.Contact;
 import de.ocplearn.hv.model.LoginUser;
+import de.ocplearn.hv.model.PaymentType;
 import de.ocplearn.hv.model.Role;
+import de.ocplearn.hv.service.PropertyManagementService;
 import de.ocplearn.hv.service.UserService;
 import de.ocplearn.hv.service.UserServiceImpl;
 import de.ocplearn.hv.util.CountryList;
@@ -39,10 +45,13 @@ public class HomeController {
 	
 	private ApplicationContext applicationContext;
 	
+	private PropertyManagementService propertyManagementService;
+	
 	@Autowired
-	public HomeController(UserService userService, ApplicationContext applicationContext) {
+	public HomeController(UserService userService, ApplicationContext applicationContext, PropertyManagementService propertyManagementService) {
 		this.userService = userService;
 		this.applicationContext = applicationContext;
+		this.propertyManagementService = propertyManagementService;
 	}
 	
 	
@@ -117,14 +126,75 @@ public class HomeController {
 	private void createPropertyManagement(PropertyManagementRegistrationFormCommand propertyManagementRegistrationFormCommand) {
 		HashMap<String, byte[]> passwordHashMap = StaticHelpers.createHash(propertyManagementRegistrationFormCommand.getInitialPassword(), null);
 		
+		// LoginUser
+		
 		LoginUserDto loginUserDto = new LoginUserDto();
 		loginUserDto.setLoginUserName(propertyManagementRegistrationFormCommand.getLoginUserName());
 		loginUserDto.setRole(Role.PROPERTY_MANAGER);
 		loginUserDto.setLocale(LocaleContextHolder.getLocale());
 		loginUserDto.setPasswHash(passwordHashMap.get("hash"));
 		loginUserDto.setSalt(passwordHashMap.get("salt"));
-				
-		userService.createUser(loginUserDto);
+		
+		// Company Contact
+		ContactDto companyContactDto = new ContactDto();
+	
+		if(companyContactDto.isCompany()) {
+			companyContactDto.setCompanyName(propertyManagementRegistrationFormCommand.getCompanyName());
+			companyContactDto.setPhone(propertyManagementRegistrationFormCommand.getCompanyPhone());
+			companyContactDto.setWebsite(propertyManagementRegistrationFormCommand.getCompanyWebsite());
+			companyContactDto.setEmail(propertyManagementRegistrationFormCommand.getCompanyEmail());
+		} else {
+			
+			companyContactDto.setCompanyName(propertyManagementRegistrationFormCommand.getPrimaryFirstName() 
+										   + propertyManagementRegistrationFormCommand.getPrimaryLastName());
+			companyContactDto.setPhone(propertyManagementRegistrationFormCommand.getPrimaryPhone());
+			companyContactDto.setEmail(propertyManagementRegistrationFormCommand.getPrimaryEmail());
+		}
+		
+		// Primary Contact
+		
+		ContactDto primaryContactDto = new ContactDto();
+		
+		primaryContactDto.setFirstName(propertyManagementRegistrationFormCommand.getPrimaryFirstName());
+		primaryContactDto.setLastName(propertyManagementRegistrationFormCommand.getPrimaryLastName());
+		
+		if( propertyManagementRegistrationFormCommand.getCompanyPhone().isEmpty() ) { 
+						primaryContactDto.setPhone(propertyManagementRegistrationFormCommand.getPrimaryPhone());
+					} else {
+						primaryContactDto.setPhone(propertyManagementRegistrationFormCommand.getCompanyPhone());
+					}
+		if( propertyManagementRegistrationFormCommand.getCompanyEmail().isEmpty() ) { 
+			primaryContactDto.setEmail(propertyManagementRegistrationFormCommand.getPrimaryEmail());
+		} else {
+			primaryContactDto.setEmail(propertyManagementRegistrationFormCommand.getCompanyEmail());
+		}
+
+		// Company Address
+		
+		AddressDto companyAddressDto = new AddressDto();
+		companyAddressDto.setStreet(propertyManagementRegistrationFormCommand.getCompanyStreet());
+		companyAddressDto.setHouseNumber(propertyManagementRegistrationFormCommand.getCompanyHouseNumber());
+		companyAddressDto.setApartment(propertyManagementRegistrationFormCommand.getCompanyApartment());
+		companyAddressDto.setCity(propertyManagementRegistrationFormCommand.getCompanyCity());
+		companyAddressDto.setProvince(propertyManagementRegistrationFormCommand.getCompanyProvince());
+		companyAddressDto.setCountry(propertyManagementRegistrationFormCommand.getCompanyCountry());
+		companyAddressDto.setZipCode(propertyManagementRegistrationFormCommand.getCompanyZipCode());
+			
+		// TODO 
+		// Primary Contact Address 
+		
+		PropertyManagementDto propertyManagementDto = new PropertyManagementDto();
+		
+		propertyManagementDto.setPrimaryLoginUser(loginUserDto);
+		propertyManagementDto.setPrimaryContact(primaryContactDto);
+		propertyManagementDto.setCompanyContact(companyContactDto);
+		// TODO
+		//Change PaymentType
+		propertyManagementDto.setPaymentType(PaymentType.PRO);
+		// TODO
+		//propertyManagementDto.setLoginUsers(loginUsers);
+
+		propertyManagementService.createPropertyManagement(propertyManagementDto);
 		
 	}
 	

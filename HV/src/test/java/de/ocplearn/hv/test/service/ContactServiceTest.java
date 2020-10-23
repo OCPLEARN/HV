@@ -19,6 +19,7 @@ import de.ocplearn.hv.model.PropertyManagement;
 import de.ocplearn.hv.service.ContactService;
 import de.ocplearn.hv.service.PropertyManagementService;
 import de.ocplearn.hv.service.UserService;
+import de.ocplearn.hv.test.dao.LoginUserDaoTest;
 import de.ocplearn.hv.util.TablePageViewData;
 
 @SpringBootTest
@@ -53,11 +54,10 @@ public class ContactServiceTest {
 		testContact.setPhone("+49123456789");
 		testContact.setMobilePhone("49123456789");
 		testContact.setFax("49123456789");
-		Assertions.assertTrue(contactService.createContact(testContact));
-		System.out.println(testContact);
+		//Assertions.assertTrue(contactService.createContact(testContact));
 		
-		LoginUserDto loginUserDto = userService.findUserById(1);
-		System.out.println(loginUserDto);
+		LoginUserDto loginUserDto = new LoginUserDaoTest().getLoginUser();
+		
 		PropertyManagementDto propertyManagementDto= new PropertyManagementDto();
 		propertyManagementDto.setPaymentType(PaymentType.FREE);
 		propertyManagementDto.setPrimaryLoginUser(loginUserDto);
@@ -66,8 +66,7 @@ public class ContactServiceTest {
 		propertyManagementDto.setCompanyContact(testContact);
 		System.out.println("propertyManagementDto.getCompanyContact().getId() :" + propertyManagementDto.getCompanyContact().getId());
 
-		propertyManagementService.createPropertyManagement(propertyManagementDto);
-		System.out.println(propertyManagementDto);
+		Assertions.assertTrue(propertyManagementService.createPropertyManagement(propertyManagementDto));
 			
 	}
 	
