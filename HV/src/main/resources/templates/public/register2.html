@@ -8,11 +8,15 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" type="text/css" media="all" href="/bootstrap/css/bootstrap.min.css" th:href="@{/bootstrap/css/bootstrap.min.css}" />
-    <link rel="stylesheet" type="text/css" media="all" href="../../static/css/hv.css"  />
-    
+
+
 	<!-- JS -->
 	<script src="/jquery/jquery-3.5.1.min.js" th:src="@{/jquery/jquery-3.5.1.min.js}"></script>
 	<script src="/bootstrap/js/bootstrap.bundle.min.js" th:src="@{/bootstrap/js/bootstrap.bundle.min.js}"></script>    
+
+<!-- 	Anpassung CSS muss nach bootstrap.css stehen (Reihenfolge zählt) -->
+    <link rel="stylesheet" type="text/css" media="all" href="./../../static/css/hv.css"  />
+
 
 </head>
 
@@ -27,9 +31,11 @@
 	
 	<form name="f" th:object="${PropertyManagementRegistrationFormCommand}" th:action="@{/register}" method="post">
 	
-		<table class="table">
+		<table class="table" th:Text="Please choose">
+		
+		
 			<tr>
-				<td th:Text=#{register.choose}>Please choose</td>
+				<td th:Text=#{register.choose}>Please choose" ></td>
 			</tr>
 			
 	<!-- 		LOGIN USER -->
@@ -65,30 +71,29 @@
 		
 		
 <!-- 		TABLE FOR COMPANY DATA	 -->
-
-			<tr id="hide-tr">
-				
+	<div>
+		
+			<tr id="companyInput">
 				<td th:Text="#{register.company.name} + ' ' ">Company name</td>
 				<td><input type="text" name="companyName" th:field="*{companyName}"></td>	
-				
 			</tr>
-			<tr >
+			
+			<tr id="companyInput2">
 				<td th:Text="#{register.company.phone} + ' ' ">Company phone</td>
 				<td><input type="text" name="companyPhone" th:field="*{companyPhone}"></td>	
 			</tr>
+			
 			<tr >
 				<td th:Text="#{register.company.email} + ' ' ">Company email</td>
 				<td><input type="text" name="companyEmail" th:field="*{companyEmail}"></td>	
 			</tr>
+			
 			<tr >
 				<td th:Text="#{register.company.website} + ' ' ">Company website</td>
 				<td><input type="text" name="companyWebsite" th:field="*{companyWebsite}"></td>	
 			</tr>
 			
-			
-			
-			
-		
+		</div>	
 		
 <!-- 		TABLE FOR PRIMARY CONTACT -->
 
@@ -144,7 +149,6 @@
 			
 			
 			
-		</table>
 				
 <!-- 		PAYMENT TYPE -->
 
@@ -154,7 +158,6 @@
 		
 		
 <!-- 		SUBMIT BUTTON -->
-		<table class="table">
 			<tr>
 				<td></td>
 				<td><input class="btn btn-primary" type="submit" th:value="#{submit}"></td>
@@ -169,17 +172,24 @@
 		function isCompanyFunction() {
 		  // Get the checkbox
 		  var checkBox = document.getElementById("companyCheck");
+		  
+		  
+		
 		  		  
 		  // Get the output text
-		  var companyInput = document.getElementById("hide-tr");
+		//  var companyInput = document.getElementById("companyInput");
+// 		  var companyInput  = document.getElementById("companyInput");
+		  var companyInput2 = document.getElementById("companyInput2");
 		  
 		  // If the checkbox is checked, display the output text
 		  if (checkBox.checked == true){
-			 companyInput.style.display = "block";
+// 			 companyInput.style.display = "block";
+			 companyInput2.style.display = "block";
 
 		  } else {
 			  
-			companyInput.style.display = "none";
+ 			companyInput.style.display = "none";
+ 			companyInput2.style.display = "none";
 			}
 } 
 	</script>

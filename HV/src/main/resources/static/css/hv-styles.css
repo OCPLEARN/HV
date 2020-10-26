@@ -1,0 +1,27 @@
+
+html {
+/*   background-color: red; */
+}
+
+table {
+	background-color: lightgrey;
+/* table-layout: auto; */
+}
+
+
+tr {
+/* 	width:100%; */
+/* 	background-color: green; */
+}
+td {
+	width: 50%;
+	
+}
+
+
+/* signinButton in Navbar,html */
+/* #signinbutton { */
+/* 	color: green; */
+/* 	position:absolute; */
+
+}

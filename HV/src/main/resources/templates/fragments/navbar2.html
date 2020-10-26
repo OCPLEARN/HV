@@ -6,9 +6,6 @@
 <meta charset="UTF-8">
 <title>Navigation Bar</title>
 
-    <link rel="stylesheet" type="text/css" media="all" href="./../../static/css/hv-styles.css"  />
-
-
 </head>
 <body>
 
@@ -67,7 +64,7 @@
       	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:if=${#authorization.expression('isAuthenticated()')} sec:authentication="name">
           UserName
         </a>       
-      	<a id="signinbutton" href="/signin" th:href="@{/signin}" th:if=${#authorization.expression('!isAuthenticated()')}>
+      	<a href="/signin" th:href="@{/signin}" th:if=${#authorization.expression('!isAuthenticated()')}>
       	  <i class="btn" aria-hidden="true"></i>&nbsp;Sign in 
       	</a>  
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">    
