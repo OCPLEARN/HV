@@ -80,7 +80,11 @@ public class ContactServiceImpl implements ContactService{
 	public boolean createContact(ContactDto contactDto) {
 		Contact contact = contactMapper.contactDtoToContact(contactDto);
 		boolean result = contactDao.save(contact);
-		contactDto.setId(contact.getId());
+		
+		if(result) {
+			contactDto.setId(contact.getId());
+			//List addresses = new 
+		}
 		return result;
 	}
 

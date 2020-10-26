@@ -264,6 +264,11 @@ public class Contact implements Comparable<Contact>{
 	public void setAddresses(List<Address> addresses) {
 		this.addresses = addresses;
 	}
+	
+
+	public List<Address> getAddresses() {
+		return addresses;
+	}
 
 	@Override
 	public int hashCode() {

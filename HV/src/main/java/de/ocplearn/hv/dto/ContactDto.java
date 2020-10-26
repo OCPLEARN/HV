@@ -21,19 +21,7 @@ public class ContactDto implements Comparable<ContactDto>{
 	private List<Address> addresses;
 
 	
-	/**
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
+	
 
 	public static class ContactBuilder{
 		
@@ -252,6 +240,28 @@ public class ContactDto implements Comparable<ContactDto>{
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+
+	public List<Address> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(List<Address> addresses) {
+		this.addresses = addresses;
 	}
 
 	@Override
