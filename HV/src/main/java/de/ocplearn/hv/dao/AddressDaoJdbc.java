@@ -82,7 +82,7 @@ public class AddressDaoJdbc implements AddressDao {
             // get generated key
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected != 1){
-                throw new SQLException("No row insert for address with id = " + address.getId());
+                throw new SQLException();
             }            
             
             ResultSet rs = stmt.getGeneratedKeys();

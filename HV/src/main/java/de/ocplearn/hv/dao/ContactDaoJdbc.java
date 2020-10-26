@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import de.ocplearn.hv.exceptions.DataAccessException;
+import de.ocplearn.hv.model.Address;
 import de.ocplearn.hv.model.Contact;
 import de.ocplearn.hv.model.Unit;
 import de.ocplearn.hv.util.Config;
@@ -292,6 +293,26 @@ public class ContactDaoJdbc implements ContactDao {
 	}
 
 	@Override
+	public boolean addAddress(Contact contact, Address address) {
+		
+		String sql = "INSERT INTO contactAddressLink ( contactId, addressId ) VALUE ( ?, ? );";
+		
+		try ( Connection connection = datasource.getConnection();
+				PreparedStatement stmt = connection.prepareStatement(sql); ) {
+				
+			stmt.setInt(1, contact.getId());
+			stmt.setInt(2, address.getId());
+			return ( stmt.executeUpdate() == 1 )? true : false;
+			
+		} catch (SQLException e) {
+			 e.printStackTrace(); 
+             logger.log(Level.WARNING, e.getMessage());
+             throw new DataAccessException("Unable to get Data from DB.");
+		}
+	}
+
+	
+	@Override
 	public List<Contact> findAddressesByContactId(int id, TablePageViewData tablePageViewData) {
 		// TODO Auto-generated method stub
 		return null;
@@ -324,5 +345,7 @@ public class ContactDaoJdbc implements ContactDao {
     	
     }
 
+
+	
 	
 }

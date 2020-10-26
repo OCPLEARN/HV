@@ -18,7 +18,7 @@ public class ContactDto implements Comparable<ContactDto>{
 	private String fax;
 	private String website;
 	private String email;
-	private List<Address> addresses;
+	private List<AddressDto> addresses;
 
 	
 	
@@ -38,7 +38,7 @@ public class ContactDto implements Comparable<ContactDto>{
 		private String fax;
 		private String website;
 		private String email;
-		private List<Address> addresses;
+		private List<AddressDto> addresses;
 
 		public ContactBuilder() {
 			
@@ -153,7 +153,7 @@ public class ContactDto implements Comparable<ContactDto>{
 		/**
 		 * @param List<Address> the addresses to set
 		 */
-		public ContactBuilder setAddressList(List<Address> addresses) {
+		public ContactBuilder setAddressList(List<AddressDto> addresses) {
 			this.addresses = addresses;
 			return this;
 		}
@@ -168,7 +168,7 @@ public class ContactDto implements Comparable<ContactDto>{
 	}
 	
 	public ContactDto(String sex, String firstName, String lastName, boolean isCompany, String companyName, String phone,
-			String mobilePhone, String fax, String website, String email, List<Address> addresses) {
+			String mobilePhone, String fax, String website, String email, List<AddressDto> addresses) {
 		super();
 		this.sex = sex;
 		this.firstName = firstName;
@@ -256,11 +256,11 @@ public class ContactDto implements Comparable<ContactDto>{
 	}
 	
 
-	public List<Address> getAddresses() {
+	public List<AddressDto> getAddresses() {
 		return addresses;
 	}
 
-	public void setAddresses(List<Address> addresses) {
+	public void setAddresses(List<AddressDto> addresses) {
 		this.addresses = addresses;
 	}
 

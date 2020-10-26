@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import de.ocplearn.hv.dto.ContactDto;
+import de.ocplearn.hv.model.Address;
 import de.ocplearn.hv.model.Contact;
 import de.ocplearn.hv.model.Unit;
 import de.ocplearn.hv.util.TablePageViewData;
@@ -14,6 +15,7 @@ public interface ContactDao {
 	boolean delete (Contact contact);
 	boolean deleteContactById(int id);
 	boolean update (Contact contact);
+	boolean addAddress (Contact contact, Address address);
 	
 	Optional<Contact> findContactById(int id);
 	

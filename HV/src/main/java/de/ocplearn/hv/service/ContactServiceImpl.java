@@ -8,9 +8,11 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.ocplearn.hv.dao.AddressDao;
 import de.ocplearn.hv.dao.ContactDao;
 import de.ocplearn.hv.dto.AddressDto;
 import de.ocplearn.hv.dto.ContactDto;
+import de.ocplearn.hv.mapper.AddressMapper;
 import de.ocplearn.hv.mapper.ContactMapper;
 import de.ocplearn.hv.model.Address;
 import de.ocplearn.hv.model.Contact;
@@ -24,11 +26,17 @@ public class ContactServiceImpl implements ContactService{
 	
 	private ContactMapper contactMapper;
 	
+	private AddressMapper addressMapper;
+	
+	private AddressDao addressDao; 
+	
 	@Autowired
-	public ContactServiceImpl(ContactDao contactDao, ContactMapper contactMapper) {
+	public ContactServiceImpl(ContactDao contactDao, ContactMapper contactMapper, AddressMapper addressMapper, AddressDao addressDao) {
 		super();
 		this.contactDao = contactDao;
 		this.contactMapper=contactMapper;
+		this.addressMapper = addressMapper;
+		this.addressDao = addressDao;
 	}
 
 	@Override
@@ -83,7 +91,19 @@ public class ContactServiceImpl implements ContactService{
 		
 		if(result) {
 			contactDto.setId(contact.getId());
-			//List addresses = new 
+			List<AddressDto> addressesDto = contactDto.getAddresses();
+			
+			for(int i = 0; i < addressesDto.size(); i++) {
+				
+				Address address = addressMapper.addressDtoToAddress(addressesDto.get(i));
+				address = addressDao.save(address);
+				if (address.getId() != 0) {
+					contactDao.addAddress(contact, address);
+					addressesDto.get(i).setId(address.getId());
+				}
+				
+				
+			}
 		}
 		return result;
 	}
