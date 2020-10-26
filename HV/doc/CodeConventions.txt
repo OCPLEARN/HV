@@ -1,0 +1,11 @@
+	CRUD Operations Rückgabewerte:
+
+	1. C:	return boolean and write Id to Dto
+	
+	2. R:	Finder 1 Object => Optional.ofObject a)	Wenn ResultSet empty => isEmpty(), 
+												 b)	wenn Object nicht vorhanden => Optional.empty()
+			Finder mehrere Objekte => List<Object>
+	3. U:	boolean
+	4. D:	boolean
+	
+	

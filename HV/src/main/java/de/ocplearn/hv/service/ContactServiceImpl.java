@@ -12,6 +12,7 @@ import de.ocplearn.hv.dao.AddressDao;
 import de.ocplearn.hv.dao.ContactDao;
 import de.ocplearn.hv.dto.AddressDto;
 import de.ocplearn.hv.dto.ContactDto;
+import de.ocplearn.hv.exceptions.DataAccessException;
 import de.ocplearn.hv.mapper.AddressMapper;
 import de.ocplearn.hv.mapper.ContactMapper;
 import de.ocplearn.hv.model.Address;
@@ -96,8 +97,8 @@ public class ContactServiceImpl implements ContactService{
 			if(addressesDto != null) {
 				for(int i = 0; i < addressesDto.size(); i++) {
 					Address address = addressMapper.addressDtoToAddress(addressesDto.get(i));
-					address = addressDao.save(address);
-					if (address.getId() != 0) {
+					boolean addressSavedSuccessful = addressDao.save(address);
+					if (addressSavedSuccessful) {
 						contactDao.addAddress(contact, address);
 						addressesDto.get(i).setId(address.getId());
 					}	
@@ -116,6 +117,30 @@ public class ContactServiceImpl implements ContactService{
 	@Override
 	public boolean deleteContactById(int id) {
 		return contactDao.deleteContactById(id);
+	}
+
+	@Override
+	public boolean updateAddress( AddressDto addressDto ) {
+		Address address = addressMapper.addressDtoToAddress(addressDto);
+		
+		try {
+			addressDao.save(address);
+			return true;
+			} catch (DataAccessException e) {
+				return false;
+			}
+	}
+
+	@Override
+	public boolean deleteAddress(AddressDto addressDto) {
+		Address address = addressMapper.addressDtoToAddress(addressDto);
+		
+		try {
+			return addressDao.delete(address);
+		} catch (DataAccessException e) {
+			return false;
+		}
+		
 	}
 
 

@@ -45,7 +45,7 @@ public class AddressDaoJdbc implements AddressDao {
     }	
 	
 	@Override
-	public Address save(Address address) throws DataAccessException {
+	public boolean save(Address address) throws DataAccessException {
         if (address.getId() == 0){
             return this.insert(address);
         }else{
@@ -53,7 +53,7 @@ public class AddressDaoJdbc implements AddressDao {
         }
 	}
 	
-	private Address insert(Address address){
+	private boolean insert(Address address){
 		
 		String sql = "INSERT INTO address (id,street,houseNumber,adrline1,"
 				+ "adrline2,city,zip,province,country,coordinate) VALUE ( null,?,?,?,?,?,?,?,?,POINT(?,?) );";
@@ -95,10 +95,10 @@ public class AddressDaoJdbc implements AddressDao {
          throw new DataAccessException("Unable to get Data from DB.");
     }   
         
-        return address;
+        return true;
 	}
 	
-	private Address update(Address address){
+	private boolean update(Address address){
 		
 		String sql = "UPDATE address SET street = ?, houseNumber = ?, adrline1 = ?,"
 				+ " adrline2 = ?, city = ?, zip = ?, province = ?, country = ?, coordinate = POINT(?,?) WHERE id = ?;";
@@ -132,7 +132,7 @@ public class AddressDaoJdbc implements AddressDao {
                  throw new DataAccessException("Unable to get Data from DB.");
             }   	
 		
-		return address;
+		return true;
 	}
 	
 

@@ -62,13 +62,20 @@ public class AddressDaoTest {
 		AddressDto addr1 = this.testAddressDtoSupplier.get();
 		
 		// save 
-		Address addr1Saved = addressDao.save( addressMapper.addressDtoToAddress(addr1) );	
+		boolean addrOneIsSaved = addressDao.save( addressMapper.addressDtoToAddress(addr1) );	
 		// assert is saved
-		Assertions.assertTrue( addr1Saved.getId() > 0 );
-		AddressDaoTest.addr1Id =  addr1Saved.getId();
+		Assertions.assertTrue( addrOneIsSaved );
+		
+		AddressDaoTest.addr1Id =  addr1.getId();
 		// System.out.println("new address id = " + addr1Id);
 		
 		// change values
+		Optional<Address> optional = addressDao.findById(addr1Id);
+		
+		Assertions.assertTrue(optional.isPresent());
+
+		AddressDto addr1Saved =  addressMapper.addressToAddressDto(optional.get()); 
+
 		addr1Saved.setStreet("Europaplatz");
 		addr1Saved.setHouseNumber("1");
 		addr1Saved.setApartment("Hauptbahnhof");
@@ -79,7 +86,7 @@ public class AddressDaoTest {
 		addr1Saved.setLongitude(13.369231);
 		
 		// save changed address
-		addr1Saved = addressDao.save( addr1Saved );	// no mapping here, using returned model type
+		addrOneIsSaved = addressDao.save( addressMapper.addressDtoToAddress(addr1Saved) );
 		// assert same address changed
 		Assertions.assertTrue( addr1Saved.getId() == AddressDaoTest.addr1Id );
 		
@@ -102,8 +109,9 @@ public class AddressDaoTest {
 		if (AddressDaoTest.addr1Id == 0) {
 			System.out.println("No address from previous test found");
 			AddressDto addressDto = this.testAddressDtoSupplier.get();
-			Address addressSaved = this.addressDao.save(this.addressMapper.addressDtoToAddress(addressDto));
-			AddressDaoTest.addr1Id = addressSaved.getId();
+			boolean addressSaved = this.addressDao.save(this.addressMapper.addressDtoToAddress(addressDto));
+			Assertions.assertTrue(addressSaved);
+			AddressDaoTest.addr1Id = addressDto.getId();
 		}
 		
 		Optional<Address> opt = this.addressDao.findById(AddressDaoTest.addr1Id);

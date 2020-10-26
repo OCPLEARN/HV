@@ -12,18 +12,19 @@ public interface ContactService {
 	
 	ContactDto findContactById(int id);
 	
-	List<ContactDto> findContactsByLastName(String lastName, TablePageViewData tablePageViewData);
-	List<ContactDto> findContactsOfUnit(Unit unit, TablePageViewData tablePageViewData);
-	List<ContactDto> findContactsIsCompany(boolean isCompany, TablePageViewData tablePageViewData);
-	List<ContactDto> findContactsByCompanyName(String companyName, TablePageViewData tablePageViewData);
-	List<ContactDto> getAllContacts(TablePageViewData tablePageViewData);
-	List<AddressDto> findAddressesByContactId(int id, TablePageViewData tablePageViewData);
+	List<ContactDto> findContactsByLastName( String lastName, TablePageViewData tablePageViewData );
+	List<ContactDto> findContactsOfUnit( Unit unit, TablePageViewData tablePageViewData );
+	List<ContactDto> findContactsIsCompany( boolean isCompany, TablePageViewData tablePageViewData );
+	List<ContactDto> findContactsByCompanyName( String companyName, TablePageViewData tablePageViewData );
+	List<ContactDto> getAllContacts( TablePageViewData tablePageViewData );
+	List<AddressDto> findAddressesByContactId( int id, TablePageViewData tablePageViewData );
 
 	
-	boolean createContact(ContactDto contactDto);
-	boolean updateContact(ContactDto contactDto);
-	boolean deleteContactById(int id);
-
+	boolean createContact( ContactDto contactDto );
+	boolean updateContact( ContactDto contactDto );
+	boolean deleteContactById( int id );
+	boolean updateAddress( AddressDto addressDto );
+	boolean deleteAddress( AddressDto addressDto );
 	
 	
 	

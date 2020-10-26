@@ -22,7 +22,7 @@ public interface AddressDao {
 	 * @param Address
 	 * @return boolean true, if successful
 	 */
-	Address save(Address address);	
+	boolean save(Address address);	
 	
 	/**
 	 * deletes an address 

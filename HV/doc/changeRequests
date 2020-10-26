@@ -12,13 +12,7 @@ Copy Constructor in Tests einbauen
 
 
 
-/// Ansatz für Eingabe Formular bei register.html
-Firma	Häkchen 	=> CompanyName 		(FirmenName)
-					=> PrimaryContactName 	(Ansprechpartner)
-					=> CompanyAddress	(Strasse, Hnr, "Apartment? Stockwerk!"
-			
+	
 
 
-	keinHäkchen 	=> kein Feld für CompanyName
-					=> PrimaryContactName (Ansprechpartner bzw Kunde?!)
-					=> PrimaryContactAddress (Strasse, Hnr, "Apartment!")
+
