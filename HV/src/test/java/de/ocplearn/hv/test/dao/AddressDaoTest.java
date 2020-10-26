@@ -62,10 +62,12 @@ public class AddressDaoTest {
 		AddressDto addr1 = this.testAddressDtoSupplier.get();
 		
 		// save 
-		boolean addrOneIsSaved = addressDao.save( addressMapper.addressDtoToAddress(addr1) );	
+		Address temporalAddress= addressMapper.addressDtoToAddress(addr1);
+		boolean addrOneIsSaved = addressDao.save( temporalAddress );	
+		
 		// assert is saved
 		Assertions.assertTrue( addrOneIsSaved );
-		
+		addr1.setId(temporalAddress.getId());
 		AddressDaoTest.addr1Id =  addr1.getId();
 		// System.out.println("new address id = " + addr1Id);
 		
