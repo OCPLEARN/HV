@@ -93,18 +93,18 @@ public class ContactServiceImpl implements ContactService{
 			contactDto.setId(contact.getId());
 			List<AddressDto> addressesDto = contactDto.getAddresses();
 			
-			for(int i = 0; i < addressesDto.size(); i++) {
-				
-				Address address = addressMapper.addressDtoToAddress(addressesDto.get(i));
-				address = addressDao.save(address);
-				if (address.getId() != 0) {
-					contactDao.addAddress(contact, address);
-					addressesDto.get(i).setId(address.getId());
+			if(addressesDto != null) {
+				for(int i = 0; i < addressesDto.size(); i++) {
+					Address address = addressMapper.addressDtoToAddress(addressesDto.get(i));
+					address = addressDao.save(address);
+					if (address.getId() != 0) {
+						contactDao.addAddress(contact, address);
+						addressesDto.get(i).setId(address.getId());
+					}	
 				}
-				
-				
 			}
 		}
+		
 		return result;
 	}
 
