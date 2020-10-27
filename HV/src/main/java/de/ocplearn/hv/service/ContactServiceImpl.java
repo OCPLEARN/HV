@@ -99,7 +99,7 @@ public class ContactServiceImpl implements ContactService{
 					Address address = addressMapper.addressDtoToAddress(addressesDto.get(i));
 					boolean addressSavedSuccessful = addressDao.save(address);
 					if (addressSavedSuccessful) {
-						contactDao.addAddress(contact, address);
+						contactDao.assignAddress(contact, address);
 						addressesDto.get(i).setId(address.getId());
 					}	
 				}
@@ -133,8 +133,8 @@ public class ContactServiceImpl implements ContactService{
 
 	@Override
 	public boolean deleteAddress(AddressDto addressDto) {
-		Address address = addressMapper.addressDtoToAddress(addressDto);
 		
+		Address address = addressMapper.addressDtoToAddress(addressDto);
 		try {
 			return addressDao.delete(address);
 		} catch (DataAccessException e) {

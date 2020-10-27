@@ -24,7 +24,7 @@ public interface ContactService {
 	boolean updateContact( ContactDto contactDto );
 	boolean deleteContactById( int id );
 	boolean updateAddress( AddressDto addressDto );
-	boolean deleteAddress( AddressDto addressDto );
+	boolean deleteAddress( AddressDto addressDto ); 
 	
 	
 	

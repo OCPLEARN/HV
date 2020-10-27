@@ -19,6 +19,7 @@ import de.ocplearn.hv.dto.AddressDto;
 import de.ocplearn.hv.mapper.AddressMapper;
 import de.ocplearn.hv.mapper.LoginUserMapper;
 import de.ocplearn.hv.model.Address;
+import de.ocplearn.hv.model.AddressType;
 
 /**
  * Test for the address dao interface
@@ -30,9 +31,9 @@ public class AddressDaoTest {
 	// id of test address
 	private static int addr1Id;
 	
-	private Supplier<AddressDto> testAddressDtoSupplier = () -> {
+	public static Supplier<AddressDto> testAddressDtoSupplier = () -> {
 		return new AddressDto("Poststraße", " 3", "Hauptbahnhof",
-				"Frankfurt am Main","60329","Hessen","DE", 50.106825, 8.663707);
+				"Frankfurt am Main","60329","Hessen","DE", 50.106825, 8.663707, AddressType.PRIMARY_BUSINESS_ADDRESS);
 	};
 	
 	@Autowired

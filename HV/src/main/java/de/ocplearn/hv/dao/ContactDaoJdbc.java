@@ -293,15 +293,16 @@ public class ContactDaoJdbc implements ContactDao {
 	}
 
 	@Override
-	public boolean addAddress(Contact contact, Address address) {
+	public boolean assignAddress(Contact contact, Address address) {
 		
-		String sql = "INSERT INTO contactAddressLink ( contactId, addressId ) VALUE ( ?, ? );";
+		String sql = "INSERT INTO contactAddressLink ( contactId, addressId, addressType ) VALUE ( ?, ?, ? );";
 		
 		try ( Connection connection = datasource.getConnection();
 				PreparedStatement stmt = connection.prepareStatement(sql); ) {
 				
 			stmt.setInt(1, contact.getId());
 			stmt.setInt(2, address.getId());
+			stmt.setString(3, address.getAddressType().toString());
 			return ( stmt.executeUpdate() == 1 )? true : false;
 			
 		} catch (SQLException e) {

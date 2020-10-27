@@ -298,6 +298,7 @@ ALTER TABLE contact DROP COLUMN propertyManagerId;
 ALTER TABLE propertyManagement ADD COLUMN companyContactId int not null AFTER paymentType;
 ALTER TABLE propertyManagement ADD CONSTRAINT fk_propertyManagement_companyContactId FOREIGN KEY (companyContactId) REFERENCES contact (id) ;
 ALTER TABLE propertyManagement MODIFY primaryLoginUserId int not null unique;
+ALTER TABLE immodb.contactAddressLink CHANGE COLUMN adrType  addressType varchar(50);
 
 
 

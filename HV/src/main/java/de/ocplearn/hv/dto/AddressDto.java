@@ -1,5 +1,6 @@
 package de.ocplearn.hv.dto;
 
+import de.ocplearn.hv.model.AddressType;
 
 public class AddressDto implements Comparable<AddressDto> {
 
@@ -13,7 +14,7 @@ public class AddressDto implements Comparable<AddressDto> {
 		private String zipCode;
 		private String province;
 		private String country; //Country.Json in static/countrycodes from: https://unstats.un.org/unsd/amaapi/api/Country
-		
+		private AddressType addressType;
 		//latitude longitude double mit 6 Nachkommastellen
 		//1.Latitude (Norden +, Süden -) 2. Longitude (Osten +, Westen -), Datumsgrenze 180 bzw. -180
 		private double latitude;
@@ -23,7 +24,7 @@ public class AddressDto implements Comparable<AddressDto> {
 			super();
 		}
 		public AddressDto(String street, String houseNumber, String apartment, String city,String zipCode, String province, String country,
-				double latitude, double longitude) {
+				double latitude, double longitude, AddressType addressType) {
 			super();
 			this.street = street;
 			this.houseNumber = houseNumber;
@@ -158,12 +159,17 @@ public class AddressDto implements Comparable<AddressDto> {
 		public void setZipCode(String zipCode) {
 			this.zipCode = zipCode;
 		}
-		
+		public AddressType getAddressType() {
+			return addressType;
+		}
+		public void setAddressType(AddressType addressType) {
+			this.addressType = addressType;
+		}
 		@Override
 		public String toString() {
 			return "Address [street=" + street + ", houseNumber=" + houseNumber + ", apartment=" + apartment + ", city="
 					+ city + ", province=" + province + ", country=" + country + ", latitude=" + latitude + ", longitude="
-					+ longitude + "]";
+					+ longitude + ", AddressType=" + addressType +  "]";
 		}
 		@Override
 		public int hashCode() {
@@ -202,7 +208,9 @@ public class AddressDto implements Comparable<AddressDto> {
 			if (street == null) {
 				if (other.street != null)
 					return false;
-			} else if (!street.equals(other.street))
+			} else if (!street.equals(other.street)) {
+				return false;
+			} else if (!addressType.equals(other.addressType))
 				return false;
 			return true;
 		}

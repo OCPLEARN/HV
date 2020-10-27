@@ -1,6 +1,8 @@
 package de.ocplearn.hv.test.service;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
 import javax.swing.text.TabExpander;
 import javax.validation.constraints.AssertTrue;
@@ -19,6 +21,7 @@ import de.ocplearn.hv.model.PropertyManagement;
 import de.ocplearn.hv.service.ContactService;
 import de.ocplearn.hv.service.PropertyManagementService;
 import de.ocplearn.hv.service.UserService;
+import de.ocplearn.hv.test.dao.AddressDaoTest;
 import de.ocplearn.hv.test.dao.LoginUserDaoTest;
 import de.ocplearn.hv.util.TablePageViewData;
 
@@ -31,6 +34,17 @@ public class ContactServiceTest {
 	
 	private PropertyManagementService propertyManagementService;
 
+	private Supplier<ContactDto> contactDtoSupplier = () ->{ 
+		return new ContactDto.ContactBuilder()
+				.setCompany(true)
+				.setcompanyName("ABB")
+				.setEmail("AB@ABB.de")
+				.setFax("06221 12345678")
+				.setFirstName("Anton")
+				.setLastName("Berta")
+				.setMobilePhone("0172 12345678")
+				.setAddressList(Arrays.asList(AddressDaoTest.testAddressDtoSupplier.get()))
+				.build();};
 
 	@Autowired
 	public ContactServiceTest(ContactService contactService, UserService userService,
@@ -144,5 +158,17 @@ public class ContactServiceTest {
 		Assertions.assertTrue(contactList!= null);
 		
 	}
+	
+	@Test
+	public void testCreateContact_assignAddressToContact_boolean () {
+		
+		ContactDto contactDto = contactDtoSupplier.get();
+		Assertions.assertTrue(contactService.createContact(contactDto));
+	}
+	
+	
+	
+	
+	
 	
 }

@@ -11,6 +11,8 @@ public class Address implements Comparable<Address> {
 	private String zipCode;
 	private String province;
 	private String country; //Country.Json in static/countrycodes from: https://unstats.un.org/unsd/amaapi/api/Country
+	private AddressType addressType;
+	
 	
 	//latitude longitude double mit 6 Nachkommastellen
 	//1.Latitude (Norden +, Süden -) 2. Longitude (Osten +, Westen -), Datumsgrenze 180 bzw. -180
@@ -21,7 +23,7 @@ public class Address implements Comparable<Address> {
 		super();
 	}
 	public Address(String street, String houseNumber, String apartment, String city,String zipCode, String province, String country,
-			double latitude, double longitude) {
+			double latitude, double longitude, AddressType addressType) {
 		super();
 		this.street = street;
 		this.houseNumber = houseNumber;
@@ -32,6 +34,7 @@ public class Address implements Comparable<Address> {
 		this.country = country;
 		this.latitude = latitude;
 		this.longitude = longitude;
+		this.addressType = addressType;
 	}
 	
 	/**
@@ -156,12 +159,20 @@ public class Address implements Comparable<Address> {
 	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
 	}	
-
+	
+	public AddressType getAddressType() {
+		return addressType;
+	}
+	public void setAddressType(AddressType addressType) {
+		this.addressType = addressType;
+	}
+	
+	
 	@Override
 	public String toString() {
 		return "Address [street=" + street + ", houseNumber=" + houseNumber + ", apartment=" + apartment + ", city="
 				+ city + ", province=" + province + ", country=" + country + ", latitude=" + latitude + ", longitude="
-				+ longitude + "]";
+				+ longitude + ", AddressType=" + addressType + "]";
 	}
 	@Override
 	public int hashCode() {
@@ -200,9 +211,12 @@ public class Address implements Comparable<Address> {
 		if (street == null) {
 			if (other.street != null)
 				return false;
-		} else if (!street.equals(other.street))
+		} else if (!street.equals(other.street)) {
+			return false;
+		} else if (!addressType.equals(other.addressType))
 			return false;
 		return true;
+		
 	}
 	
 
