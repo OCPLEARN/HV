@@ -13,9 +13,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import de.ocplearn.hv.dto.AddressDto;
 import de.ocplearn.hv.dto.ContactDto;
 import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
+import de.ocplearn.hv.model.AddressType;
 import de.ocplearn.hv.model.PaymentType;
 import de.ocplearn.hv.model.PropertyManagement;
 import de.ocplearn.hv.service.ContactService;
@@ -32,6 +34,7 @@ public class ContactServiceTest {
 	
 	private UserService userService;
 	
+	
 	private PropertyManagementService propertyManagementService;
 
 	private Supplier<ContactDto> contactDtoSupplier = () ->{ 
@@ -46,6 +49,8 @@ public class ContactServiceTest {
 				.setAddressList(Arrays.asList(AddressDaoTest.testAddressDtoSupplier.get()))
 				.build();};
 
+	private Supplier<AddressDto> addressDtoSupplier = () -> { return new AddressDto("HindenburgStrasse", "12", "a12","Malsch","75234","Baden Württemberg","GER", 48.891948, 8.332487, AddressType.PRIMARY_PRIVATE_ADDRESS );};			
+				
 	@Autowired
 	public ContactServiceTest(ContactService contactService, UserService userService,
 			PropertyManagementService propertyManagementService) {
@@ -160,11 +165,22 @@ public class ContactServiceTest {
 	}
 	
 	@Test
-	public void testCreateContact_assignAddressToContact_boolean () {
+	public void testCreateContact_assignAddressesToContact_boolean () {
 		
+		// create new ContactDto and create and assign new PRIMARY_BUSINESS_ADDRESS
 		ContactDto contactDto = contactDtoSupplier.get();
 		Assertions.assertTrue(contactService.createContact(contactDto));
+		// create new Address and save to DB
+		AddressDto addressDto =  addressDtoSupplier.get();
+		Assertions.assertTrue(contactService.createAddress(addressDto));
+		// assign new address to ContactDto 
+		Assertions.assertTrue(contactService.addAddressToContact(contactDto.getId(), addressDto));
+		//next Step Test if two different Addressobjects exist and are from different AddressType
+		
+		
 	}
+	
+	
 	
 	
 	

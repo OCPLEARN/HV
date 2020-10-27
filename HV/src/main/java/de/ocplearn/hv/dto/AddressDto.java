@@ -35,6 +35,7 @@ public class AddressDto implements Comparable<AddressDto> {
 			this.country = country;
 			this.latitude = latitude;
 			this.longitude = longitude;
+			this.addressType = addressType;
 		}
 		
 		/**

@@ -143,6 +143,28 @@ public class ContactServiceImpl implements ContactService{
 		
 	}
 
+	@Override
+	public boolean addAddressToContact(int contactId, AddressDto addressDto) {
+		
+		Address addressDtoToAddress = addressMapper.addressDtoToAddress(addressDto);
+		addressDao.save(addressDtoToAddress);
+		
+		return contactDao.assignAddress(contactId, addressDtoToAddress);
+
+	}
+	
+	@Override
+	public boolean createAddress(AddressDto addressDto) {
+		
+		Address address = addressMapper.addressDtoToAddress(addressDto);
+		
+		if (addressDao.save(address)) {
+			addressDto.setId(address.getId());
+			return true;
+		}
+		return false;
+	}
+
 
 
 }
