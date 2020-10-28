@@ -6,6 +6,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import de.ocplearn.hv.dao.AddressDao;
@@ -32,7 +33,7 @@ public class ContactServiceImpl implements ContactService{
 	private AddressDao addressDao; 
 	
 	@Autowired
-	public ContactServiceImpl(ContactDao contactDao, ContactMapper contactMapper, AddressMapper addressMapper, AddressDao addressDao) {
+	public ContactServiceImpl(ContactDao contactDao, ContactMapper contactMapper, AddressMapper addressMapper, @Qualifier ("AddressDaoJdbc")AddressDao addressDao) {
 		super();
 		this.contactDao = contactDao;
 		this.contactMapper=contactMapper;

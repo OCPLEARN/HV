@@ -177,7 +177,6 @@ public class ContactServiceTest {
 		Assertions.assertTrue(contactService.addAddressToContact(contactDto.getId(), addressDto));
 		//next Step Test if two different Addressobjects exist and are from different AddressType
 		
-		
 	}
 	
 	

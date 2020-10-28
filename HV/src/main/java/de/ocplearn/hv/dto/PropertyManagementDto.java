@@ -28,6 +28,21 @@ public class PropertyManagementDto implements Comparable<PropertyManagement>{
 	private ContactDto companyContact; //HQ
 	
 	
+	public PropertyManagementDto() {
+		super();
+	}
+	
+	
+	public PropertyManagementDto(@NotNull LoginUserDto primaryLoginUser, @NotNull ContactDto primaryContact,
+			@NotNull PaymentType paymentType, List<LoginUserDto> loginUsers, @NotNull ContactDto companyContact) {
+		super();
+		this.primaryLoginUser = primaryLoginUser;
+		this.primaryContact = primaryContact;
+		this.paymentType = paymentType;
+		this.loginUsers = loginUsers;
+		this.companyContact = companyContact;
+	}
+
 	// Getters & Setters
 
 	public ContactDto getCompanyContact() {
