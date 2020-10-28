@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.omg.CORBA.Current;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -45,7 +46,7 @@ public class PropertyManagementServiceTest {
 		
 		HashMap<String, byte[]> hashMap = StaticHelpers.createHash("Pa$$w0rd", null);
 		
-		Supplier<LoginUserDto> loginUserDtoSupplier = () -> {return new LoginUserDto("logUName", Role.PROPERTY_MANAGER, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
+		Supplier<LoginUserDto> loginUserDtoSupplier = () -> {return new LoginUserDto("logUName" + System.currentTimeMillis(), Role.PROPERTY_MANAGER, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
 	
 		Supplier<List<AddressDto>> listAddressDtoSupplier = ArrayList::new;
 		

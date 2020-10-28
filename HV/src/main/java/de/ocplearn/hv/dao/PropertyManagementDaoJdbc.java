@@ -81,6 +81,9 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 		try ( Connection connection = this.dataSource.getConnection(); 
 			  PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); ){
 			
+			System.out.println("=============");
+			System.out.println(propertyManagement.getPrimaryLoginUser().getId());
+			
 			stmt.setInt( 1, propertyManagement.getPrimaryLoginUser().getId() );
 			stmt.setString( 2, propertyManagement.getPaymentType().toString() );
 			stmt.setInt( 3, propertyManagement.getPrimaryContact().getId() );
