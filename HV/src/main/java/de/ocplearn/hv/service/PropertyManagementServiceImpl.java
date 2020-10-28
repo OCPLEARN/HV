@@ -70,11 +70,11 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		
 		PropertyManagement propertyManagement = propertyManagementMapper.propertyManagementDtoToPropertyManagement(propertyManagementDto);
 		
-		if ( ! userService.deleteUser(propertyManagementDto.getPrimaryLoginUser()) ) deleteOk = false;
-		 System.out.println("delete 1 ok : " + deleteOk);
 		if ( ! propertyManagementDao.delete(propertyManagement)) deleteOk = false;
 		 System.out.println("delete 2 ok : " + deleteOk);
 		
+		if ( ! userService.deleteUser(propertyManagementDto.getPrimaryLoginUser()) ) deleteOk = false;
+		 System.out.println("delete 1 ok : " + deleteOk);
 		
 		if ( ! contactService.deleteContactById(propertyManagement.getPrimaryContact().getId())) deleteOk = false;		
 		if ( ! contactService.deleteContactById(propertyManagement.getCompanyContact().getId())) deleteOk = false;
