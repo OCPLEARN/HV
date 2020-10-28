@@ -7,7 +7,10 @@ import java.util.Locale;
 import java.util.function.Supplier;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.omg.CORBA.Current;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,11 +29,13 @@ import de.ocplearn.hv.util.StaticHelpers;
  *
  */
 @SpringBootTest
+//Ordering TestMethods to use a created PropertyManagementDto from Test (1) to delete in Test (2)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)		
 public class PropertyManagementServiceTest {
 
 	private PropertyManagementService propertyManagementService;
 	
-	
+	private PropertyManagementDto propertyManagementDto;
 		
 	
 	@Autowired
@@ -39,7 +44,9 @@ public class PropertyManagementServiceTest {
 	}
 	
 	
+	
 	@Test
+	@Order(1)
 	public void testCreatePropertyManagement_givenDto_boolean() {
 		
 		PaymentType paymentType = PaymentType.STARTER;
@@ -64,16 +71,33 @@ public class PropertyManagementServiceTest {
 		
 		Supplier<List<LoginUserDto>> loginUserListDto = ArrayList::new;
 		
-		PropertyManagementDto propertyManagementDto = new PropertyManagementDto(  loginUserDtoSupplier.get(), 
+		propertyManagementDto = new PropertyManagementDto(  loginUserDtoSupplier.get(), 
 				  primaryContactDtoSupplier.get(),  paymentType, loginUserListDto.get(),  companyContactDtoSupplier.get());
-			
-		
+	
+	//	Test Order of TestMethods	
+	//	System.out.println("1");
+
 		
 		Assertions.assertTrue(propertyManagementService.createPropertyManagement(propertyManagementDto));
 		
+				
+	}
+	
+	
+	// public boolean deletePropertyManagement( PropertyManagementDto propertyManagementDto );
+	
+
+	@Test
+	@Order(2)
+	public void testDeletePropertyManagement_givenPropertyManagementDto_boolean () {
 		
-				
-				
+		//  TDD Ansatz zum Erinnern für HR
+		//	Test Order of TestMethods	
+		//  System.out.println("2");
+		
+		// Deletes propertyManagementDto created in Test (1)
+		Assertions.assertTrue( propertyManagementService.deletePropertyManagement( propertyManagementDto ) );
+		
 	}
 	
 	

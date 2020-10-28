@@ -11,6 +11,7 @@ import de.ocplearn.hv.dao.LoginUserDao;
 import de.ocplearn.hv.dao.PropertyManagementDao;
 import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.mapper.PropertyManagementMapper;
+import de.ocplearn.hv.model.Contact;
 import de.ocplearn.hv.model.PropertyManagement;
 
 
@@ -59,8 +60,24 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean deletePropertyManagement(PropertyManagementDto propertyManagementDto) {
-		// TODO Auto-generated method stub
-		return false;
+
+		System.out.println("=====");
+		System.out.println(propertyManagementDto.getPrimaryLoginUser().getId());
+		System.out.println(propertyManagementDto.getPrimaryContact().toString());
+		
+		PropertyManagement propertyManagement = propertyManagementMapper.propertyManagementDtoToPropertyManagement(propertyManagementDto);
+		
+		boolean deleteOk = true;
+		
+		if ( ! contactService.deleteContactById(propertyManagement.getPrimaryContact().getId())) deleteOk = false;		
+		if ( ! contactService.deleteContactById(propertyManagement.getCompanyContact().getId())) deleteOk = false;
+		if ( ! userService.deleteUser(propertyManagementDto.getPrimaryLoginUser()) ) deleteOk = false;
+	
+		//TODO Delete List of LoginUsers
+		
+		if ( ! propertyManagementDao.delete(propertyManagement)) deleteOk = false;
+		
+		return deleteOk;
 	}
 
 	@Override

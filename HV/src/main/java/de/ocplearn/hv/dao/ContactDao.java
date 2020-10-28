@@ -17,6 +17,7 @@ public interface ContactDao {
 	boolean update (Contact contact);
 	boolean assignAddress (Contact contact, Address address);
 	boolean assignAddress (int contactId, Address address);
+	boolean deleteAddressFromContact (int addressId);
 	
 	Optional<Contact> findContactById(int id);
 	

@@ -179,6 +179,18 @@ public class ContactServiceTest {
 		
 	}
 	
+	@Test
+	public void testDeleteContact_givenContactWithAdresses_boolean () {
+		
+		ContactDto contactDto = contactDtoSupplier.get();
+		Assertions.assertTrue(contactService.createContact(contactDto));
+		
+		Assertions.assertTrue( ! contactDto.getAddresses().isEmpty());
+		
+		Assertions.assertTrue( contactService.deleteContact(contactDto));
+		
+	}
+	
 	
 	
 	

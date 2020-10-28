@@ -23,6 +23,7 @@ public interface ContactService {
 	boolean createContact( ContactDto contactDto );
 	boolean updateContact( ContactDto contactDto );
 	boolean deleteContactById( int id );
+	boolean deleteContact( ContactDto contactDto );
 	boolean updateAddress( AddressDto addressDto );
 	boolean deleteAddress( AddressDto addressDto ); 
 	boolean createAddress ( AddressDto addressDto);

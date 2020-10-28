@@ -10,7 +10,7 @@ Bei Eingabe der Daten in PropertyManagementRegistrationFormCommand latitude und 
 
 Copy Constructor in Tests einbauen
 
-
+Eingeloggt im PropertyManager, neuen LoginUser mit Email anlegen  und automatisch in List<LoginUser> loginUsers speichern 
 
 	
 

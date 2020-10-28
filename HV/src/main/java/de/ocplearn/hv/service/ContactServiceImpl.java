@@ -116,10 +116,22 @@ public class ContactServiceImpl implements ContactService{
 	}
 
 	@Override
-	public boolean deleteContactById(int id) {
+	public boolean deleteContactById( int id ) {
 		return contactDao.deleteContactById(id);
 	}
 
+	@Override
+	public boolean deleteContact( ContactDto contactDto ) {
+		
+		for(AddressDto addressDto : contactDto.getAddresses()) {
+			if( ! contactDao.deleteAddressFromContact(addressDto.getId()) )  return false;			// deletes address id from link table
+			if( ! addressDao.delete(addressMapper.addressDtoToAddress(addressDto)) ) return false;	// deletes address from address table
+		}
+		if( ! contactDao.deleteContactById(contactMapper.contactDtoToContact(contactDto).getId())) return false;
+		
+		return true;
+	}
+	
 	@Override
 	public boolean updateAddress( AddressDto addressDto ) {
 		Address address = addressMapper.addressDtoToAddress(addressDto);
@@ -165,6 +177,8 @@ public class ContactServiceImpl implements ContactService{
 		}
 		return false;
 	}
+
+
 
 
 

@@ -322,6 +322,25 @@ public class ContactDaoJdbc implements ContactDao {
 	
 	
 	@Override
+	public boolean deleteAddressFromContact(int addressId) {
+		
+		String sql ="DELETE FROM contactAddressLink WHERE addressId = ?;";
+		
+		try ( Connection connection = datasource.getConnection();
+			  PreparedStatement stmt = connection.prepareStatement(sql)	) {
+			
+			stmt.setInt(1, addressId);
+			return (stmt.executeUpdate() == 1 ) ? true : false;
+			
+		} catch (SQLException e) {
+			 e.printStackTrace(); 
+             logger.log(Level.WARNING, e.getMessage());
+             throw new DataAccessException("Unable to get Data from DB.");
+		}	
+	}
+	
+	
+	@Override
 	public List<Contact> findAddressesByContactId(int id, TablePageViewData tablePageViewData) {
 		// TODO Auto-generated method stub
 		return null;
