@@ -152,7 +152,8 @@ public class ContactDaoJdbc implements ContactDao {
 	public Optional<Contact> findContactById(int id) {
 		
 		try(Connection connection = datasource.getConnection();
-				PreparedStatement stmt = connection.prepareStatement("SELECT * FROM contact WHERE id = ?;");){
+				PreparedStatement stmt = connection.prepareStatement("SELECT * FROM contact WHERE id = ?;");
+				){
 			
 			stmt.setInt(1, id);
 			ResultSet resultSet = stmt.executeQuery();
@@ -169,6 +170,8 @@ public class ContactDaoJdbc implements ContactDao {
 			contact.setWebsite(resultSet.getString("website"));
 			contact.setEmail(resultSet.getString("email"));
 			
+			contact.setAddresses( this.findAddressesByContactId(id, null) );
+			
 			return Optional.ofNullable(contact);
 			
 		} catch (SQLException e) {
@@ -183,8 +186,6 @@ public class ContactDaoJdbc implements ContactDao {
 
 	@Override
 	public List<Contact> findContactsByLastName(String lastName, TablePageViewData tablePageViewData) {
-		
-		
 		
 		try(Connection connection = datasource.getConnection();
 				PreparedStatement stmt = connection.prepareStatement("SELECT * FROM contact "
@@ -341,11 +342,44 @@ public class ContactDaoJdbc implements ContactDao {
 	
 	
 	@Override
-	public List<Contact> findAddressesByContactId(int id, TablePageViewData tablePageViewData) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Address> findAddressesByContactId(int id, TablePageViewData tablePageViewData) {
+
+		List<Address> addresses = new ArrayList<Address>(); 
+		
+		try(Connection connection = datasource.getConnection();
+				PreparedStatement stmt = connection.prepareStatement("SELECT * FROM contactaddresslink WHERE contactid = ?;");
+				){
+			
+			stmt.setInt(1, id);
+			ResultSet resultSet = stmt.executeQuery();
+			while( resultSet.next() ) {
+				addresses.add( this.mapRowToAddress(resultSet) );
+			}
+			
+		} catch (SQLException e) {
+			 e.printStackTrace(); 
+             logger.log(Level.WARNING, e.getMessage());
+             throw new DataAccessException("Unable to get Data from DB.");
+             
+		}		
+		return addresses;
 	}
 
+	private Address mapRowToAddress (ResultSet resultSet) throws SQLException {
+		// id,street,houseNumber,adrline1,adrline2,city,zip,province,country,coordinate
+		Address address = new Address();
+		address.setId( resultSet.getInt("id") );
+		address.setHouseNumber( resultSet.getString("houseNumber") );
+		address.setApartment( resultSet.getString("adrline1") );
+		//address.set???( resultSet.getString("adrline2") );
+		address.setCity( resultSet.getString("city") );
+		address.setZipCode( resultSet.getString("zip") );
+		address.setProvince(resultSet.getString("province") );
+		address.setCountry( resultSet.getString("country") );
+		address.setLatitude( resultSet.getDouble("ST_X(coordinate)") ); // ST_X(coordinate)
+		address.setLongitude( resultSet.getDouble("ST_Y(coordinate)") ); // ST_Y(coordinate)
+		return address;
+	}	
 	
 	// STATIC METHODS
 	

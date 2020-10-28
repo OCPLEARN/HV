@@ -35,7 +35,7 @@ public class PropertyManagementServiceTest {
 
 	private PropertyManagementService propertyManagementService;
 	
-	private PropertyManagementDto propertyManagementDto;
+	private static PropertyManagementDto propertyManagementDto;
 		
 	
 	@Autowired

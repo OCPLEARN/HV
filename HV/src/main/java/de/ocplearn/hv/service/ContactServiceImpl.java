@@ -117,7 +117,12 @@ public class ContactServiceImpl implements ContactService{
 
 	@Override
 	public boolean deleteContactById( int id ) {
-		return contactDao.deleteContactById(id);
+		//System.out.println("csimpl:  deleteContactById() " + id);
+		//return contactDao.deleteContactById(id);
+	//	 contactDao.findContactById(id)
+		Optional<Contact> contact = this.contactDao.findContactById(id);
+		
+		return deleteContact( this.contactMapper.contactToContactDto( (contactDao.findContactById(id).get()) ) );
 	}
 
 	@Override

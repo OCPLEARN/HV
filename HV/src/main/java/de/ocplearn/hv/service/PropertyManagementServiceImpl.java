@@ -43,9 +43,10 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	@Override
 	public boolean createPropertyManagement(PropertyManagementDto propertyManagementDto) {
 		
-		userService.createUser(propertyManagementDto.getPrimaryLoginUser());
-		contactService.createContact(propertyManagementDto.getPrimaryContact());
-		contactService.createContact(propertyManagementDto.getCompanyContact());
+		if ( ! userService.createUser(propertyManagementDto.getPrimaryLoginUser()) ) System.out.println("!!!  false 1");
+		if ( ! contactService.createContact(propertyManagementDto.getPrimaryContact()) ) System.out.println("!!!  false 2");
+		if ( ! contactService.createContact(propertyManagementDto.getCompanyContact()) ) System.out.println("!!!  false 3");
+		
 		
 		PropertyManagement propertyManagement = propertyManagementMapper.propertyManagementDtoToPropertyManagement(propertyManagementDto);
 		
@@ -65,17 +66,23 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		System.out.println(propertyManagementDto.getPrimaryLoginUser().getId());
 		System.out.println(propertyManagementDto.getPrimaryContact().toString());
 		
+		boolean deleteOk = true;
+		
 		PropertyManagement propertyManagement = propertyManagementMapper.propertyManagementDtoToPropertyManagement(propertyManagementDto);
 		
-		boolean deleteOk = true;
+		if ( ! userService.deleteUser(propertyManagementDto.getPrimaryLoginUser()) ) deleteOk = false;
+		 System.out.println("delete 1 ok : " + deleteOk);
+		if ( ! propertyManagementDao.delete(propertyManagement)) deleteOk = false;
+		 System.out.println("delete 2 ok : " + deleteOk);
+		
 		
 		if ( ! contactService.deleteContactById(propertyManagement.getPrimaryContact().getId())) deleteOk = false;		
 		if ( ! contactService.deleteContactById(propertyManagement.getCompanyContact().getId())) deleteOk = false;
-		if ( ! userService.deleteUser(propertyManagementDto.getPrimaryLoginUser()) ) deleteOk = false;
+		
 	
 		//TODO Delete List of LoginUsers
 		
-		if ( ! propertyManagementDao.delete(propertyManagement)) deleteOk = false;
+		
 		
 		return deleteOk;
 	}
