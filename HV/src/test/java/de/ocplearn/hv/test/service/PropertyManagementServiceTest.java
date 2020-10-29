@@ -57,10 +57,14 @@ public class PropertyManagementServiceTest {
 		
 		Supplier<LoginUserDto> loginUserDtoSupplier = () -> {return new LoginUserDto("logUName" + System.currentTimeMillis(), Role.PROPERTY_MANAGER, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
 			
-		AddressDto addressDto = AddressDaoTest.testAddressDtoSupplier.get();
+		// AddressDto addressDto = AddressDaoTest.testAddressDtoSupplier.get();
+		// Zwei Aufruf von Supplier<ContactDto> ergibt zwei  ContactDto - Objekte, 
+		// die aber auf dasselbe Objekt auf dem HEap referenzieren (bezüglich der AdressList)
+		// Die Folge: in der DB wird zweimal dasselbe Objekt mit derselben addressId gespeichert
+		// Die Lösung: zwei einzelne Aufrufe des AdressList-Suppliers
 		
 		Supplier<List<AddressDto>> listAddressDtoSupplierWithData = () -> {
-			return new ArrayList<AddressDto> (Arrays.asList( addressDto )) ;};
+			return new ArrayList<AddressDto> (Arrays.asList( AddressDaoTest.testAddressDtoSupplier.get() )) ;};
 		
 		Supplier<ContactDto>  primaryContactDtoSupplier = () -> {return new ContactDto.ContactBuilder()
 																						.setcompanyName("ABC")
@@ -74,11 +78,20 @@ public class PropertyManagementServiceTest {
 			
 		Supplier<ContactDto> companyContactDtoSupplier = primaryContactDtoSupplier;
 		
+		
+		
+		
+		
+		
+		
+		
 		Supplier<List<LoginUserDto>> loginUserListDto = ArrayList::new;
 		
 		propertyManagementDto = new PropertyManagementDto(  loginUserDtoSupplier.get(), 
 				  primaryContactDtoSupplier.get(),  paymentType, loginUserListDto.get(),  companyContactDtoSupplier.get());
 	
+				
+		
 	//	Test Order of TestMethods	
 	//	System.out.println("1");
 
