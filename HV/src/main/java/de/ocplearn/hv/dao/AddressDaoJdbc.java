@@ -171,11 +171,7 @@ public class AddressDaoJdbc implements AddressDao {
 	    }		
 	}
 
-	@Override
-	public List<Address> findByContactId(int contactId, TablePageViewData tablePageViewData) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	
 	private Address mapRowToAddress (ResultSet resultSet) throws SQLException {
@@ -193,4 +189,6 @@ public class AddressDaoJdbc implements AddressDao {
 		address.setLongitude( resultSet.getDouble("ST_Y(coordinate)") ); // ST_Y(coordinate)
 		return address;
 	}
+	
+	
 }

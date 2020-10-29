@@ -24,7 +24,7 @@ import de.ocplearn.hv.util.LoggerBuilder;
 public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 	
 	private DataSource dataSource;
-	
+		
 	public Logger logger = LoggerBuilder.getInstance().build( PropertyManagementDaoJdbc.class );
 		
 	
@@ -51,7 +51,19 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 
 	@Override
 	public boolean delete( PropertyManagement propertyManagement ) {
-		// TODO Auto-generated method stub
+
+		String sql ="DELETE FROM propertymanagement WHERE id = ?;";
+		
+		try( Connection connection = dataSource.getConnection();
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setInt(1, propertyManagement.getId());
+			if (stmt.executeUpdate() == 1) return true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace(); 
+	        logger.log(Level.WARNING, e.getMessage());
+	        throw new DataAccessException("Unable to get Data from DB."); 
+		}		
 		return false;
 	}
 

@@ -120,7 +120,7 @@ public class ContactServiceImpl implements ContactService{
 		//System.out.println("csimpl:  deleteContactById() " + id);
 		//return contactDao.deleteContactById(id);
 	//	 contactDao.findContactById(id)
-		Optional<Contact> contact = this.contactDao.findContactById(id);
+		//Optional<Contact> contact = this.contactDao.findContactById(id);
 		
 		return deleteContact( this.contactMapper.contactToContactDto( (contactDao.findContactById(id).get()) ) );
 	}
@@ -130,7 +130,10 @@ public class ContactServiceImpl implements ContactService{
 		
 		for(AddressDto addressDto : contactDto.getAddresses()) {
 			if( ! contactDao.deleteAddressFromContact(addressDto.getId()) )  return false;			// deletes address id from link table
+			System.out.println("Verknüpfung gelöscht");
 			if( ! addressDao.delete(addressMapper.addressDtoToAddress(addressDto)) ) return false;	// deletes address from address table
+			System.out.println("Adresse gelöscht");
+
 		}
 		if( ! contactDao.deleteContactById(contactMapper.contactDtoToContact(contactDto).getId())) return false;
 		

@@ -1,6 +1,7 @@
 package de.ocplearn.hv.test.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -22,6 +23,7 @@ import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.model.PaymentType;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.service.PropertyManagementService;
+import de.ocplearn.hv.test.dao.AddressDaoTest;
 import de.ocplearn.hv.util.StaticHelpers;
 
 /**
@@ -54,8 +56,11 @@ public class PropertyManagementServiceTest {
 		HashMap<String, byte[]> hashMap = StaticHelpers.createHash("Pa$$w0rd", null);
 		
 		Supplier<LoginUserDto> loginUserDtoSupplier = () -> {return new LoginUserDto("logUName" + System.currentTimeMillis(), Role.PROPERTY_MANAGER, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
-	
-		Supplier<List<AddressDto>> listAddressDtoSupplier = ArrayList::new;
+			
+		AddressDto addressDto = AddressDaoTest.testAddressDtoSupplier.get();
+		
+		Supplier<List<AddressDto>> listAddressDtoSupplierWithData = () -> {
+			return new ArrayList<AddressDto> (Arrays.asList( addressDto )) ;};
 		
 		Supplier<ContactDto>  primaryContactDtoSupplier = () -> {return new ContactDto.ContactBuilder()
 																						.setcompanyName("ABC")
@@ -64,7 +69,7 @@ public class PropertyManagementServiceTest {
 																						.setFirstName("Armin")
 																						.setLastName("Rohde")
 																						.setSex("M")
-																						.setAddressList(listAddressDtoSupplier.get())
+																						.setAddressList(listAddressDtoSupplierWithData.get())
 																						.build();};
 			
 		Supplier<ContactDto> companyContactDtoSupplier = primaryContactDtoSupplier;

@@ -38,16 +38,7 @@ public interface AddressDao {
 	 * @param id
 	 * @return Address
 	 */
-	Optional<Address> findById(int id);		
-	
-	/**
-	 * find an all addresses by a contact id
-	 * 
-	 * @param contact id
-	 * @param TablePageViewData (optional, contains offset,rowCount,orderBy,orderByDirection)
-	 * @return List<Address>
-	 */
-	List<Address> findByContactId(int contactId, TablePageViewData tablePageViewData);			
+	Optional<Address> findById(int id);			
 	
 	
 	

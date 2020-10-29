@@ -76,9 +76,12 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		if ( ! userService.deleteUser(propertyManagementDto.getPrimaryLoginUser()) ) deleteOk = false;
 		 System.out.println("delete 1 ok : " + deleteOk);
 		
-		if ( ! contactService.deleteContactById(propertyManagement.getPrimaryContact().getId())) deleteOk = false;		
+		if ( ! contactService.deleteContactById(propertyManagement.getPrimaryContact().getId())) deleteOk = false;
+		 System.out.println("PrimaryContact gelöscht " + deleteOk);
+
 		if ( ! contactService.deleteContactById(propertyManagement.getCompanyContact().getId())) deleteOk = false;
 		
+		System.out.println("CompanyContact gelöscht " + deleteOk);
 	
 		//TODO Delete List of LoginUsers
 		

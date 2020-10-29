@@ -38,9 +38,13 @@ public class ContactDaoJdbc implements ContactDao {
     //@Autowired
 	private DataSource datasource;	
 	
+	
+	private AddressDao addressDao;
+	
 	@Autowired
-	public ContactDaoJdbc(@Qualifier("datasource1") DataSource datasource ) {
+	public ContactDaoJdbc(@Qualifier("datasource1") DataSource datasource, AddressDao addressDao ) {
 	    	this.datasource = datasource;
+	    	this.addressDao = addressDao;
 	    }
 	
 	
@@ -97,6 +101,7 @@ public class ContactDaoJdbc implements ContactDao {
 
 	@Override
 	public boolean deleteContactById(int id) {
+		System.out.println("deleteContactById (Parameter Id= " + id + ")");
 		try(Connection connection = datasource.getConnection();
 				PreparedStatement stmt = connection.prepareStatement("DELETE FROM contact WHERE id = ?;");){
 			stmt.setInt(1, id);
@@ -159,6 +164,7 @@ public class ContactDaoJdbc implements ContactDao {
 			ResultSet resultSet = stmt.executeQuery();
 			resultSet.next();
 			Contact contact = new Contact();
+			contact.setId(resultSet.getInt("id"));
 			contact.setSex(resultSet.getString("sex"));
 			contact.setFirstName(resultSet.getString("firstName"));
 			contact.setLastName(resultSet.getString("lastName"));
@@ -205,6 +211,7 @@ public class ContactDaoJdbc implements ContactDao {
 			List<Contact> contactList= new ArrayList<Contact>();
 			while(resultSet.next()) {
 			Contact contact = new Contact();
+			contact.setId(resultSet.getInt("id"));
 			contact.setSex(resultSet.getString("sex"));
 			contact.setFirstName(resultSet.getString("firstName"));
 			contact.setLastName(resultSet.getString("lastName"));
@@ -270,6 +277,7 @@ public class ContactDaoJdbc implements ContactDao {
 			List<Contact> contactList= new ArrayList<Contact>();
 			while(resultSet.next()) {
 			Contact contact = new Contact();
+			contact.setId(resultSet.getInt("id"));
 			contact.setSex(resultSet.getString("sex"));
 			contact.setFirstName(resultSet.getString("firstName"));
 			contact.setLastName(resultSet.getString("lastName"));
@@ -352,8 +360,14 @@ public class ContactDaoJdbc implements ContactDao {
 			
 			stmt.setInt(1, id);
 			ResultSet resultSet = stmt.executeQuery();
+			
 			while( resultSet.next() ) {
-				addresses.add( this.mapRowToAddress(resultSet) );
+				int addressId = resultSet.getInt("addressId");
+				
+				Optional<Address> optionalAddress = addressDao.findById(addressId);
+				if( optionalAddress.isPresent() ) {
+					 addresses.add(optionalAddress.get());
+				}
 			}
 			
 		} catch (SQLException e) {
@@ -365,21 +379,6 @@ public class ContactDaoJdbc implements ContactDao {
 		return addresses;
 	}
 
-	private Address mapRowToAddress (ResultSet resultSet) throws SQLException {
-		// id,street,houseNumber,adrline1,adrline2,city,zip,province,country,coordinate
-		Address address = new Address();
-		address.setId( resultSet.getInt("id") );
-		address.setHouseNumber( resultSet.getString("houseNumber") );
-		address.setApartment( resultSet.getString("adrline1") );
-		//address.set???( resultSet.getString("adrline2") );
-		address.setCity( resultSet.getString("city") );
-		address.setZipCode( resultSet.getString("zip") );
-		address.setProvince(resultSet.getString("province") );
-		address.setCountry( resultSet.getString("country") );
-		address.setLatitude( resultSet.getDouble("ST_X(coordinate)") ); // ST_X(coordinate)
-		address.setLongitude( resultSet.getDouble("ST_Y(coordinate)") ); // ST_Y(coordinate)
-		return address;
-	}	
 	
 	// STATIC METHODS
 	
