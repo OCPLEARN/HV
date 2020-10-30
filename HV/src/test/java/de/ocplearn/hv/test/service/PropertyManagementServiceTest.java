@@ -38,6 +38,9 @@ public class PropertyManagementServiceTest {
 	private PropertyManagementService propertyManagementService;
 	
 	private static PropertyManagementDto propertyManagementDto;
+	
+	public static Supplier<List<AddressDto>> listAddressDtoSupplierWithData = () -> {
+		return new ArrayList<AddressDto> (Arrays.asList( AddressDaoTest.testAddressDtoSupplier.get() )) ;};
 		
 	
 	@Autowired
@@ -63,8 +66,7 @@ public class PropertyManagementServiceTest {
 		// Die Folge: in der DB wird zweimal dasselbe Objekt mit derselben addressId gespeichert
 		// Die Lösung: zwei einzelne Aufrufe des AdressList-Suppliers
 		
-		Supplier<List<AddressDto>> listAddressDtoSupplierWithData = () -> {
-			return new ArrayList<AddressDto> (Arrays.asList( AddressDaoTest.testAddressDtoSupplier.get() )) ;};
+	
 		
 		Supplier<ContactDto>  primaryContactDtoSupplier = () -> {return new ContactDto.ContactBuilder()
 																						.setcompanyName("ABC")

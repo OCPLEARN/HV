@@ -88,27 +88,39 @@ public class ContactServiceImpl implements ContactService{
 	
 	@Override
 	public boolean createContact(ContactDto contactDto) {
-		Contact contact = contactMapper.contactDtoToContact(contactDto);
-		boolean result = contactDao.save(contact);
 		
-		if(result) {
-			contactDto.setId(contact.getId());
-			List<AddressDto> addressesDto = contactDto.getAddresses();
+		List<AddressDto> addressesDto = contactDto.getAddresses();
+		if(addressesDto == null||addressesDto.size()<1) {
+			throw new IllegalStateException("Address is required for signup");
+		}else {
+			Contact contact = contactMapper.contactDtoToContact(contactDto);
+			boolean result = contactDao.save(contact);
 			
-			if(addressesDto != null) {
+			if(result) {
+				contactDto.setId(contact.getId());
+				
 				for(int i = 0; i < addressesDto.size(); i++) {
 					Address address = addressMapper.addressDtoToAddress(addressesDto.get(i));
 					boolean addressSavedSuccessful = addressDao.save(address);
 					if (addressSavedSuccessful) {
 						contactDao.assignAddress(contact, address);
 						addressesDto.get(i).setId(address.getId());
-					}	
+					}	else {
+						return false;
+					}
 				}
+			
 			}
+			return result;
 		}
 		
-		return result;
+		
 	}
+	
+	
+	
+	
+	
 
 	@Override
 	public boolean updateContact(ContactDto contactDto) {
