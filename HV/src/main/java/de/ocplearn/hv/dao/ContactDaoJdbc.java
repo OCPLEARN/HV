@@ -358,6 +358,34 @@ public class ContactDaoJdbc implements ContactDao {
 		return addresses;
 	}
 
+	private List<Contact> findByColumnNameValue( String columnName, String value ,TablePageViewData tablePageViewData ){
+		
+		List<Contact> contacts = new ArrayList<>();
+		
+		String sql ="SELECT * FROM contact "
+					+ "WHERE " + columnName + " LIKE "+ value +" "
+					+ "ORDER BY "+ tablePageViewData.getOrderBy() +" " + tablePageViewData.getOrderByDirection() + " "
+					+ "LIMIT "+tablePageViewData.getOffset()+","+ tablePageViewData.getRowCount() +" ;";
+		
+		try(
+			Connection connection = this.datasource.getConnection();
+			Statement stmt = connection.createStatement();
+			){
+			
+			ResultSet resultSet = stmt.executeQuery(sql);
+			while(resultSet.next()) {
+				contacts.add( this.mapRowToContact(resultSet) );
+			}
+			
+		}catch (SQLException e) {
+			 e.printStackTrace(); 
+             logger.log(Level.WARNING, e.getMessage());
+             throw new DataAccessException("Unable to get Data from DB.");
+		}	
+		
+		return contacts;
+	}
+	
 	private Contact mapRowToContact( ResultSet resultSet ) throws SQLException {
 		Contact contact = new Contact();
 		
