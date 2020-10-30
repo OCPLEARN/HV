@@ -73,6 +73,7 @@ public class ContactServiceTest {
 		testContact.setPhone("+49123456789");
 		testContact.setMobilePhone("49123456789");
 		testContact.setFax("49123456789");
+		testContact.setAddresses(PropertyManagementServiceTest.listAddressDtoSupplierWithData.get());
 		//Assertions.assertTrue(contactService.createContact(testContact));
 		
 		LoginUserDto loginUserDto = new LoginUserDaoTest().getLoginUser();
@@ -101,6 +102,8 @@ public class ContactServiceTest {
 		testContact.setPhone("+49123456789");
 		testContact.setMobilePhone("49123456789");
 		testContact.setFax("49123456789");
+		testContact.setAddresses(PropertyManagementServiceTest.listAddressDtoSupplierWithData.get());
+		
 		contactService.createContact(testContact);
 		
 		testContact.setFirstName("SUCCESSFUL");
@@ -122,6 +125,7 @@ public class ContactServiceTest {
 		testContact.setPhone("+49123456789");
 		testContact.setMobilePhone("49123456789");
 		testContact.setFax("49123456789");
+		testContact.setAddresses(PropertyManagementServiceTest.listAddressDtoSupplierWithData.get());
 		contactService.createContact(testContact);
 		int id = testContact.getId();
 		ContactDto contactDto = contactService.findContactById(id);
@@ -141,6 +145,7 @@ public class ContactServiceTest {
 		testContact.setPhone("+49123456789");
 		testContact.setMobilePhone("49123456789");
 		testContact.setFax("49123456789");
+		testContact.setAddresses(PropertyManagementServiceTest.listAddressDtoSupplierWithData.get());
 		contactService.createContact(testContact);
 		int id=testContact.getId();
 		

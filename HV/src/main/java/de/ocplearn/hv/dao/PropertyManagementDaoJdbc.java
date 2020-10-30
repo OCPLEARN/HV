@@ -41,7 +41,6 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 		
 		if (propertyManagement.getId() == 0) {
 			return this.insert(propertyManagement);
-			
 			 
 		}
 		
