@@ -136,8 +136,17 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	}
 	@Override
 	public boolean addLoginUserToPropertyManagement(LoginUserDto loginUserDto,  PropertyManagementDto propertyManagementDto) {
-		return propertyManagementDao.addLoginUserToPropertyManagement(loginUserMapper.loginUserDtoToLoginUser(loginUserDto), 
-																	propertyManagementMapper.propertyManagementDtoToPropertyManagement(propertyManagementDto));
+		
+		if (!
+		propertyManagementDao.addLoginUserToPropertyManagement(
+				loginUserMapper.loginUserDtoToLoginUser(loginUserDto), 
+				propertyManagementMapper.propertyManagementDtoToPropertyManagement(propertyManagementDto)
+			)
+		)return false;
+		
+		propertyManagementDto.getLoginUsers().add(loginUserDto);		
+		
+		return true;
 	}
 	@Override
 	public boolean removeLoginUserFromPropertyManagement(LoginUserDto loginUserDto,  PropertyManagementDto propertyManagementDto) {

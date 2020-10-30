@@ -188,6 +188,7 @@ public class PropertyManagementServiceTest {
 	public void testLoginUserListAvailable_givenPropertyMGMT_boolean() {
 		System.out.println("Test 6");
 		System.out.println("testLoginUserListAvailable_givenPropertyMGMT_boolean" + propertyManagementDto.getLoginUsers());
+		
 		Assertions.assertTrue(propertyManagementDto.getLoginUsers().size()>0);
 		
 	}
@@ -196,9 +197,8 @@ public class PropertyManagementServiceTest {
 	@Order(7)
 	public void testRemoveLoginUserFromPropertyMgmt_givenLoginUser_boolean() {
 		System.out.println("Test 7");
-		
 		 
-		//Assertions.assertTrue(propertyManagementService.removeLoginUserFromPropertyManagement(employee, propertyManagementDto));
+		Assertions.assertTrue(propertyManagementService.removeLoginUserFromPropertyManagement(employee, propertyManagementDto));
 	}
 	
 }
