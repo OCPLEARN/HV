@@ -108,12 +108,15 @@ public class PropertyManagementServiceTest {
 		
 		// Deletes propertyManagementDto created in Test (1)
 		Assertions.assertTrue( propertyManagementService.deletePropertyManagement( propertyManagementDto ) );
+		System.out.println("TESTDELETE: "+propertyManagementDto);
 		
 	}
 	
 	@Test
-	public void testUpdatePropertyManagament_givenUpdatedPropertyManagementDto_bollean() {
-PaymentType paymentType = PaymentType.STARTER;
+	@Order(3)
+	public void testUpdatePropertyManagament_givenUpdatedPropertyManagementDto_boolean() {
+		System.out.println("Test 3");
+		PaymentType paymentType = PaymentType.STARTER;
 		
 		HashMap<String, byte[]> hashMap = StaticHelpers.createHash("Pa$$w0rd", null);
 		
@@ -137,14 +140,22 @@ PaymentType paymentType = PaymentType.STARTER;
 				  primaryContactDtoSupplier.get(),  paymentType, loginUserListDto.get(),  companyContactDtoSupplier.get());
 		
 		Assertions.assertTrue(propertyManagementService.createPropertyManagement(propertyManagementDto));
-		int id = propertyManagementDto.getId();
+		
 		
 		propertyManagementDto.setPaymentType(PaymentType.SUPER_PRO);
 		Assertions.assertTrue(propertyManagementService.updatePropertyManagement(propertyManagementDto));
 		Assertions.assertTrue(propertyManagementDto.getPaymentType().toString().equals(PaymentType.SUPER_PRO.toString()));
+		System.out.println("TESTUPDATE: "+propertyManagementDto);
 	}
 	
-	
+	@Test
+	@Order(4)
+	public void testFindPropertyManagament_givenPropertyManagementDtoId_boolean(){
+		System.out.println("Test 4");
+		PropertyManagementDto findPropertyManagement = propertyManagementService.findPropertyManagementbyId(propertyManagementDto.getId());
+		Assertions.assertTrue(findPropertyManagement.getId()!=0);
+		System.out.println(findPropertyManagement);
+	}
 	
 	
 }

@@ -96,13 +96,23 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	}
 
 	@Override
-	public Optional<PropertyManagementDto> findPropertyManagementbyId(PropertyManagementDto propertyManagementDto) {
-		// TODO Auto-generated method stub
-		return null;
+	public PropertyManagementDto findPropertyManagementbyId(int id) {
+		Optional<PropertyManagement> optionalPropertyManagement =  propertyManagementDao.findById(id);
+		if (optionalPropertyManagement.isPresent()) {
+			PropertyManagementDto propertyManagementDto = propertyManagementMapper.propertyManagementToPropertyManagementDto(optionalPropertyManagement.get());
+			propertyManagementDto.setCompanyContact(contactService.findContactById(propertyManagementDto.getCompanyContact().getId()));
+			propertyManagementDto.setPrimaryContact(contactService.findContactById(propertyManagementDto.getPrimaryContact().getId()));
+			propertyManagementDto.setPrimaryLoginUser(userService.findUserById(propertyManagementDto.getPrimaryLoginUser().getId()));
+			
+			
+			return propertyManagementDto;
+			}else {
+				return null;
+			}
 	}
 
 	@Override
-	public Optional<PropertyManagementDto> findPropertyManagementbyPrimaryContact(
+	public PropertyManagementDto findPropertyManagementbyPrimaryContact(
 			PropertyManagementDto propertyManagementDto) {
 		// TODO Auto-generated method stub
 		return null;

@@ -10,7 +10,7 @@ public interface PropertyManagementDao {
 	
 	public boolean delete( PropertyManagement propertyManagement );
 	
-	public Optional<PropertyManagement> findById( PropertyManagement propertyManagement );
+	public Optional<PropertyManagement> findById( int id );
 	
 	public Optional<PropertyManagement> findByPrimaryContact( PropertyManagement propertyManagement );
 

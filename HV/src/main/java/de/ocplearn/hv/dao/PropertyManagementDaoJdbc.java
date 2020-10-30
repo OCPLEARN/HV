@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import de.ocplearn.hv.exceptions.DataAccessException;
+import de.ocplearn.hv.model.Contact;
+import de.ocplearn.hv.model.LoginUser;
+import de.ocplearn.hv.model.PaymentType;
 import de.ocplearn.hv.model.PropertyManagement;
 import de.ocplearn.hv.util.LoggerBuilder;
 
@@ -65,14 +68,49 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 	}
 
 	@Override
-	public Optional<PropertyManagement> findById( PropertyManagement propertyManagement ) {
+	public Optional<PropertyManagement> findById( int  id ) {
 		
+		String sql = "SELECT * FROM propertymanagement where id = ?;";
+				
+				try ( Connection connection = this.dataSource.getConnection(); 
+						  PreparedStatement stmt = connection.prepareStatement(sql); ){
+					stmt.setInt(1, id );
+					ResultSet resultSet = stmt.executeQuery();
+					return resultSet.next() ? Optional.of(this.mapRowToPropertyManagement(resultSet)) : Optional.empty();} 
+				catch (SQLException e) {
+						e.printStackTrace();
+						logger.log(Level.WARNING, e.getMessage());
+						throw new DataAccessException("Unable to get Data from DB. " + e.getMessage());		
+			        }
+					
+					
+					
+					
 		// ResultSet = Daten aus der DB in Tabellenform
 		// Nummer aus dem ResultSet entspr. Nummer des Eintrags
 		
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
+
+	private PropertyManagement mapRowToPropertyManagement(ResultSet resultSet) throws SQLException {
+		//id, primaryLoginUserId, paymentType, primaryContactId, companyContactId
+		PropertyManagement propertyManagement = new PropertyManagement();
+		propertyManagement.setId(resultSet.getInt("id"));
+		LoginUser primaryLoginUser = new LoginUser();
+		primaryLoginUser.setId(resultSet.getInt("primaryLoginUserId"));
+		propertyManagement.setPrimaryLoginUser(primaryLoginUser);
+		propertyManagement.setPaymentType(PaymentType.valueOf(resultSet.getString("paymentType")));
+		Contact primaryContact = new Contact();
+		primaryContact.setId(resultSet.getInt("primaryContactId"));
+		propertyManagement.setPrimaryContact(primaryContact);
+		Contact companyContact = new Contact();
+		companyContact.setId(resultSet.getInt("companyContactId"));
+		propertyManagement.setCompanyContact(companyContact);
+		return propertyManagement;
+	}
+
+
 
 	@Override
 	public Optional<PropertyManagement> findByPrimaryContact( PropertyManagement propertyManagement ) {

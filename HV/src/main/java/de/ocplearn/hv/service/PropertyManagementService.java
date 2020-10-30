@@ -42,7 +42,7 @@ public interface PropertyManagementService {
 	 * @param propertyManagementDto
 	 * @return PropertyManagementDto if PropertyManagement exists in DB
 	 */
-	public Optional<PropertyManagementDto> findPropertyManagementbyId( PropertyManagementDto propertyManagementDto );
+	public PropertyManagementDto findPropertyManagementbyId( int id );
 	
 	/**
 	 *  Finds a PropertyManagement by PrimaryContact and returns it
@@ -50,6 +50,6 @@ public interface PropertyManagementService {
 	 * @param propertyManagementDto
 	 * @return PropertyManagementDto if PropertyManagement exists in DB
 	 */
-	public Optional<PropertyManagementDto> findPropertyManagementbyPrimaryContact( PropertyManagementDto propertyManagementDto );
+	public PropertyManagementDto findPropertyManagementbyPrimaryContact( PropertyManagementDto propertyManagementDto );
 	
 }
