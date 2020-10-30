@@ -35,7 +35,7 @@ public class TablePageViewData {
 	 * @param orderBy
 	 * @param orderByDirection
 	 */
-	private TablePageViewData(int offset, int rowCount, String orderBy, String orderByDirection) {
+	public TablePageViewData(int offset, int rowCount, String orderBy, String orderByDirection) {
 		super();
 		this.offset = offset;
 		this.rowCount = rowCount;

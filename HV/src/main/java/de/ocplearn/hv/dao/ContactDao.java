@@ -38,14 +38,6 @@ public interface ContactDao {
 	boolean deleteContactById(int id);
 	
 	/**
-	 * Saves contact
-	 * 
-	 * @param contact to update
-	 * @return true, if successfully updated
-	 * */
-	boolean update (Contact contact);
-	
-	/**
 	 * Assigns an address 
 	 * 
 	 * @param contact 

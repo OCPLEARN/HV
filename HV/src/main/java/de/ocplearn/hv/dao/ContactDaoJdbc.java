@@ -26,9 +26,13 @@ import de.ocplearn.hv.util.DBConnectionPool;
 import de.ocplearn.hv.util.LoggerBuilder;
 import de.ocplearn.hv.util.TablePageViewData;
 
+/**
+ * Contact dao implementation for jdbc
+ * */
 @Repository
 public class ContactDaoJdbc implements ContactDao {
 
+	// logger
 	private Logger logger = LoggerBuilder.getInstance().build(ContactDaoJdbc.class);
 	
 	// jdbc 
@@ -38,7 +42,6 @@ public class ContactDaoJdbc implements ContactDao {
     //@Autowired
 	private DataSource datasource;	
 	
-	
 	private AddressDao addressDao;
 	
 	@Autowired
@@ -47,13 +50,13 @@ public class ContactDaoJdbc implements ContactDao {
 	    	this.addressDao = addressDao;
 	    }
 	
-	
 	@Override
 	public boolean save(Contact contact) {
 		if (contact.getId()==0) {
 			return insert(contact);
-		}else	
+		}else{
 			return update(contact);
+		}
 	}
 	
 	private boolean insert(Contact contact) {
@@ -89,38 +92,8 @@ public class ContactDaoJdbc implements ContactDao {
       
       return true;
   }
-		
-		
-	
 
-	@Override
-	public boolean delete(Contact contact) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean deleteContactById(int id) {
-		System.out.println("deleteContactById (Parameter Id= " + id + ")");
-		try(Connection connection = datasource.getConnection();
-				PreparedStatement stmt = connection.prepareStatement("DELETE FROM contact WHERE id = ?;");){
-			stmt.setInt(1, id);
-			int result = stmt.executeUpdate();
-			if (result==0) {
-				return false;
-			}else {
-				return true;
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace(); 
-            logger.log(Level.WARNING, e.getMessage());
-            throw new DataAccessException("Unable to get Data from DB.");
-		}
-	}
-
-	@Override
-	public boolean update(Contact contact) {
+	private boolean update(Contact contact) {
 		String sql = "UPDATE contact SET sex=?, firstName=?, lastName=?, isCompany=?, companyName=?, phone=?, mobilePhone=?, fax=?, website=?, email=? where id =?;";
 		  try(Connection con = getConnection();  
 	        		PreparedStatement stmt = con.prepareStatement(sql , Statement.RETURN_GENERATED_KEYS ); ) {
@@ -151,7 +124,31 @@ public class ContactDaoJdbc implements ContactDao {
              logger.log(Level.WARNING, e.getMessage());
              throw new DataAccessException("Unable to get Data from DB.");
         }         
-   	}
+   	}	
+	
+	@Override
+	public boolean delete(Contact contact) {
+		return deleteContactById( contact.getId() ) ;
+	}
+
+	@Override
+	public boolean deleteContactById(int id) {
+		System.out.println("deleteContactById (Parameter Id= " + id + ")");
+		try(Connection connection = datasource.getConnection();
+				PreparedStatement stmt = connection.prepareStatement("DELETE FROM contact WHERE id = ?;");){
+			stmt.setInt(1, id);
+			int result = stmt.executeUpdate();
+			if (result==0) {
+				return false;
+			}else {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace(); 
+            logger.log(Level.WARNING, e.getMessage());
+            throw new DataAccessException("Unable to get Data from DB.");
+		}
+	}
 
 	@Override
 	public Optional<Contact> findContactById(int id) {
@@ -163,32 +160,15 @@ public class ContactDaoJdbc implements ContactDao {
 			stmt.setInt(1, id);
 			ResultSet resultSet = stmt.executeQuery();
 			resultSet.next();
-			Contact contact = new Contact();
-			contact.setId(resultSet.getInt("id"));
-			contact.setSex(resultSet.getString("sex"));
-			contact.setFirstName(resultSet.getString("firstName"));
-			contact.setLastName(resultSet.getString("lastName"));
-			contact.setCompany(resultSet.getBoolean("isCompany"));
-			contact.setCompanyName(resultSet.getString("companyName"));
-			contact.setPhone(resultSet.getString("phone"));
-			contact.setMobilePhone(resultSet.getString("mobilePhone"));
-			contact.setFax(resultSet.getString("fax"));
-			contact.setWebsite(resultSet.getString("website"));
-			contact.setEmail(resultSet.getString("email"));
-			
-			contact.setAddresses( this.findAddressesByContactId(id, null) );
-			
+			Contact contact = this.mapRowToContact(resultSet);
 			return Optional.ofNullable(contact);
 			
 		} catch (SQLException e) {
 			 e.printStackTrace(); 
              logger.log(Level.WARNING, e.getMessage());
              throw new DataAccessException("Unable to get Data from DB.");
-             
 		}
-		
 	}
-
 
 	@Override
 	public List<Contact> findContactsByLastName(String lastName, TablePageViewData tablePageViewData) {
@@ -210,19 +190,11 @@ public class ContactDaoJdbc implements ContactDao {
 			ResultSet resultSet = stmt.executeQuery();
 			List<Contact> contactList= new ArrayList<Contact>();
 			while(resultSet.next()) {
-			Contact contact = new Contact();
-			contact.setId(resultSet.getInt("id"));
-			contact.setSex(resultSet.getString("sex"));
-			contact.setFirstName(resultSet.getString("firstName"));
-			contact.setLastName(resultSet.getString("lastName"));
-			contact.setCompany(resultSet.getBoolean("isCompany"));
-			contact.setCompanyName(resultSet.getString("companyName"));
-			contact.setPhone(resultSet.getString("phone"));
-			contact.setMobilePhone(resultSet.getString("mobilePhone"));
-			contact.setFax(resultSet.getString("fax"));
-			contact.setWebsite(resultSet.getString("website"));
-			contact.setEmail(resultSet.getString("email"));
-			contactList.add(contact);
+				Contact contact = new Contact();
+
+				contact = this.mapRowToContact(resultSet);
+				
+				contactList.add(contact);
 			}
 			
 			return contactList;
@@ -231,11 +203,8 @@ public class ContactDaoJdbc implements ContactDao {
 			 e.printStackTrace(); 
              logger.log(Level.WARNING, e.getMessage());
              throw new DataAccessException("Unable to get Data from DB.");
-             
 		}
-			
 	}
-
 
 	@Override
 	public List<Contact> findContactsOfUnit(Unit unit, TablePageViewData tablePageViewData) {
@@ -243,20 +212,17 @@ public class ContactDaoJdbc implements ContactDao {
 		return null;
 	}
 
-
 	@Override
 	public List<Contact> findContactsIsCompany(boolean isCompany, TablePageViewData tablePageViewData) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-
 	@Override
 	public List<Contact> findContactsByCompanyName(String companyName, TablePageViewData tablePageViewData) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 	@Override
 	public List<Contact> getAllContacts(TablePageViewData tablePageViewData) {
@@ -276,38 +242,24 @@ public class ContactDaoJdbc implements ContactDao {
 			ResultSet resultSet = stmt.executeQuery();
 			List<Contact> contactList= new ArrayList<Contact>();
 			while(resultSet.next()) {
-			Contact contact = new Contact();
-			contact.setId(resultSet.getInt("id"));
-			contact.setSex(resultSet.getString("sex"));
-			contact.setFirstName(resultSet.getString("firstName"));
-			contact.setLastName(resultSet.getString("lastName"));
-			contact.setCompany(resultSet.getBoolean("isCompany"));
-			contact.setCompanyName(resultSet.getString("companyName"));
-			contact.setPhone(resultSet.getString("phone"));
-			contact.setMobilePhone(resultSet.getString("mobilePhone"));
-			contact.setFax(resultSet.getString("fax"));
-			contact.setWebsite(resultSet.getString("website"));
-			contact.setEmail(resultSet.getString("email"));
-			contactList.add(contact);
+				Contact contact = new Contact();
+				contact = this.mapRowToContact(resultSet);
+				contactList.add(contact);
 			}
 			
 			return contactList;
-			
 		} catch (SQLException e) {
 			 e.printStackTrace(); 
              logger.log(Level.WARNING, e.getMessage());
              throw new DataAccessException("Unable to get Data from DB.");
-             
 		}
 	}
 
 	@Override
-	public boolean assignAddress(Contact contact, Address address) {
-		
+	public boolean assignAddress(Contact contact, Address address) {		
 		return assignAddress(contact.getId(), address);
 	}
 
-	
 	@Override
 	public boolean assignAddress(int contactId, Address address) {
 
@@ -329,7 +281,6 @@ public class ContactDaoJdbc implements ContactDao {
 	
 	}
 	
-	
 	@Override
 	public boolean deleteAddressFromContact(int addressId) {
 		
@@ -347,7 +298,6 @@ public class ContactDaoJdbc implements ContactDao {
              throw new DataAccessException("Unable to get Data from DB.");
 		}	
 	}
-	
 	
 	@Override
 	public List<Address> findAddressesByContactId(int id, TablePageViewData tablePageViewData) {
@@ -379,6 +329,25 @@ public class ContactDaoJdbc implements ContactDao {
 		return addresses;
 	}
 
+	private Contact mapRowToContact( ResultSet resultSet ) throws SQLException {
+		Contact contact = new Contact();
+		
+		contact.setId(resultSet.getInt("id"));
+		contact.setSex(resultSet.getString("sex"));
+		contact.setFirstName(resultSet.getString("firstName"));
+		contact.setLastName(resultSet.getString("lastName"));
+		contact.setCompany(resultSet.getBoolean("isCompany"));
+		contact.setCompanyName(resultSet.getString("companyName"));
+		contact.setPhone(resultSet.getString("phone"));
+		contact.setMobilePhone(resultSet.getString("mobilePhone"));
+		contact.setFax(resultSet.getString("fax"));
+		contact.setWebsite(resultSet.getString("website"));
+		contact.setEmail(resultSet.getString("email"));
+		
+		contact.setAddresses( this.findAddressesByContactId(contact.getId(), AddressDao.tablePageViewData ) );		
+		
+		return contact;
+	}
 	
 	// STATIC METHODS
 	
@@ -406,10 +375,4 @@ public class ContactDaoJdbc implements ContactDao {
     	
     }
 
-
-	
-
-
-	
-	
 }

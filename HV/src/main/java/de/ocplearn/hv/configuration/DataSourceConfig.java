@@ -25,7 +25,7 @@ public class DataSourceConfig {
     @ConfigurationProperties("database1.datasource")
     @Primary
     public DataSource dataSource(){
-    	logger.log(Level.INFO, "### datasource requested");
+    	//logger.log(Level.INFO, "### datasource requested");
         return DataSourceBuilder.create().build();
     }	
 	
