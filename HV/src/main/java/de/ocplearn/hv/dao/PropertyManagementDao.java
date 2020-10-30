@@ -1,5 +1,6 @@
 package de.ocplearn.hv.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import de.ocplearn.hv.dto.LoginUserDto;
@@ -20,5 +21,7 @@ public interface PropertyManagementDao {
 	public boolean addLoginUserToPropertyManagement(LoginUser loginUser,PropertyManagement propertyManagement);
 	
 	public boolean removeLoginUserFromPropertyManagement(LoginUser loginUser,PropertyManagement propertyManagement);
+	
+	public List<Integer> getLoginUsersByPropertyManagement(PropertyManagement propertyManagement);
 
 }

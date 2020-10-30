@@ -1,7 +1,9 @@
 package de.ocplearn.hv.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.mapper.LoginUserMapper;
 import de.ocplearn.hv.mapper.PropertyManagementMapper;
 import de.ocplearn.hv.model.Contact;
+import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.PropertyManagement;
 
 
@@ -111,9 +114,16 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 			propertyManagementDto.setPrimaryContact(contactService.findContactById(propertyManagementDto.getPrimaryContact().getId()));
 			propertyManagementDto.setPrimaryLoginUser(userService.findUserById(propertyManagementDto.getPrimaryLoginUser().getId()));
 			
-			
+			List <LoginUserDto> loginuserDtos = new ArrayList<LoginUserDto>();
+			List <Integer> userIds = getLoginUserIdsFromPropertyManagement(propertyManagementDto);
+			System.out.println("userIds SERVICEIMPL" + userIds);
+			for (int i:userIds) {
+				loginuserDtos.add(userService.findUserById(i));
+			}
+			System.out.println("findPropertyManagementbyId SERVICEIMPL" + loginuserDtos);
+			propertyManagementDto.setLoginUsers(loginuserDtos);
 			return propertyManagementDto;
-			}else {
+		}else {
 				return null;
 			}
 	}
@@ -135,8 +145,9 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 				propertyManagementMapper.propertyManagementDtoToPropertyManagement(propertyManagementDto));
 	}
 	@Override
-	public List<LoginUserDto> getLoginUsersByPropertyManagement(PropertyManagementDto propertyManagementDto) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Integer> getLoginUserIdsFromPropertyManagement(PropertyManagementDto propertyManagementDto) {
+
+		return propertyManagementDao.getLoginUsersByPropertyManagement(propertyManagementMapper.propertyManagementDtoToPropertyManagement(propertyManagementDto));
+				
 	}
 }

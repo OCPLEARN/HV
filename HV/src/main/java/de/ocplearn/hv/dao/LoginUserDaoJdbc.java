@@ -173,15 +173,8 @@ public class LoginUserDaoJdbc implements LoginUserDao {
             ResultSet result =  stmt.executeQuery( sql );
             
             while( result.next() ){
-                LoginUser loginUser = new LoginUser();
-
-                loginUser.setId( result.getInt("id") );
-                loginUser.setLoginUserName(result.getString("loginUserName"));
-                loginUser.setPasswHash(result.getBytes("passwHash"));
-                loginUser.setSalt(result.getBytes("salt"));
-                loginUser.setRole( Role.valueOf( result.getString("loginUserRole") )  );
-                loginUser.setLocale(new Locale(result.getString("locale"))  );   
-                list.add(loginUser);
+               
+                list.add(mapRowToLoginUser(result));
             }
             
             returnConnection(connection);
@@ -199,6 +192,18 @@ public class LoginUserDaoJdbc implements LoginUserDao {
         return list;
     }	
 	
+    public static LoginUser mapRowToLoginUser(ResultSet resultSet) throws SQLException {
+    	 LoginUser loginUser = new LoginUser();
+         
+         loginUser.setId( resultSet.getInt("id") );
+         loginUser.setLoginUserName(resultSet.getString("loginUserName"));
+         loginUser.setPasswHash(resultSet.getBytes("passwHash"));
+         loginUser.setSalt(resultSet.getBytes("salt"));
+         loginUser.setRole( Role.valueOf( resultSet.getString("loginUserRole") )  );
+         loginUser.setLocale(new Locale(resultSet.getString("locale"))  );   
+         return loginUser;
+    }
+    
 	@Override
 	public Optional<LoginUser> findUserById(int id) {
 		return Optional.ofNullable( findByColumnName("id", id).get(0) );

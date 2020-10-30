@@ -40,6 +40,7 @@ public class PropertyManagementServiceTest {
 	
 	private UserService userService;
 	
+	
 	private static PropertyManagementDto propertyManagementDto;
 	
 	public static HashMap<String, byte[]> hashMap = StaticHelpers.createHash("Pa$$w0rd", null);
@@ -47,8 +48,11 @@ public class PropertyManagementServiceTest {
 	public static Supplier<List<AddressDto>> listAddressDtoSupplierWithData = () -> {
 		return new ArrayList<AddressDto> (Arrays.asList( AddressDaoTest.testAddressDtoSupplier.get() )) ;};
 		
-		public static Supplier<LoginUserDto> loginUserDtoEmployeeSupplier = () -> {return new LoginUserDto("EmployeeTest" + System.currentTimeMillis(), Role.OWNER, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
-	@Autowired
+	public static Supplier<LoginUserDto> loginUserDtoEmployeeSupplier = () -> {return new LoginUserDto("EmployeeTest" + System.currentTimeMillis(), Role.OWNER, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
+	
+	private static LoginUserDto employee =loginUserDtoEmployeeSupplier.get();
+		
+		@Autowired
 	public PropertyManagementServiceTest( PropertyManagementService propertyManagementService,UserService userService ){
 		this.propertyManagementService = propertyManagementService;
 		this.userService=userService;
@@ -163,14 +167,38 @@ public class PropertyManagementServiceTest {
 		PropertyManagementDto findPropertyManagement = propertyManagementService.findPropertyManagementbyId(propertyManagementDto.getId());
 		Assertions.assertTrue(findPropertyManagement.getId()!=0);
 		System.out.println(findPropertyManagement);
+		
 	}
 	
 	@Test
 	@Order(5)
 	public void testAddLoginUserToPropertyMgmt_givenLoginUser_boolean() {
+		System.out.println("Test 5");
 		
-		LoginUserDto employee =loginUserDtoEmployeeSupplier.get();
 				userService.createUser(employee);
-		propertyManagementService.addLoginUserToPropertyManagement(employee, propertyManagementDto);
+				
+		Assertions.assertTrue(propertyManagementService.addLoginUserToPropertyManagement(employee, propertyManagementDto));
+		
 	}
+	
+	
+	
+	@Test
+	@Order(6)
+	public void testLoginUserListAvailable_givenPropertyMGMT_boolean() {
+		System.out.println("Test 6");
+		System.out.println("testLoginUserListAvailable_givenPropertyMGMT_boolean" + propertyManagementDto.getLoginUsers());
+		Assertions.assertTrue(propertyManagementDto.getLoginUsers().size()>0);
+		
+	}
+	
+	@Test
+	@Order(7)
+	public void testRemoveLoginUserFromPropertyMgmt_givenLoginUser_boolean() {
+		System.out.println("Test 7");
+		
+		 
+		//Assertions.assertTrue(propertyManagementService.removeLoginUserFromPropertyManagement(employee, propertyManagementDto));
+	}
+	
 }

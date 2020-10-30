@@ -54,7 +54,7 @@ public interface PropertyManagementService {
 	 */
 	public PropertyManagementDto findPropertyManagementbyPrimaryContact( PropertyManagementDto propertyManagementDto );
 	
-	public List<LoginUserDto> getLoginUsersByPropertyManagement(PropertyManagementDto propertyManagementDto);
+	public List<Integer> getLoginUserIdsFromPropertyManagement(PropertyManagementDto propertyManagementDto);
 	
 	public boolean addLoginUserToPropertyManagement(LoginUserDto loginUserDto, PropertyManagementDto propertyManagementDto);
 	
