@@ -23,6 +23,7 @@ import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.model.PaymentType;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.service.PropertyManagementService;
+import de.ocplearn.hv.service.UserService;
 import de.ocplearn.hv.test.dao.AddressDaoTest;
 import de.ocplearn.hv.util.StaticHelpers;
 
@@ -37,15 +38,24 @@ public class PropertyManagementServiceTest {
 
 	private PropertyManagementService propertyManagementService;
 	
+	private UserService userService;
+	
+	
 	private static PropertyManagementDto propertyManagementDto;
+	
+	public static HashMap<String, byte[]> hashMap = StaticHelpers.createHash("Pa$$w0rd", null);
 	
 	public static Supplier<List<AddressDto>> listAddressDtoSupplierWithData = () -> {
 		return new ArrayList<AddressDto> (Arrays.asList( AddressDaoTest.testAddressDtoSupplier.get() )) ;};
 		
+	public static Supplier<LoginUserDto> loginUserDtoEmployeeSupplier = () -> {return new LoginUserDto("EmployeeTest" + System.currentTimeMillis(), Role.OWNER, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
 	
-	@Autowired
-	public PropertyManagementServiceTest( PropertyManagementService propertyManagementService ){
+	private static LoginUserDto employee =loginUserDtoEmployeeSupplier.get();
+		
+		@Autowired
+	public PropertyManagementServiceTest( PropertyManagementService propertyManagementService,UserService userService ){
 		this.propertyManagementService = propertyManagementService;
+		this.userService=userService;
 	}
 	
 	
@@ -56,7 +66,7 @@ public class PropertyManagementServiceTest {
 		
 		PaymentType paymentType = PaymentType.STARTER;
 		
-		HashMap<String, byte[]> hashMap = StaticHelpers.createHash("Pa$$w0rd", null);
+		
 		
 		Supplier<LoginUserDto> loginUserDtoSupplier = () -> {return new LoginUserDto("logUName" + System.currentTimeMillis(), Role.PROPERTY_MANAGER, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
 			
@@ -65,8 +75,6 @@ public class PropertyManagementServiceTest {
 		// die aber auf dasselbe Objekt auf dem HEap referenzieren (bezüglich der AdressList)
 		// Die Folge: in der DB wird zweimal dasselbe Objekt mit derselben addressId gespeichert
 		// Die Lösung: zwei einzelne Aufrufe des AdressList-Suppliers
-		
-	
 		
 		Supplier<ContactDto>  primaryContactDtoSupplier = () -> {return new ContactDto.ContactBuilder()
 																						.setcompanyName("ABC")
@@ -79,14 +87,7 @@ public class PropertyManagementServiceTest {
 																						.build();};
 			
 		Supplier<ContactDto> companyContactDtoSupplier = primaryContactDtoSupplier;
-		
-		
-		
-		
-		
-		
-		
-		
+				
 		Supplier<List<LoginUserDto>> loginUserListDto = ArrayList::new;
 		
 		propertyManagementDto = new PropertyManagementDto(  loginUserDtoSupplier.get(), 
@@ -117,10 +118,87 @@ public class PropertyManagementServiceTest {
 		
 		// Deletes propertyManagementDto created in Test (1)
 		Assertions.assertTrue( propertyManagementService.deletePropertyManagement( propertyManagementDto ) );
+		System.out.println("TESTDELETE: "+propertyManagementDto);
+		
+	}
+	
+	@Test
+	@Order(3)
+	public void testUpdatePropertyManagament_givenUpdatedPropertyManagementDto_boolean() {
+		System.out.println("Test 3");
+		PaymentType paymentType = PaymentType.STARTER;
+		
+		HashMap<String, byte[]> hashMap = StaticHelpers.createHash("Pa$$w0rd", null);
+		
+		Supplier<LoginUserDto> loginUserDtoSupplier = () -> {return new LoginUserDto("UpdatePropMGMTTest" + System.currentTimeMillis(), Role.PROPERTY_MANAGER, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
+				
+		
+		
+		Supplier<ContactDto>  primaryContactDtoSupplier = () -> {return new ContactDto.ContactBuilder()
+																						.setcompanyName("UpdatePropMGMTTest")
+																						.setCompany(true)
+																						.setEmail("email@email.de")
+																						.setFirstName("Armin")
+																						.setLastName("Rohde")
+																						.setSex("M")
+																						.setAddressList(listAddressDtoSupplierWithData.get())
+																						.build();};
+			
+		Supplier<ContactDto> companyContactDtoSupplier = primaryContactDtoSupplier;
+				
+		Supplier<List<LoginUserDto>> loginUserListDto = ArrayList::new;
+		
+		propertyManagementDto = new PropertyManagementDto(  loginUserDtoSupplier.get(), 
+				  primaryContactDtoSupplier.get(),  paymentType, loginUserListDto.get(),  companyContactDtoSupplier.get());
+		
+		Assertions.assertTrue(propertyManagementService.createPropertyManagement(propertyManagementDto));
+		
+		
+		propertyManagementDto.setPaymentType(PaymentType.SUPER_PRO);
+		Assertions.assertTrue(propertyManagementService.updatePropertyManagement(propertyManagementDto));
+		Assertions.assertTrue(propertyManagementDto.getPaymentType().toString().equals(PaymentType.SUPER_PRO.toString()));
+		System.out.println("TESTUPDATE: "+propertyManagementDto);
+	}
+	
+	@Test
+	@Order(4)
+	public void testFindPropertyManagament_givenPropertyManagementDtoId_boolean(){
+		System.out.println("Test 4");
+		PropertyManagementDto findPropertyManagement = propertyManagementService.findPropertyManagementbyId(propertyManagementDto.getId());
+		Assertions.assertTrue(findPropertyManagement.getId()!=0);
+		System.out.println(findPropertyManagement);
+		
+	}
+	
+	@Test
+	@Order(5)
+	public void testAddLoginUserToPropertyMgmt_givenLoginUser_boolean() {
+		System.out.println("Test 5");
+		
+				userService.createUser(employee);
+				
+		Assertions.assertTrue(propertyManagementService.addLoginUserToPropertyManagement(employee, propertyManagementDto));
 		
 	}
 	
 	
 	
+	@Test
+	@Order(6)
+	public void testLoginUserListAvailable_givenPropertyMGMT_boolean() {
+		System.out.println("Test 6");
+		System.out.println("testLoginUserListAvailable_givenPropertyMGMT_boolean" + propertyManagementDto.getLoginUsers());
+		
+		Assertions.assertTrue(propertyManagementDto.getLoginUsers().size()>0);
+		
+	}
+	
+	@Test
+	@Order(7)
+	public void testRemoveLoginUserFromPropertyMgmt_givenLoginUser_boolean() {
+		System.out.println("Test 7");
+		 
+		Assertions.assertTrue(propertyManagementService.removeLoginUserFromPropertyManagement(employee, propertyManagementDto));
+	}
 	
 }

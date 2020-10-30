@@ -136,4 +136,11 @@ public interface ContactService {
 	 */
 	boolean addAddressToContact ( int contactId, AddressDto addressDto );
 
+	boolean removeAddressFromContact ( int contactId, AddressDto addressDto );
+	
+	
+	
+	
+
+
 }

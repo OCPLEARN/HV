@@ -33,6 +33,14 @@ public class PropertyManagementDto implements Comparable<PropertyManagement>{
 	}
 	
 	
+	@Override
+	public String toString() {
+		return "PropertyManagementDto [id=" + id + ", primaryLoginUser=" + primaryLoginUser + ", primaryContact="
+				+ primaryContact + ", paymentType=" + paymentType + ", loginUsers=" + loginUsers + ", companyContact="
+				+ companyContact + "]";
+	}
+
+
 	public PropertyManagementDto(@NotNull LoginUserDto primaryLoginUser, @NotNull ContactDto primaryContact,
 			@NotNull PaymentType paymentType, List<LoginUserDto> loginUsers, @NotNull ContactDto companyContact) {
 		super();
