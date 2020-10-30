@@ -155,24 +155,14 @@ public class ContactServiceImpl implements ContactService{
 	@Override
 	public boolean updateAddress( AddressDto addressDto ) {
 		Address address = addressMapper.addressDtoToAddress(addressDto);
-		
-		try {
-			addressDao.save(address);
-			return true;
-			} catch (DataAccessException e) {
-				return false;
-			}
+		return addressDao.save(address);
 	}
 
 	@Override
 	public boolean deleteAddress(AddressDto addressDto) {
 		
 		Address address = addressMapper.addressDtoToAddress(addressDto);
-		try {
-			return addressDao.delete(address);
-		} catch (DataAccessException e) {
-			return false;
-		}
+		return addressDao.delete(address);
 		
 	}
 
@@ -180,10 +170,8 @@ public class ContactServiceImpl implements ContactService{
 	public boolean addAddressToContact(int contactId, AddressDto addressDto) {
 		
 		Address addressDtoToAddress = addressMapper.addressDtoToAddress(addressDto);
-		addressDao.save(addressDtoToAddress);
 		
 		return contactDao.assignAddress(contactId, addressDtoToAddress);
-
 	}
 	
 	@Override
@@ -197,9 +185,5 @@ public class ContactServiceImpl implements ContactService{
 		}
 		return false;
 	}
-
-
-
-
 
 }

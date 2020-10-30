@@ -208,14 +208,39 @@ public class ContactDaoJdbc implements ContactDao {
 
 	@Override
 	public List<Contact> findContactsOfUnit(Unit unit, TablePageViewData tablePageViewData) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("needs to be implemented");
 	}
 
 	@Override
 	public List<Contact> findContactsIsCompany(boolean isCompany, TablePageViewData tablePageViewData) {
-		// TODO Auto-generated method stub
-		return null;
+
+		List<Contact> contacts = new ArrayList<>();
+
+		String sql = "SELECT * FROM contacts ORDER BY ? ? LIMIT ?, ?  WHERE isCompany = ?;";
+		
+		try (
+			Connection connection = datasource.getConnection();
+			PreparedStatement stmt = connection.prepareStatement(sql);
+				)
+		{
+			stmt.setString(1, tablePageViewData.getOrderBy()  );
+			stmt.setString(2, tablePageViewData.getOrderByDirection()  );
+			stmt.setInt(3, tablePageViewData.getOffset()  );
+			stmt.setInt(4, tablePageViewData.getRowCount()  );
+			stmt.setString(5, (isCompany ? "1" : "0"));
+			
+			ResultSet resultSet = stmt.executeQuery();
+			while( resultSet.next() ) {
+				contacts.add(this.mapRowToContact(resultSet));
+			}
+			
+		}catch (SQLException e) {
+			 e.printStackTrace(); 
+             logger.log(Level.WARNING, e.getMessage());
+             throw new DataAccessException("Unable to get Data from DB.");
+		}
+		
+		return contacts;
 	}
 
 	@Override
@@ -278,7 +303,6 @@ public class ContactDaoJdbc implements ContactDao {
              logger.log(Level.WARNING, e.getMessage());
              throw new DataAccessException("Unable to get Data from DB.");
 		}
-	
 	}
 	
 	@Override
@@ -304,11 +328,18 @@ public class ContactDaoJdbc implements ContactDao {
 
 		List<Address> addresses = new ArrayList<Address>(); 
 		
+		String sql = "SELECT * FROM contactaddresslink WHERE contactId = ? ORDER BY ? ? LIMIT ?, ?;";
+				
 		try(Connection connection = datasource.getConnection();
-				PreparedStatement stmt = connection.prepareStatement("SELECT * FROM contactaddresslink WHERE contactid = ?;");
+				PreparedStatement stmt = connection.prepareStatement(sql);
 				){
 			
 			stmt.setInt(1, id);
+			stmt.setString(2, "addressId");
+			stmt.setString(3, "ASC");
+			stmt.setInt(4, tablePageViewData.getOffset());
+			stmt.setInt(5, tablePageViewData.getRowCount());
+			
 			ResultSet resultSet = stmt.executeQuery();
 			
 			while( resultSet.next() ) {
@@ -319,12 +350,10 @@ public class ContactDaoJdbc implements ContactDao {
 					 addresses.add(optionalAddress.get());
 				}
 			}
-			
 		} catch (SQLException e) {
 			 e.printStackTrace(); 
              logger.log(Level.WARNING, e.getMessage());
              throw new DataAccessException("Unable to get Data from DB.");
-             
 		}		
 		return addresses;
 	}
@@ -367,12 +396,11 @@ public class ContactDaoJdbc implements ContactDao {
 		//return null;
     }
     
-    /* return connection to poo */
+    /* return connection to pool */
     private void returnConnection( Connection connection ) {
     	if ( Config.useDBConnectionPool() ) {
     		pool.returnConnection(connection);	
     	}
-    	
     }
 
 }
