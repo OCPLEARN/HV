@@ -66,8 +66,6 @@ public class PropertyManagementServiceTest {
 		// Die Folge: in der DB wird zweimal dasselbe Objekt mit derselben addressId gespeichert
 		// Die Lösung: zwei einzelne Aufrufe des AdressList-Suppliers
 		
-	
-		
 		Supplier<ContactDto>  primaryContactDtoSupplier = () -> {return new ContactDto.ContactBuilder()
 																						.setcompanyName("ABC")
 																						.setCompany(true)
@@ -79,14 +77,7 @@ public class PropertyManagementServiceTest {
 																						.build();};
 			
 		Supplier<ContactDto> companyContactDtoSupplier = primaryContactDtoSupplier;
-		
-		
-		
-		
-		
-		
-		
-		
+				
 		Supplier<List<LoginUserDto>> loginUserListDto = ArrayList::new;
 		
 		propertyManagementDto = new PropertyManagementDto(  loginUserDtoSupplier.get(), 
@@ -118,6 +109,39 @@ public class PropertyManagementServiceTest {
 		// Deletes propertyManagementDto created in Test (1)
 		Assertions.assertTrue( propertyManagementService.deletePropertyManagement( propertyManagementDto ) );
 		
+	}
+	
+	@Test
+	public void testUpdatePropertyManagament_givenUpdatedPropertyManagementDto_bollean() {
+PaymentType paymentType = PaymentType.STARTER;
+		
+		HashMap<String, byte[]> hashMap = StaticHelpers.createHash("Pa$$w0rd", null);
+		
+		Supplier<LoginUserDto> loginUserDtoSupplier = () -> {return new LoginUserDto("UpdatePropMGMTTest" + System.currentTimeMillis(), Role.PROPERTY_MANAGER, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
+				
+		Supplier<ContactDto>  primaryContactDtoSupplier = () -> {return new ContactDto.ContactBuilder()
+																						.setcompanyName("UpdatePropMGMTTest")
+																						.setCompany(true)
+																						.setEmail("email@email.de")
+																						.setFirstName("Armin")
+																						.setLastName("Rohde")
+																						.setSex("M")
+																						.setAddressList(listAddressDtoSupplierWithData.get())
+																						.build();};
+			
+		Supplier<ContactDto> companyContactDtoSupplier = primaryContactDtoSupplier;
+				
+		Supplier<List<LoginUserDto>> loginUserListDto = ArrayList::new;
+		
+		propertyManagementDto = new PropertyManagementDto(  loginUserDtoSupplier.get(), 
+				  primaryContactDtoSupplier.get(),  paymentType, loginUserListDto.get(),  companyContactDtoSupplier.get());
+		
+		Assertions.assertTrue(propertyManagementService.createPropertyManagement(propertyManagementDto));
+		int id = propertyManagementDto.getId();
+		
+		propertyManagementDto.setPaymentType(PaymentType.SUPER_PRO);
+		Assertions.assertTrue(propertyManagementService.updatePropertyManagement(propertyManagementDto));
+		Assertions.assertTrue(propertyManagementDto.getPaymentType().toString().equals(PaymentType.SUPER_PRO.toString()));
 	}
 	
 	

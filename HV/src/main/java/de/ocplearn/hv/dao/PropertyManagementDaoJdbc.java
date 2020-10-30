@@ -38,14 +38,12 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 	@Override
 	public boolean save( PropertyManagement propertyManagement ) {
 		
-		
 		if (propertyManagement.getId() == 0) {
 			return this.insert(propertyManagement);
-			 
-		}
+			 }else {
+				 return this.update(propertyManagement);
+			 }
 		
-		
-		return false;
 	}
 
 	@Override
@@ -82,7 +80,33 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 		return null;
 	}
 	
-	
+	private boolean update(PropertyManagement propertyManagement) {
+		String sql = "UPDATE propertymanagement SET primaryLoginUserId=?, paymentType=?, primaryContactId=?, companyContactId=? WHERE id = ?";
+		
+		try ( Connection connection = this.dataSource.getConnection(); 
+			  PreparedStatement stmt = connection.prepareStatement(sql); ){
+			
+			stmt.setInt( 1, propertyManagement.getPrimaryLoginUser().getId() );
+			stmt.setString( 2, propertyManagement.getPaymentType().toString() );
+			stmt.setInt( 3, propertyManagement.getPrimaryContact().getId() );
+			stmt.setInt( 4, propertyManagement.getCompanyContact().getId() );
+			stmt.setInt(5, propertyManagement.getId());
+
+			if (stmt.executeUpdate() == 0) {
+				return false;
+			}else {
+				return true;
+			}
+			
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.log(Level.WARNING, e.getMessage());
+			throw new DataAccessException("Unable to get Data from DB. " + e.getMessage());		
+        }
+		
+	}
 	
 	
 	private boolean insert (PropertyManagement propertyManagement ) {

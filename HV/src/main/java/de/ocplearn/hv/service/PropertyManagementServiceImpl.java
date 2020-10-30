@@ -92,8 +92,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean updatePropertyManagement(PropertyManagementDto propertyManagementDto) {
-		// TODO Auto-generated method stub
-		return false;
+		return propertyManagementDao.save(propertyManagementMapper.propertyManagementDtoToPropertyManagement(propertyManagementDto));
 	}
 
 	@Override
