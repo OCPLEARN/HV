@@ -198,7 +198,10 @@ public class ContactServiceImpl implements ContactService{
 		return false;
 	}
 
-
+		@Override
+		public boolean removeAddressFromContact(int contactId, AddressDto addressDto) {
+			return contactDao.deleteAddressFromContact(addressDto.getId());
+}
 
 
 

@@ -1,7 +1,9 @@
 package de.ocplearn.hv.service;
 
+import java.util.List;
 import java.util.Optional;
 
+import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.model.PropertyManagement;
 
@@ -51,5 +53,12 @@ public interface PropertyManagementService {
 	 * @return PropertyManagementDto if PropertyManagement exists in DB
 	 */
 	public PropertyManagementDto findPropertyManagementbyPrimaryContact( PropertyManagementDto propertyManagementDto );
+	
+	public List<LoginUserDto> getLoginUsersByPropertyManagement(PropertyManagementDto propertyManagementDto);
+	
+	public boolean addLoginUserToPropertyManagement(LoginUserDto loginUserDto, PropertyManagementDto propertyManagementDto);
+	
+	public boolean removeLoginUserFromPropertyManagement(LoginUserDto loginUserDto,PropertyManagementDto propertyManagementDto);
+	
 	
 }

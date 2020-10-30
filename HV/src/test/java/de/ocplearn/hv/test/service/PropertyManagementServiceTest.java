@@ -23,6 +23,7 @@ import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.model.PaymentType;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.service.PropertyManagementService;
+import de.ocplearn.hv.service.UserService;
 import de.ocplearn.hv.test.dao.AddressDaoTest;
 import de.ocplearn.hv.util.StaticHelpers;
 
@@ -37,15 +38,20 @@ public class PropertyManagementServiceTest {
 
 	private PropertyManagementService propertyManagementService;
 	
+	private UserService userService;
+	
 	private static PropertyManagementDto propertyManagementDto;
+	
+	public static HashMap<String, byte[]> hashMap = StaticHelpers.createHash("Pa$$w0rd", null);
 	
 	public static Supplier<List<AddressDto>> listAddressDtoSupplierWithData = () -> {
 		return new ArrayList<AddressDto> (Arrays.asList( AddressDaoTest.testAddressDtoSupplier.get() )) ;};
 		
-	
+		public static Supplier<LoginUserDto> loginUserDtoEmployeeSupplier = () -> {return new LoginUserDto("EmployeeTest" + System.currentTimeMillis(), Role.OWNER, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
 	@Autowired
-	public PropertyManagementServiceTest( PropertyManagementService propertyManagementService ){
+	public PropertyManagementServiceTest( PropertyManagementService propertyManagementService,UserService userService ){
 		this.propertyManagementService = propertyManagementService;
+		this.userService=userService;
 	}
 	
 	
@@ -56,7 +62,7 @@ public class PropertyManagementServiceTest {
 		
 		PaymentType paymentType = PaymentType.STARTER;
 		
-		HashMap<String, byte[]> hashMap = StaticHelpers.createHash("Pa$$w0rd", null);
+		
 		
 		Supplier<LoginUserDto> loginUserDtoSupplier = () -> {return new LoginUserDto("logUName" + System.currentTimeMillis(), Role.PROPERTY_MANAGER, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
 			
@@ -122,6 +128,8 @@ public class PropertyManagementServiceTest {
 		
 		Supplier<LoginUserDto> loginUserDtoSupplier = () -> {return new LoginUserDto("UpdatePropMGMTTest" + System.currentTimeMillis(), Role.PROPERTY_MANAGER, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
 				
+		
+		
 		Supplier<ContactDto>  primaryContactDtoSupplier = () -> {return new ContactDto.ContactBuilder()
 																						.setcompanyName("UpdatePropMGMTTest")
 																						.setCompany(true)
@@ -157,5 +165,12 @@ public class PropertyManagementServiceTest {
 		System.out.println(findPropertyManagement);
 	}
 	
-	
+	@Test
+	@Order(5)
+	public void testAddLoginUserToPropertyMgmt_givenLoginUser_boolean() {
+		
+		LoginUserDto employee =loginUserDtoEmployeeSupplier.get();
+				userService.createUser(employee);
+		propertyManagementService.addLoginUserToPropertyManagement(employee, propertyManagementDto);
+	}
 }

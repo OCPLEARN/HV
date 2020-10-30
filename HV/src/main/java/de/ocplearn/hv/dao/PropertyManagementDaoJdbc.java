@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import de.ocplearn.hv.dto.LoginUserDto;
+import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.exceptions.DataAccessException;
 import de.ocplearn.hv.model.Contact;
 import de.ocplearn.hv.model.LoginUser;
@@ -180,6 +182,42 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
         }
 		
 		
+	}
+
+
+
+	@Override
+	public boolean addLoginUserToPropertyManagement(LoginUser loginUser, PropertyManagement propertyManagement) {
+		String sql = "INSERT INTO propertymanagementloginuserlink (id, propertyManagementId, loginUserId) VALUES (null, ?, ?)";
+		try ( Connection connection = this.dataSource.getConnection(); 
+				  PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); ){	
+	
+			stmt.setInt( 1, propertyManagement.getId() );
+			stmt.setInt( 2, loginUser.getId() );
+			if (stmt.executeUpdate() == 0) return false;
+			
+			else {
+				ResultSet resultSet = stmt.getGeneratedKeys();	
+				resultSet.next();
+				propertyManagement.setId(resultSet.getInt(1)); 
+										
+				return true;
+			}
+	
+	} catch (SQLException e) {
+		e.printStackTrace();
+		logger.log(Level.WARNING, e.getMessage());
+		throw new DataAccessException("Unable to get Data from DB. " + e.getMessage());		
+    }
+	}
+
+
+
+	@Override
+	public boolean removeLoginUserFromPropertyManagement(LoginUser loginUser,
+			PropertyManagement propertyManagement) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	

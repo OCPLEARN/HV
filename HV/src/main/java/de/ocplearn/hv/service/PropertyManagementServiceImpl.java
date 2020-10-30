@@ -1,5 +1,6 @@
 package de.ocplearn.hv.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,9 @@ import de.ocplearn.hv.dao.AddressDao;
 import de.ocplearn.hv.dao.ContactDao;
 import de.ocplearn.hv.dao.LoginUserDao;
 import de.ocplearn.hv.dao.PropertyManagementDao;
+import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
+import de.ocplearn.hv.mapper.LoginUserMapper;
 import de.ocplearn.hv.mapper.PropertyManagementMapper;
 import de.ocplearn.hv.model.Contact;
 import de.ocplearn.hv.model.PropertyManagement;
@@ -22,6 +25,8 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	
 	private PropertyManagementMapper propertyManagementMapper;
 	
+	private LoginUserMapper loginUserMapper;
+	
 	private UserService userService;
 	
 	private ContactService contactService; 
@@ -30,13 +35,15 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	public PropertyManagementServiceImpl ( 	PropertyManagementDao propertyManagementDao,
 											PropertyManagementMapper propertyManagementMapper,
 											UserService userService,
-											ContactService contactService
+											ContactService contactService,
+											LoginUserMapper loginUserMapper
 										) {
 		
 		this.propertyManagementDao = propertyManagementDao;
 		this.propertyManagementMapper = propertyManagementMapper;
 		this.userService = userService;
 		this.contactService = contactService;
+		this.loginUserMapper=loginUserMapper;
 		}
 	
 	
@@ -117,5 +124,19 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	@Override
+	public boolean addLoginUserToPropertyManagement(LoginUserDto loginUserDto,  PropertyManagementDto propertyManagementDto) {
+		return propertyManagementDao.addLoginUserToPropertyManagement(loginUserMapper.loginUserDtoToLoginUser(loginUserDto), 
+																	propertyManagementMapper.propertyManagementDtoToPropertyManagement(propertyManagementDto));
+	}
+	@Override
+	public boolean removeLoginUserFromPropertyManagement(LoginUserDto loginUserDto,  PropertyManagementDto propertyManagementDto) {
+		return propertyManagementDao.removeLoginUserFromPropertyManagement(loginUserMapper.loginUserDtoToLoginUser(loginUserDto), 
+				propertyManagementMapper.propertyManagementDtoToPropertyManagement(propertyManagementDto));
+	}
+	@Override
+	public List<LoginUserDto> getLoginUsersByPropertyManagement(PropertyManagementDto propertyManagementDto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
