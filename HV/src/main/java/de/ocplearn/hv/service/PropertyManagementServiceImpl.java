@@ -79,6 +79,16 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		boolean deleteOk = true;
 		
 		PropertyManagement propertyManagement = propertyManagementMapper.propertyManagementDtoToPropertyManagement(propertyManagementDto);
+			
+		
+		// delete all loginUsers from PropertyManagement
+		for(LoginUserDto loginUserDto : propertyManagementDto.getLoginUsers()) {
+			if( ! this.removeLoginUserFromPropertyManagement(loginUserDto, propertyManagementDto)) {
+				deleteOk = false;
+			} else {
+				if ( ! userService.deleteUser(loginUserDto)) deleteOk = false;
+			}
+		}
 		
 		if ( ! propertyManagementDao.delete(propertyManagement)) deleteOk = false;
 		 System.out.println("delete 2 ok : " + deleteOk);
@@ -88,15 +98,12 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		
 		if ( ! contactService.deleteContactById(propertyManagement.getPrimaryContact().getId())) deleteOk = false;
 		 System.out.println("PrimaryContact gelöscht " + deleteOk);
-
+		 
 		if ( ! contactService.deleteContactById(propertyManagement.getCompanyContact().getId())) deleteOk = false;
 		
 		System.out.println("CompanyContact gelöscht " + deleteOk);
-	
-		//TODO Delete List of LoginUsers
-		
-		
-		
+
+		// TODO success notification to deleting person
 		return deleteOk;
 	}
 
