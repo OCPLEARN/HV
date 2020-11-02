@@ -1,5 +1,6 @@
 package de.ocplearn.hv.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,7 @@ import de.ocplearn.hv.dto.AddressDto;
 import de.ocplearn.hv.dto.ContactDto;
 import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
+import de.ocplearn.hv.model.AddressType;
 import de.ocplearn.hv.model.Contact;
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.PaymentType;
@@ -126,6 +128,48 @@ public class HomeController {
 	private void createPropertyManagement(PropertyManagementRegistrationFormCommand propertyManagementRegistrationFormCommand) {
 		HashMap<String, byte[]> passwordHashMap = StaticHelpers.createHash(propertyManagementRegistrationFormCommand.getInitialPassword(), null);
 		
+		// Company Contact
+		ContactDto companyContactDto = new ContactDto();
+		// Primary Contact
+		ContactDto primaryContactDto = new ContactDto();
+		
+		// Company Address
+		
+		AddressDto companyAddressDto = new AddressDto();
+		companyAddressDto.setStreet(propertyManagementRegistrationFormCommand.getCompanyStreet());
+		companyAddressDto.setHouseNumber(propertyManagementRegistrationFormCommand.getCompanyHouseNumber());
+		companyAddressDto.setApartment(propertyManagementRegistrationFormCommand.getCompanyApartment());
+		companyAddressDto.setCity(propertyManagementRegistrationFormCommand.getCompanyCity());
+		companyAddressDto.setProvince(propertyManagementRegistrationFormCommand.getCompanyProvince());
+		companyAddressDto.setCountry(propertyManagementRegistrationFormCommand.getCompanyCountry());
+		companyAddressDto.setZipCode(propertyManagementRegistrationFormCommand.getCompanyZipCode());
+		companyAddressDto.setAddressType(AddressType.SECONDARY_BUSINESS_ADDRESS);
+
+		
+			
+		// Primary Contact Address 
+		AddressDto secondaryAddressDto = new AddressDto();
+		secondaryAddressDto.setStreet(propertyManagementRegistrationFormCommand.getCompanyStreet());
+		secondaryAddressDto.setHouseNumber(propertyManagementRegistrationFormCommand.getCompanyHouseNumber());
+		secondaryAddressDto.setApartment(propertyManagementRegistrationFormCommand.getCompanyApartment());
+		secondaryAddressDto.setCity(propertyManagementRegistrationFormCommand.getCompanyCity());
+		secondaryAddressDto.setProvince(propertyManagementRegistrationFormCommand.getCompanyProvince());
+		secondaryAddressDto.setCountry(propertyManagementRegistrationFormCommand.getCompanyCountry());
+		secondaryAddressDto.setZipCode(propertyManagementRegistrationFormCommand.getCompanyZipCode());
+		secondaryAddressDto.setAddressType(AddressType.SECONDARY_BUSINESS_ADDRESS);
+
+		
+		
+		// Address Lists for both DTOs
+		List<AddressDto> companyAddresses = new ArrayList<AddressDto>();
+		companyAddresses.add(companyAddressDto);
+		companyContactDto.setAddresses(companyAddresses);
+		
+		List<AddressDto> secondaryAddresses = new ArrayList<AddressDto>();
+		secondaryAddresses.add(secondaryAddressDto);
+		primaryContactDto.setAddresses(secondaryAddresses);
+		
+		
 		// LoginUser
 		
 		LoginUserDto loginUserDto = new LoginUserDto();
@@ -135,26 +179,26 @@ public class HomeController {
 		loginUserDto.setPasswHash(passwordHashMap.get("hash"));
 		loginUserDto.setSalt(passwordHashMap.get("salt"));
 		
-		// Company Contact
-		ContactDto companyContactDto = new ContactDto();
+		
+	
 	
 		if(companyContactDto.isCompany()) {
 			companyContactDto.setCompanyName(propertyManagementRegistrationFormCommand.getCompanyName());
 			companyContactDto.setPhone(propertyManagementRegistrationFormCommand.getCompanyPhone());
 			companyContactDto.setWebsite(propertyManagementRegistrationFormCommand.getCompanyWebsite());
 			companyContactDto.setEmail(propertyManagementRegistrationFormCommand.getCompanyEmail());
-		} else {
+			companyAddressDto.setAddressType(AddressType.PRIMARY_BUSINESS_ADDRESS);
 			
+		} else {
 			companyContactDto.setCompanyName(propertyManagementRegistrationFormCommand.getPrimaryFirstName() 
 										   + propertyManagementRegistrationFormCommand.getPrimaryLastName());
 			companyContactDto.setPhone(propertyManagementRegistrationFormCommand.getPrimaryPhone());
 			companyContactDto.setEmail(propertyManagementRegistrationFormCommand.getPrimaryEmail());
+			secondaryAddressDto.setAddressType(AddressType.PRIMARY_BUSINESS_ADDRESS);
 		}
 		
-		// Primary Contact
-		
-		ContactDto primaryContactDto = new ContactDto();
-		
+	
+			
 		primaryContactDto.setFirstName(propertyManagementRegistrationFormCommand.getPrimaryFirstName());
 		primaryContactDto.setLastName(propertyManagementRegistrationFormCommand.getPrimaryLastName());
 		
@@ -169,19 +213,10 @@ public class HomeController {
 			primaryContactDto.setEmail(propertyManagementRegistrationFormCommand.getCompanyEmail());
 		}
 
-		// Company Address
+	
 		
-		AddressDto companyAddressDto = new AddressDto();
-		companyAddressDto.setStreet(propertyManagementRegistrationFormCommand.getCompanyStreet());
-		companyAddressDto.setHouseNumber(propertyManagementRegistrationFormCommand.getCompanyHouseNumber());
-		companyAddressDto.setApartment(propertyManagementRegistrationFormCommand.getCompanyApartment());
-		companyAddressDto.setCity(propertyManagementRegistrationFormCommand.getCompanyCity());
-		companyAddressDto.setProvince(propertyManagementRegistrationFormCommand.getCompanyProvince());
-		companyAddressDto.setCountry(propertyManagementRegistrationFormCommand.getCompanyCountry());
-		companyAddressDto.setZipCode(propertyManagementRegistrationFormCommand.getCompanyZipCode());
-			
-		// TODO 
-		// Primary Contact Address 
+		
+		
 		
 		PropertyManagementDto propertyManagementDto = new PropertyManagementDto();
 		

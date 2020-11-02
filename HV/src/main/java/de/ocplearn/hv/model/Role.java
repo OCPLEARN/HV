@@ -10,7 +10,9 @@ public enum Role {
     ADMIN( "Admin of operation team" ), 
     PROPERTY_MANAGER( "Default user" ) , 
     TENANT( "Inhabits a unit" ), 
-    OWNER( "Owns a building" );
+    OWNER( "Owns a building" ),
+    EMPLOYEE ( "Works for a Property Manager and is not a specifird contact (not a human)")
+    ;
     
     private String description;
     

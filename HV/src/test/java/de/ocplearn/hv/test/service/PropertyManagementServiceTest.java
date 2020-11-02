@@ -40,7 +40,6 @@ public class PropertyManagementServiceTest {
 	
 	private UserService userService;
 	
-	
 	private static PropertyManagementDto propertyManagementDto;
 	
 	public static HashMap<String, byte[]> hashMap = StaticHelpers.createHash("Pa$$w0rd", null);
@@ -48,9 +47,11 @@ public class PropertyManagementServiceTest {
 	public static Supplier<List<AddressDto>> listAddressDtoSupplierWithData = () -> {
 		return new ArrayList<AddressDto> (Arrays.asList( AddressDaoTest.testAddressDtoSupplier.get() )) ;};
 		
-	public static Supplier<LoginUserDto> loginUserDtoEmployeeSupplier = () -> {return new LoginUserDto("EmployeeTest" + System.currentTimeMillis(), Role.OWNER, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
+	public static Supplier<LoginUserDto> loginUserDtoEmployeeSupplier = () -> {return new LoginUserDto("EmployeeTest" + System.currentTimeMillis(), Role.EMPLOYEE, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
 	
+	// needs to be static to hold the id of employee which is returned on saving / creating the dto
 	private static LoginUserDto employee =loginUserDtoEmployeeSupplier.get();
+	private static LoginUserDto employee2 = loginUserDtoEmployeeSupplier.get();
 		
 		@Autowired
 	public PropertyManagementServiceTest( PropertyManagementService propertyManagementService,UserService userService ){
@@ -58,6 +59,11 @@ public class PropertyManagementServiceTest {
 		this.userService=userService;
 	}
 	
+		
+		
+		
+		
+		
 	
 	
 	@Test
@@ -88,10 +94,11 @@ public class PropertyManagementServiceTest {
 			
 		Supplier<ContactDto> companyContactDtoSupplier = primaryContactDtoSupplier;
 				
-		Supplier<List<LoginUserDto>> loginUserListDto = ArrayList::new;
+		Supplier<List<LoginUserDto>> loginUserListDtoSupplier = ArrayList::new;
+	
 		
 		propertyManagementDto = new PropertyManagementDto(  loginUserDtoSupplier.get(), 
-				  primaryContactDtoSupplier.get(),  paymentType, loginUserListDto.get(),  companyContactDtoSupplier.get());
+				  primaryContactDtoSupplier.get(),  paymentType, loginUserListDtoSupplier.get(),  companyContactDtoSupplier.get());
 	
 				
 		
@@ -100,6 +107,7 @@ public class PropertyManagementServiceTest {
 
 		
 		Assertions.assertTrue(propertyManagementService.createPropertyManagement(propertyManagementDto));
+		
 		
 				
 	}
@@ -115,6 +123,9 @@ public class PropertyManagementServiceTest {
 		//  TDD Ansatz zum Erinnern für HR
 		//	Test Order of TestMethods	
 		//  System.out.println("2");
+		
+		// adds List of LoginUsers to
+		
 		
 		// Deletes propertyManagementDto created in Test (1)
 		Assertions.assertTrue( propertyManagementService.deletePropertyManagement( propertyManagementDto ) );
@@ -177,7 +188,11 @@ public class PropertyManagementServiceTest {
 		
 				userService.createUser(employee);
 				
+				userService.createUser(employee2);
+			
+				
 		Assertions.assertTrue(propertyManagementService.addLoginUserToPropertyManagement(employee, propertyManagementDto));
+		Assertions.assertTrue(propertyManagementService.addLoginUserToPropertyManagement(employee2, propertyManagementDto));
 		
 	}
 	
@@ -199,6 +214,21 @@ public class PropertyManagementServiceTest {
 		System.out.println("Test 7");
 		 
 		Assertions.assertTrue(propertyManagementService.removeLoginUserFromPropertyManagement(employee, propertyManagementDto));
+		Assertions.assertTrue(propertyManagementService.removeLoginUserFromPropertyManagement(employee2, propertyManagementDto));
+		
 	}
 	
+	
+	
+	
 }
+
+
+
+
+
+
+
+
+
+
