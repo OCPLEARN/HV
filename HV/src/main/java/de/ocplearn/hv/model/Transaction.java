@@ -1,8 +1,18 @@
 package de.ocplearn.hv.model;
 
-public class Unit {
-	
+public class Transaction {
+
 	private int id;
+
+	public Transaction() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Transaction(int id) {
+		super();
+		this.id = id;
+	}
 
 	/**
 	 * @return the id
@@ -17,16 +27,4 @@ public class Unit {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public Unit(int id) {
-		super();
-		this.id = id;
-	}
-
-	public Unit() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	
-
 }

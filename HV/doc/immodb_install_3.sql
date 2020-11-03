@@ -307,4 +307,5 @@ ADD CONSTRAINT `fk_building_propertyManagementId`
 	FOREIGN KEY (`propertyManagementId`)
 	REFERENCES `immodb`. `propertymanagement` (`id`);
 
-
+ALTER TABLE `immodb`. `buildingowner` DROP FOREIGN KEY fk_buildingOwner_propertyManagerId;
+ALTER TABLE `immodb`.`buildingowner` DROP COLUMN propertyManagerId;
