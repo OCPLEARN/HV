@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean createUser(LoginUserDto loginUserDto) {
     	LoginUser loginUser = loginUserMapper.loginUserDtoToLoginUser(loginUserDto);
-    	
+    	//System.out.println("US -- createUser() " + loginUser.getLoginUserName() );	
         if ( loginUserDao.userAlreadyExists(loginUser.getLoginUserName()) ){
             return false;
         }

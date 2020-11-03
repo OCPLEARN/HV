@@ -50,8 +50,17 @@ public class PropertyManagementServiceTest {
 	public static Supplier<LoginUserDto> loginUserDtoEmployeeSupplier = () -> {return new LoginUserDto("EmployeeTest" + System.currentTimeMillis(), Role.EMPLOYEE, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
 	
 	// needs to be static to hold the id of employee which is returned on saving / creating the dto
-	private static LoginUserDto employee =loginUserDtoEmployeeSupplier.get();
-	private static LoginUserDto employee2 = loginUserDtoEmployeeSupplier.get();
+	private static LoginUserDto employee;// = loginUserDtoEmployeeSupplier.get();
+	private static LoginUserDto employee2;// = loginUserDtoEmployeeSupplier.get();
+	static {
+		employee = loginUserDtoEmployeeSupplier.get();
+		try {Thread.sleep(250);}
+		catch( InterruptedException e ) {
+			//
+		}
+		employee2 = loginUserDtoEmployeeSupplier.get();
+	}
+	
 		
 		@Autowired
 	public PropertyManagementServiceTest( PropertyManagementService propertyManagementService,UserService userService ){
@@ -186,11 +195,9 @@ public class PropertyManagementServiceTest {
 	public void testAddLoginUserToPropertyMgmt_givenLoginUser_boolean() {
 		System.out.println("Test 5");
 		
-				userService.createUser(employee);
-				
-				userService.createUser(employee2);
+		Assertions.assertTrue(userService.createUser(employee) );
+		Assertions.assertTrue(userService.createUser(employee2) );		
 			
-				
 		Assertions.assertTrue(propertyManagementService.addLoginUserToPropertyManagement(employee, propertyManagementDto));
 		Assertions.assertTrue(propertyManagementService.addLoginUserToPropertyManagement(employee2, propertyManagementDto));
 		
