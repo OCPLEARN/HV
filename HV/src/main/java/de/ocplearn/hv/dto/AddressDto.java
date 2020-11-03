@@ -38,6 +38,14 @@ public class AddressDto implements Comparable<AddressDto> {
 			this.addressType = addressType;
 		}
 		
+		// Copy Constructor === DANGER ===
+		// May only be used for simple Objects without id references from DB
+		// Only for first construction of object
+		// when references in original object are altered - references of the newly created object are altered, too.
+		public AddressDto(AddressDto addressDto) {
+			this(addressDto.street, addressDto.houseNumber, addressDto.apartment,addressDto.city,  addressDto.zipCode, addressDto.province, addressDto.country, addressDto.latitude, addressDto.longitude, addressDto.addressType );			
+		}
+		
 		/**
 		 * @return the id
 		 */

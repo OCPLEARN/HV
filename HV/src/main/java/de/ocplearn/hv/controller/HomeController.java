@@ -148,16 +148,22 @@ public class HomeController {
 		
 			
 		// Primary Contact Address 
-		AddressDto secondaryAddressDto = new AddressDto();
-		secondaryAddressDto.setStreet(propertyManagementRegistrationFormCommand.getCompanyStreet());
-		secondaryAddressDto.setHouseNumber(propertyManagementRegistrationFormCommand.getCompanyHouseNumber());
-		secondaryAddressDto.setApartment(propertyManagementRegistrationFormCommand.getCompanyApartment());
-		secondaryAddressDto.setCity(propertyManagementRegistrationFormCommand.getCompanyCity());
-		secondaryAddressDto.setProvince(propertyManagementRegistrationFormCommand.getCompanyProvince());
-		secondaryAddressDto.setCountry(propertyManagementRegistrationFormCommand.getCompanyCountry());
-		secondaryAddressDto.setZipCode(propertyManagementRegistrationFormCommand.getCompanyZipCode());
-		secondaryAddressDto.setAddressType(AddressType.SECONDARY_BUSINESS_ADDRESS);
+		// replaced by the following copy constructor
+//		AddressDto secondaryAddressDto = new AddressDto();
+//		secondaryAddressDto.setStreet(propertyManagementRegistrationFormCommand.getCompanyStreet());
+//		secondaryAddressDto.setHouseNumber(propertyManagementRegistrationFormCommand.getCompanyHouseNumber());
+//		secondaryAddressDto.setApartment(propertyManagementRegistrationFormCommand.getCompanyApartment());
+//		secondaryAddressDto.setCity(propertyManagementRegistrationFormCommand.getCompanyCity());
+//		secondaryAddressDto.setProvince(propertyManagementRegistrationFormCommand.getCompanyProvince());
+//		secondaryAddressDto.setCountry(propertyManagementRegistrationFormCommand.getCompanyCountry());
+//		secondaryAddressDto.setZipCode(propertyManagementRegistrationFormCommand.getCompanyZipCode());
+//		secondaryAddressDto.setAddressType(AddressType.SECONDARY_BUSINESS_ADDRESS);
 
+		
+		// Primary Contact Address with copy constructor - may only be used before first writing to DB
+		AddressDto secondaryAddressDto = new AddressDto(companyAddressDto);
+
+		
 		
 		
 		// Address Lists for both DTOs
@@ -197,6 +203,8 @@ public class HomeController {
 			secondaryAddressDto.setAddressType(AddressType.PRIMARY_BUSINESS_ADDRESS);
 		}
 		
+		companyAddressDto.setAddressType(AddressType.BUILDING_ADDRESS);
+
 	
 			
 		primaryContactDto.setFirstName(propertyManagementRegistrationFormCommand.getPrimaryFirstName());
@@ -229,7 +237,6 @@ public class HomeController {
 		// TODO
 		//propertyManagementDto.setLoginUsers(loginUsers);
 
-		propertyManagementService.createPropertyManagement(propertyManagementDto);
 		
 	}
 	

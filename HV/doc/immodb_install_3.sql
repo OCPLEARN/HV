@@ -300,6 +300,11 @@ ALTER TABLE propertyManagement ADD CONSTRAINT fk_propertyManagement_companyConta
 ALTER TABLE propertyManagement MODIFY primaryLoginUserId int not null unique;
 ALTER TABLE immodb.contactAddressLink CHANGE COLUMN adrType  addressType varchar(50);
 
-
+ALTER TABLE immodb.building CHANGE COLUMN propertyManagerId  propertyManagementId INT NOT NULL;
+ALTER TABLE `immodb`.`building` DROP FOREIGN KEY `fk_building_propertyManagerId`;
+ALTER TABLE `immodb`. `building`
+ADD CONSTRAINT `fk_building_propertyManagementId`
+	FOREIGN KEY (`propertyManagementId`)
+	REFERENCES `immodb`. `propertymanagement` (`id`);
 
 
