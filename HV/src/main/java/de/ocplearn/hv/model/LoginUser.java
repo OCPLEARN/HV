@@ -1,5 +1,6 @@
 package de.ocplearn.hv.model;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -114,5 +115,11 @@ public class LoginUser implements Comparable<LoginUser> {
     @Override
     public int compareTo(LoginUser o) {
         return this.getLoginUserName().compareTo(o.getLoginUserName());
-    }    
+    }
+
+	@Override
+	public String toString() {
+		return "LoginUser [id=" + id + ", loginUserName=" + loginUserName + ", role=" + role +  ", locale=" + locale + "]";
+	}    
+    
 }

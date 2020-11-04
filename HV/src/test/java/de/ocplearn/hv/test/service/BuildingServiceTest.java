@@ -1,7 +1,10 @@
 package de.ocplearn.hv.test.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.function.Supplier;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,10 +21,12 @@ import de.ocplearn.hv.mapper.BuildingMapper;
 import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.BuildingType;
 import de.ocplearn.hv.model.PaymentType;
+import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.service.ContactService;
 import de.ocplearn.hv.service.PropertyManagementService;
 import de.ocplearn.hv.service.UserService;
 import de.ocplearn.hv.test.dao.AddressDaoTest;
+import de.ocplearn.hv.util.StaticHelpers;
 
 @SpringBootTest
 public class BuildingServiceTest {
@@ -36,6 +41,11 @@ public class BuildingServiceTest {
 	
 	private BuildingDao buildingDao; 
 	
+	public static HashMap<String, byte[]> hashMap = StaticHelpers.createHash("Pa$$w0rd", null);
+	
+	public static Supplier<LoginUserDto> loginUserDtoEmployeeSupplier = () -> {return new LoginUserDto("BuildingTest" + System.currentTimeMillis(), Role.EMPLOYEE, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
+	
+	
 	@Autowired
 	public BuildingServiceTest(BuildingDao buildingDao, PropertyManagementService propertyManagementService, UserService userService,BuildingMapper buildingMapper, ContactService contactService) {
 		super();
@@ -48,16 +58,21 @@ public class BuildingServiceTest {
 	
 	@Test
 	public void testCreateBuilding() {
+	
 		BuildingDto buildingDto = new BuildingDto();
 		AddressDto address = AddressDaoTest.testAddressDtoSupplier.get();
 		Assertions.assertTrue(contactService.createAddress(address));
 		PaymentType paymentType = PaymentType.STARTER;
 		List<LoginUserDto> loginUsers = PropertyManagementServiceTest.loginUserListDtoSupplier.get();
-		LoginUserDto employee = PropertyManagementServiceTest.employee;
+		LoginUserDto employee = loginUserDtoEmployeeSupplier.get();
 		Assertions.assertTrue(userService.createUser(employee));
 		loginUsers.add(employee);
-		PropertyManagementDto propertyManagementDto = new PropertyManagementDto(  PropertyManagementServiceTest.loginUserDtoSupplier.get(), 
-				PropertyManagementServiceTest.primaryContactDtoSupplier.get(),  paymentType, loginUsers,  PropertyManagementServiceTest.companyContactDtoSupplier.get());
+		PropertyManagementDto propertyManagementDto = new PropertyManagementDto(  
+				PropertyManagementServiceTest.loginUserDtoSupplier.get(), 
+				PropertyManagementServiceTest.primaryContactDtoSupplier.get(),  
+				paymentType, 
+				loginUsers,  
+				PropertyManagementServiceTest.companyContactDtoSupplier.get());
 		Assertions.assertTrue(propertyManagementService.createPropertyManagement(propertyManagementDto));
 		buildingDto.setAddress(address);
 		buildingDto.setPropertyManagement(propertyManagementDto);
