@@ -137,7 +137,7 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 	        		PreparedStatement stmt = con.prepareStatement( "DELETE FROM loginUser WHERE loginUserName = ?;" );) {
 	                
 	                stmt.setString(1, loginUserName  );
-	                
+	                System.out.println("loginUserName" + loginUserName);
 	            return (stmt.executeUpdate()==1)?true:false;
 	               
 	                

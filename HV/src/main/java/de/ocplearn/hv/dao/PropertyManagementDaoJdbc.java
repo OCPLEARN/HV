@@ -170,7 +170,7 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 			stmt.setInt( 3, propertyManagement.getPrimaryContact().getId() );
 			stmt.setInt( 4, propertyManagement.getCompanyContact().getId() );
 
-			if (stmt.executeUpdate() == 0) return false;
+			if (stmt.executeUpdate() != 0) return false;
 			
 			else {
 				ResultSet resultSet = stmt.getGeneratedKeys();	
