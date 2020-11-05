@@ -56,9 +56,12 @@ public interface PropertyManagementService {
 	
 	public List<Integer> getLoginUserIdsFromPropertyManagement(PropertyManagementDto propertyManagementDto);
 	
+	public List<PropertyManagementDto> findPropertyManagementbyCompanyName( PropertyManagementDto propertyManagementDto );
+	
 	public boolean addLoginUserToPropertyManagement(LoginUserDto loginUserDto, PropertyManagementDto propertyManagementDto);
 	
 	public boolean removeLoginUserFromPropertyManagement(LoginUserDto loginUserDto,PropertyManagementDto propertyManagementDto);
+	
 	
 	
 }

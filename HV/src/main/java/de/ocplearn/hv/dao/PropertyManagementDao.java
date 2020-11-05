@@ -17,11 +17,12 @@ public interface PropertyManagementDao {
 	public Optional<PropertyManagement> findById( int id );
 	
 	public Optional<PropertyManagement> findByPrimaryContact( PropertyManagement propertyManagement );
-	
+		
 	public boolean addLoginUserToPropertyManagement(LoginUser loginUser,PropertyManagement propertyManagement);
 	
 	public boolean removeLoginUserFromPropertyManagement(LoginUser loginUser,PropertyManagement propertyManagement);
 	
 	public List<Integer> getLoginUsersByPropertyManagement(PropertyManagement propertyManagement);
 
+	public List<PropertyManagement> findPropertyManagementByComanyName (String name);
 }
