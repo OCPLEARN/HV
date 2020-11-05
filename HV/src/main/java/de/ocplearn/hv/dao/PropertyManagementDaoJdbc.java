@@ -259,6 +259,32 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 		}	
 	}
 	
+	@Override
+	public List<PropertyManagement> findPropertyManagementByComanyName(String name) {
+		
+		String sql;
+		sql = "SELECT * FROM propertymanagement AS pm \n" + 
+				"INNER JOIN contact AS co ON pm.companyContactId = co.id WHERE co.companyName LIKE ?;";
+		
+		List<PropertyManagement> propertyManagements = new ArrayList<PropertyManagement>();
+		
+		try ( Connection connection = dataSource.getConnection();
+				PreparedStatement stmt = connection.prepareStatement(sql);) {
+			stmt.setString(1, name);
+			ResultSet resultSet = stmt.executeQuery(sql);
+			
+			while (resultSet.next()) {
+				propertyManagements.add(this.mapRowToPropertyManagement(resultSet));
+			}
+			return propertyManagements;
+
+		} catch (SQLException e) {
+			 e.printStackTrace(); 
+	            logger.log(Level.WARNING, e.getMessage());
+	            throw new DataAccessException("Unable to get Data from DB.");
+		}
+	}
+	
 	
 
 }

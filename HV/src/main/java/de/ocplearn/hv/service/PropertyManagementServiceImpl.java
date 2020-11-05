@@ -166,4 +166,14 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		return propertyManagementDao.getLoginUsersByPropertyManagement(propertyManagementMapper.propertyManagementDtoToPropertyManagement(propertyManagementDto));
 				
 	}
+	
+	@Override
+	public List<PropertyManagementDto> findPropertyManagementbyCompanyName(PropertyManagementDto propertyManagementDto) {
+		
+		List<PropertyManagementDto> propertyManagements = new ArrayList<PropertyManagementDto>();
+		
+		propertyManagements.add()
+		
+		return ;
+	}
 }
