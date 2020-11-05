@@ -285,7 +285,7 @@ public class Contact implements Comparable<Contact>{
 
 	@Override
 	public String toString() {
-		return "Contact [sex=" + sex + ", firstName=" + firstName + ", lastName=" + lastName + ", isCompany="
+		return "Contact [id= "+id+", sex=" + sex + ", firstName=" + firstName + ", lastName=" + lastName + ", isCompany="
 				+ isCompany + ", companyName=" + companyName + ", phone=" + phone + ", mobilePhone=" + mobilePhone
 				+ ", fax=" + fax + ", website=" + website + ", email=" + email + "Addresses=" + addresses + "]";
 	}
