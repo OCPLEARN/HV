@@ -137,4 +137,9 @@ public class BuildingOwnerDto implements Comparable<BuildingOwnerDto> {
 		return this.getContact().compareTo(o.getContact());
 	}
 	
+	@Override
+	public String toString() {
+		return "BuildingOwner [id=" + id + ", contact=" + contact + ", loginUser=" + loginUser + "]";
+	}	
+	
 }
