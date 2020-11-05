@@ -75,6 +75,8 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 
                 // get generated key
                 int r = stmt.executeUpdate();
+                if ( r != 1 ) {return false;}
+                
                 ResultSet rs = stmt.getGeneratedKeys();
                 rs.next();
                 loginUser.setId(rs.getInt(1));
@@ -148,8 +150,6 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 	            }            
 		}
 
-		
-		
 		return false;
 	}
 

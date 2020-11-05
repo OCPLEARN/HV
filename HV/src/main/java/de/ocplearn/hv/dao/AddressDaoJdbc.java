@@ -82,7 +82,7 @@ public class AddressDaoJdbc implements AddressDao {
             // get generated key
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected != 1){
-                throw new SQLException();
+                return false;
             }            
             
             ResultSet rs = stmt.getGeneratedKeys();
@@ -123,7 +123,8 @@ public class AddressDaoJdbc implements AddressDao {
                 int rowsAffected = stmt.executeUpdate();
                 
                 if (rowsAffected != 1){
-                    throw new SQLException("No row was updated for address with id = " + address.getId());
+                    return false;
+                	//throw new SQLException("No row was updated for address with id = " + address.getId());
                 }
 
             } catch (SQLException e) {

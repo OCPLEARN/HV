@@ -8,6 +8,8 @@
 	3. U:	boolean
 	4. D:	boolean
 	
+	CRUD operations INSERT/UPDATE rows affected != 1 return false
+	
 	####TablePageViewData Standard values to be set in the DAO Interface####
 	
 	 int offset = 0; 

@@ -136,5 +136,12 @@ public class BuildingOwner implements Comparable<BuildingOwner> {
 		
 		return this.getContact().compareTo(o.getContact());
 	}
+
+	@Override
+	public String toString() {
+		return "BuildingOwner [id=" + id + ", contact=" + contact + ", loginUser=" + loginUser + "]";
+	}
+	
+	
 	
 }
