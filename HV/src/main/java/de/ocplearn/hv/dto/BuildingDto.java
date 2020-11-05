@@ -92,14 +92,14 @@ public class BuildingDto implements Comparable<BuildingDto>{
 	/**
 	 * @return the buidlinType
 	 */
-	public BuildingType getBuildinType() {
+	public BuildingType getBuildingType() {
 		return buildingType;
 	}
 
 	/**
 	 * @param buidlinType the buidlinType to set
 	 */
-	public void setBuidlinType(BuildingType buildingType) {
+	public void setBuildingType(BuildingType buildingType) {
 		this.buildingType = buildingType;
 	}
 

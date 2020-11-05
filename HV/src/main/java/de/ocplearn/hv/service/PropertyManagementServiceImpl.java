@@ -59,9 +59,10 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		
 		
 		PropertyManagement propertyManagement = propertyManagementMapper.propertyManagementDtoToPropertyManagement(propertyManagementDto);
-		
+		System.out.println("CREATE: "+propertyManagement);
 		if(	propertyManagementDao.save(propertyManagement)) {
 			System.out.println("======");
+			System.out.println(propertyManagement.getPrimaryLoginUser().getId());
 			System.out.println(propertyManagement.getPrimaryLoginUser());
 		propertyManagementDto.setId(propertyManagement.getId());
 		return true;

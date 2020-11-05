@@ -16,6 +16,13 @@ public class PropertyManagement implements Comparable<PropertyManagement> {
 	
 	
 	
+	@Override
+	public String toString() {
+		return "PropertyManagement [id=" + id + ", primaryLoginUser=" + primaryLoginUser + ", primaryContact="
+				+ primaryContact + ", companyContact=" + companyContact + ", paymentType=" + paymentType
+				+ ", loginUsers=" + loginUsers + "]";
+	}
+
 	public PropertyManagement() {
 	
 	}

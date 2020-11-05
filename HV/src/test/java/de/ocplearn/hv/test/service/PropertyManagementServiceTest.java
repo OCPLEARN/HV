@@ -50,7 +50,7 @@ public class PropertyManagementServiceTest {
 	public static Supplier<LoginUserDto> loginUserDtoEmployeeSupplier = () -> {return new LoginUserDto("EmployeeTest" + System.currentTimeMillis(), Role.EMPLOYEE, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
 	
 	// needs to be static to hold the id of employee which is returned on saving / creating the dto
-	private static LoginUserDto employee;// = loginUserDtoEmployeeSupplier.get();
+	public static LoginUserDto employee;// = loginUserDtoEmployeeSupplier.get();
 	private static LoginUserDto employee2;// = loginUserDtoEmployeeSupplier.get();
 	static {
 		employee = loginUserDtoEmployeeSupplier.get();
@@ -61,8 +61,25 @@ public class PropertyManagementServiceTest {
 		employee2 = loginUserDtoEmployeeSupplier.get();
 	}
 	
+	public static Supplier<LoginUserDto> loginUserDtoSupplier = () -> {return new LoginUserDto("logUName" + System.currentTimeMillis(), Role.PROPERTY_MANAGER, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
 		
-		@Autowired
+	public static Supplier<ContactDto>  primaryContactDtoSupplier = () -> {return new ContactDto.ContactBuilder()
+			.setcompanyName("ABC")
+			.setCompany(true)
+			.setEmail("email@email.de")
+			.setFirstName("Armin")
+			.setLastName("Rohde")
+			.setSex("M")
+			.setAddressList(listAddressDtoSupplierWithData.get())
+			.build();};
+
+	
+	public static Supplier<ContactDto> companyContactDtoSupplier = primaryContactDtoSupplier;
+	
+	public static Supplier<List<LoginUserDto>> loginUserListDtoSupplier = ArrayList::new;
+	
+	
+	@Autowired
 	public PropertyManagementServiceTest( PropertyManagementService propertyManagementService,UserService userService ){
 		this.propertyManagementService = propertyManagementService;
 		this.userService=userService;
@@ -83,7 +100,7 @@ public class PropertyManagementServiceTest {
 		
 		
 		
-		Supplier<LoginUserDto> loginUserDtoSupplier = () -> {return new LoginUserDto("logUName" + System.currentTimeMillis(), Role.PROPERTY_MANAGER, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
+		
 			
 		// AddressDto addressDto = AddressDaoTest.testAddressDtoSupplier.get();
 		// Zwei Aufruf von Supplier<ContactDto> ergibt zwei  ContactDto - Objekte, 
@@ -91,20 +108,10 @@ public class PropertyManagementServiceTest {
 		// Die Folge: in der DB wird zweimal dasselbe Objekt mit derselben addressId gespeichert
 		// Die Lösung: zwei einzelne Aufrufe des AdressList-Suppliers
 		
-		Supplier<ContactDto>  primaryContactDtoSupplier = () -> {return new ContactDto.ContactBuilder()
-																						.setcompanyName("ABC")
-																						.setCompany(true)
-																						.setEmail("email@email.de")
-																						.setFirstName("Armin")
-																						.setLastName("Rohde")
-																						.setSex("M")
-																						.setAddressList(listAddressDtoSupplierWithData.get())
-																						.build();};
-			
-		Supplier<ContactDto> companyContactDtoSupplier = primaryContactDtoSupplier;
+		
+		
 				
-		Supplier<List<LoginUserDto>> loginUserListDtoSupplier = ArrayList::new;
-	
+		
 		
 		propertyManagementDto = new PropertyManagementDto(  loginUserDtoSupplier.get(), 
 				  primaryContactDtoSupplier.get(),  paymentType, loginUserListDtoSupplier.get(),  companyContactDtoSupplier.get());
@@ -112,7 +119,7 @@ public class PropertyManagementServiceTest {
 				
 		
 	//	Test Order of TestMethods	
-	//	System.out.println("1");
+	//	System.out.println("1 : create prop mgmt" + propertyManagementDto);
 
 		
 		Assertions.assertTrue(propertyManagementService.createPropertyManagement(propertyManagementDto));

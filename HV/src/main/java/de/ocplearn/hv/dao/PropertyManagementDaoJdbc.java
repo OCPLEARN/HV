@@ -169,8 +169,14 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 			stmt.setString( 2, propertyManagement.getPaymentType().toString() );
 			stmt.setInt( 3, propertyManagement.getPrimaryContact().getId() );
 			stmt.setInt( 4, propertyManagement.getCompanyContact().getId() );
+<<<<<<< HEAD
 
 			if (stmt.executeUpdate() != 1) return false;
+=======
+			System.out.println("here");
+			if (stmt.executeUpdate() != 1) return false;
+			
+>>>>>>> branch 'develop' of https://github.com/OCPLEARN/HV.git
 			else {
 				ResultSet resultSet = stmt.getGeneratedKeys();	
 				resultSet.next();
