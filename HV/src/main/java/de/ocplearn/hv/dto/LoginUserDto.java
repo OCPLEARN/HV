@@ -26,12 +26,6 @@ public class LoginUserDto implements Comparable<LoginUserDto> {
     @NotNull
     private byte [] passwHash;
     private byte [] salt;
-    @Override
-	public String toString() {
-		return "LoginUserDto [id=" + id + ", loginUserName=" + loginUserName + ", role=" + role + ", locale=" + locale
-				+ "]";
-	}
-
 
 	private Locale locale;
 
@@ -124,6 +118,11 @@ public class LoginUserDto implements Comparable<LoginUserDto> {
         return true;
     }
 
+    @Override
+   	public String toString() {
+   		return "LoginUserDto [id=" + id + ", loginUserName=" + loginUserName + ", role=" + role + ", locale=" + locale
+   				+ "]";
+   	}
     
     /**
      * Compares by loginUserName

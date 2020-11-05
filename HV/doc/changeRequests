@@ -12,7 +12,7 @@ Copy Constructor in Tests einbauen
 
 Eingeloggt im PropertyManager, neuen LoginUser mit Email anlegen  und automatisch in List<LoginUser> loginUsers speichern 
 
-	
+Maximal 1 primary business address im Primary loginuser eines Propertymgmt objektes	
 
 
 
