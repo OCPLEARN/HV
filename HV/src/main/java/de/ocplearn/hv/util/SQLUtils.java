@@ -6,16 +6,35 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Static helper methods in SQL Daos
+ * */
 public class SQLUtils {
 	
-	
-	public static String createSQLString (String TABLE_NAME_PREFIX, List<String> tableColumnNames) {
+	/**
+	 * Build sql String for given sql column list. Will create result table, 
+	 * where column names are prefixed with table name.
+	 *
+	 * @param TABLE_NAME_PREFIX 
+	 * @param List of column names to convert
+	 * @param List of column names (startsWith()) to exclude from conversion
+	 * */
+	public static String createSQLString (String TABLE_NAME_PREFIX, List<String> tableColumnNames, List<String> excludedColumns) {
 		
 			Set<String> tmp = new HashSet<>( tableColumnNames );
 			Iterator<String> it =  tmp.iterator();
 			StringBuilder sbFull = new StringBuilder();
-			while ( it.hasNext() ) {
+			colLoop: while ( it.hasNext() ) {
+				
 				String col = it.next();
+				
+				for ( String s : excludedColumns ) {
+					if ( col.startsWith(s) ) {
+						sbFull.append(col).append(", ");
+						continue colLoop;
+					};
+				}			
+				
 				StringBuilder sb = new StringBuilder();
 				// replace 
 				// SELECT * 

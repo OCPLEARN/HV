@@ -35,10 +35,15 @@ public class AddressDaoJdbc implements AddressDao {
 
 	private static final String TABLE_NAME = "address";
 	private static final String TABLE_NAME_PREFIX = "ad";
-	private static final String COLUMNS = SQLUtils.createSQLString(TABLE_NAME_PREFIX, Arrays.asList(
+	private static final String COLUMNS = SQLUtils.createSQLString(
+			TABLE_NAME_PREFIX, 
+			Arrays.asList(
 		"id", "timeStmpAdd", "timeStmpEdit", "street", "houseNumber",
-		"adrLine1", "adrLine2", "city", "zip", "province", "country", "ST_X(coordinate)", "ST_Y(coordinate)"
-			));	
+		"adrLine1", "adrLine2", "city", "zip", "province", "country",
+		"ST_X(coordinate)", "ST_Y(coordinate)"
+			),
+			Arrays.asList("ST_X","ST_Y")
+			);	
 	
 	// ST_X(coordinate),ST_Y(coordinate)
 	
@@ -146,7 +151,6 @@ public class AddressDaoJdbc implements AddressDao {
 		
 		return true;
 	}
-	
 
 	@Override
 	public boolean delete(Address address) {
@@ -167,9 +171,12 @@ public class AddressDaoJdbc implements AddressDao {
 	@Override
 	public Optional<Address> findById(int id) {
 
+		String sql = "SELECT "+AddressDaoJdbc.COLUMNS+" FROM address AS "+AddressDaoJdbc.TABLE_NAME_PREFIX+" WHERE id = ?;";
+		//System.out.println("findById() " + sql);		
+		
 		try(
 				Connection con = this.datasource.getConnection();
-				PreparedStatement stmt = con.prepareStatement( "SELECT "+AddressDaoJdbc.COLUMNS+" FROM address WHERE id = ?;" );
+				PreparedStatement stmt = con.prepareStatement( sql );
 				)
 		{
 			stmt.setInt(1, id );
@@ -183,9 +190,6 @@ public class AddressDaoJdbc implements AddressDao {
 	    }		
 	}
 
-
-
-	
 	private Address mapRowToAddress (ResultSet resultSet) throws SQLException {
 		// id,street,houseNumber,adrline1,adrline2,city,zip,province,country,coordinate
 		Address address = new Address();
@@ -197,10 +201,9 @@ public class AddressDaoJdbc implements AddressDao {
 		address.setZipCode( resultSet.getString(AddressDaoJdbc.TABLE_NAME_PREFIX + ".zip") );
 		address.setProvince(resultSet.getString(AddressDaoJdbc.TABLE_NAME_PREFIX + ".province") );
 		address.setCountry( resultSet.getString(AddressDaoJdbc.TABLE_NAME_PREFIX + ".country") );
-		address.setLatitude( resultSet.getDouble(AddressDaoJdbc.TABLE_NAME_PREFIX + ".ST_X(coordinate)") ); // ST_X(coordinate)
-		address.setLongitude( resultSet.getDouble(AddressDaoJdbc.TABLE_NAME_PREFIX + ".ST_Y(coordinate)") ); // ST_Y(coordinate)
+		address.setLatitude( resultSet.getDouble("ST_X(coordinate)") ); // ST_X(coordinate)
+		address.setLongitude( resultSet.getDouble("ST_Y(coordinate)") ); // ST_Y(coordinate)
 		return address;
 	}
-	
 	
 }
