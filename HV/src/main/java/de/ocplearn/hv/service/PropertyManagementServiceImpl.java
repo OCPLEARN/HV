@@ -173,8 +173,8 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		
 		List<PropertyManagementDto> propertyManagements = new ArrayList<PropertyManagementDto>();
 		
-		propertyManagements.add()
+		//propertyManagements.add()
 		
-		return ;
+		return null;
 	}
 }
