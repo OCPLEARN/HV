@@ -25,6 +25,7 @@ import de.ocplearn.hv.model.BuildingOwner;
 import de.ocplearn.hv.model.Contact;
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.util.LoggerBuilder;
+import de.ocplearn.hv.util.SQLUtils;
 import de.ocplearn.hv.util.TablePageViewData;
 
 /**
@@ -35,27 +36,8 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 
 	private static final String TABLE_NAME = "buildingowner";
 	private static final String TABLE_NAME_PREFIX = "bo";
-	private static final String COLUMNS;
-	static {
-		Set<String> tmp = new HashSet<>( Arrays.asList( "id", "timeStmpAdd", "timeStmpEdit", "contactId", "loginUserId" ) );
-		Iterator<String> it =  tmp.iterator();
-		StringBuilder sbFull = new StringBuilder();
-		while ( it.hasNext() ) {
-			String col = it.next();
-			StringBuilder sb = new StringBuilder();
-			// SELECT * 
-			// SELECT bo.id AS 'bo.id' FROM buildingowner AS bo
-			sb
-			.append(TABLE_NAME_PREFIX).append('.').append(col)
-			.append(" AS '")
-			.append(TABLE_NAME_PREFIX).append('.').append(col)
-			.append("', ");
-			sbFull.append(sb.toString());
-		}
-		sbFull.delete(sbFull.length()-2, sbFull.length());
-		COLUMNS = sbFull.toString();
-		//System.out.println("columns = " + COLUMNS);
-	}
+	private static final String COLUMNS = SQLUtils.createSQLString(TABLE_NAME_PREFIX, Arrays.asList("id", "timeStmpAdd", "timeStmpEdit", "contactId", "loginUserId"));
+
 	
 	
 	/* logger */

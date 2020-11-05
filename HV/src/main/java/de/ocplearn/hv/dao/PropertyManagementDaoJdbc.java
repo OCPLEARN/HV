@@ -258,8 +258,10 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 	public List<PropertyManagement> findPropertyManagementByComanyName(String name) {
 		
 		String sql;
-		sql = "SELECT * FROM propertymanagement AS pm \n" + 
-				"INNER JOIN contact AS co ON pm.companyContactId = co.id WHERE co.companyName LIKE ?;";
+		sql = "SELECT * FROM propertymanagement AS pm INNER JOIN contact AS co ON pm.companyContactId = co.id WHERE co.companyName LIKE ?;";
+		
+		
+		
 		
 		List<PropertyManagement> propertyManagements = new ArrayList<PropertyManagement>();
 		

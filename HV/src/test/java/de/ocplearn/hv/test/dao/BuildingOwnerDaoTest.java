@@ -29,13 +29,17 @@ public class BuildingOwnerDaoTest {
 	/**
 	 * 
 	 * */
-	@Test
-	public void testFindBuildingOwner_Id_OwnerFound() {
-		
-		Optional<BuildingOwner> opt = this.buildingOwnerDao.findByIdFull(1);
-		Assertions.assertTrue(opt.isPresent());
-		//System.out.println( "testFindBuildingOwner_Id_OwnerFound() : " + opt.get() );
-	}
+	
+// TODO	 BuildingOwnerDaoTest 
+//	@Test
+//	public void testFindBuildingOwner_Id_OwnerFound() {
+//		
+//		
+//		
+//		Optional<BuildingOwner> opt = this.buildingOwnerDao.findByIdFull(1);
+//		Assertions.assertTrue(opt.isPresent());
+//		//System.out.println( "testFindBuildingOwner_Id_OwnerFound() : " + opt.get() );
+//	}
 	
 	
 }
