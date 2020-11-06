@@ -28,6 +28,7 @@ import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.util.Config;
 import de.ocplearn.hv.util.DBConnectionPool;
 import de.ocplearn.hv.util.LoggerBuilder;
+import de.ocplearn.hv.util.SQLUtils;
 import de.ocplearn.hv.util.StaticHelpers;
 
 
@@ -37,6 +38,15 @@ import de.ocplearn.hv.util.StaticHelpers;
  * */
 @Component("LoginUserDaoJdbc")
 public class LoginUserDaoJdbc implements LoginUserDao {
+	
+	private static final String TABLE_NAME = "loginUser";
+	private static final String TABLE_NAME_PREFIX = "lu";
+	private static final String COLUMNS = SQLUtils.createSQLString(
+			TABLE_NAME_PREFIX, 
+			Arrays.asList( "id", "timeStmpAdd", "timeStmpEdit", "loginUserName", "passwHash",
+							"salt", "loginUserRole", "locale" ),
+			new ArrayList()
+			);	
 
 	private Logger logger = LoggerBuilder.getInstance().build(LoginUserDaoJdbc.class);
 	
@@ -50,6 +60,9 @@ public class LoginUserDaoJdbc implements LoginUserDao {
     public LoginUserDaoJdbc(@Qualifier("datasource1") DataSource datasource ) {
     	this.datasource = datasource;
     }
+    
+    
+    
     
 	@Override
 	public boolean save(LoginUser loginUser) {
@@ -195,13 +208,15 @@ public class LoginUserDaoJdbc implements LoginUserDao {
     public LoginUser mapRowToLoginUser(ResultSet resultSet) throws SQLException {
     	 LoginUser loginUser = new LoginUser();
          
-         loginUser.setId( resultSet.getInt("id") );
-         loginUser.setLoginUserName(resultSet.getString("loginUserName"));
-         loginUser.setPasswHash(resultSet.getBytes("passwHash"));
-         loginUser.setSalt(resultSet.getBytes("salt"));
-         loginUser.setRole( Role.valueOf( resultSet.getString("loginUserRole") )  );
-         loginUser.setLocale(new Locale(resultSet.getString("locale"))  );   
+         loginUser.setId( resultSet.getInt(TABLE_NAME_PREFIX +  ".id") );
+         loginUser.setLoginUserName(resultSet.getString(TABLE_NAME_PREFIX + ".loginUserName"));
+         loginUser.setPasswHash(resultSet.getBytes(TABLE_NAME_PREFIX + ".passwHash"));
+         loginUser.setSalt(resultSet.getBytes(TABLE_NAME_PREFIX + ".salt"));
+         loginUser.setRole( Role.valueOf( resultSet.getString(TABLE_NAME_PREFIX + ".loginUserRole") )  );
+         loginUser.setLocale(new Locale(resultSet.getString(TABLE_NAME_PREFIX + ".locale"))  );   
          return loginUser;
+         
+         
     }
     
 	@Override
@@ -223,7 +238,7 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 	public boolean userAlreadyExists(String loginUserName) {
 		// read user from database
         try(Connection con = getConnection();
-        		PreparedStatement stmt = con.prepareStatement( "SELECT * FROM loginUser WHERE loginUserName = ?;" );) {
+        		PreparedStatement stmt = con.prepareStatement( "SELECT " + COLUMNS + " FROM loginUser  AS " + TABLE_NAME_PREFIX + " WHERE loginUserName = ?;" );) {
                 
                 stmt.setString(1, loginUserName  );
                 ResultSet rs = stmt.executeQuery();
@@ -292,7 +307,7 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 		 List<LoginUser> loginUserList = new ArrayList<>();
 
 		 try(Connection connection = getConnection(); 
-			 PreparedStatement stmt = connection.prepareStatement( "SELECT * FROM loginUser ORDER BY " 
+			 PreparedStatement stmt = connection.prepareStatement( "SELECT  " + COLUMNS + "  FROM loginUser AS " + TABLE_NAME_PREFIX + " ORDER BY " 
 					 + orderBy 
 					 + " " 
 					 + orderDirection 
@@ -310,14 +325,8 @@ public class LoginUserDaoJdbc implements LoginUserDao {
              ResultSet resultSet = stmt.executeQuery();          
              
              while (resultSet.next()) {
-            	 LoginUser loginUser = new LoginUser();
-            	 loginUser.setId(resultSet.getInt("id"));
-            	 loginUser.setLoginUserName(resultSet.getString("loginUserName"));
-            	 loginUser.setRole(Role.valueOf(resultSet.getString("loginUserRole")));
-            	 loginUser.setPasswHash(resultSet.getBytes("passwHash"));
-            	 loginUser.setSalt(resultSet.getBytes("salt"));
             	 
-            	 loginUserList.add(loginUser);
+            	 loginUserList.add(this.mapRowToLoginUser(resultSet));
             	 //System.out.println(loginUser.getLoginUserName());
 
              }

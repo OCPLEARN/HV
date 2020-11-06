@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -24,6 +25,7 @@ import de.ocplearn.hv.model.Unit;
 import de.ocplearn.hv.util.Config;
 import de.ocplearn.hv.util.DBConnectionPool;
 import de.ocplearn.hv.util.LoggerBuilder;
+import de.ocplearn.hv.util.SQLUtils;
 import de.ocplearn.hv.util.TablePageViewData;
 
 /**
@@ -31,6 +33,15 @@ import de.ocplearn.hv.util.TablePageViewData;
  * */
 @Repository
 public class ContactDaoJdbc implements ContactDao {
+	
+	private static final String TABLE_NAME = "contact";
+	private static final String TABLE_NAME_PREFIX = "co";
+	private static final String COLUMNS = SQLUtils.createSQLString(
+			TABLE_NAME_PREFIX, 
+			Arrays.asList( "id", "timeStmpAdd", "timeStmpEdit", "sex", "firstName",
+							"lastName", "isCompany", "companyName", "phone", "mobilePhone", "fax", "website", "email" ),
+			new ArrayList()
+			);	
 
 	// logger
 	private Logger logger = LoggerBuilder.getInstance().build(ContactDaoJdbc.class);
@@ -154,7 +165,7 @@ public class ContactDaoJdbc implements ContactDao {
 	public Optional<Contact> findContactById(int id) {
 		
 		try(Connection connection = datasource.getConnection();
-				PreparedStatement stmt = connection.prepareStatement("SELECT * FROM contact WHERE id = ?;");
+				PreparedStatement stmt = connection.prepareStatement("SELECT " + COLUMNS + " FROM contact AS " + TABLE_NAME_PREFIX + " WHERE id = ?;");
 				){
 			
 			stmt.setInt(1, id);
@@ -174,10 +185,10 @@ public class ContactDaoJdbc implements ContactDao {
 	public List<Contact> findContactsByLastName(String lastName, TablePageViewData tablePageViewData) {
 		
 		try(Connection connection = datasource.getConnection();
-				PreparedStatement stmt = connection.prepareStatement("SELECT * FROM contact "
-						+ "ORDER BY ? ?"
-						+ "LIMIT ?,?"
-						+ "WHERE lastName = ?;");){
+				PreparedStatement stmt = connection.prepareStatement("SELECT " + COLUMNS + " FROM contact AS " + TABLE_NAME_PREFIX 
+						+ " ORDER BY ? ?"
+						+ " LIMIT ?,?"
+						+ " WHERE lastName = ?;");){
 			String i1 = tablePageViewData.getOrderBy();
 			String i2 = tablePageViewData.getOrderByDirection();
 			stmt.setString(1, i1);
@@ -216,18 +227,18 @@ public class ContactDaoJdbc implements ContactDao {
 
 		List<Contact> contacts = new ArrayList<>();
 
-		String sql = "SELECT * FROM contacts ORDER BY ? ? LIMIT ?, ?  WHERE isCompany = ?;";
+		String sql = "SELECT " + COLUMNS + " FROM contacts AS " + TABLE_NAME_PREFIX + " ORDER BY ? ? LIMIT ?, ?  WHERE isCompany = ?;";
 		
 		try (
 			Connection connection = datasource.getConnection();
 			PreparedStatement stmt = connection.prepareStatement(sql);
-				)
-		{
+			) {
 			stmt.setString(1, tablePageViewData.getOrderBy()  );
 			stmt.setString(2, tablePageViewData.getOrderByDirection()  );
 			stmt.setInt(3, tablePageViewData.getOffset()  );
 			stmt.setInt(4, tablePageViewData.getRowCount()  );
 			stmt.setString(5, (isCompany ? "1" : "0"));
+			
 			
 			ResultSet resultSet = stmt.executeQuery();
 			while( resultSet.next() ) {
@@ -389,17 +400,17 @@ public class ContactDaoJdbc implements ContactDao {
 	private Contact mapRowToContact( ResultSet resultSet ) throws SQLException {
 		Contact contact = new Contact();
 		
-		contact.setId(resultSet.getInt("id"));
-		contact.setSex(resultSet.getString("sex"));
-		contact.setFirstName(resultSet.getString("firstName"));
-		contact.setLastName(resultSet.getString("lastName"));
-		contact.setCompany(resultSet.getBoolean("isCompany"));
-		contact.setCompanyName(resultSet.getString("companyName"));
-		contact.setPhone(resultSet.getString("phone"));
-		contact.setMobilePhone(resultSet.getString("mobilePhone"));
-		contact.setFax(resultSet.getString("fax"));
-		contact.setWebsite(resultSet.getString("website"));
-		contact.setEmail(resultSet.getString("email"));
+		contact.setId(resultSet.getInt(TABLE_NAME_PREFIX + ".id"));
+		contact.setSex(resultSet.getString(TABLE_NAME_PREFIX + ".sex"));
+		contact.setFirstName(resultSet.getString(TABLE_NAME_PREFIX + ".firstName"));
+		contact.setLastName(resultSet.getString(TABLE_NAME_PREFIX + ".lastName"));
+		contact.setCompany(resultSet.getBoolean(TABLE_NAME_PREFIX + ".isCompany"));
+		contact.setCompanyName(resultSet.getString(TABLE_NAME_PREFIX + ".companyName"));
+		contact.setPhone(resultSet.getString(TABLE_NAME_PREFIX + ".phone"));
+		contact.setMobilePhone(resultSet.getString(TABLE_NAME_PREFIX + ".mobilePhone"));
+		contact.setFax(resultSet.getString(TABLE_NAME_PREFIX + ".fax"));
+		contact.setWebsite(resultSet.getString(TABLE_NAME_PREFIX + ".website"));
+		contact.setEmail(resultSet.getString(TABLE_NAME_PREFIX + ".email"));
 		
 		contact.setAddresses( this.findAddressesByContactId(contact.getId(), AddressDao.tablePageViewData ) );		
 		

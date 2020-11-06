@@ -166,7 +166,7 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 		BuildingOwner buildingOwner = null;
 		
 		//String sql = "SELECT * FROM buildingowner WHERE id = ?;";
-		String sql = "SELECT "+COLUMNS+", co.*,lu.*  FROM buildingOwner AS " + TABLE_NAME_PREFIX + " " 
+		String sql = "SELECT "+ COLUMNS +", co.*,lu.*  FROM buildingOwner AS " + TABLE_NAME_PREFIX + " " 
 		+ "JOIN contact co ON bo.contactId = co.id "
 		+ "JOIN loginuser lu ON bo.loginUserId = lu.id "
 		+ "WHERE bo.id = ?;";

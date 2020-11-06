@@ -130,24 +130,23 @@ public class BuildingDaoJdbc implements BuildingDao{
 
 	@Override
 	public Optional<Building> findById(int id) {
-				String sql = "SELECT "+COLUMNS+", pm.*, ad.*  FROM building AS bu " 
+				String sql = "SELECT " + COLUMNS + ", pm.*, " + AddressDaoJdbc.COLUMNS +"  FROM building AS " + TABLE_NAME_PREFIX 
 				+ "JOIN propertymanagement pm ON bu.propertyManagementId = bu.id "
-				+ "JOIN address ad ON bu.addressId = ad.id "
-				+ "WHERE bu.id = ?;";
+				+ "JOIN " + AddressDaoJdbc.TABLE_NAME + " AS " + AddressDaoJdbc.TABLE_NAME_PREFIX 
+				+ " ON " + TABLE_NAME_PREFIX + ".addressId = " + AddressDaoJdbc.TABLE_NAME_PREFIX + ".id " 
+				+ "WHERE " + TABLE_NAME_PREFIX + ".id = ?;";
 				
-				try(
-						Connection con = this.dataSource.getConnection();
-						PreparedStatement stmt = con.prepareStatement( sql );
-						)
-				{
-					stmt.setInt(1, id );
-					ResultSet resultSet = stmt.executeQuery();
-					return resultSet.next() ? Optional.of(this.mapRowToBuilding(resultSet)) : Optional.empty();
-				}
-				catch (SQLException e) {
-			    	e.printStackTrace(); 
-			        logger.log(Level.WARNING, e.getMessage());
-			        throw new DataAccessException("Unable to get Data from DB.");            
+		try( Connection con = this.dataSource.getConnection();
+			 PreparedStatement stmt = con.prepareStatement( sql );
+			) {
+				stmt.setInt(1, id );
+				ResultSet resultSet = stmt.executeQuery();
+				return resultSet.next() ? Optional.of(this.mapRowToBuilding(resultSet)) : Optional.empty();
+				
+		} catch (SQLException e) {
+			    e.printStackTrace(); 
+			    logger.log(Level.WARNING, e.getMessage());
+			    throw new DataAccessException("Unable to get Data from DB.");            
 			    }		
 	}
 

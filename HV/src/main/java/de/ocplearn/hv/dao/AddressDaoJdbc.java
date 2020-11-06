@@ -33,9 +33,9 @@ import de.ocplearn.hv.util.TablePageViewData;
 @Component("AddressDaoJdbc")
 public class AddressDaoJdbc implements AddressDao {
 
-	private static final String TABLE_NAME = "address";
-	private static final String TABLE_NAME_PREFIX = "ad";
-	private static final String COLUMNS = SQLUtils.createSQLString(
+	public static final String TABLE_NAME = "address";
+	public static final String TABLE_NAME_PREFIX = "ad";
+	public static final String COLUMNS = SQLUtils.createSQLString(
 			TABLE_NAME_PREFIX, 
 			Arrays.asList(
 		"id", "timeStmpAdd", "timeStmpEdit", "street", "houseNumber",
