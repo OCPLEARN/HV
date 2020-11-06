@@ -39,6 +39,7 @@ public interface BuildingDao {
 	 boolean delete(Building building);
 	 
 	 Optional<Building> findById(int id);
+	 Optional<Building> findByIdPartial(int id);
 	 List <Integer> findBuildingOwnerIdsByBuildingId(int buildingId, TablePageViewData tablePageViewData);
 	 List <Building> getAllBuildings();
 	 

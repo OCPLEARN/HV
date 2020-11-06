@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -19,11 +21,22 @@ import de.ocplearn.hv.exceptions.DataAccessException;
 import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.BuildingOwner;
 import de.ocplearn.hv.util.LoggerBuilder;
+import de.ocplearn.hv.util.SQLUtils;
 import de.ocplearn.hv.util.TablePageViewData;
 
 @Repository
 public class BuildingDaoJdbc implements BuildingDao{
-
+	
+	private static final String TABLE_NAME = "building";
+	private static final String TABLE_NAME_PREFIX = "bu";
+	private static final String COLUMNS = SQLUtils.createSQLString(
+			TABLE_NAME_PREFIX, 
+			Arrays.asList(
+		"id", "timeStmpAdd", "timeStmpEdit", "propertyManagementId", "buildingName",
+		"addressId", "buildingType", "note"	),
+			new ArrayList<String>()
+			);
+	
 	private DataSource dataSource;
 	
 	public Logger logger = LoggerBuilder.getInstance().build( PropertyManagementDaoJdbc.class );
@@ -80,8 +93,33 @@ public class BuildingDaoJdbc implements BuildingDao{
 	}
 	
 	private boolean update(Building building) {
-		// TODO Auto-generated method stub
-		return false;
+		String sql = "UPDATE building SET propertyManagementId=?, buildingName=?, addressId=?, buildingType=?, note=? WHERE id =?;"; 
+		
+		  try(Connection con = this.dataSource.getConnection();
+					PreparedStatement stmt = con.prepareStatement(sql);) {
+			  stmt.setInt(1, building.getPropertyManagement().getId());
+				stmt.setString(2, building.getName());
+				stmt.setInt(3, building.getAddress().getId());
+				stmt.setString(4, building.getBuildingType().toString());
+				stmt.setString(5, building.getNote());
+				stmt.setInt(6, building.getId());
+				
+				 int rowsAffected = stmt.executeUpdate();
+	                
+	                if (rowsAffected != 1){
+	                    return false;
+	                }else {
+	                	return true;
+	                }
+	                
+	               
+		  } catch (SQLException e) {
+				e.printStackTrace();
+				logger.log(Level.WARNING, e.getMessage());
+				throw new DataAccessException("Unable to get Data from DB. " + e.getMessage());	
+			}
+
+		
 	}
 
 	@Override
@@ -92,9 +130,32 @@ public class BuildingDaoJdbc implements BuildingDao{
 
 	@Override
 	public Optional<Building> findById(int id) {
-		// TODO Auto-generated method stub
+				String sql = "SELECT "+COLUMNS+", pm.*, ad.*  FROM building AS bu " 
+				+ "JOIN propertymanagement pm ON bu.propertyManagementId = bu.id "
+				+ "JOIN address ad ON bu.addressId = ad.id "
+				+ "WHERE bu.id = ?;";
+				
+				try(
+						Connection con = this.dataSource.getConnection();
+						PreparedStatement stmt = con.prepareStatement( sql );
+						)
+				{
+					stmt.setInt(1, id );
+					ResultSet resultSet = stmt.executeQuery();
+					return resultSet.next() ? Optional.of(this.mapRowToBuilding(resultSet)) : Optional.empty();
+				}
+				catch (SQLException e) {
+			    	e.printStackTrace(); 
+			        logger.log(Level.WARNING, e.getMessage());
+			        throw new DataAccessException("Unable to get Data from DB.");            
+			    }		
+	}
+
+	public Building mapRowToBuilding(ResultSet resultSet) {
+		
 		return null;
 	}
+
 
 	@Override
 	public List<Integer> findBuildingOwnerIdsByBuildingId(int buildingId, TablePageViewData tablePageViewData) {
@@ -118,6 +179,13 @@ public class BuildingDaoJdbc implements BuildingDao{
 	public boolean removeBuildingOwnerFromBuilding(BuildingOwner buildingOwner, Building building) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+
+	@Override
+	public Optional<Building> findByIdPartial(int id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
