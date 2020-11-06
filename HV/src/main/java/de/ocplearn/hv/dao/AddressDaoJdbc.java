@@ -42,10 +42,11 @@ public class AddressDaoJdbc implements AddressDao {
 		"adrLine1", "adrLine2", "city", "zip", "province", "country",
 		"ST_X(coordinate)", "ST_Y(coordinate)"
 			),
-			Arrays.asList("ST_X","ST_Y")
+			Arrays.asList("ST_X(coordinate)","ST_Y(coordinate)")
 			);	
 	
 	// ST_X(coordinate),ST_Y(coordinate)
+	// ST_X(coordinate) AS 'ad.ST_X(coordinate)' DOES NOT WORK
 	
 	/* logger */
 	private Logger logger = LoggerBuilder.getInstance().build(AddressDaoJdbc.class);

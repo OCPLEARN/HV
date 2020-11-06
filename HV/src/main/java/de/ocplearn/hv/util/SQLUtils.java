@@ -27,9 +27,9 @@ public class SQLUtils {
 			colLoop: while ( it.hasNext() ) {
 				
 				String col = it.next();
-				
-				for ( String s : excludedColumns ) {
-					if ( col.startsWith(s) ) {
+				// check current column is in excluded list
+				for ( String excludedColumn : excludedColumns ) {
+					if ( col.equals(excludedColumn) ) {
 						sbFull.append(col).append(", ");
 						continue colLoop;
 					};
