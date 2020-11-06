@@ -37,10 +37,12 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 
 	private static final String TABLE_NAME = "buildingowner";
 	private static final String TABLE_NAME_PREFIX = "bo";
-	private static final String COLUMNS = SQLUtils.createSQLString(TABLE_NAME_PREFIX, Arrays.asList("id", "timeStmpAdd", "timeStmpEdit", "contactId", "loginUserId"), new ArrayList());
+	private static final String COLUMNS = SQLUtils.createSQLString(
+			TABLE_NAME_PREFIX, 
+			Arrays.asList("id", "timeStmpAdd", "timeStmpEdit", "contactId", "loginUserId"), 
+			new ArrayList()
+			);
 
-	
-	
 	/* logger */
 	private Logger logger = LoggerBuilder.getInstance().build(BuildingOwnerDaoJdbc.class);
 	
@@ -164,7 +166,7 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 		BuildingOwner buildingOwner = null;
 		
 		//String sql = "SELECT * FROM buildingowner WHERE id = ?;";
-		String sql = "SELECT "+COLUMNS+", co.*,lu.*  FROM buildingOwner AS bo " 
+		String sql = "SELECT "+COLUMNS+", co.*,lu.*  FROM buildingOwner AS " + TABLE_NAME_PREFIX + " " 
 		+ "JOIN contact co ON bo.contactId = co.id "
 		+ "JOIN loginuser lu ON bo.loginUserId = lu.id "
 		+ "WHERE bo.id = ?;";

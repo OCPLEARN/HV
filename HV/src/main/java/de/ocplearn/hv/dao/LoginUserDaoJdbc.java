@@ -192,7 +192,7 @@ public class LoginUserDaoJdbc implements LoginUserDao {
         return list;
     }	
 	
-    public static LoginUser mapRowToLoginUser(ResultSet resultSet) throws SQLException {
+    public LoginUser mapRowToLoginUser(ResultSet resultSet) throws SQLException {
     	 LoginUser loginUser = new LoginUser();
          
          loginUser.setId( resultSet.getInt("id") );
