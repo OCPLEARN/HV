@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -36,7 +37,7 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 
 	private static final String TABLE_NAME = "buildingowner";
 	private static final String TABLE_NAME_PREFIX = "bo";
-	private static final String COLUMNS = SQLUtils.createSQLString(TABLE_NAME_PREFIX, Arrays.asList("id", "timeStmpAdd", "timeStmpEdit", "contactId", "loginUserId"));
+	private static final String COLUMNS = SQLUtils.createSQLString(TABLE_NAME_PREFIX, Arrays.asList("id", "timeStmpAdd", "timeStmpEdit", "contactId", "loginUserId"), new ArrayList());
 
 	
 	

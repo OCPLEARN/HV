@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -22,6 +23,7 @@ import de.ocplearn.hv.exceptions.DataAccessException;
 import de.ocplearn.hv.model.Address;
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.util.LoggerBuilder;
+import de.ocplearn.hv.util.SQLUtils;
 import de.ocplearn.hv.util.TablePageViewData;
 
 /**
@@ -31,6 +33,21 @@ import de.ocplearn.hv.util.TablePageViewData;
 @Component("AddressDaoJdbc")
 public class AddressDaoJdbc implements AddressDao {
 
+	private static final String TABLE_NAME = "address";
+	private static final String TABLE_NAME_PREFIX = "ad";
+	private static final String COLUMNS = SQLUtils.createSQLString(
+			TABLE_NAME_PREFIX, 
+			Arrays.asList(
+		"id", "timeStmpAdd", "timeStmpEdit", "street", "houseNumber",
+		"adrLine1", "adrLine2", "city", "zip", "province", "country",
+		"ST_X(coordinate)", "ST_Y(coordinate)"
+			),
+			Arrays.asList("ST_X(coordinate)","ST_Y(coordinate)")
+			);	
+	
+	// ST_X(coordinate),ST_Y(coordinate)
+	// ST_X(coordinate) AS 'ad.ST_X(coordinate)' DOES NOT WORK
+	
 	/* logger */
 	private Logger logger = LoggerBuilder.getInstance().build(AddressDaoJdbc.class);
 	
@@ -135,7 +152,6 @@ public class AddressDaoJdbc implements AddressDao {
 		
 		return true;
 	}
-	
 
 	@Override
 	public boolean delete(Address address) {
@@ -156,9 +172,12 @@ public class AddressDaoJdbc implements AddressDao {
 	@Override
 	public Optional<Address> findById(int id) {
 
+		String sql = "SELECT "+AddressDaoJdbc.COLUMNS+" FROM address AS "+AddressDaoJdbc.TABLE_NAME_PREFIX+" WHERE id = ?;";
+		//System.out.println("findById() " + sql);		
+		
 		try(
 				Connection con = this.datasource.getConnection();
-				PreparedStatement stmt = con.prepareStatement( "SELECT *, ST_X(coordinate),ST_Y(coordinate) FROM address WHERE id = ?;" );
+				PreparedStatement stmt = con.prepareStatement( sql );
 				)
 		{
 			stmt.setInt(1, id );
@@ -172,24 +191,20 @@ public class AddressDaoJdbc implements AddressDao {
 	    }		
 	}
 
-
-
-	
 	private Address mapRowToAddress (ResultSet resultSet) throws SQLException {
 		// id,street,houseNumber,adrline1,adrline2,city,zip,province,country,coordinate
 		Address address = new Address();
-		address.setId( resultSet.getInt("id") );
-		address.setHouseNumber( resultSet.getString("houseNumber") );
-		address.setApartment( resultSet.getString("adrline1") );
+		address.setId( resultSet.getInt( AddressDaoJdbc.TABLE_NAME_PREFIX + ".id") );
+		address.setHouseNumber( resultSet.getString(AddressDaoJdbc.TABLE_NAME_PREFIX + ".houseNumber") );
+		address.setApartment( resultSet.getString(AddressDaoJdbc.TABLE_NAME_PREFIX + ".adrline1") );
 		//address.set???( resultSet.getString("adrline2") );
-		address.setCity( resultSet.getString("city") );
-		address.setZipCode( resultSet.getString("zip") );
-		address.setProvince(resultSet.getString("province") );
-		address.setCountry( resultSet.getString("country") );
+		address.setCity( resultSet.getString(AddressDaoJdbc.TABLE_NAME_PREFIX + ".city") );
+		address.setZipCode( resultSet.getString(AddressDaoJdbc.TABLE_NAME_PREFIX + ".zip") );
+		address.setProvince(resultSet.getString(AddressDaoJdbc.TABLE_NAME_PREFIX + ".province") );
+		address.setCountry( resultSet.getString(AddressDaoJdbc.TABLE_NAME_PREFIX + ".country") );
 		address.setLatitude( resultSet.getDouble("ST_X(coordinate)") ); // ST_X(coordinate)
 		address.setLongitude( resultSet.getDouble("ST_Y(coordinate)") ); // ST_Y(coordinate)
 		return address;
 	}
-	
 	
 }
