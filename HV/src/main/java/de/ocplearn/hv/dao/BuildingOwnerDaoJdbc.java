@@ -146,6 +146,7 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 	public Optional<BuildingOwner> findByIdPartial(int id) {
 		try(
 				Connection con = this.datasource.getConnection();
+				// TODO replace SELECT * by SELECT mapRowTo
 				PreparedStatement stmt = con.prepareStatement( "SELECT * FROM buildingowner WHERE id = ?;" );
 				)
 		{
@@ -164,7 +165,7 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 	public Optional<BuildingOwner> findByIdFull(int id) {
 		
 		BuildingOwner buildingOwner = null;
-		
+		//TODO SELECT contact and loginUser
 		//String sql = "SELECT * FROM buildingowner WHERE id = ?;";
 		String sql = "SELECT "+ COLUMNS +", co.*,lu.*  FROM buildingOwner AS " + TABLE_NAME_PREFIX + " " 
 		+ "JOIN contact co ON bo.contactId = co.id "
@@ -203,7 +204,7 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 
 	
 	/* maps a row to BuildingOwnerObject */
-	private BuildingOwner mapRowToBuildingOwner( ResultSet resultSet ) throws SQLException {
+	public BuildingOwner mapRowToBuildingOwner( ResultSet resultSet ) throws SQLException {
 
 		BuildingOwner buildingOwner = new BuildingOwner();
 		

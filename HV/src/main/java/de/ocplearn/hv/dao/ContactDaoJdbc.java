@@ -397,7 +397,7 @@ public class ContactDaoJdbc implements ContactDao {
 		return contacts;
 	}
 	
-	private Contact mapRowToContact( ResultSet resultSet ) throws SQLException {
+	public Contact mapRowToContact( ResultSet resultSet ) throws SQLException {
 		Contact contact = new Contact();
 		
 		contact.setId(resultSet.getInt(TABLE_NAME_PREFIX + ".id"));

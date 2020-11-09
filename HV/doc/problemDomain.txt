@@ -1,0 +1,71 @@
+
+=== AllocationKey ===
+möglichst allgemeingültige Methode um einen Abrechnungsschlüssel zu berechenen.
+Der Schlüssel soll je nach Art der abzurechneneden Werte (Grundsteuer, Wasser, Hausmeister) 
+und den technischen Möglichkeiten im Building (Wasseruhren vorhanden oder nicht, etc) verschieden sein 
+und beim Erstellen des Buildings per Dropdown ausgewählt werden können. 
+Spätere Änderungen des Keys für einzelne oder Alle Abrechnungen sollen möglich sein.
+===============
+
+Ziel vom AllocationKey = Faktor
+Kostenträger / Gesamtkosten = Faktor	1 / 1000 = 0,001
+Gesamtkosten * Faktor = Kosten für Kostenträger /// allocationKey ist der Faktor
+
+=== Werte / Eingaben
+Wasser 		(100 m3 	/ 1000 m3)			* GesamtKosten	= anteilige Kosten (Verbrauch nach Verbrauchseinheiten)
+		( 4Units aus SQL / 10 Units aus SQL)
+		1 Renter	/ 23 GesamtRenter		* Gesamtkosten = anteilige Kosten ( Verbrauch Mietern * 1 Mieter)
+		5 Renter 	/ 23 GesamtRenter		* Gesamtkosten = anteilige Kosten ( Verbrauch Mietern * 5 Mieter)
+
+
+
+		1 Unit		/ 10 Units (SQL od. 10 Objekte zählen)	* ( 12* HMRE )
+
+
+===Abrechnung Modell
+
+		Haus gesamt		Faktor 		Ihr Anteil
+Wasser		1000			0,1		100
+
+Grundsteuer	10000			0,25		2500
+		(12* HMRE)		
+
+
+
+=== Auswahlfeld für HV beim einrichten eines Buildings
+
+Wasser Abrechnungsmodell	- m2
+				- Wohnungseinheiten		
+				- Mieteranzahl / Kopf
+				- Verbrauch 
+				- prozentual
+
+Müll Abrechnungsmodell		- m2
+				- Wohnungseinheiten		
+				- Mieteranzahl / Kopf
+				- Verbrauch
+				- prozentual
+
+Grundsteuer Abrechnungsmodell	- m2
+				- Wohnungseinheiten		
+				- Mieteranzahl / Kopf
+				- Verbrauch
+				- prozentual
+
+Hausmeister Abrechnungsmodell	- m2
+				- Wohnungseinheiten		
+				- Mieteranzahl / Kopf
+				- Verbrauch
+				- prozentual
+
+Spezoial Abrechnungsmodell	- m2
+				- Wohnungseinheiten		
+				- Mieteranzahl / Kopf
+				- Verbrauch
+				- prozentual
+
+
+
+Building
+allocationKey für Wasser	Verbrauch Wasseruhr / Verbrauch Gesamtes Building	=> Faktor
+allocationKey für Grundsteuer	qm Wohnung	    / qm gesamtes Haus			=> Faktor

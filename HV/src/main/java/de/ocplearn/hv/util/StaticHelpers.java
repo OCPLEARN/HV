@@ -75,32 +75,39 @@ public class StaticHelpers {
     // 1 default method -> allocationKey(List<? extends Allocatable> allList, List<? extends Allocatable> partialList)
     // 2 method for incoming numbers: values need to be added and type is not safe (double vs Double) -> allocationKey(Double denominator, Double counter) {sum all usage / sum partial usage}
     
-    public static <T, U > double allocationKey( List<U> uList, List<T> tList) {
-    	Double counter = 0.0;
-    	Double denominator = 0.0;
-    	
-    	for(U u : uList) {
-    		if( u instanceof Number) {
-    			counter += (Double)u; 
-    			System.out.println(u);
-    			}									// alternativ: new Double(u);
-    		else counter += 1;
-    	}
-    	
-    	for(T t : tList) {
-    		 if (t instanceof Number) {
-    			 denominator += (Double) t;
-    			 System.out.println(denominator);
-    			 } 									// alternativ: new Double(t);
-    		 else denominator +=1;
-    	}
-    	
-    	
-    	System.out.println("====================");
-    	System.out.println(counter);
-    	System.out.println(denominator);
-    	return ( (double) ( counter / denominator) );
-    	
-    }
+    // denominator entspricht 100 %
+    // counter entspricht Anteil
+    // Rückgabewert double entspricht Faktor
+    
+    // TODO method allocationKey
+    
+//    public static <T, U > double allocationKey( List<U> uList, List<T> tList) {
+//    	Double counter = 0.0;
+//    	Double denominator = 0.0;
+//    	
+//    	for(U u : uList) {
+//    		if( u instanceof Number) {
+//    			counter += (Double)u; 
+//    			System.out.println(u);
+//    			}									// alternativ: new Double(u);
+//    		else counter += 1;
+//    	}
+//    	
+//    	for(T t : tList) {
+//    		 if (t instanceof Number) {
+//    			 denominator += (Double) t;
+//    			 System.out.println(denominator);
+//    			 } 									// alternativ: new Double(t);
+//    		 else denominator +=1;
+//    	}
+//    	
+//    	
+//    	System.out.println("====================");
+//    	System.out.println(counter);
+//    	System.out.println(denominator);
+//    	return ( (double) ( counter / denominator) );
+//    	
+//    }
+    
 
 }

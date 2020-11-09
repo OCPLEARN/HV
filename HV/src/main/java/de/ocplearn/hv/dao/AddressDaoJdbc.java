@@ -191,7 +191,7 @@ public class AddressDaoJdbc implements AddressDao {
 	    }		
 	}
 
-	private Address mapRowToAddress (ResultSet resultSet) throws SQLException {
+	public Address mapRowToAddress (ResultSet resultSet) throws SQLException {
 		// id,street,houseNumber,adrline1,adrline2,city,zip,province,country,coordinate
 		Address address = new Address();
 		address.setId( resultSet.getInt( AddressDaoJdbc.TABLE_NAME_PREFIX + ".id") );

@@ -75,7 +75,7 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 
 	@Override
 	public Optional<PropertyManagement> findById( int  id ) {
-		
+		// TODO SELECT String mapTo
 		String sql = "SELECT * FROM propertymanagement where id = ?;";
 				
 				try ( Connection connection = this.dataSource.getConnection(); 
@@ -99,7 +99,7 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 		
 	}
 
-	private PropertyManagement mapRowToPropertyManagement(ResultSet resultSet) throws SQLException {
+	public PropertyManagement mapRowToPropertyManagement(ResultSet resultSet) throws SQLException {
 		//id, primaryLoginUserId, paymentType, primaryContactId, companyContactId
 		PropertyManagement propertyManagement = new PropertyManagement();
 		propertyManagement.setId(resultSet.getInt("id"));
