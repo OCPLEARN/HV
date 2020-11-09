@@ -39,9 +39,9 @@ import de.ocplearn.hv.util.StaticHelpers;
 @Component("LoginUserDaoJdbc")
 public class LoginUserDaoJdbc implements LoginUserDao {
 	
-	private static final String TABLE_NAME = "loginUser";
-	private static final String TABLE_NAME_PREFIX = "lu";
-	private static final String COLUMNS = SQLUtils.createSQLString(
+	public static final String TABLE_NAME = "loginUser";
+	public static final String TABLE_NAME_PREFIX = "lu";
+	public static final String COLUMNS = SQLUtils.createSQLString(
 			TABLE_NAME_PREFIX, 
 			Arrays.asList( "id", "timeStmpAdd", "timeStmpEdit", "loginUserName", "passwHash",
 							"salt", "loginUserRole", "locale" ),
@@ -207,17 +207,21 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 	
     public LoginUser mapRowToLoginUser(ResultSet resultSet) throws SQLException {
     	 LoginUser loginUser = new LoginUser();
-         
-         loginUser.setId( resultSet.getInt(TABLE_NAME_PREFIX +  ".id") );
-         loginUser.setLoginUserName(resultSet.getString(TABLE_NAME_PREFIX + ".loginUserName"));
-         loginUser.setPasswHash(resultSet.getBytes(TABLE_NAME_PREFIX + ".passwHash"));
-         loginUser.setSalt(resultSet.getBytes(TABLE_NAME_PREFIX + ".salt"));
-         loginUser.setRole( Role.valueOf( resultSet.getString(TABLE_NAME_PREFIX + ".loginUserRole") )  );
-         loginUser.setLocale(new Locale(resultSet.getString(TABLE_NAME_PREFIX + ".locale"))  );   
-         return loginUser;
-         
-         
+         return this.mapRowToLoginUser(resultSet, loginUser);
     }
+
+    public LoginUser mapRowToLoginUser(ResultSet resultSet, LoginUser loginUser) throws SQLException {
+   	    
+        loginUser.setId( resultSet.getInt(TABLE_NAME_PREFIX +  ".id") );
+        loginUser.setLoginUserName(resultSet.getString(TABLE_NAME_PREFIX + ".loginUserName"));
+        loginUser.setPasswHash(resultSet.getBytes(TABLE_NAME_PREFIX + ".passwHash"));
+        loginUser.setSalt(resultSet.getBytes(TABLE_NAME_PREFIX + ".salt"));
+        loginUser.setRole( Role.valueOf( resultSet.getString(TABLE_NAME_PREFIX + ".loginUserRole") )  );
+        loginUser.setLocale(new Locale(resultSet.getString(TABLE_NAME_PREFIX + ".locale"))  );   
+        
+        return loginUser;
+   }    
+    
     
 	@Override
 	public Optional<LoginUser> findUserById(int id) {

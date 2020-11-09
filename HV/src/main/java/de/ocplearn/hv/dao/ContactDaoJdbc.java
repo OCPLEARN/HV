@@ -34,9 +34,9 @@ import de.ocplearn.hv.util.TablePageViewData;
 @Repository
 public class ContactDaoJdbc implements ContactDao {
 	
-	private static final String TABLE_NAME = "contact";
-	private static final String TABLE_NAME_PREFIX = "co";
-	private static final String COLUMNS = SQLUtils.createSQLString(
+	public static final String TABLE_NAME = "contact";
+	public static final String TABLE_NAME_PREFIX = "co";
+	public static final String COLUMNS = SQLUtils.createSQLString(
 			TABLE_NAME_PREFIX, 
 			Arrays.asList( "id", "timeStmpAdd", "timeStmpEdit", "sex", "firstName",
 							"lastName", "isCompany", "companyName", "phone", "mobilePhone", "fax", "website", "email" ),
@@ -397,9 +397,8 @@ public class ContactDaoJdbc implements ContactDao {
 		return contacts;
 	}
 	
-	public Contact mapRowToContact( ResultSet resultSet ) throws SQLException {
-		Contact contact = new Contact();
-		
+	public Contact mapRowToContact( ResultSet resultSet, Contact contact ) throws SQLException {
+
 		contact.setId(resultSet.getInt(TABLE_NAME_PREFIX + ".id"));
 		contact.setSex(resultSet.getString(TABLE_NAME_PREFIX + ".sex"));
 		contact.setFirstName(resultSet.getString(TABLE_NAME_PREFIX + ".firstName"));
@@ -414,7 +413,12 @@ public class ContactDaoJdbc implements ContactDao {
 		
 		contact.setAddresses( this.findAddressesByContactId(contact.getId(), AddressDao.tablePageViewData ) );		
 		
-		return contact;
+		return contact;		
+	}
+	
+	public Contact mapRowToContact( ResultSet resultSet ) throws SQLException {
+		Contact contact = new Contact();
+		return this.mapRowToContact(resultSet, contact);
 	}
 	
 	// STATIC METHODS

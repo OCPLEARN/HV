@@ -49,8 +49,16 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 	/* A factory for connections to the physical data source that this DataSource object represents. */
 	private DataSource datasource;		
 	
-	public BuildingOwnerDaoJdbc( @Qualifier("datasource1") DataSource datasource ) {
+	private ContactDaoJdbc contactDaoJdbc;
+	
+	private LoginUserDaoJdbc loginUserDaoJdbc;
+	
+	public BuildingOwnerDaoJdbc( @Qualifier("datasource1") DataSource datasource,
+			ContactDaoJdbc contactDaoJdbc,
+			LoginUserDaoJdbc loginUserDaoJdbc) {
 		this.datasource = datasource;
+		this.contactDaoJdbc = contactDaoJdbc;
+		this.loginUserDaoJdbc = loginUserDaoJdbc;
 	}
 	
 	@Override
@@ -167,10 +175,10 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 		BuildingOwner buildingOwner = null;
 		//TODO SELECT contact and loginUser
 		//String sql = "SELECT * FROM buildingowner WHERE id = ?;";
-		String sql = "SELECT "+ COLUMNS +", co.*,lu.*  FROM buildingOwner AS " + TABLE_NAME_PREFIX + " " 
-		+ "JOIN contact co ON bo.contactId = co.id "
-		+ "JOIN loginuser lu ON bo.loginUserId = lu.id "
-		+ "WHERE bo.id = ?;";
+		String sql = "SELECT " + COLUMNS + ", " + ContactDaoJdbc.COLUMNS + "," + LoginUserDaoJdbc.COLUMNS + "  FROM buildingOwner AS " + TABLE_NAME_PREFIX + " " 
+				+ "JOIN contact " + ContactDaoJdbc.TABLE_NAME_PREFIX + " ON bo.contactId = co.id "
+				+ "JOIN loginuser " + LoginUserDaoJdbc.TABLE_NAME_PREFIX + " ON bo.loginUserId = lu.id "
+				+ "WHERE bo.id = ?;";
 		
 		System.out.println("sql = " + sql);
 		
@@ -184,8 +192,8 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 			//return resultSet.next() ? Optional.of(this.mapRowToBuildingOwner(resultSet)) : Optional.empty();
 			if (! resultSet.next()) return Optional.empty();
 			buildingOwner = this.mapRowToBuildingOwner(resultSet);
-			
-			
+			buildingOwner.setContact( this.contactDaoJdbc.mapRowToContact(resultSet,buildingOwner.getContact() ) );
+			buildingOwner.setLoginUser( this.loginUserDaoJdbc.mapRowToLoginUser(resultSet, buildingOwner.getLoginUser()  ) );
 		}
 		catch (SQLException e) {
 	    	e.printStackTrace(); 
@@ -202,8 +210,12 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 		return null;
 	}
 
-	
-	/* maps a row to BuildingOwnerObject */
+	/**
+	 * maps a row to BuildingOwnerObject
+	 * 
+	 * @param  resultSet
+	 * @return BuildingOwner
+	 * */
 	public BuildingOwner mapRowToBuildingOwner( ResultSet resultSet ) throws SQLException {
 
 		BuildingOwner buildingOwner = new BuildingOwner();
@@ -216,6 +228,7 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 
 		LoginUser loginUser = new LoginUser();
 		loginUser.setId( resultSet.getInt( BuildingOwnerDaoJdbc.TABLE_NAME_PREFIX + ".loginUserId" ) );
+		buildingOwner.setLoginUser(loginUser);
 		
 		return buildingOwner;		
 	}
