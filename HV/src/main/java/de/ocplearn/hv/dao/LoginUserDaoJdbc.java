@@ -180,9 +180,9 @@ public class LoginUserDaoJdbc implements LoginUserDao {
                 Statement stmt = connection.createStatement();
                 ){
             
-            String sql = "SELECT * FROM loginUser WHERE "+ columnName +" = '" + value + "';";
+            String sql = "SELECT "+COLUMNS+" FROM loginUser AS "+TABLE_NAME_PREFIX+" WHERE "+ columnName +" = '" + value + "';";
             // WHERE col1 = v1 AND col2 = v2;
-            System.out.println("findByColumnName() sql = " + sql);
+            //System.out.println("findByColumnName() sql = " + sql);
             ResultSet result =  stmt.executeQuery( sql );
             
             while( result.next() ){

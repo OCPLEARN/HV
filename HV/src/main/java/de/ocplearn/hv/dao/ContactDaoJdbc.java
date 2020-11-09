@@ -263,7 +263,7 @@ public class ContactDaoJdbc implements ContactDao {
 	@Override
 	public List<Contact> getAllContacts(TablePageViewData tablePageViewData) {
 		try(Connection connection = datasource.getConnection();
-				PreparedStatement stmt = connection.prepareStatement("SELECT * FROM contact "
+				PreparedStatement stmt = connection.prepareStatement("SELECT "+COLUMNS+" FROM contact AS "+TABLE_NAME_PREFIX+" "
 						+ "ORDER BY ? ?"
 						+ "LIMIT ?,?;");){
 			String i1 = tablePageViewData.getOrderByDirection();
@@ -373,7 +373,7 @@ public class ContactDaoJdbc implements ContactDao {
 		
 		List<Contact> contacts = new ArrayList<>();
 		
-		String sql ="SELECT * FROM contact "
+		String sql ="SELECT "+COLUMNS+" FROM contact AS "+TABLE_NAME_PREFIX+" "
 					+ "WHERE " + columnName + " LIKE "+ value +" "
 					+ "ORDER BY "+ tablePageViewData.getOrderBy() +" " + tablePageViewData.getOrderByDirection() + " "
 					+ "LIMIT "+tablePageViewData.getOffset()+","+ tablePageViewData.getRowCount() +" ;";
