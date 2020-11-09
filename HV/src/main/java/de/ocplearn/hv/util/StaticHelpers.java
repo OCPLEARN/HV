@@ -5,6 +5,7 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -57,5 +58,49 @@ public class StaticHelpers {
         return passwordHashMap;
     }    
     
+    
+    // Verteilungsschlüssel - allocationKey
+    
+//    public static double allocationKey(List<? extends Countable> listOfAll, List<? extends Countable> listOfPart) {
+//    	
+//    	for(<? extends Countable> all : listOfAll)
+//    }
+//  
+    // get the ratio of two numbers 
+    // numbers can be amount of objects (Building, Owner, Unit, Renter) or Double, Integer
+    // T becomes 100%, U becomes partial
+    // e.g. T all Renters of a building, U one or more specific Renters of a Building
+    // e.g. T all sqm of a building, U specific amount of sqm of a Renter / Owner
+    // or work with interface Allocatable:
+    // 1 default method -> allocationKey(List<? extends Allocatable> allList, List<? extends Allocatable> partialList)
+    // 2 method for incoming numbers: values need to be added and type is not safe (double vs Double) -> allocationKey(Double denominator, Double counter) {sum all usage / sum partial usage}
+    
+    public static <T, U > double allocationKey( List<U> uList, List<T> tList) {
+    	Double counter = 0.0;
+    	Double denominator = 0.0;
+    	
+    	for(U u : uList) {
+    		if( u instanceof Number) {
+    			counter += (Double)u; 
+    			System.out.println(u);
+    			}									// alternativ: new Double(u);
+    		else counter += 1;
+    	}
+    	
+    	for(T t : tList) {
+    		 if (t instanceof Number) {
+    			 denominator += (Double) t;
+    			 System.out.println(denominator);
+    			 } 									// alternativ: new Double(t);
+    		 else denominator +=1;
+    	}
+    	
+    	
+    	System.out.println("====================");
+    	System.out.println(counter);
+    	System.out.println(denominator);
+    	return ( (double) ( counter / denominator) );
+    	
+    }
 
 }
