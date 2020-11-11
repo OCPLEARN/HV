@@ -3,22 +3,16 @@ package de.ocplearn.hv.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import de.ocplearn.hv.dao.AddressDao;
-import de.ocplearn.hv.dao.ContactDao;
-import de.ocplearn.hv.dao.LoginUserDao;
 import de.ocplearn.hv.dao.PropertyManagementDao;
 import de.ocplearn.hv.dto.ContactDto;
 import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.mapper.LoginUserMapper;
 import de.ocplearn.hv.mapper.PropertyManagementMapper;
-import de.ocplearn.hv.model.Contact;
-import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.PropertyManagement;
 
 
@@ -170,12 +164,15 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	}
 	
 	@Override
-	public List<PropertyManagementDto> findPropertyManagementbyCompanyName(String companyName) {
+	public List<PropertyManagementDto> findPropertyManagementbyCompanyName( String companyName ) {
 		
-		List<PropertyManagementDto> propertyManagements = new ArrayList<PropertyManagementDto>();
+		List<PropertyManagementDto> propertyManagementDtoList = new ArrayList<PropertyManagementDto>();
 		
-		//propertyManagements.add()
+		List<PropertyManagement> propertyManagementList = propertyManagementDao.findPropertyManagementByComanyName(companyName);
+		for (PropertyManagement propertyManagement : propertyManagementList) {
+			propertyManagementDtoList.add(propertyManagementMapper.propertyManagementToPropertyManagementDto(propertyManagement));
+		}
 		
-		return null;
+		return propertyManagementDtoList;
 	}
 }

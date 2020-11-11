@@ -16,12 +16,9 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import de.ocplearn.hv.configuration.DataSourceConfig;
-import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.exceptions.DataAccessException;
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.Role;
@@ -45,7 +42,7 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 			TABLE_NAME_PREFIX, 
 			Arrays.asList( "id", "timeStmpAdd", "timeStmpEdit", "loginUserName", "passwHash",
 							"salt", "loginUserRole", "locale" ),
-			new ArrayList()
+			new ArrayList<String>()
 			);	
 
 	private Logger logger = LoggerBuilder.getInstance().build(LoginUserDaoJdbc.class);

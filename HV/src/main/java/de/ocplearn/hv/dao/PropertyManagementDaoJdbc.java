@@ -5,32 +5,37 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.sql.DataSourceDefinition;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import de.ocplearn.hv.dto.LoginUserDto;
-import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.exceptions.DataAccessException;
 import de.ocplearn.hv.model.Contact;
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.PaymentType;
 import de.ocplearn.hv.model.PropertyManagement;
-import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.util.LoggerBuilder;
+import de.ocplearn.hv.util.SQLUtils;
 
 
 @Repository
 public class PropertyManagementDaoJdbc implements PropertyManagementDao {
+	
+	public static final String TABLE_NAME = "propertyManagement";
+	public static final String TABLE_NAME_PREFIX = "pm";
+	public static final String COLUMNS = SQLUtils.createSQLString(
+			TABLE_NAME_PREFIX, 
+			Arrays.asList("id", "timeStmpAdd", "timeStmpEdit", "primaryLoginUserId", "paymentType", "primaryContactId", "companyContactId"), 
+			new ArrayList<String>() 
+			);
 	
 	private DataSource dataSource;
 		
@@ -75,9 +80,11 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 
 	@Override
 	public Optional<PropertyManagement> findById( int  id ) {
-		// TODO SELECT String mapTo
-		String sql = "SELECT * FROM propertymanagement where id = ?;";
-				
+		String sql = "SELECT " 	+ PropertyManagementDaoJdbc.COLUMNS 
+								+ " FROM " + PropertyManagementDaoJdbc.TABLE_NAME 
+								+ " AS " + PropertyManagementDaoJdbc.TABLE_NAME_PREFIX 
+								+ " WHERE " + PropertyManagementDaoJdbc.TABLE_NAME_PREFIX + ".id = ?;";
+				 
 				try ( Connection connection = this.dataSource.getConnection(); 
 						  PreparedStatement stmt = connection.prepareStatement(sql); ){
 					stmt.setInt(1, id );
@@ -91,29 +98,25 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 					
 					
 					
-					
-		// ResultSet = Daten aus der DB in Tabellenform
-		// Nummer aus dem ResultSet entspr. Nummer des Eintrags
 		
-		// TODO Auto-generated method stub
 		
 	}
 
 	public PropertyManagement mapRowToPropertyManagement(ResultSet resultSet) throws SQLException {
 		//id, primaryLoginUserId, paymentType, primaryContactId, companyContactId
 		PropertyManagement propertyManagement = new PropertyManagement();
-		propertyManagement.setId(resultSet.getInt("id"));
+		propertyManagement.setId(resultSet.getInt(PropertyManagementDaoJdbc.TABLE_NAME_PREFIX + ".id"));
 		
 		LoginUser primaryLoginUser = new LoginUser();
-		primaryLoginUser.setId(resultSet.getInt("primaryLoginUserId"));
+		primaryLoginUser.setId(resultSet.getInt(PropertyManagementDaoJdbc.TABLE_NAME_PREFIX + ".primaryLoginUserId"));
 		
 		propertyManagement.setPrimaryLoginUser(primaryLoginUser);
-		propertyManagement.setPaymentType(PaymentType.valueOf(resultSet.getString("paymentType")));
+		propertyManagement.setPaymentType(PaymentType.valueOf(resultSet.getString(PropertyManagementDaoJdbc.TABLE_NAME_PREFIX + ".paymentType")));
 		Contact primaryContact = new Contact();
-		primaryContact.setId(resultSet.getInt("primaryContactId"));
+		primaryContact.setId(resultSet.getInt(PropertyManagementDaoJdbc.TABLE_NAME_PREFIX + ".primaryContactId"));
 		propertyManagement.setPrimaryContact(primaryContact);
 		Contact companyContact = new Contact();
-		companyContact.setId(resultSet.getInt("companyContactId"));
+		companyContact.setId(resultSet.getInt(PropertyManagementDaoJdbc.TABLE_NAME_PREFIX + ".companyContactId"));
 		propertyManagement.setCompanyContact(companyContact);
 		return propertyManagement;
 	}
@@ -121,10 +124,34 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 
 
 	@Override
-	public Optional<PropertyManagement> findByPrimaryContact( PropertyManagement propertyManagement ) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<PropertyManagement> findByPrimaryContact( Contact primaryContact ) {
+		
+		// SELECT pm.id  AS "pm.Id" FROM propertyManagement AS pm WHERE pm.primaryContactId = 74;
+
+		String sql ="SELECT " + PropertyManagementDaoJdbc.COLUMNS 
+				   +" FROM"   + PropertyManagementDaoJdbc.TABLE_NAME 
+				   +" AS "    + PropertyManagementDaoJdbc.TABLE_NAME_PREFIX 
+				   +" WHERE " + PropertyManagementDaoJdbc.TABLE_NAME_PREFIX + ".primaryContactId =  ?;";
+		
+		try( 
+		// 1. Connection to DB		
+			 Connection connection = dataSource.getConnection();
+		// 2. SQL Statement		
+			 PreparedStatement stmt = connection.prepareStatement(sql);
+			){
+			stmt.setInt( 1, primaryContact.getId() );
+		// 3. Return ResultSet	
+			ResultSet resultSet = stmt.executeQuery();
+		// 4. do something with ResultSet				
+		return resultSet.next() ? Optional.of( this.mapRowToPropertyManagement(resultSet) ) : Optional.empty();				
+					
+		}catch( SQLException e ) {
+	    	e.printStackTrace(); 
+	        logger.log( Level.WARNING, e.getMessage() );
+	        throw new DataAccessException( "Unable to get Data from DB." );
+		}
 	}
+	
 	
 	private boolean update(PropertyManagement propertyManagement) {
 		String sql = "UPDATE propertymanagement SET primaryLoginUserId=?, paymentType=?, primaryContactId=?, companyContactId=? WHERE id = ?";
@@ -255,11 +282,18 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 	}
 	
 	@Override
-	public List<PropertyManagement> findPropertyManagementByComanyName(String name) {
+	public List<PropertyManagement> findPropertyManagementByComanyName( String companyName ) {
 		
 		String sql;
-		sql = "SELECT * FROM propertymanagement AS pm INNER JOIN contact AS co ON pm.companyContactId = co.id WHERE co.companyName LIKE ?;";
-		
+		sql = "SELECT "
+			+ PropertyManagementDaoJdbc.COLUMNS + " FROM " + PropertyManagementDaoJdbc.TABLE_NAME 
+			+ " AS " + PropertyManagementDaoJdbc.TABLE_NAME_PREFIX 
+			+ " INNER JOIN " 
+			+ ContactDaoJdbc.TABLE_NAME 
+			+ " AS " + ContactDaoJdbc.TABLE_NAME_PREFIX
+			+ " ON " + PropertyManagementDaoJdbc.TABLE_NAME_PREFIX + ".companyContactId  = " + ContactDaoJdbc.TABLE_NAME_PREFIX + ".id" 
+			+ " WHERE " + ContactDaoJdbc.TABLE_NAME_PREFIX + ".companyName LIKE ?;";
+			
 		
 		
 		
@@ -267,7 +301,7 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 		
 		try ( Connection connection = dataSource.getConnection();
 				PreparedStatement stmt = connection.prepareStatement(sql);) {
-			stmt.setString(1, name);
+			stmt.setString(1, companyName);
 			ResultSet resultSet = stmt.executeQuery(sql);
 			
 			while (resultSet.next()) {

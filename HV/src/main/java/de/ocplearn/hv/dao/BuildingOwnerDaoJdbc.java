@@ -7,11 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,7 +18,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import de.ocplearn.hv.exceptions.DataAccessException;
-import de.ocplearn.hv.model.Address;
 import de.ocplearn.hv.model.BuildingOwner;
 import de.ocplearn.hv.model.Contact;
 import de.ocplearn.hv.model.LoginUser;
@@ -35,12 +31,12 @@ import de.ocplearn.hv.util.TablePageViewData;
 @Component("BuildingOwnerDaoJdbc")
 public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 
-	private static final String TABLE_NAME = "buildingowner";
-	private static final String TABLE_NAME_PREFIX = "bo";
-	private static final String COLUMNS = SQLUtils.createSQLString(
+	public static final String TABLE_NAME = "buildingowner";
+	public static final String TABLE_NAME_PREFIX = "bo";
+	public static final String COLUMNS = SQLUtils.createSQLString(
 			TABLE_NAME_PREFIX, 
 			Arrays.asList("id", "timeStmpAdd", "timeStmpEdit", "contactId", "loginUserId"), 
-			new ArrayList()
+			new ArrayList<String>()
 			);
 
 	/* logger */
@@ -229,6 +225,7 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 		LoginUser loginUser = new LoginUser();
 		loginUser.setId( resultSet.getInt( BuildingOwnerDaoJdbc.TABLE_NAME_PREFIX + ".loginUserId" ) );
 		buildingOwner.setLoginUser(loginUser);
+		
 		
 		return buildingOwner;		
 	}

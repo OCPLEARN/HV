@@ -1,0 +1,29 @@
+Navigationsentwurf
+waagerechter Baum
+
+A immobilie	neu				
+		gebäudedaten bearbeiten
+		mieter daten ändern 	-> B
+		rechnung eingeben 	-> D
+		abrechnung erstellen 	-> D
+
+B mieter	neu
+		mieterdaten ändern
+		rechnung zuordnen / eingeben 	-> D
+		abrechnung erstellen 		-> D
+
+C kunde(owner)	neu
+		ownerdaten ändern
+		abrechnung erstellen 	-> D
+		immobilie erstellen 	-> A
+		immobilie ändern 	-> A
+		mieter ändern 		-> B
+
+D rechnung	neu (eigene)	
+		ändern (eigene)
+		eingeben (fremde)
+		ändern fremde
+
+E mitarbeiter	neu
+		ändern
+		fire

@@ -40,7 +40,7 @@ public class ContactDaoJdbc implements ContactDao {
 			TABLE_NAME_PREFIX, 
 			Arrays.asList( "id", "timeStmpAdd", "timeStmpEdit", "sex", "firstName",
 							"lastName", "isCompany", "companyName", "phone", "mobilePhone", "fax", "website", "email" ),
-			new ArrayList()
+			new ArrayList<String>()
 			);	
 
 	// logger
