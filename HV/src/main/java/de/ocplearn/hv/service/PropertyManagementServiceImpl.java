@@ -12,6 +12,7 @@ import de.ocplearn.hv.dao.AddressDao;
 import de.ocplearn.hv.dao.ContactDao;
 import de.ocplearn.hv.dao.LoginUserDao;
 import de.ocplearn.hv.dao.PropertyManagementDao;
+import de.ocplearn.hv.dto.ContactDto;
 import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.mapper.LoginUserMapper;
@@ -138,7 +139,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public PropertyManagementDto findPropertyManagementbyPrimaryContact(
-			PropertyManagementDto propertyManagementDto) {
+			 ContactDto contactDto) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -169,7 +170,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	}
 	
 	@Override
-	public List<PropertyManagementDto> findPropertyManagementbyCompanyName(PropertyManagementDto propertyManagementDto) {
+	public List<PropertyManagementDto> findPropertyManagementbyCompanyName(String companyName) {
 		
 		List<PropertyManagementDto> propertyManagements = new ArrayList<PropertyManagementDto>();
 		
