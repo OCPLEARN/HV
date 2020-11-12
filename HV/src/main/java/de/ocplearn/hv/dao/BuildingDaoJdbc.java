@@ -168,29 +168,33 @@ public class BuildingDaoJdbc implements BuildingDao{
 			    }		
 	}
 
-	public Building mapRowToBuilding(ResultSet resultSet, Building building) throws SQLException {
+	public Building mapRowToBuilding( ResultSet resultSet, Building building ) throws SQLException {
 		// 
-		building.setId(resultSet.getInt(BuildingDaoJdbc.TABLE_NAME_PREFIX + ".id" ));
-		building.setName(resultSet.getString(BuildingDaoJdbc.TABLE_NAME_PREFIX + ".buildingName" ));
-		building.setBuildingType(BuildingType.valueOf(resultSet.getString(BuildingDaoJdbc.TABLE_NAME_PREFIX + ".buildingType" )));		
+		building.setId( resultSet.getInt( BuildingDaoJdbc.TABLE_NAME_PREFIX + ".id" ) );
+		building.setName( resultSet.getString( BuildingDaoJdbc.TABLE_NAME_PREFIX + ".buildingName" ) );
+		building.setBuildingType( BuildingType.valueOf( resultSet.getString( BuildingDaoJdbc.TABLE_NAME_PREFIX + ".buildingType" ) ) );		
 		
 		Address address = new Address();
-		address.setId(resultSet.getInt(BuildingDaoJdbc.TABLE_NAME_PREFIX + ".addressId"));
+		address.setId(resultSet.getInt( BuildingDaoJdbc.TABLE_NAME_PREFIX + ".addressId") );
 		building.setAddress(address);
 		
 		PropertyManagement propertyManagement = new PropertyManagement();
-		propertyManagement.setId(resultSet.getInt(BuildingDaoJdbc.TABLE_NAME_PREFIX + ".propertyManangementId"));
+		propertyManagement.setId( resultSet.getInt( BuildingDaoJdbc.TABLE_NAME_PREFIX + ".propertyManangementId" ) );
 		building.setPropertyManagement(propertyManagement);
 		
-		building.setNote(resultSet.getNString(BuildingDaoJdbc.TABLE_NAME_PREFIX + "note"));
+		building.setOwners(owners);
 		
+		building.setUnits(units);
 		
+		building.setTransactions(transactions);
+		
+		building.setNote( resultSet.getNString( BuildingDaoJdbc.TABLE_NAME_PREFIX + "note" ) );
+	
 				
-				
-		return null;
+		return building;
 	}
 	
-	public Building mapRowToBuilding(ResultSet resultSet) {
+	public Building mapRowToBuilding(ResultSet resultSet) throws SQLException {
 		return mapRowToBuilding( resultSet, new Building() );
 	}
 
