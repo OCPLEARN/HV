@@ -18,8 +18,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import de.ocplearn.hv.exceptions.DataAccessException;
+import de.ocplearn.hv.model.Address;
 import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.BuildingOwner;
+import de.ocplearn.hv.model.BuildingType;
+import de.ocplearn.hv.model.PropertyManagement;
 import de.ocplearn.hv.util.LoggerBuilder;
 import de.ocplearn.hv.util.SQLUtils;
 import de.ocplearn.hv.util.TablePageViewData;
@@ -27,9 +30,9 @@ import de.ocplearn.hv.util.TablePageViewData;
 @Repository
 public class BuildingDaoJdbc implements BuildingDao{
 	
-	private static final String TABLE_NAME = "building";
-	private static final String TABLE_NAME_PREFIX = "bu";
-	private static final String COLUMNS = SQLUtils.createSQLString(
+	public static final String TABLE_NAME = "building";
+	public static final String TABLE_NAME_PREFIX = "bu";
+	public static final String COLUMNS = SQLUtils.createSQLString(
 			TABLE_NAME_PREFIX, 
 			Arrays.asList(
 		"id", "timeStmpAdd", "timeStmpEdit", "propertyManagementId", "buildingName",
@@ -39,11 +42,21 @@ public class BuildingDaoJdbc implements BuildingDao{
 	
 	private DataSource dataSource;
 	
+	private AddressDao addressDao;
+	
+	private AddressDaoJdbc addressDaoJdbc; 
+	
+	private PropertyManagementDaoJdbc propertyManagementDaoJdbc;
+	
+	 
+	
 	public Logger logger = LoggerBuilder.getInstance().build( PropertyManagementDaoJdbc.class );
 		
 	
-	@Autowired // DB einbinden über Autowire mit Qualifier
-	public BuildingDaoJdbc( @Qualifier ("datasource1") DataSource dataSource ) {
+	@Autowired // DB einbinden über Autowire mit Qualifier Implementierung von AddressDao mit Qualifier spezifiziert
+	public BuildingDaoJdbc( @Qualifier ("datasource1") DataSource dataSource, 
+							@Qualifier("AddressDaoJdbc") AddressDao addressDao, 
+							AddressDaoJdbc addressDaoJdbc, PropertyManagementDaoJdbc propertyManagementDaoJdbc) {
 		this.dataSource = dataSource;
 	}
 	
@@ -141,7 +154,12 @@ public class BuildingDaoJdbc implements BuildingDao{
 			) {
 				stmt.setInt(1, id );
 				ResultSet resultSet = stmt.executeQuery();
-				return resultSet.next() ? Optional.of(this.mapRowToBuilding(resultSet)) : Optional.empty();
+				
+				Building building = this.mapRowToBuilding(resultSet);
+				building.setAddress(addressDaoJdbc.mapRowToAddress(resultSet, building.getAddress()));
+				building.setPropertyManagement(propertyManagementDaoJdbc.mapRowToPropertyManagement(resultSet, building.getPropertyManagement()));
+				
+			//	return resultSet.next() ? Optional.of(this.mapRowToBuilding(resultSet)) : Optional.empty();
 				
 		} catch (SQLException e) {
 			    e.printStackTrace(); 
@@ -150,9 +168,30 @@ public class BuildingDaoJdbc implements BuildingDao{
 			    }		
 	}
 
-	public Building mapRowToBuilding(ResultSet resultSet) {
-		// TODO
+	public Building mapRowToBuilding(ResultSet resultSet, Building building) throws SQLException {
+		// 
+		building.setId(resultSet.getInt(BuildingDaoJdbc.TABLE_NAME_PREFIX + ".id" ));
+		building.setName(resultSet.getString(BuildingDaoJdbc.TABLE_NAME_PREFIX + ".buildingName" ));
+		building.setBuildingType(BuildingType.valueOf(resultSet.getString(BuildingDaoJdbc.TABLE_NAME_PREFIX + ".buildingType" )));		
+		
+		Address address = new Address();
+		address.setId(resultSet.getInt(BuildingDaoJdbc.TABLE_NAME_PREFIX + ".addressId"));
+		building.setAddress(address);
+		
+		PropertyManagement propertyManagement = new PropertyManagement();
+		propertyManagement.setId(resultSet.getInt(BuildingDaoJdbc.TABLE_NAME_PREFIX + ".propertyManangementId"));
+		building.setPropertyManagement(propertyManagement);
+		
+		building.setNote(resultSet.getNString(BuildingDaoJdbc.TABLE_NAME_PREFIX + "note"));
+		
+		
+				
+				
 		return null;
+	}
+	
+	public Building mapRowToBuilding(ResultSet resultSet) {
+		return mapRowToBuilding( resultSet, new Building() );
 	}
 
 

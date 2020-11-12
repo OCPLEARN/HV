@@ -417,8 +417,7 @@ public class ContactDaoJdbc implements ContactDao {
 	}
 	
 	public Contact mapRowToContact( ResultSet resultSet ) throws SQLException {
-		Contact contact = new Contact();
-		return this.mapRowToContact(resultSet, contact);
+		return this.mapRowToContact(resultSet, new Contact());
 	}
 	
 	// STATIC METHODS

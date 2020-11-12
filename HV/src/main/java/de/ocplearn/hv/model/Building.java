@@ -16,6 +16,12 @@ public class Building implements Comparable<Building>{
 	
 	private List<BuildingOwner> owners;
 	
+	// statt  des Feldes private List<BuildingOwner> owners;
+	// kann man eine Methode der folgenden Art einbauen
+	// private List<BuildingOwner> getBuildingOwners(){return new ArrayList();}
+	// Vorteil: man muss nicht bei jedem Objektaufruf von Building alle Owner und deren Contact(e) und Address(en) aufrufen 
+	// Top Level Objekte klein halten
+	
 	private Set<Unit> units;
 	
 	private Set<Transaction> transactions;

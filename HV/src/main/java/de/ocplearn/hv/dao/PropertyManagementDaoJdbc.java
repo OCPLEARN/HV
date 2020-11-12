@@ -102,9 +102,9 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 		
 	}
 
-	public PropertyManagement mapRowToPropertyManagement(ResultSet resultSet) throws SQLException {
+	public PropertyManagement mapRowToPropertyManagement(ResultSet resultSet, PropertyManagement propertyManagement) throws SQLException {
 		//id, primaryLoginUserId, paymentType, primaryContactId, companyContactId
-		PropertyManagement propertyManagement = new PropertyManagement();
+		
 		propertyManagement.setId(resultSet.getInt(PropertyManagementDaoJdbc.TABLE_NAME_PREFIX + ".id"));
 		
 		LoginUser primaryLoginUser = new LoginUser();
@@ -121,6 +121,12 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 		return propertyManagement;
 	}
 
+	public PropertyManagement mapRowToPropertyManagement(ResultSet resultSet) throws SQLException {
+		return mapRowToPropertyManagement (resultSet, new PropertyManagement());
+	}
+	
+	
+	
 
 
 	@Override
