@@ -354,3 +354,7 @@ CREATE TABLE unitOwnerLink (
     FOREIGN KEY (unitFeaturesId)
     REFERENCES unitFeatures (id)
     );
+DROP TABLE buildingOwnerLink;
+
+ALTER TABLE renter DROP FOREIGN KEY fk_renter_propertyManagerId;
+ALTER TABLE renter DROP COLUMN propertyManagerId;

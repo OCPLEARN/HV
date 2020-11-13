@@ -3,9 +3,13 @@ package de.ocplearn.hv.service;
 import java.util.List;
 import java.util.Optional;
 
+import de.ocplearn.hv.dto.BuildingDto;
+import de.ocplearn.hv.dto.BuildingOwnerDto;
 import de.ocplearn.hv.dto.ContactDto;
 import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
+import de.ocplearn.hv.dto.RenterDto;
+import de.ocplearn.hv.dto.UnitDto;
 import de.ocplearn.hv.model.PropertyManagement;
 
 
@@ -67,30 +71,50 @@ public interface PropertyManagementService {
 	public boolean removeLoginUserFromPropertyManagement(LoginUserDto loginUserDto,PropertyManagementDto propertyManagementDto);
 	
 	
-	// BUILDINGOWNERS
+	// BUILDINGS CRUD
 	
-//	assignBuildingOwnerToBuilding
-//	removeBuildingOwnerFromBuilding
-//	assignAllUnitsToOneOwner
-//
-//	createBuilding
-//	deleteBuilding
-//	updateBuilding
-//
+	public boolean createBuilding(BuildingDto buildingDto);
+	
+	public boolean deleteBuilding(int buildingDtoId);
+	
+	public boolean updateBuilding(BuildingDto buildingDto);
+	
+	
+	// ASSIGN BUILDINGOWNERS TO BUILDING
+	
+	public boolean assignBuildingOwnerToBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto);
+	
+	public boolean removeBuildingOwnerFromBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto);
+	
+	public boolean assignAllUnitsToOneOwner(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto);
+	
+	
+	// UNITS CRUD
+	
+	public boolean createUnit(UnitDto unitDto);
+	
+	public boolean deleteUnit(UnitDto unitDto);
+	
+	public boolean updateUnit(UnitDto unitDto);
+	
+	
+	//  ASSIGN BUILDINGOWNERS TO UNIT
+
+	public boolean assignUnitOwnerToUnit (BuildingOwnerDto buildingOwnerDto, UnitDto unitDto);
+	
+	public boolean removeUnitOwnerFromUnit (BuildingOwnerDto buildingOwnerDto, UnitDto unitDto);
+	
+	
+	//  ASSIGN RENTER TO UNIT
+	
+	public boolean assignUnitRenterToUnit (RenterDto renterDto, UnitDto unitDto);
+	
+	public boolean removeRenterFromUnit (RenterDto renterDto, UnitDto unitDto);
+	
 
 	
 	
-	// UNITS
 	
-
-//		assignUnitOwnerToUnit
-//		removeUnitOwnerFromUnit
-//		assignRenterToUnit
-//		removeRenterFromUnit
-	//
-//		createUnit
-//		deleteUnit
-//		updateUnit
 	
 	
 }

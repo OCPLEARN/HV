@@ -8,9 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.ocplearn.hv.dao.PropertyManagementDao;
+import de.ocplearn.hv.dto.BuildingDto;
+import de.ocplearn.hv.dto.BuildingOwnerDto;
 import de.ocplearn.hv.dto.ContactDto;
 import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
+import de.ocplearn.hv.dto.RenterDto;
+import de.ocplearn.hv.dto.UnitDto;
 import de.ocplearn.hv.mapper.LoginUserMapper;
 import de.ocplearn.hv.mapper.PropertyManagementMapper;
 import de.ocplearn.hv.model.PropertyManagement;
@@ -175,4 +179,97 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		
 		return propertyManagementDtoList;
 	}
+
+
+	@Override
+	public boolean createBuilding(BuildingDto buildingDto) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean deleteBuilding(int buildingDtoId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean updateBuilding(BuildingDto buildingDto) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean assignBuildingOwnerToBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean removeBuildingOwnerFromBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean assignAllUnitsToOneOwner(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean createUnit(UnitDto unitDto) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean deleteUnit(UnitDto unitDto) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean updateUnit(UnitDto unitDto) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean assignUnitOwnerToUnit(BuildingOwnerDto buildingOwnerDto, UnitDto unitDto) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean removeUnitOwnerFromUnit(BuildingOwnerDto buildingOwnerDto, UnitDto unitDto) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean assignUnitRenterToUnit(RenterDto renterDto, UnitDto unitDto) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean removeRenterFromUnit(RenterDto renterDto, UnitDto unitDto) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	 
 }
