@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -23,6 +24,8 @@ import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.BuildingOwner;
 import de.ocplearn.hv.model.BuildingType;
 import de.ocplearn.hv.model.PropertyManagement;
+import de.ocplearn.hv.model.Transaction;
+import de.ocplearn.hv.model.Unit;
 import de.ocplearn.hv.util.LoggerBuilder;
 import de.ocplearn.hv.util.SQLUtils;
 import de.ocplearn.hv.util.TablePageViewData;
@@ -142,7 +145,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 	}
 
 	@Override
-	public Optional<Building> findById(int id) {
+	public Optional<Building> findByIdPartial(int id) {
 				String sql = "SELECT " + COLUMNS + ", pm.*, " + AddressDaoJdbc.COLUMNS +"  FROM building AS " + TABLE_NAME_PREFIX 
 				+ "JOIN propertymanagement pm ON bu.propertyManagementId = bu.id "
 				+ "JOIN " + AddressDaoJdbc.TABLE_NAME + " AS " + AddressDaoJdbc.TABLE_NAME_PREFIX 
@@ -155,12 +158,16 @@ public class BuildingDaoJdbc implements BuildingDao{
 				stmt.setInt(1, id );
 				ResultSet resultSet = stmt.executeQuery();
 				
-				Building building = this.mapRowToBuilding(resultSet);
-				building.setAddress(addressDaoJdbc.mapRowToAddress(resultSet, building.getAddress()));
-				building.setPropertyManagement(propertyManagementDaoJdbc.mapRowToPropertyManagement(resultSet, building.getPropertyManagement()));
+				if (resultSet.next()) {
 				
-			//	return resultSet.next() ? Optional.of(this.mapRowToBuilding(resultSet)) : Optional.empty();
-				
+					Building building = this.mapRowToBuilding(resultSet);
+					building.setAddress(addressDaoJdbc.mapRowToAddress(resultSet, building.getAddress()));
+					building.setPropertyManagement(propertyManagementDaoJdbc.mapRowToPropertyManagement(resultSet, building.getPropertyManagement()));
+					return Optional.of(building);
+				} else {
+					return Optional.empty();
+				}
+			
 		} catch (SQLException e) {
 			    e.printStackTrace(); 
 			    logger.log(Level.WARNING, e.getMessage());
@@ -182,11 +189,12 @@ public class BuildingDaoJdbc implements BuildingDao{
 		propertyManagement.setId( resultSet.getInt( BuildingDaoJdbc.TABLE_NAME_PREFIX + ".propertyManangementId" ) );
 		building.setPropertyManagement(propertyManagement);
 		
-		building.setOwners(owners);
-		
-		building.setUnits(units);
-		
-		building.setTransactions(transactions);
+		// TODO setOwners
+		building.setOwners(new ArrayList<BuildingOwner>());
+		// TODO setUnits
+		building.setUnits(new HashSet<Unit>());
+		// TODO setTransactions
+		building.setTransactions(new HashSet<Transaction>());
 		
 		building.setNote( resultSet.getNString( BuildingDaoJdbc.TABLE_NAME_PREFIX + "note" ) );
 	
@@ -225,7 +233,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 
 
 	@Override
-	public Optional<Building> findByIdPartial(int id) {
+	public Optional<Building> findByIdFull(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

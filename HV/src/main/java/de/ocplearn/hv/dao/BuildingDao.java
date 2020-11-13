@@ -38,8 +38,28 @@ public interface BuildingDao {
 	 boolean save(Building building);
 	 boolean delete(Building building);
 	 
-	 Optional<Building> findById(int id);
+	 
+	 /**
+	  * * finds Building by id and returns an optional of a Building 
+	  *   that has id, name, Address, BuildingType, PropertyManagement, note
+	  *   AND a FILLED OUT List of Owners and FILLED OUT sets of Units and Transactions
+	  * 
+	  * @param id
+	  * @return Optional<Building>
+	  */
+	 Optional<Building> findByIdFull(int id);
+	 
+	 /**
+	  * * finds Building by id and returns an optional of a Building 
+	  *   that has id, name, Address, BuildingType, PropertyManagement, note
+	  *   AND an EMPTY List of Owners and EMPTY sets of Units and Transactions
+	  * 
+	  * @param id
+	  * @return Optional<Building>
+	  */
 	 Optional<Building> findByIdPartial(int id);
+	 
+	 	 
 	 List <Integer> findBuildingOwnerIdsByBuildingId(int buildingId, TablePageViewData tablePageViewData);
 	 List <Building> getAllBuildings();
 	 
