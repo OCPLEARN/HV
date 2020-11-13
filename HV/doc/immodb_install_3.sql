@@ -309,3 +309,48 @@ ADD CONSTRAINT `fk_building_propertyManagementId`
 
 ALTER TABLE `immodb`. `buildingowner` DROP FOREIGN KEY fk_buildingOwner_propertyManagerId;
 ALTER TABLE `immodb`.`buildingowner` DROP COLUMN propertyManagerId;
+CREATE TABLE unitOwnerLink (
+		id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+		timeStmpAdd timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		timeStmpEdit timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+		unitId INT NOT NULL,
+		buildingOwnerId INT NOT NULL,
+		
+		CONSTRAINT fk_unitOwnerLink_unitId 					/* fk = foreignKey Benennung des Constraint*/
+		FOREIGN KEY ( unitId )									/* Spaltenname des ForeignKey */
+		REFERENCES unit ( id), 							/*Referenztabelle*/
+		
+		CONSTRAINT fk_unitOwnerLink_buildingOwnerId 			/* fk = foreignKey*/
+		FOREIGN KEY ( buildingOwnerId )								/* Spaltenname des ForeignKey */
+		REFERENCES buildingOwner ( id ) 				/*Referenztabelle*/
+	);
+	   CREATE TABLE unitFeatures (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	timeStmpAdd timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+	timeStmpEdit timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    featureName VARCHAR (255),
+    featureValueBoolean char (1),
+    APARTMENT_UNIT char(1),
+	COMMERCIAL_UNIT char(1),
+	PARKING_UNIT char(1),
+    BUILDING_UNIT char(1),
+    REAL_ESTATE_UNIT char(1),
+    OTHER_UNIT char(1)
+    );
+    
+    CREATE TABLE unitFeaturesLink (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	timeStmpAdd timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+	timeStmpEdit timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    unitId INT NOT NULL,
+    unitFeaturesId INT NOT NULL,
+    featureValue VARCHAR(255),
+    
+    CONSTRAINT fk_unitFeaturesLink_unitId
+    FOREIGN KEY (unitId)
+    REFERENCES unit (id),
+    
+    CONSTRAINT fk_unitFeaturesLink_unitFeaturesId
+    FOREIGN KEY (unitFeaturesId)
+    REFERENCES unitFeatures (id)
+    );

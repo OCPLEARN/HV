@@ -8,11 +8,14 @@ import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.model.PropertyManagement;
 
+
 /**
  * Create, update, delete, read and finds PropertyManagements
+ * and manages BuildingOwners and Units
  */
-
 public interface PropertyManagementService {
+	
+	// PROPERTYMANAGEMENTS
 	
 	
 	/**
@@ -63,6 +66,31 @@ public interface PropertyManagementService {
 	
 	public boolean removeLoginUserFromPropertyManagement(LoginUserDto loginUserDto,PropertyManagementDto propertyManagementDto);
 	
+	
+	// BUILDINGOWNERS
+	
+//	assignBuildingOwnerToBuilding
+//	removeBuildingOwnerFromBuilding
+//	assignAllUnitsToOneOwner
+//
+//	createBuilding
+//	deleteBuilding
+//	updateBuilding
+//
+
+	
+	
+	// UNITS
+	
+
+//		assignUnitOwnerToUnit
+//		removeUnitOwnerFromUnit
+//		assignRenterToUnit
+//		removeRenterFromUnit
+	//
+//		createUnit
+//		deleteUnit
+//		updateUnit
 	
 	
 }
