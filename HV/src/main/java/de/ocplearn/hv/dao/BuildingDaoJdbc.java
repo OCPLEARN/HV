@@ -51,10 +51,9 @@ public class BuildingDaoJdbc implements BuildingDao{
 	
 	private PropertyManagementDaoJdbc propertyManagementDaoJdbc;
 	
-	 
-	
 	public Logger logger = LoggerBuilder.getInstance().build( PropertyManagementDaoJdbc.class );
 		
+	
 	
 	@Autowired // DB einbinden über Autowire mit Qualifier Implementierung von AddressDao mit Qualifier spezifiziert
 	public BuildingDaoJdbc( @Qualifier ("datasource1") DataSource dataSource, 
@@ -103,10 +102,8 @@ public class BuildingDaoJdbc implements BuildingDao{
 			logger.log(Level.WARNING, e.getMessage());
 			throw new DataAccessException("Unable to get Data from DB. " + e.getMessage());	
 		}
-			
-	
-	
 	}
+	
 	
 	private boolean update(Building building) {
 		String sql = "UPDATE building SET propertyManagementId=?, buildingName=?, addressId=?, buildingType=?, note=? WHERE id =?;"; 
@@ -127,8 +124,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 	                }else {
 	                	return true;
 	                }
-	                
-	               
+	               	               
 		  } catch (SQLException e) {
 				e.printStackTrace();
 				logger.log(Level.WARNING, e.getMessage());
@@ -138,11 +134,28 @@ public class BuildingDaoJdbc implements BuildingDao{
 		
 	}
 
+	
 	@Override
-	public boolean delete(Building building) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean deleteById(int buildingId) {
+		// TODO please code check, Dominik
+
+		String sql = "DELETE * FROM building WHERE id = ?";
+		
+		try (
+			Connection connection = dataSource.getConnection();
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			) {
+			stmt.setInt( 1, buildingId );
+			return (stmt.executeUpdate() > 0) ?  true :  false;
+			
+		}catch(SQLException e) {
+			 e.printStackTrace(); 
+			    logger.log(Level.WARNING, e.getMessage());
+			    throw new DataAccessException("Unable to get Data from DB."); 
+		}
 	}
+
+
 
 	@Override
 	public Optional<Building> findByIdPartial(int id) {
@@ -196,7 +209,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 		// TODO setTransactions
 		building.setTransactions(new HashSet<Transaction>());
 		
-		building.setNote( resultSet.getNString( BuildingDaoJdbc.TABLE_NAME_PREFIX + "note" ) );
+		building.setNote( resultSet.getString( BuildingDaoJdbc.TABLE_NAME_PREFIX + "note" ) );
 	
 				
 		return building;
@@ -209,14 +222,86 @@ public class BuildingDaoJdbc implements BuildingDao{
 
 	@Override
 	public List<Integer> findBuildingOwnerIdsByBuildingId(int buildingId, TablePageViewData tablePageViewData) {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO exchange SQL hardcode with SQLUtils code
+		
+//		SELECT buildingOwnerId 					Auswahl Spalte buildingOwnerId
+//		FROM unitOwnerLink 						aus Tabelle unitOwnerLink
+//		INNER JOIN unit 						verknüpft mit Tabelle unit
+//		ON unit.id = unitOwnerLink.unitId  		ON (Vorbedingung) Spalte unit.id = Spalte unitOwnerLink.unitId
+//		WHERE  unit.buildingId = 1 ;			(in der Vorauswahl von ON wird gesucht WHERE unit.buildinId =...
+		
+		String sql = "SELECT unitOwnerLink.buildingOwnerId FROM unitOwnerLink" 
+					+ "INNER JOIN unit"
+					+ "ON unit.id = unitOwnerLink.unitId"
+					+ "WHERE unit.buildingId = ?;";
+					
+					
+		
+		try( Connection connection = dataSource.getConnection();
+			 PreparedStatement stmt = connection.prepareStatement(sql);
+			 ){
+		 		stmt.setInt( 1, buildingId );
+		 		ResultSet resultSet = stmt.executeQuery();
+		 		
+		 		List<Integer> buildingOwnerList = new ArrayList<>();
+		 		while(resultSet.next()) {
+		 			buildingOwnerList.add(resultSet.getInt("unitOwnerLink.buildingOwnerId"));
+		 	
+			}
+			 	return 	buildingOwnerList;
+
+		}catch( SQLException e ) {
+				e.printStackTrace(); 
+			    logger.log(Level.WARNING, e.getMessage());
+			    throw new DataAccessException("Unable to get Data from DB.");
+		}
+		
 	}
 
 	@Override
-	public List<Building> getAllBuildingsByPropertyManagement() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Building> getAllBuildingsOfPropertyManagementById(int propertyManangementId) {
+		// TODO change SQL to STATIC FIELDS AND CALL mapToRow(resultSet) instead while loop code
+		
+		String sql = "SELECT * FROM building WHERE building.propertyManagementId = ?;";
+		
+		List<Building> buildingList = new ArrayList<>();
+		
+		try( Connection connection = dataSource.getConnection();
+			 PreparedStatement stmt = connection.prepareStatement(sql);
+			){
+			stmt.setInt(1, propertyManangementId);
+			
+			ResultSet resultSet = stmt.executeQuery();
+			
+			while(resultSet.next()) {
+				PropertyManagement propertyManagement = new PropertyManagement();
+				propertyManagement.setId(propertyManangementId);
+				Address address = new Address();
+				address.setId(resultSet.getInt("addressId"));
+				
+				Building building = new Building();
+				building.setId(resultSet.getInt( "id" ));
+				building.setPropertyManagement( propertyManagement );
+				building.setName(resultSet.getString( "name" ));	
+				building.setNote(resultSet.getString("note"));
+				building.setBuildingType(BuildingType.valueOf(resultSet.getString("buildingType")));
+			//	building.setAddress(addressDao.findById(resultSet.getInt("addressId")).get());
+				building.setAddress(address);
+				building.setUnits(new HashSet<Unit>());
+				building.setTransactions(new HashSet<Transaction>());
+				building.setOwners(new ArrayList<BuildingOwner>());
+				
+				buildingList.add(building);
+			}
+			
+			return buildingList;
+						
+			
+		}catch( SQLException e ) {
+				e.printStackTrace(); 
+				logger.log(Level.WARNING, e.getMessage());
+				throw new DataAccessException("Unable to get Data from DB.");
+		}
 	}
 
 	@Override

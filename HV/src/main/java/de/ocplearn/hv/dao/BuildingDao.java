@@ -36,8 +36,8 @@ public interface BuildingDao {
 	TablePageViewData tablePageViewData = new TablePageViewData(OFFSET,LIMIT,SORT_FIELD,SORT_DIRECTION);
 	
 	 boolean save(Building building);
-	 boolean delete(Building building);
-	 
+	 	 
+	 boolean deleteById(int buildingId);
 	 
 	 /**
 	  * * finds Building by id and returns an optional of a Building 
@@ -62,9 +62,10 @@ public interface BuildingDao {
 	 	 
 	 List <Integer> findBuildingOwnerIdsByBuildingId(int buildingId, TablePageViewData tablePageViewData);
 	 
-	 List <Building> getAllBuildingsByPropertyManagement();
+	 List <Building> getAllBuildingsOfPropertyManagementById(int propertyManangementId);
 	 
 	 boolean addBuildingOwnerToBuilding(BuildingOwner buildingOwner, Building building);
+	 
 	 boolean removeBuildingOwnerFromBuilding(BuildingOwner buildingOwner, Building building);
 	 
 	

@@ -358,3 +358,4 @@ DROP TABLE buildingOwnerLink;
 
 ALTER TABLE renter DROP FOREIGN KEY fk_renter_propertyManagerId;
 ALTER TABLE renter DROP COLUMN propertyManagerId;
+ALTER TABLE unit ADD COLUMN unitType varchar(50);
