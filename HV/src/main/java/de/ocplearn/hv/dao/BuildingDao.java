@@ -61,7 +61,8 @@ public interface BuildingDao {
 	 
 	 	 
 	 List <Integer> findBuildingOwnerIdsByBuildingId(int buildingId, TablePageViewData tablePageViewData);
-	 List <Building> getAllBuildings();
+	 
+	 List <Building> getAllBuildingsByPropertyManagement();
 	 
 	 boolean addBuildingOwnerToBuilding(BuildingOwner buildingOwner, Building building);
 	 boolean removeBuildingOwnerFromBuilding(BuildingOwner buildingOwner, Building building);

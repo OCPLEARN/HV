@@ -214,7 +214,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 	}
 
 	@Override
-	public List<Building> getAllBuildings() {
+	public List<Building> getAllBuildingsByPropertyManagement() {
 		// TODO Auto-generated method stub
 		return null;
 	}

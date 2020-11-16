@@ -6,8 +6,8 @@ import de.ocplearn.hv.mapper.LoginUserMapper;
 import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.PropertyManagement;
+import de.ocplearn.hv.model.Renter;
 import de.ocplearn.hv.model.Role;
-import de.ocplearn.hv.model.Tenant;
 import de.ocplearn.hv.util.StaticHelpers;
 
 import java.util.HashMap;
@@ -76,12 +76,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Tenant> findTenantsByPropertyManager(PropertyManagement propertyManager) {
+    public List<Renter> findRenterByPropertyManager(PropertyManagement propertyManager) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<Tenant> findTenantsByBuilding(Building building) {
+    public List<Renter> findRenterByBuilding(Building building) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
