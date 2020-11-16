@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.ocplearn.hv.dao.BuildingDao;
 import de.ocplearn.hv.dao.PropertyManagementDao;
 import de.ocplearn.hv.dto.BuildingDto;
 import de.ocplearn.hv.dto.BuildingOwnerDto;
@@ -15,6 +16,9 @@ import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.dto.RenterDto;
 import de.ocplearn.hv.dto.UnitDto;
+import de.ocplearn.hv.mapper.BuildingMapper;
+import de.ocplearn.hv.mapper.BuildingOwnerMapper;
+import de.ocplearn.hv.mapper.ContactMapper;
 import de.ocplearn.hv.mapper.LoginUserMapper;
 import de.ocplearn.hv.mapper.PropertyManagementMapper;
 import de.ocplearn.hv.model.PropertyManagement;
@@ -32,13 +36,25 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	private UserService userService;
 	
 	private ContactService contactService; 
+	
+	private ContactMapper contactMapper;
+	
+	private BuildingDao buildingDao;
+	
+	private BuildingMapper buildingMapper;
+	
+	private BuildingOwnerMapper buildingOwnerMapper;
 		
 	@Autowired
 	public PropertyManagementServiceImpl ( 	PropertyManagementDao propertyManagementDao,
 											PropertyManagementMapper propertyManagementMapper,
 											UserService userService,
 											ContactService contactService,
-											LoginUserMapper loginUserMapper
+											LoginUserMapper loginUserMapper,
+											ContactMapper contactMapper,
+											BuildingDao buildingDao,
+											BuildingMapper buildingMapper,
+											BuildingOwnerMapper buildingOwnerMapper
 										) {
 		
 		this.propertyManagementDao = propertyManagementDao;
@@ -46,6 +62,10 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		this.userService = userService;
 		this.contactService = contactService;
 		this.loginUserMapper=loginUserMapper;
+		this.contactMapper = contactMapper;
+		this.buildingDao = buildingDao;
+		this.buildingMapper = buildingMapper;
+		this.buildingOwnerMapper = buildingOwnerMapper;
 		}
 	
 	
@@ -138,8 +158,12 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	@Override
 	public PropertyManagementDto findPropertyManagementbyPrimaryContact(
 			 ContactDto contactDto) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<PropertyManagement> optPropertyManagement =propertyManagementDao.findByPrimaryContact(contactMapper.contactDtoToContact(contactDto));
+		if(optPropertyManagement.isPresent()) {
+			return propertyManagementMapper.propertyManagementToPropertyManagementDto(optPropertyManagement.get());
+		}else {
+			return null;
+		}
 	}
 	@Override
 	public boolean addLoginUserToPropertyManagement(LoginUserDto loginUserDto,  PropertyManagementDto propertyManagementDto) {
@@ -183,36 +207,45 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean createBuilding(BuildingDto buildingDto) {
-		// TODO Auto-generated method stub
-		return false;
+		return buildingDao.save(buildingMapper.buildingDtoToBuilding(buildingDto));
 	}
 
 
 	@Override
-	public boolean deleteBuilding(int buildingDtoId) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean deleteBuildingById(int buildingDtoId) {
+		 return deleteBuilding( this.buildingMapper.buildingToBuildingDto( (buildingDao.findByIdFull(buildingDtoId).get()) ) );
 	}
 
+	@Override
+	public boolean deleteBuilding(BuildingDto buildingDto) {
+		//TODO: check if building/unit is currently in use in any active rental contracts
+		if (findBuildingById(buildingDto.getId())!=null) {
+				if(contactService.deleteAddress(buildingDto.getAddress())) {
+					//TODO: delete UNITS from this Building	deleteUnit()
+				return buildingDao.deleteById(buildingDto.getId());
+				}else {
+					return false;
+				}
+			}else {
+				return false;
+			}
+	}
 
 	@Override
 	public boolean updateBuilding(BuildingDto buildingDto) {
-		// TODO Auto-generated method stub
-		return false;
+		return buildingDao.save(buildingMapper.buildingDtoToBuilding(buildingDto));
 	}
 
 
 	@Override
 	public boolean assignBuildingOwnerToBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
-		// TODO Auto-generated method stub
-		return false;
+		return buildingDao.addBuildingOwnerToBuilding(buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto), buildingMapper.buildingDtoToBuilding(buildingDto));
 	}
 
 
 	@Override
 	public boolean removeBuildingOwnerFromBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
-		// TODO Auto-generated method stub
-		return false;
+		return buildingDao.removeBuildingOwnerFromBuilding(buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto), buildingMapper.buildingDtoToBuilding(buildingDto));
 	}
 
 
@@ -269,6 +302,55 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	public boolean removeRenterFromUnit(RenterDto renterDto, UnitDto unitDto) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+
+	@Override
+	public BuildingDto findBuildingById(int buildingId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public boolean createBuildingOwner(BuildingOwnerDto buildingOwnerDto) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean deleteBuildingOwnerById(int buildingOwnerDtoId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean deleteBuildingOwner(BuildingOwnerDto buildingOwnerDto) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean updateBuildingOwner(BuildingOwnerDto buildingOwnerDto) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public BuildingOwnerDto findBuildingOwnerById(int buildingOwnerId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public UnitDto findUnitById(int unitId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	 

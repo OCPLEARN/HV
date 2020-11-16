@@ -75,9 +75,26 @@ public interface PropertyManagementService {
 	
 	public boolean createBuilding(BuildingDto buildingDto);
 	
-	public boolean deleteBuilding(int buildingDtoId);
+	public boolean deleteBuildingById(int buildingDtoId);
+	
+	public boolean deleteBuilding(BuildingDto buildingDto);
 	
 	public boolean updateBuilding(BuildingDto buildingDto);
+	
+	public BuildingDto findBuildingById (int buildingId);
+	
+	// BUILDINGOWNERS CRUD
+	
+	public boolean createBuildingOwner(BuildingOwnerDto buildingOwnerDto);
+	
+	public boolean deleteBuildingOwnerById(int buildingOwnerDtoId);
+	
+	public boolean deleteBuildingOwner(BuildingOwnerDto buildingOwnerDto);
+	
+	public boolean updateBuildingOwner(BuildingOwnerDto buildingOwnerDto);
+	
+	public BuildingOwnerDto findBuildingOwnerById (int buildingOwnerId);
+	
 	
 	
 	// ASSIGN BUILDINGOWNERS TO BUILDING
@@ -96,6 +113,8 @@ public interface PropertyManagementService {
 	public boolean deleteUnit(UnitDto unitDto);
 	
 	public boolean updateUnit(UnitDto unitDto);
+	
+	public UnitDto findUnitById(int unitId);
 	
 	
 	//  ASSIGN BUILDINGOWNERS TO UNIT
