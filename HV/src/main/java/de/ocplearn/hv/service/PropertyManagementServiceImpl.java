@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.ocplearn.hv.dao.BuildingDao;
+import de.ocplearn.hv.dao.BuildingOwnerDao;
 import de.ocplearn.hv.dao.PropertyManagementDao;
 import de.ocplearn.hv.dto.BuildingDto;
 import de.ocplearn.hv.dto.BuildingOwnerDto;
@@ -21,6 +22,7 @@ import de.ocplearn.hv.mapper.BuildingOwnerMapper;
 import de.ocplearn.hv.mapper.ContactMapper;
 import de.ocplearn.hv.mapper.LoginUserMapper;
 import de.ocplearn.hv.mapper.PropertyManagementMapper;
+import de.ocplearn.hv.model.BuildingOwner;
 import de.ocplearn.hv.model.PropertyManagement;
 
 
@@ -41,6 +43,8 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	
 	private BuildingDao buildingDao;
 	
+	private BuildingOwnerDao buildingOwnerDao;
+	
 	private BuildingMapper buildingMapper;
 	
 	private BuildingOwnerMapper buildingOwnerMapper;
@@ -54,7 +58,8 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 											ContactMapper contactMapper,
 											BuildingDao buildingDao,
 											BuildingMapper buildingMapper,
-											BuildingOwnerMapper buildingOwnerMapper
+											BuildingOwnerMapper buildingOwnerMapper,
+											BuildingOwnerDao buildingOwnerDao
 										) {
 		
 		this.propertyManagementDao = propertyManagementDao;
@@ -66,6 +71,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		this.buildingDao = buildingDao;
 		this.buildingMapper = buildingMapper;
 		this.buildingOwnerMapper = buildingOwnerMapper;
+		this.buildingOwnerDao = buildingOwnerDao;
 		}
 	
 	
@@ -314,36 +320,32 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean createBuildingOwner(BuildingOwnerDto buildingOwnerDto) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.buildingOwnerDao.save( this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto) );
 	}
 
 
 	@Override
 	public boolean deleteBuildingOwnerById(int buildingOwnerDtoId) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.buildingOwnerDao.delete(buildingOwnerDtoId);
 	}
 
 
 	@Override
 	public boolean deleteBuildingOwner(BuildingOwnerDto buildingOwnerDto) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.buildingOwnerDao.delete( this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto) );
 	}
 
 
 	@Override
 	public boolean updateBuildingOwner(BuildingOwnerDto buildingOwnerDto) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.buildingOwnerDao.save( this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto) );
 	}
 
 
 	@Override
 	public BuildingOwnerDto findBuildingOwnerById(int buildingOwnerId) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<BuildingOwner> opt = this.buildingOwnerDao.findByIdFull(buildingOwnerId);
+		return opt.isPresent() ? this.buildingOwnerMapper.buildingOwnerToBuildingOwnerDto(opt.get()) : null;
 	}
 
 

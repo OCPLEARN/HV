@@ -54,6 +54,14 @@ public interface BuildingOwnerDao {
 	 * @return true on success
 	 */
 	public boolean delete( BuildingOwner buildingOwner );
+
+	/**
+	 * Removal of BuildingOwner
+	 * 
+	 * @param id 
+	 * @return true on success
+	 */
+	public boolean delete( int buildingOwnerId );	
 	
 	/**
 	 * Find by id, internal references to other entities are only filled with id

@@ -129,23 +129,30 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 		
 		return true;
 	}	
-	
+
 	@Override
-	public boolean delete(BuildingOwner buildingOwner) {
+	public boolean delete(int buildingOwnerId) {
 		try(	
 				Connection con =  this.datasource.getConnection();
 	        	PreparedStatement stmt = con.prepareStatement( "DELETE FROM buildingowner WHERE id = ?;" );
 			)
 		{
-			stmt.setInt(1, buildingOwner.getId()  );
+			stmt.setInt(1, buildingOwnerId  );
 	        return (stmt.executeUpdate()==1)?true:false;	                
 	    } catch (SQLException e) {
 	    	e.printStackTrace(); 
 	        logger.log(Level.WARNING, e.getMessage());
 	        throw new DataAccessException("Unable to delete data from DB.");            
-	    }
+	    }		
+	}	
+	
+	@Override
+	public boolean delete(BuildingOwner buildingOwner) {
+		return this.delete(buildingOwner.getId());
 	}
 
+	
+	
 	@Override
 	public Optional<BuildingOwner> findByIdPartial(int id) {
 		try(
