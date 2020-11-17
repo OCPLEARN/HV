@@ -49,6 +49,8 @@ public class BuildingDaoJdbc implements BuildingDao{
 	
 	private AddressDaoJdbc addressDaoJdbc; 
 	
+	private UnitDaoJdbc unitDaoJdbc;
+	
 	private PropertyManagementDaoJdbc propertyManagementDaoJdbc;
 	
 	public Logger logger = LoggerBuilder.getInstance().build( PropertyManagementDaoJdbc.class );
@@ -58,8 +60,13 @@ public class BuildingDaoJdbc implements BuildingDao{
 	@Autowired // DB einbinden über Autowire mit Qualifier Implementierung von AddressDao mit Qualifier spezifiziert
 	public BuildingDaoJdbc( @Qualifier ("datasource1") DataSource dataSource, 
 							@Qualifier("AddressDaoJdbc") AddressDao addressDao, 
-							AddressDaoJdbc addressDaoJdbc, PropertyManagementDaoJdbc propertyManagementDaoJdbc) {
+							AddressDaoJdbc addressDaoJdbc,
+							PropertyManagementDaoJdbc propertyManagementDaoJdbc,
+							UnitDaoJdbc unitDaoJdbc
+							) {
 		this.dataSource = dataSource;
+		this.addressDaoJdbc = addressDaoJdbc;
+		this.unitDaoJdbc = unitDaoJdbc;
 	}
 	
 	
@@ -308,8 +315,21 @@ public class BuildingDaoJdbc implements BuildingDao{
 	
 	@Override
 	public boolean addBuildingOwnerToBuilding(BuildingOwner buildingOwner, Building building) {
-		// TODO Auto-generated method stub
-		return false;
+
+		Unit buildingUnit = this.unitDaoJdbc.getBuildingUnit(building.getId());
+
+		String sql = "INSERT INTO unitownerlink (unitId, buildingOwnerId) VALUE (?, ?);";
+		try( Connection connection = dataSource.getConnection();
+				 PreparedStatement stmt = connection.prepareStatement(sql);
+		){
+			stmt.setInt(1, buildingUnit.getId());
+			stmt.setInt(2, buildingOwner.getId());
+			return stmt.executeUpdate() == 1 ? true : false; 			
+		}catch( SQLException e ) {
+			e.printStackTrace(); 
+			logger.log(Level.WARNING, e.getMessage());
+			throw new DataAccessException("Unable to get Data from DB.");
+		}
 	}
 
 	@Override
