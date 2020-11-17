@@ -217,8 +217,22 @@ public class Unit implements Comparable<Unit>{
 	
 	@Override
 	public int compareTo(Unit o) {
-		if(this.getBuilding().getId()-o.getBuilding().getId()) {
-			
+		if(this.getBuilding().getId()==o.getBuilding().getId()) {
+			if(this.getUnitName().equals(o.getUnitName())) {
+				if(this.getAddress().getId()==o.getAddress().getId()) {
+					if(this.getConstructionYear()==o.getConstructionYear()) {
+						return this.getConstructionYear()-o.getConstructionYear();
+					}else {
+						return this.getId()-o.getId();
+					}
+				}else {
+					return this.getAddress().getId()-o.getAddress().getId();
+				}
+			}else {
+				return this.getUnitName().compareTo(o.getUnitName());
+			}
+		}else {
+			return this.getBuilding().getId()-o.getBuilding().getId();
 		}
 	}
 	

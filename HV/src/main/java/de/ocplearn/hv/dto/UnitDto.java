@@ -4,7 +4,7 @@ import de.ocplearn.hv.model.Address;
 import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.UnitType;
 
-public class UnitDto {
+public class UnitDto implements Comparable<UnitDto>{
 	
 	private int id;
 	
@@ -219,5 +219,25 @@ public class UnitDto {
 				+ ", note=" + note + ", unitType=" + unitType + "]";
 	}
 	
+	@Override
+	public int compareTo(UnitDto o) {
+		if(this.getBuildingDto().getId()==o.getBuildingDto().getId()) {
+			if(this.getUnitName().equals(o.getUnitName())) {
+				if(this.getAddressDto().getId()==o.getAddressDto().getId()) {
+					if(this.getConstructionYear()==o.getConstructionYear()) {
+						return this.getConstructionYear()-o.getConstructionYear();
+					}else {
+						return this.getId()-o.getId();
+					}
+				}else {
+					return this.getAddressDto().getId()-o.getAddressDto().getId();
+				}
+			}else {
+				return this.getUnitName().compareTo(o.getUnitName());
+			}
+		}else {
+			return this.getBuildingDto().getId()-o.getBuildingDto().getId();
+		}
+	}
 
 }
