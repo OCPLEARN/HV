@@ -147,7 +147,7 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 		
 	@Override
 	public Optional<PropertyManagement> findByPrimaryLoginUserId(int id) {
-		String sql = "SELECT * FROM propertymanagemt WHERE primaryLoginUserId = ?;";
+		String sql = "SELECT " + COLUMNS + " FROM " + TABLE_NAME + " AS " + TABLE_NAME_PREFIX + " WHERE " + TABLE_NAME_PREFIX + ".primaryLoginUserId = ?;";
 		try ( Connection connection = this.dataSource.getConnection(); 
 				  PreparedStatement stmt = connection.prepareStatement(sql); ){
 			stmt.setInt(1,  id);

@@ -24,6 +24,7 @@ import de.ocplearn.hv.model.PaymentType;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.service.PropertyManagementService;
 import de.ocplearn.hv.service.UserService;
+import de.ocplearn.hv.test.TestObjectSupplier;
 import de.ocplearn.hv.test.dao.AddressDaoTest;
 import de.ocplearn.hv.util.StaticHelpers;
 
@@ -36,6 +37,9 @@ import de.ocplearn.hv.util.StaticHelpers;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)		
 public class PropertyManagementServiceTest {
 
+	@Autowired
+	private TestObjectSupplier instance;
+	
 	private PropertyManagementService propertyManagementService;
 	
 	private UserService userService;
@@ -232,7 +236,14 @@ public class PropertyManagementServiceTest {
 		
 	}
 	
-	
+	@Test
+	@Order(8)	
+	public void testGetModel_givenModelKey_PropertyMgmt() {
+		//TestObjectSupplier instance = TestObjectSupplier.getInstance();
+		PropertyManagementDto model1 =  instance.getModel("Model1");
+		Assertions.assertTrue(model1.getPrimaryLoginUser().getLoginUserName().equals("userModel1"));
+		
+	}
 	
 	
 }

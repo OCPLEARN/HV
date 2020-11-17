@@ -15,7 +15,9 @@ import java.util.TreeSet;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.stereotype.Component;
 
 import de.ocplearn.hv.dao.LoginUserDao;
 import de.ocplearn.hv.dto.AddressDto;
@@ -28,6 +30,7 @@ import de.ocplearn.hv.dto.TransactionDto;
 import de.ocplearn.hv.dto.UnitDto;
 import de.ocplearn.hv.model.Address;
 import de.ocplearn.hv.model.AddressType;
+import de.ocplearn.hv.model.BuildingType;
 import de.ocplearn.hv.model.Contact;
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.PaymentType;
@@ -42,6 +45,7 @@ import de.ocplearn.hv.test.dao.LoginUserDaoTest;
 import de.ocplearn.hv.util.StaticHelpers;
 
 @SpringBootTest
+@Component
 public class TestObjectSupplier {
 	
 	// list of PM test models
@@ -83,7 +87,7 @@ public class TestObjectSupplier {
 	@Autowired
 	private TestObjectSupplier(
 			UserService userService,
-			LoginUserDao loginUserDao,
+			@Qualifier("LoginUserDaoJdbc") LoginUserDao loginUserDao,
 			PropertyManagementService propertyManagementService
 			) {
 		this.userService = userService;
@@ -187,7 +191,7 @@ public class TestObjectSupplier {
 	}
 	
 	public ContactDto createContactDto (boolean isCompany, String firstName, String lastName, String...companyName ) {
-				
+		
 		contactDto =  new ContactDto.ContactBuilder()
 				.setCompany(isCompany)
 				.setcompanyName(isCompany?companyName[0]:null)
@@ -219,7 +223,7 @@ public class TestObjectSupplier {
 		propertyManagementDto.setPrimaryContact(createContactDto(false, partsBox.firstNameSupplier.get(), partsBox.lastNameSupplier.get()));
 		propertyManagementDto.setPaymentType(PaymentType.PRO);
 		propertyManagementDto.setLoginUsers(Arrays.asList(createLoginUserDto(Role.EMPLOYEE),createLoginUserDto(Role.EMPLOYEE)));
-		propertyManagementDto.setCompanyContact(createContactDto(true, partsBox.firstNameSupplier.get(), partsBox.lastNameSupplier.get()));
+		propertyManagementDto.setCompanyContact(createContactDto(true, partsBox.firstNameSupplier.get(), partsBox.lastNameSupplier.get(), "Model Company" ));
 		
 		return propertyManagementDto;
 	}	
@@ -238,7 +242,7 @@ public class TestObjectSupplier {
 		buildingDto.setTransactions(new TreeSet<TransactionDto>());
 		buildingDto.setPropertyManagement( createPropertyManagementDto() );
 		buildingDto.setNote("Do not enter");
-		
+		buildingDto.setBuildingType(BuildingType.APARTMENT_BUILDING);
 		return buildingDto;		
 	}
 	
