@@ -241,7 +241,11 @@ public class PropertyManagementServiceTest {
 	public void testGetModel_givenModelKey_PropertyMgmt() {
 		//TestObjectSupplier instance = TestObjectSupplier.getInstance();
 		PropertyManagementDto model1 =  instance.getModel("Model1");
+		//System.out.println( "testGetModel_givenModelKey_PropertyMgmt()" );
+		//System.out.println("\t " + model1.getPrimaryLoginUser());
 		Assertions.assertTrue(model1.getPrimaryLoginUser().getLoginUserName().equals("userModel1"));
+		
+		
 		
 	}
 	

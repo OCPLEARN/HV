@@ -377,10 +377,9 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	@Override
 	public PropertyManagementDto findPropertyManagementbyPrimaryLoginUserName(String PrimaryLoginUserName) {
 		LoginUserDto loginUserDto = this.userService.findUserByLoginUserName(PrimaryLoginUserName);
-		return this.propertyManagementMapper.propertyManagementToPropertyManagementDto(
-				// Optional.get()
-				( this.propertyManagementDao.findByPrimaryLoginUserId(loginUserDto.getId()) ).get()
-		);
+		Optional<PropertyManagement> opt =  this.propertyManagementDao.findByPrimaryLoginUserId(loginUserDto.getId());
+		if ( ! opt.isPresent() ) return null;
+		return this.findPropertyManagementbyId( opt.get().getId() );
 	}
 	
 	 
