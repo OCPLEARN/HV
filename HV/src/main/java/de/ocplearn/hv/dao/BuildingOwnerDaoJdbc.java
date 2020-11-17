@@ -202,8 +202,35 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 	
 	@Override
 	public List<Integer> findAllBuildingIdsByOwnerId(int id, TablePageViewData tablePageViewData) {
-		// TODO Auto-generated method stub
-		return null;
+
+		List<Integer> list = new ArrayList<Integer>();
+		
+		String sql = "SELECT un.buildingId FROM unitownerlink AS uol"
+		+ " JOIN unit AS un" 
+		+ " ON uol.unitId = un.id"
+		+ " WHERE un.unitType = 'BUILDING_UNIT' AND uol.buildingOwnerId = ?"
+		+ " ORDER BY ?"
+		+ " LIMIT ?, ? ;";	
+		
+		try( 	Connection connection = this.datasource.getConnection();
+				PreparedStatement prepStmt = connection.prepareStatement(sql);
+				){
+			
+			prepStmt.setInt(1, id);
+			prepStmt.setString(2, tablePageViewData.getOrderBy());
+			prepStmt.setInt(3, tablePageViewData.getOffset());
+			prepStmt.setInt(4, tablePageViewData.getRowCount());
+			ResultSet resultSet = prepStmt.executeQuery();
+			while( resultSet.next() ) {
+				list.add(resultSet.getInt("un.buildingId"));
+			}
+		}
+		catch (SQLException e) {
+	    	e.printStackTrace(); 
+	        logger.log(Level.WARNING, e.getMessage());
+	        throw new DataAccessException("Unable to get Data from DB.");            
+	    }		
+		return list;
 	}
 
 	/**
