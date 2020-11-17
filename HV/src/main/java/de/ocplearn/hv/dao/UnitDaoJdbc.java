@@ -48,6 +48,7 @@ public class UnitDaoJdbc implements UnitDao {
 			
 			ResultSet resultSet = stmt.executeQuery();
 			Unit unit = mapRowToUnit(resultSet);
+			return unit;
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -63,7 +64,7 @@ public class UnitDaoJdbc implements UnitDao {
 
 
 	private Unit mapRowToUnit(ResultSet resultSet, Unit unit) {
-		unit.
+		return null;
 	}
 	
 }
