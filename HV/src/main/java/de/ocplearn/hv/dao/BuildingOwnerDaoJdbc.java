@@ -240,8 +240,16 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 	 * @return BuildingOwner
 	 * */
 	public BuildingOwner mapRowToBuildingOwner( ResultSet resultSet ) throws SQLException {
-
-		BuildingOwner buildingOwner = new BuildingOwner();
+		return this.mapRowToBuildingOwner(resultSet, new BuildingOwner());
+	}
+	
+	/**
+	 * maps a row to BuildingOwnerObject
+	 * @param BuildingOwner instance
+	 * @param resultSet
+	 * @return BuildingOwner
+	 * */
+	public BuildingOwner mapRowToBuildingOwner( ResultSet resultSet, BuildingOwner buildingOwner ) throws SQLException {
 		
 		buildingOwner.setId( resultSet.getInt( BuildingOwnerDaoJdbc.TABLE_NAME_PREFIX +  ".id" ) );
 		
@@ -254,6 +262,6 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 		buildingOwner.setLoginUser(loginUser);
 		
 		
-		return buildingOwner;		
+		return buildingOwner;	
 	}
 }
