@@ -1,11 +1,13 @@
 package de.ocplearn.hv.test;
 
+import java.security.KeyStore.Entry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -31,6 +33,7 @@ import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.PaymentType;
 import de.ocplearn.hv.model.PropertyManagement;
 import de.ocplearn.hv.model.Role;
+import de.ocplearn.hv.model.UnitType;
 import de.ocplearn.hv.service.ContactService;
 import de.ocplearn.hv.service.PropertyManagementService;
 import de.ocplearn.hv.service.UserService;
@@ -41,12 +44,25 @@ import de.ocplearn.hv.util.StaticHelpers;
 @SpringBootTest
 public class TestObjectSupplier {
 	
-	private static final TestObjectSupplier INSTANCE;	
+	// list of PM test models
+	private static final Map<String, String> PM_MODELS;
+	
+	static {
+		PM_MODELS = new HashMap<>();
+		PM_MODELS.put("Model1", "userModel1");
+		PM_MODELS.put("Model2", "userModel2");
+		PM_MODELS.put("Model3", "userModel3");
+	}
+	
+	private static TestObjectSupplier INSTANCE;	
 		
-	static { INSTANCE = new TestObjectSupplier();}
+	//static { INSTANCE = new TestObjectSupplier();}
 	
 	public static TestObjectSupplier getInstance() { return INSTANCE;};
 	
+	private UserService userService;
+	
+	private PropertyManagementService propertyManagementService;
 	
 	private LoginUserDto loginUserDto;
 	
@@ -60,37 +76,105 @@ public class TestObjectSupplier {
 	
 	private BuildingOwnerDto buildingOwnerDto;
 	
-	@Autowired
 	private LoginUserDao loginUserDao;
 
+	PartsBox partsBox = PartsBox.getInstance();
 	
-	private TestObjectSupplier() {	
+	@Autowired
+	private TestObjectSupplier(
+			UserService userService,
+			LoginUserDao loginUserDao,
+			PropertyManagementService propertyManagementService
+			) {
+		this.userService = userService;
+		this.loginUserDao = loginUserDao;
+		this.propertyManagementService = propertyManagementService;
 		
+		PM_MODELS.forEach( (k, v) -> {
+			// k = model name
+			// v = userModel1 loginUserName 
+			LoginUserDto loginUserDto = this.userService.findUserByLoginUserName(v);
+			// #1 loginUser
+			loginUserDto = this.createLoginUserDto(Role.PROPERTY_MANAGER, v);
+			// #2 PM
+			PropertyManagementDto pmModel = this.createPropertyManagementDto(loginUserDto);
+			this.propertyManagementService.createPropertyManagement(propertyManagementDto);	// pm saved, lu saved
+			// #3 Building + Address
+			AddressDto buildingAddress = this.createAddressDto(AddressType.BUILDING_ADDRESS);
+			AddressDto unitAddress = this.createAddressDto(AddressType.PRIMARY_PRIVATE_ADDRESS);
+			
+			BuildingDto buildingDto = this.createBuildingDto( pmModel );
+			buildingDto.setName("House " + k);
+			buildingDto.setAddress(buildingAddress);
+			this.propertyManagementService.createBuilding(buildingDto);	// building saved
+
+			// #4 BuildingOwner
+			BuildingOwnerDto sister1 = this.createBuildingOwnerDto();
+			this.propertyManagementService.assignBuildingOwnerToBuilding(sister1, buildingDto);
+			BuildingOwnerDto sister2 = this.createBuildingOwnerDto();
+			this.propertyManagementService.assignBuildingOwnerToBuilding(sister2, buildingDto);
+			
+			if (loginUserDto == null) {
+				switch(v) {
+					case "userModel3" : 
+						// L
+					case "userModel2" : 
+						// M				
+					case "userModel1" : {
+						// S
+						// unit 1 BUILDING
+						UnitDto unitDto_BUILDING = new UnitDto( buildingDto, "BUILDING_UNIT name", buildingAddress, 1000.00, 1962, "note", UnitType.BUILDING_UNIT );
+						this.propertyManagementService.createUnit(unitDto_BUILDING);
+						// unit 2 EG left
+						UnitDto unitDto_unit2 = new UnitDto( buildingDto, "EG left", unitAddress, 122.25, 1962, "note", UnitType.APARTMENT_UNIT );
+						this.propertyManagementService.createUnit(unitDto_unit2);
+						
+						UnitDto unitDto_unit3 = new UnitDto( buildingDto, "EG right", unitAddress, 122.25, 1962, "note", UnitType.APARTMENT_UNIT );
+						this.propertyManagementService.createUnit(unitDto_unit3);
+						
+						UnitDto unitDto_unit4 = new UnitDto( buildingDto, "OG left", unitAddress, 112.75, 1964, "note", UnitType.APARTMENT_UNIT );
+						this.propertyManagementService.createUnit(unitDto_unit4);
+						
+						UnitDto unitDto_unit5 = new UnitDto( buildingDto, "OG right", unitAddress, 112.75, 1964, "note", UnitType.APARTMENT_UNIT );
+						this.propertyManagementService.createUnit(unitDto_unit5);
+						break;
+					}		
+				}
+
+			}
+		} );
+		
+		INSTANCE = this;
+	}
+	
+	public LoginUserDto createLoginUserDto(Role role, String loginUserName) {
+		 loginUserDto = new LoginUserDto();
+			
+			//String randomName = LoginUserDaoTest.getRandomName();
+		 	String randomName = loginUserName;
+		 
+			Optional<LoginUser> opt = loginUserDao.findUserByLoginUserName(randomName);
+			if ( opt.isPresent() ) {
+				System.out.println("### LoginUserName already exists!");
+				throw new RuntimeException("### random LoginUserName already exists!");
+			}
+			loginUserDto.setLoginUserName(randomName);
+			
+			 HashMap<String, byte[]> hm = StaticHelpers.createHash("Pa$$w0rd", null);
+		        loginUserDto.setPasswHash( hm.get("hash") );
+		        loginUserDto.setSalt(hm.get("salt") );	
+		        if (role==null) {
+		        loginUserDto.setRole(Role.PROPERTY_MANAGER);
+		        }else {
+		        	loginUserDto.setRole(role);
+		        }
+		        loginUserDto.setLocale( Locale.GERMANY );
+		        
+		    return loginUserDto;		
 	}
 	
 	public LoginUserDto createLoginUserDto(Role role) {
-		 loginUserDto = new LoginUserDto();
-		
-		String randomName = LoginUserDaoTest.getRandomName();
-		
-		Optional<LoginUser> opt = loginUserDao.findUserByLoginUserName(randomName);
-		if ( opt.isPresent() ) {
-			System.out.println("### LoginUserName already exists!");
-			throw new RuntimeException("### random LoginUserName already exists!");
-		}
-		loginUserDto.setLoginUserName(randomName);
-		
-		 HashMap<String, byte[]> hm = StaticHelpers.createHash("Pa$$w0rd", null);
-	        loginUserDto.setPasswHash( hm.get("hash") );
-	        loginUserDto.setSalt(hm.get("salt") );	
-	        if (role==null) {
-	        loginUserDto.setRole(Role.PROPERTY_MANAGER);
-	        }else {
-	        	loginUserDto.setRole(role);
-	        }
-	        loginUserDto.setLocale( Locale.GERMANY );
-	        
-	    return loginUserDto;
+		return this.createLoginUserDto(role,LoginUserDaoTest.getRandomName() );
 	}
 	
 	public ContactDto createContactDto (boolean isCompany, String firstName, String lastName, String...companyName ) {
@@ -119,19 +203,23 @@ public class TestObjectSupplier {
 		return addressDto;
 	}
 	
-	public PropertyManagementDto createPropertyManagementDto() {
+	public PropertyManagementDto createPropertyManagementDto(LoginUserDto loginUserDto) {
 		
 		propertyManagementDto = new PropertyManagementDto();
-		propertyManagementDto.setPrimaryLoginUser(createLoginUserDto(Role.PROPERTY_MANAGER));
-		propertyManagementDto.setPrimaryContact(createContactDto(false, "Peter", "Pan"));
+		propertyManagementDto.setPrimaryLoginUser(loginUserDto);
+		propertyManagementDto.setPrimaryContact(createContactDto(false, partsBox.firstNameSupplier.get(), partsBox.lastNameSupplier.get()));
 		propertyManagementDto.setPaymentType(PaymentType.PRO);
 		propertyManagementDto.setLoginUsers(Arrays.asList(createLoginUserDto(Role.EMPLOYEE),createLoginUserDto(Role.EMPLOYEE)));
-		propertyManagementDto.setCompanyContact(createContactDto(true, "Bruce", "Banner"));
+		propertyManagementDto.setCompanyContact(createContactDto(true, partsBox.firstNameSupplier.get(), partsBox.lastNameSupplier.get()));
 		
 		return propertyManagementDto;
-	}
+	}	
 	
-	public BuildingDto createBuildingDto() {
+	public PropertyManagementDto createPropertyManagementDto() {
+		return this.createPropertyManagementDto( createLoginUserDto(Role.PROPERTY_MANAGER) );
+	}
+
+	public BuildingDto createBuildingDto(PropertyManagementDto propertyManagementDto)  { 
 		buildingDto = new BuildingDto();
 		buildingDto.setName("Manson-House");
 		buildingDto.setAddress(createAddressDto(AddressType.BUILDING_ADDRESS));
@@ -139,19 +227,21 @@ public class TestObjectSupplier {
 		buildingDto.setOwners(new ArrayList<BuildingOwnerDto>());
 		buildingDto.setUnits(new TreeSet<UnitDto>());
 		buildingDto.setTransactions(new TreeSet<TransactionDto>());
-		buildingDto.setPropertyManagement(createPropertyManagementDto());
+		buildingDto.setPropertyManagement( createPropertyManagementDto() );
 		buildingDto.setNote("Do not enter");
 		
-		return buildingDto;
-		
+		return buildingDto;		
+	}
+	
+	public BuildingDto createBuildingDto() {
+		return this.createBuildingDto(null);
 	}
 	
 	public BuildingOwnerDto createBuildingOwnerDto () {
 		
 		buildingOwnerDto = new BuildingOwnerDto();
-		buildingOwnerDto.setContact(createContactDto(true, "Bruce", "Banner"));
+		buildingOwnerDto.setContact(createContactDto(true, this.partsBox.firstNameSupplier.get(), partsBox.lastNameSupplier.get()));
 		buildingOwnerDto.setLoginUser(createLoginUserDto(Role.OWNER));
-		//TODO: complete building <--> buildingOwner create methods
 		buildingOwnerDto.setBuildings(new ArrayList<BuildingDto>());
 		
 		return buildingOwnerDto;

@@ -48,6 +48,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	private BuildingMapper buildingMapper;
 	
 	private BuildingOwnerMapper buildingOwnerMapper;
+	
 		
 	@Autowired
 	public PropertyManagementServiceImpl ( 	PropertyManagementDao propertyManagementDao,
@@ -213,6 +214,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean createBuilding(BuildingDto buildingDto) {
+		if( ! this.contactService.createAddress(buildingDto.getAddress()) ) return false;
 		return buildingDao.save(buildingMapper.buildingDtoToBuilding(buildingDto));
 	}
 

@@ -22,6 +22,9 @@ public class PartsBox {
 			"Frank","Helena","Rudy","Joey","Homer",
 			"Bart","Cindy","Rita","Bert","Chandler",
 			"Greta", "Lara", "Hilbert", "Martin", "Alan"};	
+
+	private  String[] lastNames = { "Banner", "Müller", "Lang", "Rogers",
+			"Stark", "Parkers"};		
 	
 	private String[] apartmentParts = { 
 			"room", "apartment", "place", "area", "place", "floor", "id", "box"
@@ -62,6 +65,15 @@ public class PartsBox {
 	public Supplier<String> firstNameSupplier = () -> {
 		return (this.firstNames[ random.nextInt(this.firstNames.length) ] );
 	};		
+
+	/**
+	 * Returns a random lastname String
+	 * 
+	 * @return lastName
+	 * */
+	public Supplier<String> lastNameSupplier = () -> {
+		return (this.lastNames[ random.nextInt(this.lastNames.length) ] );
+	};			
 	
 	/**
 	 * Returns a random apartment String
