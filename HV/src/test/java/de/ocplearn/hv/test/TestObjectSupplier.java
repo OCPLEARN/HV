@@ -110,8 +110,10 @@ public class TestObjectSupplier {
 
 			// #4 BuildingOwner
 			BuildingOwnerDto sister1 = this.createBuildingOwnerDto();
+			this.propertyManagementService.createBuildingOwner(sister1);	//sis 1 saved
 			this.propertyManagementService.assignBuildingOwnerToBuilding(sister1, buildingDto);
 			BuildingOwnerDto sister2 = this.createBuildingOwnerDto();
+			this.propertyManagementService.createBuildingOwner(sister2);	// sis2 saved
 			this.propertyManagementService.assignBuildingOwnerToBuilding(sister2, buildingDto);
 			
 			if (loginUserDto == null) {

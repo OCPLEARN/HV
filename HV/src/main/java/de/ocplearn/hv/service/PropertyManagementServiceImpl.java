@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import de.ocplearn.hv.dao.BuildingDao;
 import de.ocplearn.hv.dao.BuildingOwnerDao;
 import de.ocplearn.hv.dao.PropertyManagementDao;
+import de.ocplearn.hv.dao.UnitDao;
 import de.ocplearn.hv.dto.BuildingDto;
 import de.ocplearn.hv.dto.BuildingOwnerDto;
 import de.ocplearn.hv.dto.ContactDto;
@@ -22,6 +23,7 @@ import de.ocplearn.hv.mapper.BuildingOwnerMapper;
 import de.ocplearn.hv.mapper.ContactMapper;
 import de.ocplearn.hv.mapper.LoginUserMapper;
 import de.ocplearn.hv.mapper.PropertyManagementMapper;
+import de.ocplearn.hv.mapper.UnitMapper;
 import de.ocplearn.hv.model.BuildingOwner;
 import de.ocplearn.hv.model.PropertyManagement;
 
@@ -49,6 +51,9 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	
 	private BuildingOwnerMapper buildingOwnerMapper;
 	
+	private UnitDao unitDao;
+	
+	private UnitMapper unitMapper;
 		
 	@Autowired
 	public PropertyManagementServiceImpl ( 	PropertyManagementDao propertyManagementDao,
@@ -60,7 +65,10 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 											BuildingDao buildingDao,
 											BuildingMapper buildingMapper,
 											BuildingOwnerMapper buildingOwnerMapper,
-											BuildingOwnerDao buildingOwnerDao
+											BuildingOwnerDao buildingOwnerDao,
+											UnitDao unitDao,
+											UnitMapper unitMapper
+											
 										) {
 		
 		this.propertyManagementDao = propertyManagementDao;
@@ -73,6 +81,8 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		this.buildingMapper = buildingMapper;
 		this.buildingOwnerMapper = buildingOwnerMapper;
 		this.buildingOwnerDao = buildingOwnerDao;
+		this.unitDao = unitDao;
+		this.unitMapper = unitMapper;
 		}
 	
 	
@@ -214,7 +224,16 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean createBuilding(BuildingDto buildingDto) {
+		// #1 Address
 		if( ! this.contactService.createAddress(buildingDto.getAddress()) ) return false;
+		// #2 Owner
+		// TODO should createBuilding() also create its owners?
+//		for ( BuildingOwnerDto bo : buildingDto.getOwners() ) {
+//			if ( bo.getId() == 0 ) { // create owner, not exiting before
+//				if ( ! this.buildingOwnerDao.save( this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(bo) ) )
+//				return false;
+//			}
+//		}
 		return buildingDao.save(buildingMapper.buildingDtoToBuilding(buildingDto));
 	}
 
@@ -266,22 +285,19 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean createUnit(UnitDto unitDto) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.unitDao.save(this.unitMapper.UnitDtoToUnit(unitDto));
 	}
 
 
 	@Override
 	public boolean deleteUnit(UnitDto unitDto) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.unitDao.delete(this.unitMapper.UnitDtoToUnit(unitDto));
 	}
 
 
 	@Override
 	public boolean updateUnit(UnitDto unitDto) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.unitDao.save(this.unitMapper.UnitDtoToUnit(unitDto));
 	}
 
 
