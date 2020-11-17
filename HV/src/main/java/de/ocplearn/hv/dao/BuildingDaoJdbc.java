@@ -76,7 +76,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 
 	private boolean insert(Building building) {
 		String sql = "INSERT INTO building (propertyManagementId, buildingName, addressId, buildingType, note) values (?,?,?,?,?);"; 
-	System.out.println("INSERT BUILDING: "+building);
+
 		try ( Connection connection = this.dataSource.getConnection(); 
 				  PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); ){
 	

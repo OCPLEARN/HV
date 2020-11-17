@@ -1,5 +1,7 @@
 package de.ocplearn.hv.dao;
 
+import java.util.Optional;
+
 import de.ocplearn.hv.model.Unit;
 import de.ocplearn.hv.util.TablePageViewData;
 
@@ -30,6 +32,16 @@ public interface UnitDao {
 	 */
 	TablePageViewData tablePageViewData = new TablePageViewData(OFFSET,LIMIT,SORT_FIELD,SORT_DIRECTION);
 	
-
+	//CRUD
+	
+	boolean save(Unit unit);
+	
+	boolean delete(Unit unit);
+	
+	Optional<Unit> findUnitByIdFull(int id);
+	
+	
 	Unit getBuildingUnit(int buildingId);
+
+	Optional<Unit> findUnitByIdPartial(int id);
 }
