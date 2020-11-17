@@ -40,24 +40,19 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 	private DataSource dataSource;
 		
 	public Logger logger = LoggerBuilder.getInstance().build( PropertyManagementDaoJdbc.class );
-		
 	
 	@Autowired // DB einbinden über Autowire mit Qualifier
 	public PropertyManagementDaoJdbc( @Qualifier ("datasource1") DataSource dataSource ) {
 		this.dataSource = dataSource;
 	}
-	
 
-	
 	@Override
 	public boolean save( PropertyManagement propertyManagement ) {
-		
 		if (propertyManagement.getId() == 0) {
 			return this.insert(propertyManagement);
-			 }else {
-				 return this.update(propertyManagement);
-			 }
-		
+		}else {
+			return this.update(propertyManagement);
+		}
 	}
 
 	@Override
@@ -85,21 +80,17 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 								+ " AS " + PropertyManagementDaoJdbc.TABLE_NAME_PREFIX 
 								+ " WHERE " + PropertyManagementDaoJdbc.TABLE_NAME_PREFIX + ".id = ?;";
 				 
-				try ( Connection connection = this.dataSource.getConnection(); 
-						  PreparedStatement stmt = connection.prepareStatement(sql); ){
-					stmt.setInt(1, id );
-					ResultSet resultSet = stmt.executeQuery();
-					return resultSet.next() ? Optional.of(this.mapRowToPropertyManagement(resultSet)) : Optional.empty();} 
-				catch (SQLException e) {
-						e.printStackTrace();
-						logger.log(Level.WARNING, e.getMessage());
-						throw new DataAccessException("Unable to get Data from DB. " + e.getMessage());		
-			        }
-					
-					
-					
-		
-		
+		try ( Connection connection = this.dataSource.getConnection(); 
+				  PreparedStatement stmt = connection.prepareStatement(sql); ){
+			stmt.setInt(1, id );
+			ResultSet resultSet = stmt.executeQuery();
+			return resultSet.next() ? Optional.of(this.mapRowToPropertyManagement(resultSet)) : Optional.empty();
+		} 
+		catch (SQLException e) {
+				e.printStackTrace();
+				logger.log(Level.WARNING, e.getMessage());
+				throw new DataAccessException("Unable to get Data from DB. " + e.getMessage());		
+	    }
 	}
 
 	public PropertyManagement mapRowToPropertyManagement(ResultSet resultSet, PropertyManagement propertyManagement) throws SQLException {
@@ -124,10 +115,6 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 	public PropertyManagement mapRowToPropertyManagement(ResultSet resultSet) throws SQLException {
 		return mapRowToPropertyManagement (resultSet, new PropertyManagement());
 	}
-	
-	
-	
-
 
 	@Override
 	public Optional<PropertyManagement> findByPrimaryContact( Contact primaryContact ) {
@@ -157,8 +144,7 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 	        throw new DataAccessException( "Unable to get Data from DB." );
 		}
 	}
-	
-	
+		
 	private boolean update(PropertyManagement propertyManagement) {
 		String sql = "UPDATE propertymanagement SET primaryLoginUserId=?, paymentType=?, primaryContactId=?, companyContactId=? WHERE id = ?";
 		
@@ -177,8 +163,6 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 				return true;
 			}
 			
-			
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			logger.log(Level.WARNING, e.getMessage());
@@ -186,7 +170,6 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
         }
 		
 	}
-	
 	
 	private boolean insert (PropertyManagement propertyManagement ) {
 		
@@ -214,11 +197,8 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 			logger.log(Level.WARNING, e.getMessage());
 			throw new DataAccessException("Unable to get Data from DB. " + e.getMessage());		
         }
-		
-		
+				
 	}
-
-
 
 	@Override
 	public boolean addLoginUserToPropertyManagement(LoginUser loginUser, PropertyManagement propertyManagement) {
@@ -229,25 +209,22 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 			stmt.setInt( 1, propertyManagement.getId() );
 			stmt.setInt( 2, loginUser.getId() );
 			if (stmt.executeUpdate() == 0) return false;
-			
 			else {
-														
 				return true;
-			}
-	
-	} catch (SQLException e) {
-		e.printStackTrace();
-		logger.log(Level.WARNING, e.getMessage());
-		throw new DataAccessException("Unable to get Data from DB. " + e.getMessage());		
-    }
+			}	
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.log(Level.WARNING, e.getMessage());
+			throw new DataAccessException("Unable to get Data from DB. " + e.getMessage());		
+	    }
 	}
-
-
 
 	@Override
 	public boolean removeLoginUserFromPropertyManagement(LoginUser loginUser,
-			PropertyManagement propertyManagement) {
-		System.out.println("removeLoginUserFromPropertyManagement: "+loginUser.getId() + " " + propertyManagement.getId());
+		PropertyManagement propertyManagement) {
+		
+		//System.out.println("removeLoginUserFromPropertyManagement: "+loginUser.getId() + " " + propertyManagement.getId());
+		
 		String sql ="DELETE FROM propertymanagementloginuserlink WHERE loginUserId = ? AND propertyManagementId=?;";
 		
 		try ( Connection connection = dataSource.getConnection();
@@ -263,11 +240,16 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
              throw new DataAccessException("Unable to get Data from DB.");
 		}	
 	}
+	
 	@Override
 	public List<Integer> getLoginUsersByPropertyManagement(PropertyManagement propertyManagement) {
+		
 		List <Integer> loginUserIds = new ArrayList<Integer>();
-		System.out.println("\t getLoginUsersByPropertyManagement" + propertyManagement.getId());
+		
+		//System.out.println("\t getLoginUsersByPropertyManagement" + propertyManagement.getId());
+		
 		String sql = "select * from propertymanagementloginuserlink where propertyManagementId = ?;";
+		
 		try ( Connection connection = dataSource.getConnection();
 				  PreparedStatement stmt = connection.prepareStatement(sql)	) {
 			stmt.setInt(1, propertyManagement.getId());
@@ -299,9 +281,6 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 			+ " AS " + ContactDaoJdbc.TABLE_NAME_PREFIX
 			+ " ON " + PropertyManagementDaoJdbc.TABLE_NAME_PREFIX + ".companyContactId  = " + ContactDaoJdbc.TABLE_NAME_PREFIX + ".id" 
 			+ " WHERE " + ContactDaoJdbc.TABLE_NAME_PREFIX + ".companyName LIKE ?;";
-			
-		
-		
 		
 		List<PropertyManagement> propertyManagements = new ArrayList<PropertyManagement>();
 		
@@ -321,7 +300,5 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 	            throw new DataAccessException("Unable to get Data from DB.");
 		}
 	}
-	
-	
 
 }
