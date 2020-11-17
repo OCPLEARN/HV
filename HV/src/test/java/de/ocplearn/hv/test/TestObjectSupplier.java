@@ -94,29 +94,31 @@ public class TestObjectSupplier {
 			// k = model name
 			// v = userModel1 loginUserName 
 			LoginUserDto loginUserDto = this.userService.findUserByLoginUserName(v);
-			// #1 loginUser
-			loginUserDto = this.createLoginUserDto(Role.PROPERTY_MANAGER, v);
-			// #2 PM
-			PropertyManagementDto pmModel = this.createPropertyManagementDto(loginUserDto);
-			this.propertyManagementService.createPropertyManagement(propertyManagementDto);	// pm saved, lu saved
-			// #3 Building + Address
-			AddressDto buildingAddress = this.createAddressDto(AddressType.BUILDING_ADDRESS);
-			AddressDto unitAddress = this.createAddressDto(AddressType.PRIMARY_PRIVATE_ADDRESS);
-			
-			BuildingDto buildingDto = this.createBuildingDto( pmModel );
-			buildingDto.setName("House " + k);
-			buildingDto.setAddress(buildingAddress);
-			this.propertyManagementService.createBuilding(buildingDto);	// building saved
 
-			// #4 BuildingOwner
-			BuildingOwnerDto sister1 = this.createBuildingOwnerDto();
-			this.propertyManagementService.createBuildingOwner(sister1);	//sis 1 saved
-			this.propertyManagementService.assignBuildingOwnerToBuilding(sister1, buildingDto);
-			BuildingOwnerDto sister2 = this.createBuildingOwnerDto();
-			this.propertyManagementService.createBuildingOwner(sister2);	// sis2 saved
-			this.propertyManagementService.assignBuildingOwnerToBuilding(sister2, buildingDto);
-			
 			if (loginUserDto == null) {
+				
+				// #1 loginUser
+				loginUserDto = this.createLoginUserDto(Role.PROPERTY_MANAGER, v);
+				// #2 PM
+				PropertyManagementDto pmModel = this.createPropertyManagementDto(loginUserDto);
+				this.propertyManagementService.createPropertyManagement(propertyManagementDto);	// pm saved, lu saved
+				// #3 Building + Address
+				AddressDto buildingAddress = this.createAddressDto(AddressType.BUILDING_ADDRESS);
+				AddressDto unitAddress = this.createAddressDto(AddressType.PRIMARY_PRIVATE_ADDRESS);
+				BuildingDto buildingDto = this.createBuildingDto( pmModel );
+				buildingDto.setName("House " + k);
+				buildingDto.setAddress(buildingAddress);
+				this.propertyManagementService.createBuilding(buildingDto);	// building saved
+
+				// #4 BuildingOwner and assign 
+				BuildingOwnerDto sister1 = this.createBuildingOwnerDto();
+				this.propertyManagementService.createBuildingOwner(sister1);	//sis 1 saved
+				this.propertyManagementService.assignBuildingOwnerToBuilding(sister1, buildingDto);
+				BuildingOwnerDto sister2 = this.createBuildingOwnerDto();
+				this.propertyManagementService.createBuildingOwner(sister2);	// sis2 saved
+				this.propertyManagementService.assignBuildingOwnerToBuilding(sister2, buildingDto);				
+				
+				// units
 				switch(v) {
 					case "userModel3" : 
 						// L
@@ -147,6 +149,11 @@ public class TestObjectSupplier {
 		} );
 		
 		INSTANCE = this;
+	}
+	
+	public PropertyManagementDto getModel( String key ) {
+		String loginUserName = PM_MODELS.get(key);
+		return this.propertyManagementService.findPropertyManagementbyPrimaryLoginUserName(loginUserName);
 	}
 	
 	public LoginUserDto createLoginUserDto(Role role, String loginUserName) {

@@ -145,6 +145,23 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 		}
 	}
 		
+	@Override
+	public Optional<PropertyManagement> findByPrimaryLoginUserId(int id) {
+		String sql = "SELECT * FROM propertymanagemt WHERE primaryLoginUserId = ?;";
+		try ( Connection connection = this.dataSource.getConnection(); 
+				  PreparedStatement stmt = connection.prepareStatement(sql); ){
+			stmt.setInt(1,  id);
+			ResultSet resultSet = stmt.executeQuery();
+			resultSet.next();
+			return Optional.of(this.mapRowToPropertyManagement(resultSet));
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.log(Level.WARNING, e.getMessage());
+			throw new DataAccessException("Unable to get Data from DB. " + e.getMessage());		
+	    }		
+	}	
+	
 	private boolean update(PropertyManagement propertyManagement) {
 		String sql = "UPDATE propertymanagement SET primaryLoginUserId=?, paymentType=?, primaryContactId=?, companyContactId=? WHERE id = ?";
 		
@@ -300,5 +317,7 @@ public class PropertyManagementDaoJdbc implements PropertyManagementDao {
 	            throw new DataAccessException("Unable to get Data from DB.");
 		}
 	}
+
+
 
 }

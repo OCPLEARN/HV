@@ -62,6 +62,13 @@ public interface PropertyManagementService {
 	 */
 	public PropertyManagementDto findPropertyManagementbyPrimaryContact( ContactDto contactDto );
 	
+	/**
+	 * Find propertymnagent by primary login users name
+	 * @param login user name
+	 * @return PropertyManagementDto
+	 * */
+	public PropertyManagementDto findPropertyManagementbyPrimaryLoginUserName(String PrimaryLoginUserName);
+	
 	public List<Integer> getLoginUserIdsFromPropertyManagement(PropertyManagementDto propertyManagementDto);
 	
 	public List<PropertyManagementDto> findPropertyManagementbyCompanyName( String companyName );

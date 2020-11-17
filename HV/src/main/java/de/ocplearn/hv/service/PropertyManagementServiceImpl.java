@@ -372,6 +372,16 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+	@Override
+	public PropertyManagementDto findPropertyManagementbyPrimaryLoginUserName(String PrimaryLoginUserName) {
+		LoginUserDto loginUserDto = this.userService.findUserByLoginUserName(PrimaryLoginUserName);
+		return this.propertyManagementMapper.propertyManagementToPropertyManagementDto(
+				// Optional.get()
+				( this.propertyManagementDao.findByPrimaryLoginUserId(loginUserDto.getId()) ).get()
+		);
+	}
 	
 	 
 }

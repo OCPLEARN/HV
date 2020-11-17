@@ -17,6 +17,8 @@ public interface PropertyManagementDao {
 	
 	public Optional<PropertyManagement> findByPrimaryContact( Contact primaryContact );
 		
+	public Optional<PropertyManagement> findByPrimaryLoginUserId( int id );
+	
 	public boolean addLoginUserToPropertyManagement(LoginUser loginUser,PropertyManagement propertyManagement);
 	
 	public boolean removeLoginUserFromPropertyManagement(LoginUser loginUser,PropertyManagement propertyManagement);
@@ -24,4 +26,6 @@ public interface PropertyManagementDao {
 	public List<Integer> getLoginUsersByPropertyManagement(PropertyManagement propertyManagement);
 
 	public List<PropertyManagement> findPropertyManagementByComanyName (String companyName);
+	
+	
 }
