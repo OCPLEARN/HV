@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.BuildingOwner;
+import de.ocplearn.hv.model.Unit;
 import de.ocplearn.hv.util.TablePageViewData;
 
 public interface BuildingDao {
@@ -68,7 +69,7 @@ public interface BuildingDao {
 	 
 	 boolean removeBuildingOwnerFromBuilding(BuildingOwner buildingOwner, Building building);
 	 
-	
+
 	
 	
 	

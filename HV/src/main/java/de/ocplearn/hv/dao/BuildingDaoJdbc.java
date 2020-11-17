@@ -230,10 +230,10 @@ public class BuildingDaoJdbc implements BuildingDao{
 //		ON unit.id = unitOwnerLink.unitId  		ON (Vorbedingung) Spalte unit.id = Spalte unitOwnerLink.unitId
 //		WHERE  unit.buildingId = 1 ;			(in der Vorauswahl von ON wird gesucht WHERE unit.buildinId =...
 		
-		String sql = "SELECT unitOwnerLink.buildingOwnerId FROM unitOwnerLink" 
-					+ "INNER JOIN unit"
-					+ "ON unit.id = unitOwnerLink.unitId"
-					+ "WHERE unit.buildingId = ?;";
+		String sql = "SELECT unitownerlink.buildingOwnerId FROM unitownerlink as unitownerlink" 
+					+ "INNER JOIN unit as unit"
+					+ "ON unit.id = unitownerlink.unitId"
+					+ "WHERE unit.buildingId = ? AND unit.unitType='BUILDING_UNIT';";
 					
 					
 		
@@ -245,7 +245,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 		 		
 		 		List<Integer> buildingOwnerList = new ArrayList<>();
 		 		while(resultSet.next()) {
-		 			buildingOwnerList.add(resultSet.getInt("unitOwnerLink.buildingOwnerId"));
+		 			buildingOwnerList.add(resultSet.getInt("unitownerlink.buildingOwnerId"));
 		 	
 			}
 			 	return 	buildingOwnerList;
@@ -304,6 +304,8 @@ public class BuildingDaoJdbc implements BuildingDao{
 		}
 	}
 
+
+	
 	@Override
 	public boolean addBuildingOwnerToBuilding(BuildingOwner buildingOwner, Building building) {
 		// TODO Auto-generated method stub
