@@ -134,6 +134,7 @@ public class TestObjectSupplier {
 						// unit 1 BUILDING
 						UnitDto unitDto_BUILDING = new UnitDto( buildingDto, "BUILDING_UNIT name", buildingAddress, 1000.00, 1962, "note", UnitType.BUILDING_UNIT );
 						this.propertyManagementService.createUnit(unitDto_BUILDING);
+						System.out.println("######### buiding unit id =   " + unitDto_BUILDING.getId() );
 						// unit 2 EG left
 						UnitDto unitDto_unit2 = new UnitDto( buildingDto, "EG left", unitAddress, 122.25, 1962, "note", UnitType.APARTMENT_UNIT );
 						this.propertyManagementService.createUnit(unitDto_unit2);

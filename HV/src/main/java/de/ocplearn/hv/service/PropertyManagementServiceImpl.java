@@ -335,6 +335,11 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		return null;
 	}
 
+	@Override
+	public List<BuildingDto> findBuildingByPropertyManagement(int propertyManagementId) {
+		// TODO Auto-generated method stub
+		return null;
+	}	
 
 	@Override
 	public boolean createBuildingOwner(BuildingOwnerDto buildingOwnerDto) {
@@ -381,6 +386,9 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		if ( ! opt.isPresent() ) return null;
 		return this.findPropertyManagementbyId( opt.get().getId() );
 	}
+
+
+
 	
 	 
 }

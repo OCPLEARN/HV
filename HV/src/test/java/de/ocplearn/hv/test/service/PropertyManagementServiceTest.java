@@ -20,8 +20,10 @@ import de.ocplearn.hv.dto.AddressDto;
 import de.ocplearn.hv.dto.ContactDto;
 import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
+import de.ocplearn.hv.dto.UnitDto;
 import de.ocplearn.hv.model.PaymentType;
 import de.ocplearn.hv.model.Role;
+import de.ocplearn.hv.model.UnitType;
 import de.ocplearn.hv.service.PropertyManagementService;
 import de.ocplearn.hv.service.UserService;
 import de.ocplearn.hv.test.TestObjectSupplier;
@@ -245,8 +247,10 @@ public class PropertyManagementServiceTest {
 		//System.out.println("\t " + model1.getPrimaryLoginUser());
 		Assertions.assertTrue(model1.getPrimaryLoginUser().getLoginUserName().equals("userModel1"));
 		
+		//this.propertyManagementService.
 		
-		
+		//UnitDto unitDto_BUILDING = new UnitDto( buildingDto, "BUILDING_UNIT name", buildingAddress, 1000.00, 1962, "note", UnitType.BUILDING_UNIT );
+		//this.propertyManagementService.createUnit(unitDto_BUILDING);		
 	}
 	
 	

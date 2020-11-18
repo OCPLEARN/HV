@@ -90,6 +90,10 @@ public interface PropertyManagementService {
 	
 	public BuildingDto findBuildingById (int buildingId);
 	
+	// BUILDING finder
+	
+	public List<BuildingDto> findBuildingByPropertyManagement (int propertyManagementId);
+	
 	// BUILDINGOWNERS CRUD
 	
 	public boolean createBuildingOwner(BuildingOwnerDto buildingOwnerDto);
