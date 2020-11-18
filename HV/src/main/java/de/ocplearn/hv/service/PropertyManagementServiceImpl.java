@@ -32,6 +32,7 @@ import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.BuildingOwner;
 import de.ocplearn.hv.model.PropertyManagement;
 import de.ocplearn.hv.model.Unit;
+import lombok.RequiredArgsConstructor;
 
 
 @Service
@@ -231,7 +232,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	@Override
 	public boolean createBuilding(BuildingDto buildingDto) {
 		// #1 Address
-		if(  this.contactService.createAddress(buildingDto.getAddress()) ) return false;
+		if( ! this.contactService.createAddress(buildingDto.getAddress()) ) return false;
 		// #2 Owner
 		// TODO should createBuilding() also create its owners?
 //		for ( BuildingOwnerDto bo : buildingDto.getOwners() ) {
@@ -307,7 +308,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	@Override
 	public boolean createUnit(UnitDto unitDto) {
 		System.out.println("public boolean createUnit(UnitDto unitDto)" + unitDto);
-		Unit unit = unitMapper.unitDtoToUnit(unitDto);
+		Unit unit = unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext());
 		System.out.println("this.unitMapper.UnitDtoToUnit(unitDto)" + unit);
 		if( this.unitDao.save(unit)) {
 			unitDto.setId(unit.getId());
@@ -320,13 +321,13 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean deleteUnit(UnitDto unitDto) {
-		return this.unitDao.delete(this.unitMapper.unitDtoToUnit(unitDto));
+		return this.unitDao.delete(this.unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext()));
 	}
 
 
 	@Override
 	public boolean updateUnit(UnitDto unitDto) {
-		return this.unitDao.save(this.unitMapper.unitDtoToUnit(unitDto));
+		return this.unitDao.save(this.unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext()));
 	}
 
 

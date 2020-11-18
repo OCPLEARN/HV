@@ -1,18 +1,12 @@
 package de.ocplearn.hv.test;
 
-import java.security.KeyStore.Entry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.TreeSet;
-
-import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,16 +22,12 @@ import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.dto.TransactionDto;
 import de.ocplearn.hv.dto.UnitDto;
-import de.ocplearn.hv.model.Address;
 import de.ocplearn.hv.model.AddressType;
 import de.ocplearn.hv.model.BuildingType;
-import de.ocplearn.hv.model.Contact;
 import de.ocplearn.hv.model.LoginUser;
 import de.ocplearn.hv.model.PaymentType;
-import de.ocplearn.hv.model.PropertyManagement;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.model.UnitType;
-import de.ocplearn.hv.service.ContactService;
 import de.ocplearn.hv.service.PropertyManagementService;
 import de.ocplearn.hv.service.UserService;
 import de.ocplearn.hv.test.dao.AddressDaoTest;
@@ -106,15 +96,20 @@ public class TestObjectSupplier {
 				// #2 PM
 				PropertyManagementDto pmModel = this.createPropertyManagementDto(loginUserDto);
 				this.propertyManagementService.createPropertyManagement(propertyManagementDto);	// pm saved, lu saved
-				// #3 Building + Address
+				// #3 Building + Address + Building Unit
 				AddressDto buildingAddress = this.createAddressDto(AddressType.BUILDING_ADDRESS);
 				AddressDto unitAddress = this.createAddressDto(AddressType.PRIMARY_PRIVATE_ADDRESS);
 				BuildingDto buildingDto = this.createBuildingDto( pmModel );
 				buildingDto.setName("House " + k);
 				buildingDto.setAddress(buildingAddress);
-				boolean bo1 = this.propertyManagementService.createBuilding(buildingDto);	// building saved
+				this.propertyManagementService.createBuilding(buildingDto);	// building saved
+				// unit 1 BUILDING
+				UnitDto unitDto_BUILDING = new UnitDto( buildingDto, "BUILDING_UNIT name", buildingAddress, 1000.00, 1962, "note", UnitType.BUILDING_UNIT );
+				this.propertyManagementService.createUnit(unitDto_BUILDING);
+				System.out.println("######### buiding unit id =   " + unitDto_BUILDING.getId() );
 				//System.out.println("bo1 : " + bo1);
 
+				
 				// #4 BuildingOwner and assign 
 				BuildingOwnerDto sister1 = this.createBuildingOwnerDto();
 				this.propertyManagementService.createBuildingOwner(sister1);	//sis 1 saved
@@ -125,16 +120,75 @@ public class TestObjectSupplier {
 				
 				// units
 				switch(v) {
-					case "userModel3" : 
+					case "userModel3" : {
 						// L
-					case "userModel2" : 
+						BuildingDto buildingDto3 = this.createBuildingDto( pmModel );
+						buildingDto.setName("House 3 " + k);
+						AddressDto addressDto = new AddressDto(partsBox.streetSupplier.get(), 
+								"49", 
+								partsBox.apartmentsSupplier.get(), 
+								partsBox.citySupplier.get(), 
+								partsBox.zipSupplier.get(), 
+								partsBox.provinceSupplier.get(), 
+								partsBox.countrySupplier.get(), 
+								partsBox.latitudeSupplier.get(), 
+								partsBox.longitudeSupplier.get(),
+								AddressType.BUILDING_ADDRESS);
+						buildingDto3.setAddress(addressDto);;
+						this.propertyManagementService.createBuilding(buildingDto3);	// building saved
+						//  BUILDING unit for building 2
+						UnitDto unitDto_BUILDING3 = new UnitDto( buildingDto3, "BUILDING_UNIT building 2", addressDto, 45000.00, 2000, "Skyscraper 12", UnitType.BUILDING_UNIT );
+						this.propertyManagementService.createUnit(unitDto_BUILDING);
+						System.out.println("######### buiding unit id =   " + unitDto_BUILDING3.getId() );
+						//assign buildingowner to building
+						this.propertyManagementService.assignBuildingOwnerToBuilding(sister1, buildingDto3);
+						//units
+						String[] unitNames =  {"EG left", "EG right", "OG1 left", "OG1 right", "OG2 left", "OG2, right", "OG3 left", "OG3, right"};
+						for (String s: unitNames) {
+							UnitDto unitDto_unit = new UnitDto( buildingDto3, s, addressDto, 80.25, 1977, "note", UnitType.APARTMENT_UNIT );
+							this.propertyManagementService.createUnit(unitDto_unit);
+							
+						}
+						UnitDto unitDto_unit = new UnitDto( buildingDto3, "garage", addressDto, 175.00, 1985, "parking", UnitType.PARKING_UNIT );
+						this.propertyManagementService.createUnit(unitDto_unit);
+						
+						
+						
+						
+						
+						
+					}
+					case "userModel2" :{ 
 						// M				
+						
+						BuildingDto buildingDto2 = this.createBuildingDto( pmModel );
+						buildingDto2.setName("House 2 " + k);
+						buildingDto2.setBuildingType(BuildingType.HALL);
+						AddressDto addressDto = new AddressDto(partsBox.streetSupplier.get(), 
+								"42", 
+								partsBox.apartmentsSupplier.get(), 
+								partsBox.citySupplier.get(), 
+								partsBox.zipSupplier.get(), 
+								partsBox.provinceSupplier.get(), 
+								partsBox.countrySupplier.get(), 
+								partsBox.latitudeSupplier.get(), 
+								partsBox.longitudeSupplier.get(),
+								AddressType.BUILDING_ADDRESS);
+						buildingDto2.setAddress(addressDto);;
+						this.propertyManagementService.createBuilding(buildingDto2);	// building saved
+						//  BUILDING unit for building 2
+						UnitDto unitDto_BUILDING2 = new UnitDto( buildingDto2, "BUILDING_UNIT building 2", addressDto, 50000.00, 1980, "warehouse 13", UnitType.BUILDING_UNIT );
+						this.propertyManagementService.createUnit(unitDto_BUILDING2);
+						System.out.println("######### buiding unit id =   " + unitDto_BUILDING2.getId() );
+						//assign buildingowner to building
+						this.propertyManagementService.assignBuildingOwnerToBuilding(sister2, buildingDto2);	
+						
+						
+						
+						
+					}
 					case "userModel1" : {
 						// S
-						// unit 1 BUILDING
-						UnitDto unitDto_BUILDING = new UnitDto( buildingDto, "BUILDING_UNIT name", buildingAddress, 1000.00, 1962, "note", UnitType.BUILDING_UNIT );
-						this.propertyManagementService.createUnit(unitDto_BUILDING);
-						System.out.println("######### buiding unit id =   " + unitDto_BUILDING.getId() );
 						// unit 2 EG left
 						UnitDto unitDto_unit2 = new UnitDto( buildingDto, "EG left", unitAddress, 122.25, 1962, "note", UnitType.APARTMENT_UNIT );
 						this.propertyManagementService.createUnit(unitDto_unit2);

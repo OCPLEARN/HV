@@ -288,13 +288,13 @@ public class PropertyManagementServiceTest {
 		
 		
 		
-		BuildingOwnerDto sister1 = instance.createBuildingOwnerDto();
-		this.propertyManagementService.createBuildingOwner(sister1);	//sis 1 saved
-		this.propertyManagementService.assignBuildingOwnerToBuilding(sister1, buildingDto);
-		BuildingOwnerDto sister2 = instance.createBuildingOwnerDto();
-		this.propertyManagementService.createBuildingOwner(sister2);	// sis2 saved
-		this.propertyManagementService.assignBuildingOwnerToBuilding(sister2, buildingDto);	
-		
+//		BuildingOwnerDto sister1 = instance.createBuildingOwnerDto();
+//		this.propertyManagementService.createBuildingOwner(sister1);	//sis 1 saved
+//		this.propertyManagementService.assignBuildingOwnerToBuilding(sister1, buildingDto);
+//		BuildingOwnerDto sister2 = instance.createBuildingOwnerDto();
+//		this.propertyManagementService.createBuildingOwner(sister2);	// sis2 saved
+//		this.propertyManagementService.assignBuildingOwnerToBuilding(sister2, buildingDto);	
+//		
 		
 	}
 	

@@ -1,5 +1,6 @@
 package de.ocplearn.hv.mapper;
 
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 
 import org.mapstruct.factory.Mappers;
@@ -14,7 +15,7 @@ public interface UnitMapper {
 
 	UnitMapper INSTANCE = Mappers.getMapper(UnitMapper.class);
 	
-	UnitDto unitToUnitDto(Unit unit);
+	UnitDto unitToUnitDto(Unit unit, @Context CycleAvoidingMappingContext context);
 	
-	Unit unitDtoToUnit(UnitDto unitDto);
+	Unit unitDtoToUnit(UnitDto unitDto, @Context CycleAvoidingMappingContext context);
 }

@@ -1,6 +1,8 @@
 package de.ocplearn.hv.dto;
 
 import de.ocplearn.hv.model.AddressType;
+import lombok.Builder;
+
 
 public class AddressDto implements Comparable<AddressDto> {
 
