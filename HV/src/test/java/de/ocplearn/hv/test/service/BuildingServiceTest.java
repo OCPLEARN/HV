@@ -18,6 +18,7 @@ import de.ocplearn.hv.dto.BuildingOwnerDto;
 import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.mapper.BuildingMapper;
+import de.ocplearn.hv.mapper.CycleAvoidingMappingContext;
 import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.BuildingType;
 import de.ocplearn.hv.model.PaymentType;
@@ -82,7 +83,7 @@ public class BuildingServiceTest {
 		buildingDto.setOwners(new ArrayList<BuildingOwnerDto>());
 		
 		System.out.println("testCreateBuilding" + buildingDto);
-		Building building = buildingMapper.buildingDtoToBuilding(buildingDto);
+		Building building = buildingMapper.buildingDtoToBuilding(buildingDto, new CycleAvoidingMappingContext());
 		System.out.println("testCreateBuilding2" + building);
 		Assertions.assertTrue(buildingDao.save(building));
 		

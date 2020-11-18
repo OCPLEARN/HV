@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.mapstruct.Context;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ import de.ocplearn.hv.dto.UnitDto;
 import de.ocplearn.hv.mapper.BuildingMapper;
 import de.ocplearn.hv.mapper.BuildingOwnerMapper;
 import de.ocplearn.hv.mapper.ContactMapper;
+import de.ocplearn.hv.mapper.CycleAvoidingMappingContext;
 import de.ocplearn.hv.mapper.LoginUserMapper;
 import de.ocplearn.hv.mapper.PropertyManagementMapper;
 import de.ocplearn.hv.mapper.UnitMapper;
@@ -238,7 +240,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 //				return false;
 //			}
 //		}
-		Building building = buildingMapper.buildingDtoToBuilding(buildingDto);
+		Building building = buildingMapper.buildingDtoToBuilding(buildingDto, new CycleAvoidingMappingContext() );
 		if( buildingDao.save(building)) {
 			buildingDto.setId(building.getId());
 			return true;
@@ -250,7 +252,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean deleteBuildingById(int buildingDtoId) {
-		 return deleteBuilding( this.buildingMapper.buildingToBuildingDto( (buildingDao.findByIdFull(buildingDtoId).get()) ) );
+		 return deleteBuilding( this.buildingMapper.buildingToBuildingDto(buildingDao.findByIdFull(buildingDtoId).get(),new CycleAvoidingMappingContext())  );
 	}
 
 	@Override
@@ -270,14 +272,14 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean updateBuilding(BuildingDto buildingDto) {
-		return buildingDao.save(buildingMapper.buildingDtoToBuilding(buildingDto));
+		return buildingDao.save(buildingMapper.buildingDtoToBuilding(buildingDto, new CycleAvoidingMappingContext()));
 	}
 
 
 	@Override
 	public boolean assignBuildingOwnerToBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
 		BuildingOwner buildingOwner = buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto);
-		Building building = buildingMapper.buildingDtoToBuilding(buildingDto);
+		Building building = buildingMapper.buildingDtoToBuilding(buildingDto, new CycleAvoidingMappingContext());
 		if( buildingDao.addBuildingOwnerToBuilding(buildingOwner, building)) {
 			
 			buildingOwnerDto.addBuilding(buildingDto);
@@ -291,7 +293,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean removeBuildingOwnerFromBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
-		return buildingDao.removeBuildingOwnerFromBuilding(buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto), buildingMapper.buildingDtoToBuilding(buildingDto));
+		return buildingDao.removeBuildingOwnerFromBuilding(buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto), buildingMapper.buildingDtoToBuilding(buildingDto, new CycleAvoidingMappingContext()));
 	}
 
 
@@ -366,7 +368,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	public List<BuildingDto> findBuildingsByPropertyManagement(int propertyManagementId) {
 		return this.buildingDao.findBuildingsByPropertyManagement(propertyManagementId)
 				.stream()
-				.map(building -> this.buildingMapper.buildingToBuildingDto(building))
+				.map(building -> this.buildingMapper.buildingToBuildingDto(building, new CycleAvoidingMappingContext()))
 				.collect(Collectors.toList());
 	}	
 
