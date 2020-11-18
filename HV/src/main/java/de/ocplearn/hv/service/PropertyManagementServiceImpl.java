@@ -307,9 +307,15 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean createUnit(UnitDto unitDto) {
+		if(unitDto.getAddress().getId()==0) {
+			if(!contactService.createAddress(unitDto.getAddress())) return false;
+		}
 		System.out.println("public boolean createUnit(UnitDto unitDto)" + unitDto);
 		Unit unit = unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext());
 		System.out.println("this.unitMapper.UnitDtoToUnit(unitDto)" + unit);
+		
+	
+		
 		if( this.unitDao.save(unit)) {
 			unitDto.setId(unit.getId());
 			return true;
