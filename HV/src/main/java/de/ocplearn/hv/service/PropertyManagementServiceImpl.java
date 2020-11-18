@@ -279,7 +279,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean assignBuildingOwnerToBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
-		BuildingOwner buildingOwner = buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto);
+		BuildingOwner buildingOwner = buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto, new CycleAvoidingMappingContext());
 		Building building = buildingMapper.buildingDtoToBuilding(buildingDto, new CycleAvoidingMappingContext());
 		if( buildingDao.addBuildingOwnerToBuilding(buildingOwner, building)) {
 			
@@ -294,7 +294,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean removeBuildingOwnerFromBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
-		return buildingDao.removeBuildingOwnerFromBuilding(buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto), buildingMapper.buildingDtoToBuilding(buildingDto, new CycleAvoidingMappingContext()));
+		return buildingDao.removeBuildingOwnerFromBuilding(buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto, new CycleAvoidingMappingContext()), buildingMapper.buildingDtoToBuilding(buildingDto, new CycleAvoidingMappingContext()));
 	}
 
 
@@ -381,7 +381,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 			return false; 
 		}
 		
-		BuildingOwner buildingOwner = this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto);
+		BuildingOwner buildingOwner = this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto,new CycleAvoidingMappingContext());
 		
 	
 		
@@ -402,20 +402,20 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean deleteBuildingOwner(BuildingOwnerDto buildingOwnerDto) {
-		return this.buildingOwnerDao.delete( this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto) );
+		return this.buildingOwnerDao.delete( this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto,new CycleAvoidingMappingContext()) );
 	}
 
 
 	@Override
 	public boolean updateBuildingOwner(BuildingOwnerDto buildingOwnerDto) {
-		return this.buildingOwnerDao.save( this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto) );
+		return this.buildingOwnerDao.save( this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto,new CycleAvoidingMappingContext()) );
 	}
 
 
 	@Override
 	public BuildingOwnerDto findBuildingOwnerById(int buildingOwnerId) {
 		Optional<BuildingOwner> opt = this.buildingOwnerDao.findByIdFull(buildingOwnerId);
-		return opt.isPresent() ? this.buildingOwnerMapper.buildingOwnerToBuildingOwnerDto(opt.get()) : null;
+		return opt.isPresent() ? this.buildingOwnerMapper.buildingOwnerToBuildingOwnerDto(opt.get(), new CycleAvoidingMappingContext()) : null;
 	}
 
 

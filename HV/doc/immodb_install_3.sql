@@ -359,4 +359,6 @@ DROP TABLE buildingOwnerLink;
 ALTER TABLE renter DROP FOREIGN KEY fk_renter_propertyManagerId;
 ALTER TABLE renter DROP COLUMN propertyManagerId;
 ALTER TABLE unit ADD COLUMN unitType varchar(50);
-ALTER TABLE buildingOwner DROP FOREIGN KEY fk_buildingOwner_loginUserId;   
+#18.11.2020
+ALTER TABLE buildingOwner DROP FOREIGN KEY fk_buildingOwner_loginUserId;  
+ALTER TABLE unit MODIFY usableFloorSpace DOUBLE(12,2); 
