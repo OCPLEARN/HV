@@ -112,7 +112,8 @@ public class TestObjectSupplier {
 				BuildingDto buildingDto = this.createBuildingDto( pmModel );
 				buildingDto.setName("House " + k);
 				buildingDto.setAddress(buildingAddress);
-				this.propertyManagementService.createBuilding(buildingDto);	// building saved
+				boolean bo1 = this.propertyManagementService.createBuilding(buildingDto);	// building saved
+				//System.out.println("bo1 : " + bo1);
 
 				// #4 BuildingOwner and assign 
 				BuildingOwnerDto sister1 = this.createBuildingOwnerDto();
@@ -240,7 +241,7 @@ public class TestObjectSupplier {
 		buildingDto.setOwners(new ArrayList<BuildingOwnerDto>());
 		buildingDto.setUnits(new TreeSet<UnitDto>());
 		buildingDto.setTransactions(new TreeSet<TransactionDto>());
-		buildingDto.setPropertyManagement( createPropertyManagementDto() );
+		buildingDto.setPropertyManagement( propertyManagementDto );
 		buildingDto.setNote("Do not enter");
 		buildingDto.setBuildingType(BuildingType.APARTMENT_BUILDING);
 		return buildingDto;		
