@@ -1,6 +1,7 @@
 package de.ocplearn.hv.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import de.ocplearn.hv.dto.BuildingDto;
@@ -13,7 +14,9 @@ public interface BuildingOwnerMapper {
 
 	BuildingOwnerMapper INSTANCE = Mappers.getMapper(BuildingOwnerMapper.class);
 	
+	//@Mapping( target = "buildings", ignore = true)
 	BuildingOwnerDto buildingOwnerToBuildingOwnerDto(BuildingOwner buildingOwner);
 	
+	//@Mapping( target = "buildings", ignore = true)
 	BuildingOwner buildingOwnerDtoToBuildingOwner(BuildingOwnerDto buildingOwnerDto);
 }

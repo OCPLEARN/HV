@@ -77,7 +77,7 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
         	//String coordinate = "POINT("+address.getLatitude()+", "+address.getLongitude()+"";
         	
             stmt.setInt(1, buildingOwner.getContact().getId() );
-            stmt.setInt(1, buildingOwner.getLoginUser().getId() );
+            stmt.setInt(2, buildingOwner.getLoginUser().getId() );
             
             //System.out.println(sql);
             

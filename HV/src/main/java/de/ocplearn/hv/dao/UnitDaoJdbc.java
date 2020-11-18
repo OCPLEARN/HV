@@ -50,7 +50,7 @@ public class UnitDaoJdbc implements UnitDao {
 
 	@Override
 	public Unit getBuildingUnit(int buildingId) {
-		String sql = "select " + COLUMNS + " from unit where buildingId=? and unitType=?;";
+		String sql = "select " + COLUMNS + " from " + TABLE_NAME + " AS " + TABLE_NAME_PREFIX +" where " + TABLE_NAME_PREFIX +".buildingId=? and "+ TABLE_NAME_PREFIX+".unitType=?;";
 		
 		try ( Connection connection = this.dataSource.getConnection(); 
 				  PreparedStatement stmt = connection.prepareStatement(sql); ){
@@ -59,7 +59,7 @@ public class UnitDaoJdbc implements UnitDao {
 			stmt.setString(2, "BUILDING_UNIT");
 			
 			ResultSet resultSet = stmt.executeQuery();
-			
+			resultSet.next();
 			return mapRowToUnit(resultSet);
 			
 			

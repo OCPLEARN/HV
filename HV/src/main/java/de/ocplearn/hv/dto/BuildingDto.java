@@ -1,8 +1,10 @@
 package de.ocplearn.hv.dto;
 
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import de.ocplearn.hv.model.BuildingType;
 
@@ -107,7 +109,7 @@ public class BuildingDto implements Comparable<BuildingDto>{
 	 * @return the owners
 	 */
 	public List<BuildingOwnerDto> getOwners() {
-		return owners;
+		return Collections.unmodifiableList(owners);
 	}
 
 	/**
@@ -117,6 +119,9 @@ public class BuildingDto implements Comparable<BuildingDto>{
 		this.owners = owners;
 	}
 
+	public void addOwners(BuildingOwnerDto buildingOwner) {
+		owners.add(buildingOwner);
+	}
 	/**
 	 * @return the units
 	 */

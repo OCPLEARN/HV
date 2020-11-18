@@ -1,6 +1,7 @@
 package de.ocplearn.hv.model;
 
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -111,7 +112,7 @@ public class Building implements Comparable<Building>{
 	 * @return the owners
 	 */
 	public List<BuildingOwner> getOwners() {
-		return owners;
+		return Collections.unmodifiableList(owners);
 	}
 
 	/**
@@ -119,6 +120,10 @@ public class Building implements Comparable<Building>{
 	 */
 	public void setOwners(List<BuildingOwner> owners) {
 		this.owners = owners;
+	}
+	
+	public void addOwners(BuildingOwner buildingOwner) {
+		owners.add(buildingOwner);
 	}
 
 	/**

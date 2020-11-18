@@ -24,7 +24,8 @@ public class PartsBox {
 			"Greta", "Lara", "Hilbert", "Martin", "Alan"};	
 
 	private  String[] lastNames = { "Banner", "Müller", "Lang", "Rogers",
-			"Stark", "Parkers"};		
+			"Stark", "Parkers"};
+	
 	
 	private String[] apartmentParts = { 
 			"room", "apartment", "place", "area", "place", "floor", "id", "box"
@@ -47,7 +48,8 @@ public class PartsBox {
 	
 	private String[] countries = {
 			"DE", "NL"
-	};	
+	};
+	
 	
 	/**
 	 * Return the singleton instance of PartsBox
@@ -73,7 +75,11 @@ public class PartsBox {
 	 * */
 	public Supplier<String> lastNameSupplier = () -> {
 		return (this.lastNames[ random.nextInt(this.lastNames.length) ] );
-	};			
+	};
+	
+	public Supplier<String> companyNameSupplier = () -> {
+		return (lastNameSupplier.get() + " GmbH" );
+	};
 	
 	/**
 	 * Returns a random apartment String

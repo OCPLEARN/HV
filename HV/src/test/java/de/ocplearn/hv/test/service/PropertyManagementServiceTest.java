@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ser.std.ClassSerializer;
 
 import de.ocplearn.hv.dto.AddressDto;
 import de.ocplearn.hv.dto.BuildingDto;
+import de.ocplearn.hv.dto.BuildingOwnerDto;
 import de.ocplearn.hv.dto.ContactDto;
 import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
@@ -273,18 +274,26 @@ public class PropertyManagementServiceTest {
 //		this.propertyManagementService.createUnit(unitDto_BUILDING);		
 //		Assertions.assertTrue(unitDto_BUILDING.getId()!=0);
 		
-		UnitDto unitDto_unit2 = new UnitDto( buildingDto, "EG left", addressDto, 122.25, 1962, "note", UnitType.APARTMENT_UNIT );
-		this.propertyManagementService.createUnit(unitDto_unit2);
+//		UnitDto unitDto_unit2 = new UnitDto( buildingDto, "EG left", addressDto, 122.25, 1962, "note", UnitType.APARTMENT_UNIT );
+//		this.propertyManagementService.createUnit(unitDto_unit2);
+//		
+//		UnitDto unitDto_unit3 = new UnitDto( buildingDto, "EG right", addressDto, 122.25, 1962, "note", UnitType.APARTMENT_UNIT );
+//		this.propertyManagementService.createUnit(unitDto_unit3);
+//		
+//		UnitDto unitDto_unit4 = new UnitDto( buildingDto, "OG left", addressDto, 112.75, 1964, "note", UnitType.APARTMENT_UNIT );
+//		this.propertyManagementService.createUnit(unitDto_unit4);
+//		
+//		UnitDto unitDto_unit5 = new UnitDto( buildingDto, "OG right", addressDto, 112.75, 1964, "note", UnitType.APARTMENT_UNIT );
+//		this.propertyManagementService.createUnit(unitDto_unit5);
 		
-		UnitDto unitDto_unit3 = new UnitDto( buildingDto, "EG right", addressDto, 122.25, 1962, "note", UnitType.APARTMENT_UNIT );
-		this.propertyManagementService.createUnit(unitDto_unit3);
 		
-		UnitDto unitDto_unit4 = new UnitDto( buildingDto, "OG left", addressDto, 112.75, 1964, "note", UnitType.APARTMENT_UNIT );
-		this.propertyManagementService.createUnit(unitDto_unit4);
 		
-		UnitDto unitDto_unit5 = new UnitDto( buildingDto, "OG right", addressDto, 112.75, 1964, "note", UnitType.APARTMENT_UNIT );
-		this.propertyManagementService.createUnit(unitDto_unit5);
-		
+		BuildingOwnerDto sister1 = instance.createBuildingOwnerDto();
+		this.propertyManagementService.createBuildingOwner(sister1);	//sis 1 saved
+		this.propertyManagementService.assignBuildingOwnerToBuilding(sister1, buildingDto);
+		BuildingOwnerDto sister2 = instance.createBuildingOwnerDto();
+		this.propertyManagementService.createBuildingOwner(sister2);	// sis2 saved
+		this.propertyManagementService.assignBuildingOwnerToBuilding(sister2, buildingDto);	
 		
 		
 	}

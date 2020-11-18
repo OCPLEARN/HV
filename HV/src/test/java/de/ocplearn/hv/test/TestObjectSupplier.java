@@ -255,7 +255,7 @@ public class TestObjectSupplier {
 	public BuildingOwnerDto createBuildingOwnerDto () {
 		
 		buildingOwnerDto = new BuildingOwnerDto();
-		buildingOwnerDto.setContact(createContactDto(true, this.partsBox.firstNameSupplier.get(), partsBox.lastNameSupplier.get()));
+		buildingOwnerDto.setContact(createContactDto(true, this.partsBox.firstNameSupplier.get(), partsBox.lastNameSupplier.get(),partsBox.companyNameSupplier.get()));
 		buildingOwnerDto.setLoginUser(createLoginUserDto(Role.OWNER));
 		buildingOwnerDto.setBuildings(new ArrayList<BuildingDto>());
 		

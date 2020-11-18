@@ -26,6 +26,7 @@ import de.ocplearn.hv.mapper.ContactMapper;
 import de.ocplearn.hv.mapper.LoginUserMapper;
 import de.ocplearn.hv.mapper.PropertyManagementMapper;
 import de.ocplearn.hv.mapper.UnitMapper;
+import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.BuildingOwner;
 import de.ocplearn.hv.model.PropertyManagement;
 import de.ocplearn.hv.model.Unit;
@@ -228,7 +229,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	@Override
 	public boolean createBuilding(BuildingDto buildingDto) {
 		// #1 Address
-		if( ! this.contactService.createAddress(buildingDto.getAddress()) ) return false;
+		if(  this.contactService.createAddress(buildingDto.getAddress()) ) return false;
 		// #2 Owner
 		// TODO should createBuilding() also create its owners?
 //		for ( BuildingOwnerDto bo : buildingDto.getOwners() ) {
@@ -237,7 +238,13 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 //				return false;
 //			}
 //		}
-		return buildingDao.save(buildingMapper.buildingDtoToBuilding(buildingDto));
+		Building building = buildingMapper.buildingDtoToBuilding(buildingDto);
+		if( buildingDao.save(building)) {
+			buildingDto.setId(building.getId());
+			return true;
+		}else {
+		return false;
+		}
 	}
 
 
@@ -269,7 +276,16 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean assignBuildingOwnerToBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
-		return buildingDao.addBuildingOwnerToBuilding(buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto), buildingMapper.buildingDtoToBuilding(buildingDto));
+		BuildingOwner buildingOwner = buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto);
+		Building building = buildingMapper.buildingDtoToBuilding(buildingDto);
+		if( buildingDao.addBuildingOwnerToBuilding(buildingOwner, building)) {
+			
+			buildingOwnerDto.addBuilding(buildingDto);
+			buildingDto.addOwners(buildingOwnerDto);
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 
@@ -356,7 +372,22 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean createBuildingOwner(BuildingOwnerDto buildingOwnerDto) {
-		return this.buildingOwnerDao.save( this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto) );
+		
+		if (! contactService.createContact(buildingOwnerDto.getContact())){
+			
+			return false; 
+		}
+		
+		BuildingOwner buildingOwner = this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto);
+		
+	
+		
+		if (this.buildingOwnerDao.save( buildingOwner )) {
+			buildingOwnerDto.setId(buildingOwner.getId());
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 
