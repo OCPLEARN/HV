@@ -259,10 +259,16 @@ public class PropertyManagementServiceTest {
 		List <BuildingDto> buildingList = this.propertyManagementService.findBuildingsByPropertyManagement(model1.getId());
 		Assertions.assertTrue(buildingList.size()==1);
 		System.out.println(buildingList);
-		UnitDto unitDto_BUILDING = new UnitDto( buildingList.get(0), 
-				"BUILDING_UNIT name", 
-				contactService.findAddressById(buildingList.get(0).getAddress().getId()), 
-				1000.00, 1962, "note", UnitType.BUILDING_UNIT );
+		System.out.println("buildingList.get(0)" + buildingList.get(0));
+		AddressDto addressDto = contactService.findAddressById(buildingList.get(0).getAddress().getId());
+		UnitDto unitDto_BUILDING = new UnitDto();
+				unitDto_BUILDING.setBuilding(buildingList.get(0));
+				unitDto_BUILDING.setAddress(addressDto);
+				unitDto_BUILDING.setUnitName("BUILDING_UNIT name");
+				unitDto_BUILDING.setUnitType(UnitType.BUILDING_UNIT);
+				unitDto_BUILDING.setUsableFloorSpace(1000.00);
+				unitDto_BUILDING.setConstructionYear(1962);
+				unitDto_BUILDING.setNote("note");
 		this.propertyManagementService.createUnit(unitDto_BUILDING);		
 		Assertions.assertTrue(unitDto_BUILDING.getId()!=0);
 		

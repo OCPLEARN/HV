@@ -6,7 +6,7 @@ import org.mapstruct.factory.Mappers;
 import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.model.PropertyManagement;
 
-@Mapper(componentModel = "Spring")
+@Mapper(componentModel = "spring")
 public interface PropertyManagementMapper {
 	
 	PropertyManagementMapper INSTANCE = Mappers.getMapper(PropertyManagementMapper.class);

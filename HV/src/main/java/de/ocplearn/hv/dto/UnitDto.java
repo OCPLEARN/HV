@@ -8,11 +8,11 @@ public class UnitDto implements Comparable<UnitDto>{
 	
 	private int id;
 	
-	private BuildingDto buildingDto;
+	private BuildingDto building;
 	
 	private String unitName;
 	
-	private AddressDto addressDto;
+	private AddressDto address;
 	
 	private double usableFloorSpace;
 	
@@ -27,15 +27,15 @@ public class UnitDto implements Comparable<UnitDto>{
 	/**
 	 * @return the building
 	 */
-	public BuildingDto getBuildingDto() {
-		return buildingDto;
+	public BuildingDto getBuilding() {
+		return building;
 	}
 
 	/**
 	 * @param building the building to set
 	 */
-	public void setBuildingDto(BuildingDto buildingDto) {
-		this.buildingDto = buildingDto;
+	public void setBuilding(BuildingDto building) {
+		this.building = building;
 	}
 
 	/**
@@ -55,15 +55,15 @@ public class UnitDto implements Comparable<UnitDto>{
 	/**
 	 * @return the address
 	 */
-	public AddressDto getAddressDto() {
-		return addressDto;
+	public AddressDto getAddress() {
+		return address;
 	}
 
 	/**
 	 * @param address the address to set
 	 */
-	public void setAddressDto(AddressDto addressDto) {
-		this.addressDto = addressDto;
+	public void setAddress(AddressDto address) {
+		this.address= address;
 	}
 
 	/**
@@ -141,9 +141,9 @@ public class UnitDto implements Comparable<UnitDto>{
 	public UnitDto(BuildingDto buildingDto, String unitName, AddressDto addressDto, double usableFloorSpace, int constructionYear,
 			String note, UnitType unitType) {
 		super();
-		this.buildingDto = buildingDto;
+		this.building = buildingDto;
 		this.unitName = unitName;
-		this.addressDto = addressDto;
+		this.address = addressDto;
 		this.usableFloorSpace = usableFloorSpace;
 		this.constructionYear = constructionYear;
 		this.note = note;
@@ -159,8 +159,8 @@ public class UnitDto implements Comparable<UnitDto>{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((addressDto == null) ? 0 : addressDto.hashCode());
-		result = prime * result + ((buildingDto == null) ? 0 : buildingDto.hashCode());
+		result = prime * result + ((address == null) ? 0 : address.hashCode());
+		result = prime * result + ((building == null) ? 0 : building.hashCode());
 		result = prime * result + constructionYear;
 		result = prime * result + id;
 		result = prime * result + ((note == null) ? 0 : note.hashCode());
@@ -181,15 +181,15 @@ public class UnitDto implements Comparable<UnitDto>{
 		if (getClass() != obj.getClass())
 			return false;
 		UnitDto other = (UnitDto) obj;
-		if (addressDto == null) {
-			if (other.addressDto != null)
+		if (address == null) {
+			if (other.address != null)
 				return false;
-		} else if (!addressDto.equals(other.addressDto))
+		} else if (!address.equals(other.address))
 			return false;
-		if (buildingDto == null) {
-			if (other.buildingDto != null)
+		if (building == null) {
+			if (other.building != null)
 				return false;
-		} else if (!buildingDto.equals(other.buildingDto))
+		} else if (!building.equals(other.building))
 			return false;
 		if (constructionYear != other.constructionYear)
 			return false;
@@ -214,29 +214,29 @@ public class UnitDto implements Comparable<UnitDto>{
 
 	@Override
 	public String toString() {
-		return "UnitDto [id=" + id + ", buildingDto=" + buildingDto + ", unitName=" + unitName + ", addressDto="
-				+ addressDto + ", usableFloorSpace=" + usableFloorSpace + ", constructionYear=" + constructionYear
+		return "UnitDto [id=" + id + ", buildingDto=" + building + ", unitName=" + unitName + ", addressDto="
+				+ address + ", usableFloorSpace=" + usableFloorSpace + ", constructionYear=" + constructionYear
 				+ ", note=" + note + ", unitType=" + unitType + "]";
 	}
 	
 	@Override
 	public int compareTo(UnitDto o) {
-		if(this.getBuildingDto().getId()==o.getBuildingDto().getId()) {
+		if(this.getBuilding().getId()==o.getBuilding().getId()) {
 			if(this.getUnitName().equals(o.getUnitName())) {
-				if(this.getAddressDto().getId()==o.getAddressDto().getId()) {
+				if(this.getAddress().getId()==o.getAddress().getId()) {
 					if(this.getConstructionYear()==o.getConstructionYear()) {
 						return this.getConstructionYear()-o.getConstructionYear();
 					}else {
 						return this.getId()-o.getId();
 					}
 				}else {
-					return this.getAddressDto().getId()-o.getAddressDto().getId();
+					return this.getAddress().getId()-o.getAddress().getId();
 				}
 			}else {
 				return this.getUnitName().compareTo(o.getUnitName());
 			}
 		}else {
-			return this.getBuildingDto().getId()-o.getBuildingDto().getId();
+			return this.getBuilding().getId()-o.getBuilding().getId();
 		}
 	}
 

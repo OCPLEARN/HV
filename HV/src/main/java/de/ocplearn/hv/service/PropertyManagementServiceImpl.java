@@ -28,6 +28,7 @@ import de.ocplearn.hv.mapper.PropertyManagementMapper;
 import de.ocplearn.hv.mapper.UnitMapper;
 import de.ocplearn.hv.model.BuildingOwner;
 import de.ocplearn.hv.model.PropertyManagement;
+import de.ocplearn.hv.model.Unit;
 
 
 @Service
@@ -287,19 +288,22 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean createUnit(UnitDto unitDto) {
-		return this.unitDao.save(this.unitMapper.UnitDtoToUnit(unitDto));
+		System.out.println("public boolean createUnit(UnitDto unitDto)" + unitDto);
+		Unit unit = unitMapper.unitDtoToUnit(unitDto);
+		System.out.println("this.unitMapper.UnitDtoToUnit(unitDto)" + unit);
+		return this.unitDao.save(unit);
 	}
 
 
 	@Override
 	public boolean deleteUnit(UnitDto unitDto) {
-		return this.unitDao.delete(this.unitMapper.UnitDtoToUnit(unitDto));
+		return this.unitDao.delete(this.unitMapper.unitDtoToUnit(unitDto));
 	}
 
 
 	@Override
 	public boolean updateUnit(UnitDto unitDto) {
-		return this.unitDao.save(this.unitMapper.UnitDtoToUnit(unitDto));
+		return this.unitDao.save(this.unitMapper.unitDtoToUnit(unitDto));
 	}
 
 
