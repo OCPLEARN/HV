@@ -3,6 +3,8 @@ package de.ocplearn.hv.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -336,9 +338,11 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	}
 
 	@Override
-	public List<BuildingDto> findBuildingByPropertyManagement(int propertyManagementId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<BuildingDto> findBuildingsByPropertyManagement(int propertyManagementId) {
+		return this.buildingDao.findBuildingsByPropertyManagement(propertyManagementId)
+				.stream()
+				.map(building -> this.buildingMapper.buildingToBuildingDto(building))
+				.collect(Collectors.toList());
 	}	
 
 	@Override

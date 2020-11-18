@@ -176,7 +176,7 @@ public class AddressDto implements Comparable<AddressDto> {
 		}
 		@Override
 		public String toString() {
-			return "Address [street=" + street + ", houseNumber=" + houseNumber + ", apartment=" + apartment + ", city="
+			return "Address [id ="+id+" street=" + street + ", houseNumber=" + houseNumber + ", apartment=" + apartment + ", city="
 					+ city + ", province=" + province + ", country=" + country + ", latitude=" + latitude + ", longitude="
 					+ longitude + ", AddressType=" + addressType +  "]";
 		}

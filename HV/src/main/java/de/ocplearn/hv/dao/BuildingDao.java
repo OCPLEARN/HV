@@ -60,10 +60,12 @@ public interface BuildingDao {
 	  */
 	 Optional<Building> findByIdPartial(int id);
 	 
+	 List<Building> findBuildingsByPropertyManagement(int propertyManagementId);
 	 	 
 	 List <Integer> findBuildingOwnerIdsByBuildingId(int buildingId, TablePageViewData tablePageViewData);
 	 
 	 List <Building> getAllBuildingsOfPropertyManagementById(int propertyManangementId);
+	 
 	 
 	 boolean addBuildingOwnerToBuilding(BuildingOwner buildingOwner, Building building);
 	 

@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import de.ocplearn.hv.exceptions.DataAccessException;
@@ -38,6 +39,13 @@ public class UnitDaoJdbc implements UnitDao {
 	private DataSource dataSource;
 	
 	public Logger logger = LoggerBuilder.getInstance().build( PropertyManagementDaoJdbc.class );
+
+	
+	@Autowired
+	public UnitDaoJdbc(DataSource dataSource) {
+		super();
+		this.dataSource = dataSource;
+	}
 
 
 	@Override
@@ -105,7 +113,7 @@ public class UnitDaoJdbc implements UnitDao {
 				+ "values (?,?,?,?,?,?,?);";
 		try ( Connection connection = this.dataSource.getConnection(); 
 				  PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); ){
-	
+			System.out.println("private boolean insert(Unit unit)" + unit);
 			stmt.setInt(1, unit.getBuilding().getId());
 			stmt.setString(2, unit.getUnitName());
 			stmt.setInt(3, unit.getAddress().getId());

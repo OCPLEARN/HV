@@ -206,7 +206,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 		building.setAddress(address);
 		
 		PropertyManagement propertyManagement = new PropertyManagement();
-		propertyManagement.setId( resultSet.getInt( BuildingDaoJdbc.TABLE_NAME_PREFIX + ".propertyManangementId" ) );
+		propertyManagement.setId( resultSet.getInt( BuildingDaoJdbc.TABLE_NAME_PREFIX + ".propertyManagementId" ) );
 		building.setPropertyManagement(propertyManagement);
 		
 		// TODO setOwners
@@ -216,7 +216,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 		// TODO setTransactions
 		building.setTransactions(new HashSet<Transaction>());
 		
-		building.setNote( resultSet.getString( BuildingDaoJdbc.TABLE_NAME_PREFIX + "note" ) );
+		building.setNote( resultSet.getString( BuildingDaoJdbc.TABLE_NAME_PREFIX + ".note" ) );
 	
 				
 		return building;
@@ -227,6 +227,31 @@ public class BuildingDaoJdbc implements BuildingDao{
 	}
 
 
+	@Override
+	public List<Building> findBuildingsByPropertyManagement(int propertyManagementId) {
+		
+		List<Building> buildingList = new ArrayList<>();
+		String sql = "SELECT " + COLUMNS + " FROM " + TABLE_NAME +" AS " + TABLE_NAME_PREFIX + " WHERE " + TABLE_NAME_PREFIX +".propertyManagementId = ?;";
+		try( Connection con = this.dataSource.getConnection();
+			 PreparedStatement stmt = con.prepareStatement( sql );
+			) {
+		
+		stmt.setInt(1, propertyManagementId);
+		
+		ResultSet resultSet = stmt.executeQuery();
+		while(resultSet.next()) {
+			buildingList.add(mapRowToBuilding(resultSet));				
+		}
+		
+		return buildingList;
+	
+	} catch (SQLException e) {
+	    e.printStackTrace(); 
+	    logger.log(Level.WARNING, e.getMessage());
+	    throw new DataAccessException("Unable to get Data from DB.");            
+	    }
+	}
+	
 	@Override
 	public List<Integer> findBuildingOwnerIdsByBuildingId(int buildingId, TablePageViewData tablePageViewData) {
 		// TODO exchange SQL hardcode with SQLUtils code

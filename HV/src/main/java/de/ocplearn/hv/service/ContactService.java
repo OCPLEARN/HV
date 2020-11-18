@@ -24,6 +24,9 @@ public interface ContactService {
 	 */
 	ContactDto findContactById(int id);
 	
+	AddressDto findAddressById(int id);
+	
+	
 	/**
 	 * Finds by last name
 	 * @param last name 

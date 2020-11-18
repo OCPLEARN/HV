@@ -92,7 +92,7 @@ public interface PropertyManagementService {
 	
 	// BUILDING finder
 	
-	public List<BuildingDto> findBuildingByPropertyManagement (int propertyManagementId);
+	public List<BuildingDto> findBuildingsByPropertyManagement (int propertyManagementId);
 	
 	// BUILDINGOWNERS CRUD
 	

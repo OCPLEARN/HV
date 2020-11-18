@@ -52,6 +52,17 @@ public class ContactServiceImpl implements ContactService{
 	}
 
 	@Override
+	public AddressDto findAddressById(int id) {
+		Optional<Address> opt = addressDao.findById(id);
+		if(opt.isPresent()) {
+			return addressMapper.addressToAddressDto(opt.get());
+		}else {
+			return null;
+		}
+		
+	}
+	
+	@Override
 	public List<ContactDto> findContactsByLastName(String lastName, TablePageViewData tablePageViewData) {
 		// TODO Auto-generated method stub
 		return null;
