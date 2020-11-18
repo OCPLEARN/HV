@@ -123,7 +123,7 @@ public class TestObjectSupplier {
 					case "userModel3" : {
 						// L
 						BuildingDto buildingDto3 = this.createBuildingDto( pmModel );
-						buildingDto.setName("House 3 " + k);
+						buildingDto3.setName("House 3 " + k);
 						AddressDto addressDto = new AddressDto(partsBox.streetSupplier.get(), 
 								"49", 
 								partsBox.apartmentsSupplier.get(), 
@@ -138,7 +138,7 @@ public class TestObjectSupplier {
 						this.propertyManagementService.createBuilding(buildingDto3);	// building saved
 						//  BUILDING unit for building 2
 						UnitDto unitDto_BUILDING3 = new UnitDto( buildingDto3, "BUILDING_UNIT building 2", addressDto, 45000.00, 2000, "Skyscraper 12", UnitType.BUILDING_UNIT );
-						this.propertyManagementService.createUnit(unitDto_BUILDING);
+						this.propertyManagementService.createUnit(unitDto_BUILDING3);
 						System.out.println("######### buiding unit id =   " + unitDto_BUILDING3.getId() );
 						//assign buildingowner to building
 						this.propertyManagementService.assignBuildingOwnerToBuilding(sister1, buildingDto3);
