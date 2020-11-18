@@ -291,7 +291,12 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		System.out.println("public boolean createUnit(UnitDto unitDto)" + unitDto);
 		Unit unit = unitMapper.unitDtoToUnit(unitDto);
 		System.out.println("this.unitMapper.UnitDtoToUnit(unitDto)" + unit);
-		return this.unitDao.save(unit);
+		if( this.unitDao.save(unit)) {
+			unitDto.setId(unit.getId());
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 
