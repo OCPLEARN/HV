@@ -56,3 +56,9 @@ $ end expression
 
 ==== Test Order ====
 https://www.baeldung.com/junit-5-test-order
+
+
+==== Cycle Avoiding Mapping ====
+https://github.com/mapstruct/mapstruct-examples/blob/master/mapstruct-mapping-with-cycles/src/main/java/org/mapstruct/example/mapper/EmployeeMapper.java
+https://stackoverflow.com/questions/45652298/spring-boot-mapstruct-stackoverflow-error
+

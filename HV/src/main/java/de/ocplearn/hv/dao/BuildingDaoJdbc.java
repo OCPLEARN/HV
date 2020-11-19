@@ -339,15 +339,13 @@ public class BuildingDaoJdbc implements BuildingDao{
 
 	
 	@Override
-	public boolean addBuildingOwnerToBuilding(BuildingOwner buildingOwner, Building building) {
-
-		Unit buildingUnit = this.unitDaoJdbc.getBuildingUnit(building.getId());
+	public boolean addOwnerToUnit(BuildingOwner buildingOwner, Unit unit) {
 
 		String sql = "INSERT INTO unitownerlink (unitId, buildingOwnerId) VALUE (?, ?);";
 		try( Connection connection = dataSource.getConnection();
 				 PreparedStatement stmt = connection.prepareStatement(sql);
 		){
-			stmt.setInt(1, buildingUnit.getId());
+			stmt.setInt(1, unit.getId());
 			stmt.setInt(2, buildingOwner.getId());
 			return stmt.executeUpdate() == 1 ? true : false; 			
 		}catch( SQLException e ) {

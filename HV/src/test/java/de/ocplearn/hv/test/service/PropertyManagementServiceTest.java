@@ -12,22 +12,16 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.omg.CORBA.Current;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.fasterxml.jackson.databind.ser.std.ClassSerializer;
-
 import de.ocplearn.hv.dto.AddressDto;
 import de.ocplearn.hv.dto.BuildingDto;
-import de.ocplearn.hv.dto.BuildingOwnerDto;
 import de.ocplearn.hv.dto.ContactDto;
 import de.ocplearn.hv.dto.LoginUserDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
-import de.ocplearn.hv.dto.UnitDto;
 import de.ocplearn.hv.model.PaymentType;
 import de.ocplearn.hv.model.Role;
-import de.ocplearn.hv.model.UnitType;
 import de.ocplearn.hv.service.ContactService;
 import de.ocplearn.hv.service.PropertyManagementService;
 import de.ocplearn.hv.service.UserService;

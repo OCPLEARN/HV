@@ -3,10 +3,8 @@ package de.ocplearn.hv.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import org.mapstruct.Context;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +30,7 @@ import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.BuildingOwner;
 import de.ocplearn.hv.model.PropertyManagement;
 import de.ocplearn.hv.model.Unit;
-import lombok.RequiredArgsConstructor;
+import de.ocplearn.hv.model.UnitType;
 
 
 @Service
@@ -279,16 +277,26 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean assignBuildingOwnerToBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
-		BuildingOwner buildingOwner = buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto, new CycleAvoidingMappingContext());
-		Building building = buildingMapper.buildingDtoToBuilding(buildingDto, new CycleAvoidingMappingContext());
-		if( buildingDao.addBuildingOwnerToBuilding(buildingOwner, building)) {
-			
-			buildingOwnerDto.addBuilding(buildingDto);
-			buildingDto.addOwners(buildingOwnerDto);
-			return true;
+		Unit unit = this.unitDao.getBuildingUnit(buildingDto.getId());
+		if(unit!=null) {
+			log
+			UnitDto buildingUnit = unitMapper.unitToUnitDto(unit,new CycleAvoidingMappingContext());
+			if(buildingUnit.getUnitType()!=UnitType.BUILDING_UNIT) {
+				throw new IllegalStateException("not a BUILDING_UNIT id: " + buildingUnit.getId());
+			}
+			if(this.assignUnitOwnerToUnit(buildingOwnerDto, buildingUnit)) {
+				buildingOwnerDto.addBuilding(buildingDto);
+				buildingDto.addOwners(buildingOwnerDto);
+				return true;
+			}else {
+				return false;
+			}
 		}else {
+			System.out.println("assignBuildingOwnerToBuilding unit is null");
 			return false;
+			
 		}
+		
 	}
 
 
@@ -339,8 +347,13 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean assignUnitOwnerToUnit(BuildingOwnerDto buildingOwnerDto, UnitDto unitDto) {
-		// TODO Auto-generated method stub
-		return false;
+		BuildingOwner buildingOwner = buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto, new CycleAvoidingMappingContext());
+		Unit unit = unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext());
+		if( buildingDao.addOwnerToUnit(buildingOwner,unit)){
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 

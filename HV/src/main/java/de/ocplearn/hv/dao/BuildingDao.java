@@ -67,9 +67,9 @@ public interface BuildingDao {
 	 List <Building> getAllBuildingsOfPropertyManagementById(int propertyManangementId);
 	 
 	 
-	 boolean addBuildingOwnerToBuilding(BuildingOwner buildingOwner, Building building);
-	 
 	 boolean removeBuildingOwnerFromBuilding(BuildingOwner buildingOwner, Building building);
+
+	 boolean addOwnerToUnit(BuildingOwner buildingOwner, Unit unit);
 	 
 
 	
