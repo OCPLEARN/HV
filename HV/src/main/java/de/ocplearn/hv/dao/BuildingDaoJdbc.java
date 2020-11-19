@@ -16,6 +16,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
 import de.ocplearn.hv.exceptions.DataAccessException;
@@ -49,7 +50,8 @@ public class BuildingDaoJdbc implements BuildingDao{
 	
 	private AddressDaoJdbc addressDaoJdbc; 
 	
-	private UnitDaoJdbc unitDaoJdbc;
+	//@Autowired
+	//private UnitDaoJdbc unitDaoJdbc;
 	
 	private PropertyManagementDaoJdbc propertyManagementDaoJdbc;
 	
@@ -60,13 +62,12 @@ public class BuildingDaoJdbc implements BuildingDao{
 	@Autowired // DB einbinden über Autowire mit Qualifier Implementierung von AddressDao mit Qualifier spezifiziert
 	public BuildingDaoJdbc( @Qualifier ("datasource1") DataSource dataSource, 
 							@Qualifier("AddressDaoJdbc") AddressDao addressDao, 
-							AddressDaoJdbc addressDaoJdbc,
-							PropertyManagementDaoJdbc propertyManagementDaoJdbc,
-							UnitDaoJdbc unitDaoJdbc
+							PropertyManagementDaoJdbc propertyManagementDaoJdbc
 							) {
 		this.dataSource = dataSource;
-		this.addressDaoJdbc = addressDaoJdbc;
-		this.unitDaoJdbc = unitDaoJdbc;
+		this.addressDao = addressDao;
+		//this.unitDaoJdbc = unitDaoJdbc;
+		this.propertyManagementDaoJdbc = propertyManagementDaoJdbc;
 	}
 	
 	
@@ -364,8 +365,32 @@ public class BuildingDaoJdbc implements BuildingDao{
 
 	@Override
 	public Optional<Building> findByIdFull(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		String sql = "SELECT " + COLUMNS + " FROM " + TABLE_NAME + " AS " + TABLE_NAME_PREFIX + " "
+				+ "WHERE " + TABLE_NAME_PREFIX + ".id = ?; ";
+		
+		try( Connection con = this.dataSource.getConnection();
+			PreparedStatement stmt = con.prepareStatement( sql );
+			) {
+			stmt.setInt(1, id );
+			ResultSet resultSet = stmt.executeQuery();
+			
+			if (resultSet.next()) {
+				Building building = this.mapRowToBuilding(resultSet);
+				Optional<Address> optAddress = this.addressDao.findById( building.getAddress().getId() );
+				if ( optAddress.isPresent() ) {
+					building.setAddress(optAddress.get());
+				}
+				return Optional.of(building);
+			} else {
+				return Optional.empty();
+			}
+				
+		} catch (SQLException e) {
+			    e.printStackTrace(); 
+			    logger.log(Level.WARNING, e.getMessage());
+			    throw new DataAccessException("Unable to get Data from DB.");            
+		}			
 	}
 
 }

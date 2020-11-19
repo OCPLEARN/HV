@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
 import de.ocplearn.hv.exceptions.DataAccessException;
@@ -40,15 +41,16 @@ public class UnitDaoJdbc implements UnitDao {
 	
 	public Logger logger = LoggerBuilder.getInstance().build( PropertyManagementDaoJdbc.class );
 
+	@Autowired
 	private BuildingDao buildingDao;
 	
 	private AddressDao addressDao;
 	
 	@Autowired
-	public UnitDaoJdbc(DataSource dataSource, BuildingDao buildingDao, AddressDao addressDao) {
+	public UnitDaoJdbc(DataSource dataSource,AddressDao addressDao) {
 		super();
 		this.dataSource = dataSource;
-		this.buildingDao = buildingDao;
+		//this.buildingDao = buildingDao;
 		this.addressDao = addressDao;
 	}
 
@@ -61,7 +63,7 @@ public class UnitDaoJdbc implements UnitDao {
 				  PreparedStatement stmt = connection.prepareStatement(sql); ){
 			
 			stmt.setInt(1, buildingId);
-			stmt.setString(2, "BUILDING_UNIT");
+			stmt.setString(2, UnitType.BUILDING_UNIT.name());
 			
 			ResultSet resultSet = stmt.executeQuery();
 			resultSet.next();
