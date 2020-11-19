@@ -40,16 +40,21 @@ public class UnitDaoJdbc implements UnitDao {
 	
 	public Logger logger = LoggerBuilder.getInstance().build( PropertyManagementDaoJdbc.class );
 
+	private BuildingDao buildingDao;
+	
+	private AddressDao addressDao;
 	
 	@Autowired
-	public UnitDaoJdbc(DataSource dataSource) {
+	public UnitDaoJdbc(DataSource dataSource, BuildingDao buildingDao, AddressDao addressDao) {
 		super();
 		this.dataSource = dataSource;
+		this.buildingDao = buildingDao;
+		this.addressDao = addressDao;
 	}
 
 
 	@Override
-	public Unit getBuildingUnit(int buildingId) {
+	public Unit getBuildingUnitFull(int buildingId) {
 		String sql = "select " + COLUMNS + " from " + TABLE_NAME + " AS " + TABLE_NAME_PREFIX +" where " + TABLE_NAME_PREFIX +".buildingId=? and "+ TABLE_NAME_PREFIX+".unitType=?;";
 		
 		try ( Connection connection = this.dataSource.getConnection(); 
@@ -60,8 +65,18 @@ public class UnitDaoJdbc implements UnitDao {
 			
 			ResultSet resultSet = stmt.executeQuery();
 			resultSet.next();
-			return mapRowToUnit(resultSet);
+			Unit unit = mapRowToUnit(resultSet);
 			
+			// #1 building
+			Optional<Building> optBuilding = this.buildingDao.findByIdFull( unit.getBuilding().getId() );
+			if( !optBuilding.isPresent() ) throw new IllegalStateException("building id does not exist " + unit.getBuilding().getId() );
+			unit.setBuilding( optBuilding.get() );
+			// #2 Address
+			Optional<Address> optAddress = this.addressDao.findById( unit.getAddress().getId() );
+			if( !optAddress.isPresent() ) throw new IllegalStateException("address id does not exist " + unit.getAddress().getId() );
+			unit.setAddress( optAddress.get() );
+			
+			return unit;
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

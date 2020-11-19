@@ -41,7 +41,7 @@ public interface UnitDao {
 	Optional<Unit> findUnitByIdFull(int id);
 	
 	
-	Unit getBuildingUnit(int buildingId);
+	Unit getBuildingUnitFull(int buildingId);
 
 	Optional<Unit> findUnitByIdPartial(int id);
 }

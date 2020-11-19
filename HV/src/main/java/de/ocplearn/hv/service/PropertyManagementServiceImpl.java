@@ -277,9 +277,9 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean assignBuildingOwnerToBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
-		Unit unit = this.unitDao.getBuildingUnit(buildingDto.getId());
+		Unit unit = this.unitDao.getBuildingUnitFull(buildingDto.getId());
 		if(unit!=null) {
-			log
+			
 			UnitDto buildingUnit = unitMapper.unitToUnitDto(unit,new CycleAvoidingMappingContext());
 			if(buildingUnit.getUnitType()!=UnitType.BUILDING_UNIT) {
 				throw new IllegalStateException("not a BUILDING_UNIT id: " + buildingUnit.getId());
