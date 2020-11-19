@@ -69,7 +69,7 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 	private boolean insert(BuildingOwner buildingOwner){
 		
 		String sql = "INSERT INTO buildingowner (id,contactId,loginUserId) "
-				+ "VALUE ( null,?,?);";
+				+ "VALUES ( null,?,?);";
 		
         try(Connection con = this.datasource.getConnection();  
         	PreparedStatement stmt = con.prepareStatement(sql , Statement.RETURN_GENERATED_KEYS );) {	
