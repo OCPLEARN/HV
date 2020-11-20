@@ -52,6 +52,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 	@Lazy
 	private UnitDao unitDao;
 	
+	@Autowired
 	private AddressDaoJdbc addressDaoJdbc; 
 	
 	//@Autowired
@@ -175,7 +176,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 				String sql = "SELECT " + COLUMNS + ", " + PropertyManagementDaoJdbc.COLUMNS +
 						", " + AddressDaoJdbc.COLUMNS +"  FROM " + TABLE_NAME + " AS " + TABLE_NAME_PREFIX 
 				+ " JOIN " + PropertyManagementDaoJdbc.TABLE_NAME + " " + PropertyManagementDaoJdbc.TABLE_NAME_PREFIX 
-				+ " ON  " + TABLE_NAME_PREFIX + ".propertyManagementId = "+ TABLE_NAME_PREFIX +".id "
+				+ " ON  " + TABLE_NAME_PREFIX + ".propertyManagementId = "+ PropertyManagementDaoJdbc.TABLE_NAME_PREFIX +".id "
 				+ "JOIN " + AddressDaoJdbc.TABLE_NAME + " " + AddressDaoJdbc.TABLE_NAME_PREFIX 
 				+ " ON " + TABLE_NAME_PREFIX + ".addressId = " + AddressDaoJdbc.TABLE_NAME_PREFIX + ".id " 
 				+ "WHERE " + TABLE_NAME_PREFIX + ".id = ?;";

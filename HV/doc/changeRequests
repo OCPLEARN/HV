@@ -14,5 +14,17 @@ Eingeloggt im PropertyManager, neuen LoginUser mit Email anlegen  und automatisc
 
 Maximal 1 primary business address im Primary loginuser eines Propertymgmt objektes	
 
-
+# 2020-11-20 builingOwners im PM anlegen ohne Zuordnung zu buildings
+# buildingOwner.propertyManagementId
+# all building owners of pm
+SELECT DISTINCT bo.id FROM propertymanagement AS pm
+JOIN building AS bu
+	ON bu.propertyManagementId = pm.id
+JOIN unit un 
+	ON bu.id = un.buildingId
+JOIN unitownerlink uol
+	ON un.id = uol.unitId
+JOIN buildingOwner bo
+	ON uol.buildingOwnerId = bo.id
+WHERE un.unitType = 'BUILDING_UNIT' AND pm.id =  267;
 

@@ -82,6 +82,8 @@ public class UnitServiceTest {
 						new ArrayList<>()
 						);
 		
+		Assertions.assertTrue(this.propertyManagementService.createBuildingOwner(buildingOwnerDto));
+		
 		for( BuildingDto buildingDto : buildingsDto ) {	
 			
 			if ( buildingDto.getBuildingType() == BuildingType.HALL ) {
