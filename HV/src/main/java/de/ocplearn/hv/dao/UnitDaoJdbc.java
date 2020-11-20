@@ -248,7 +248,7 @@ public class UnitDaoJdbc implements UnitDao {
 				TABLE_NAME_PREFIX + " WHERE " + TABLE_NAME_PREFIX + ".buildingId=?;";
 		
 		Optional<Building> optBuilding = this.buildingDao.findByIdPartial(buildingId);
-		if ( !optBuilding.isPresent() ) throw new IllegalStateException("given building not found by id!");
+		if ( !optBuilding.isPresent() ) throw new IllegalStateException("UniDao -  findUnitsByBuildingIdFull() given building not found by id!");
 		
 		try( Connection con = this.dataSource.getConnection();
 				 PreparedStatement stmt = con.prepareStatement( sql );

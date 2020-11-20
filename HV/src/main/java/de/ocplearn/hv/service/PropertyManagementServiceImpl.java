@@ -48,6 +48,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	
 	private ContactMapper contactMapper;
 	
+	@Autowired
 	private BuildingDao buildingDao;
 	
 	private BuildingOwnerDao buildingOwnerDao;
@@ -56,6 +57,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	
 	private BuildingOwnerMapper buildingOwnerMapper;
 	
+	@Autowired
 	private UnitDao unitDao;
 	
 	private UnitMapper unitMapper;
@@ -67,11 +69,10 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 											ContactService contactService,
 											LoginUserMapper loginUserMapper,
 											ContactMapper contactMapper,
-											BuildingDao buildingDao,
+											
 											BuildingMapper buildingMapper,
 											BuildingOwnerMapper buildingOwnerMapper,
 											BuildingOwnerDao buildingOwnerDao,
-											UnitDao unitDao,
 											UnitMapper unitMapper
 											
 										) {
@@ -82,11 +83,11 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		this.contactService = contactService;
 		this.loginUserMapper=loginUserMapper;
 		this.contactMapper = contactMapper;
-		this.buildingDao = buildingDao;
+		//this.buildingDao = buildingDao;
 		this.buildingMapper = buildingMapper;
 		this.buildingOwnerMapper = buildingOwnerMapper;
 		this.buildingOwnerDao = buildingOwnerDao;
-		this.unitDao = unitDao;
+		//this.unitDao = unitDao;
 		this.unitMapper = unitMapper;
 		}
 	

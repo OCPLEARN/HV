@@ -48,6 +48,8 @@ public class BuildingDaoJdbc implements BuildingDao{
 	
 	private AddressDao addressDao;
 	
+	@Autowired
+	@Lazy
 	private UnitDao unitDao;
 	
 	private AddressDaoJdbc addressDaoJdbc; 
@@ -64,14 +66,13 @@ public class BuildingDaoJdbc implements BuildingDao{
 	@Autowired // DB einbinden über Autowire mit Qualifier Implementierung von AddressDao mit Qualifier spezifiziert
 	public BuildingDaoJdbc( @Qualifier ("datasource1") DataSource dataSource, 
 							@Qualifier("AddressDaoJdbc") AddressDao addressDao, 
-							PropertyManagementDaoJdbc propertyManagementDaoJdbc,
-							UnitDao unitDao
+							PropertyManagementDaoJdbc propertyManagementDaoJdbc
 							) {
 		this.dataSource = dataSource;
 		this.addressDao = addressDao;
 		//this.unitDaoJdbc = unitDaoJdbc;
 		this.propertyManagementDaoJdbc = propertyManagementDaoJdbc;
-		this.unitDao = unitDao;
+		//this.unitDao = unitDao;
 	}
 	
 	
@@ -171,16 +172,23 @@ public class BuildingDaoJdbc implements BuildingDao{
 
 	@Override
 	public Optional<Building> findByIdPartial(int id) {
-				String sql = "SELECT " + COLUMNS + ", pm.*, " + AddressDaoJdbc.COLUMNS +"  FROM building AS " + TABLE_NAME_PREFIX 
-				+ "JOIN propertymanagement pm ON bu.propertyManagementId = bu.id "
-				+ "JOIN " + AddressDaoJdbc.TABLE_NAME + " AS " + AddressDaoJdbc.TABLE_NAME_PREFIX 
+				String sql = "SELECT " + COLUMNS + ", " + PropertyManagementDaoJdbc.COLUMNS +
+						", " + AddressDaoJdbc.COLUMNS +"  FROM " + TABLE_NAME + " AS " + TABLE_NAME_PREFIX 
+				+ " JOIN " + PropertyManagementDaoJdbc.TABLE_NAME + " " + PropertyManagementDaoJdbc.TABLE_NAME_PREFIX 
+				+ " ON  " + TABLE_NAME_PREFIX + ".propertyManagementId = "+ TABLE_NAME_PREFIX +".id "
+				+ "JOIN " + AddressDaoJdbc.TABLE_NAME + " " + AddressDaoJdbc.TABLE_NAME_PREFIX 
 				+ " ON " + TABLE_NAME_PREFIX + ".addressId = " + AddressDaoJdbc.TABLE_NAME_PREFIX + ".id " 
 				+ "WHERE " + TABLE_NAME_PREFIX + ".id = ?;";
+				
+				
 				
 		try( Connection con = this.dataSource.getConnection();
 			 PreparedStatement stmt = con.prepareStatement( sql );
 			) {
 				stmt.setInt(1, id );
+				
+				System.out.println("BuidlingDao - findByIdPartial()  sql = \n" + stmt.toString());
+				
 				ResultSet resultSet = stmt.executeQuery();
 				
 				if (resultSet.next()) {
