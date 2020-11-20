@@ -359,8 +359,10 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean removeUnitOwnerFromUnit(BuildingOwnerDto buildingOwnerDto, UnitDto unitDto) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.buildingDao.removeOwnerFromUnit( 
+			this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto, new CycleAvoidingMappingContext()) ,
+			this.unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext())
+		);
 	}
 
 

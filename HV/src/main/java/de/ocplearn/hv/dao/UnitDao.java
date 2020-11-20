@@ -1,6 +1,7 @@
 package de.ocplearn.hv.dao;
 
 import java.util.Optional;
+import java.util.Set;
 
 import de.ocplearn.hv.model.Unit;
 import de.ocplearn.hv.util.TablePageViewData;
@@ -44,4 +45,11 @@ public interface UnitDao {
 	Unit getBuildingUnitFull(int buildingId);
 
 	Optional<Unit> findUnitByIdPartial(int id);
+	
+	/**
+	 * finds all units of given building id
+	 * @param building id
+	 * @return Set of Units
+	 * */
+	Set<Unit> findUnitsByBuildingIdFull (int buildingId);
 }

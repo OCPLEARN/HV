@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -209,7 +211,7 @@ public class UnitDaoJdbc implements UnitDao {
 
 	@Override
 	public Optional<Unit> findUnitByIdPartial(int id) {
-		String sql = "SELECT * FROM unit WHERE id=?;";
+		String sql = "SELECT " + COLUMNS + " FROM " + TABLE_NAME + " AS " + TABLE_NAME_PREFIX + " WHERE " + TABLE_NAME_PREFIX + ".id=?;";
 		try( Connection con = this.dataSource.getConnection();
 				 PreparedStatement stmt = con.prepareStatement( sql );
 				) {
@@ -234,5 +236,40 @@ public class UnitDaoJdbc implements UnitDao {
 	public Optional<Unit> findUnitByIdFull(int id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	@Override
+	public Set<Unit> findUnitsByBuildingIdFull(int buildingId) {
+		
+		Set<Unit> units = new LinkedHashSet<Unit>();
+		
+		String sql = "SELECT " + COLUMNS + " FROM " + TABLE_NAME + " AS " +
+				TABLE_NAME_PREFIX + " WHERE " + TABLE_NAME_PREFIX + ".buildingId=?;";
+		
+		Optional<Building> optBuilding = this.buildingDao.findByIdPartial(buildingId);
+		if ( !optBuilding.isPresent() ) throw new IllegalStateException("given building not found by id!");
+		
+		try( Connection con = this.dataSource.getConnection();
+				 PreparedStatement stmt = con.prepareStatement( sql );
+				) {
+			stmt.setInt(1, buildingId);
+			ResultSet resultSet = stmt.executeQuery();
+			while( resultSet.next() ) {
+				Unit unit = new Unit();
+				unit = this.mapRowToUnit(resultSet, unit );
+				unit.setBuilding( optBuilding.get() );
+				Optional<Address> optAddress = this.addressDao.findById( unit.getAddress().getId() );
+				if (! optAddress.isPresent()) throw new IllegalStateException("given address not found by id!");
+				unit.setAddress( optAddress.get() );
+				units.add(unit);
+			}
+		
+		} catch (SQLException e) {
+		    e.printStackTrace(); 
+		    logger.log(Level.WARNING, e.getMessage());
+		    throw new DataAccessException("Unable to get Data from DB.");            
+		}
+		return units;
 	}
 }

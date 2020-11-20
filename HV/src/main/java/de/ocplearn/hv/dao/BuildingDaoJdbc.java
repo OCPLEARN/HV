@@ -48,6 +48,8 @@ public class BuildingDaoJdbc implements BuildingDao{
 	
 	private AddressDao addressDao;
 	
+	private UnitDao unitDao;
+	
 	private AddressDaoJdbc addressDaoJdbc; 
 	
 	//@Autowired
@@ -62,12 +64,14 @@ public class BuildingDaoJdbc implements BuildingDao{
 	@Autowired // DB einbinden über Autowire mit Qualifier Implementierung von AddressDao mit Qualifier spezifiziert
 	public BuildingDaoJdbc( @Qualifier ("datasource1") DataSource dataSource, 
 							@Qualifier("AddressDaoJdbc") AddressDao addressDao, 
-							PropertyManagementDaoJdbc propertyManagementDaoJdbc
+							PropertyManagementDaoJdbc propertyManagementDaoJdbc,
+							UnitDao unitDao
 							) {
 		this.dataSource = dataSource;
 		this.addressDao = addressDao;
 		//this.unitDaoJdbc = unitDaoJdbc;
 		this.propertyManagementDaoJdbc = propertyManagementDaoJdbc;
+		this.unitDao = unitDao;
 	}
 	
 	
@@ -241,7 +245,17 @@ public class BuildingDaoJdbc implements BuildingDao{
 		
 		ResultSet resultSet = stmt.executeQuery();
 		while(resultSet.next()) {
-			buildingList.add(mapRowToBuilding(resultSet));				
+			
+			Building building = mapRowToBuilding(resultSet); 
+			
+//			// TODO setOwners
+//			building.setOwners(new ArrayList<BuildingOwner>());
+//			// TODO setUnits
+			building.setUnits( this.unitDao.findUnitsByBuildingIdFull(building.getId()) );
+//			// TODO setTransactions
+//			building.setTransactions(new HashSet<Transaction>());			
+			
+			buildingList.add( building );		
 		}
 		
 		return buildingList;
@@ -357,6 +371,22 @@ public class BuildingDaoJdbc implements BuildingDao{
 	}
 
 	@Override
+	public boolean removeOwnerFromUnit(BuildingOwner buildingOwner, Unit unit) {
+		String sql = "DELETE FROM unitownerlink WHERE unitId = ? AND buildingOwnerId = ?; ";
+		try( Connection connection = dataSource.getConnection();
+				 PreparedStatement stmt = connection.prepareStatement(sql);
+		){
+			stmt.setInt(1, unit.getId());
+			stmt.setInt(2, buildingOwner.getId());
+			return stmt.executeUpdate() == 1 ? true : false; 			
+		}catch( SQLException e ) {
+			e.printStackTrace(); 
+			logger.log(Level.WARNING, e.getMessage());
+			throw new DataAccessException("Unable to get Data from DB.");
+		}
+	}	
+	
+	@Override
 	public boolean removeBuildingOwnerFromBuilding(BuildingOwner buildingOwner, Building building) {
 		// TODO Auto-generated method stub
 		return false;
@@ -381,6 +411,9 @@ public class BuildingDaoJdbc implements BuildingDao{
 				if ( optAddress.isPresent() ) {
 					building.setAddress(optAddress.get());
 				}
+				
+				// TODO Set<Unit> missing
+				
 				return Optional.of(building);
 			} else {
 				return Optional.empty();
@@ -392,5 +425,8 @@ public class BuildingDaoJdbc implements BuildingDao{
 			    throw new DataAccessException("Unable to get Data from DB.");            
 		}			
 	}
+
+
+
 
 }

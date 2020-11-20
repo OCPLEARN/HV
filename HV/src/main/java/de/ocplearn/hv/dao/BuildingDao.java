@@ -71,6 +71,7 @@ public interface BuildingDao {
 
 	 boolean addOwnerToUnit(BuildingOwner buildingOwner, Unit unit);
 	 
+	 boolean removeOwnerFromUnit(BuildingOwner buildingOwner, Unit unit);
 
 	
 	
