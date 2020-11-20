@@ -1,6 +1,8 @@
 package de.ocplearn.hv.test.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -8,8 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import de.ocplearn.hv.dto.BuildingDto;
+import de.ocplearn.hv.dto.BuildingOwnerDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.dto.UnitDto;
+import de.ocplearn.hv.model.BuildingType;
+import de.ocplearn.hv.model.Role;
+import de.ocplearn.hv.model.Unit;
 import de.ocplearn.hv.model.UnitType;
 import de.ocplearn.hv.service.PropertyManagementService;
 import de.ocplearn.hv.test.TestObjectSupplier;
@@ -53,7 +59,59 @@ public class UnitServiceTest {
 				
 			}	
 		}
-
 	}
 	
+	// 	public boolean assignUnitOwnerToUnit (BuildingOwnerDto buildingOwnerDto, UnitDto unitDto);
+
+	
+	@Test
+	public void testAssignUnitOwnerToUnit_givenModel3_returnBooleanTrue() {
+		
+		PropertyManagementDto propertyManagementDto = TestObjectSupplier.getInstance().getModel("Model3");
+		
+		// Model 3 HALL owned by one sister -> add the other sister
+		
+		List<BuildingDto> buildingsDto = propertyManagementService.findBuildingsByPropertyManagement(propertyManagementDto.getId());
+		
+		BuildingOwnerDto buildingOwnerDto = 
+				new BuildingOwnerDto(  
+						TestObjectSupplier.getInstance()
+						.createContactDto( false, "Schwester", "Drei" ), 
+						TestObjectSupplier.getInstance()
+						.createLoginUserDto( Role.OWNER ),
+						new ArrayList<>()
+						);
+		
+		for( BuildingDto buildingDto : buildingsDto ) {	
+			
+			if ( buildingDto.getBuildingType() == BuildingType.HALL ) {
+				
+				Set<UnitDto> unitsDto = buildingDto.getUnits();
+					unitsDto.forEach( unitDto -> {
+						if( unitDto.getUnitType() == UnitType.BUILDING_UNIT ) { 
+							
+						Assertions.assertTrue( propertyManagementService.assignUnitOwnerToUnit( buildingOwnerDto, unitDto ) );
+						System.out.println( "buildings of BuildingOwner: " + buildingOwnerDto.getBuildings() );
+						Assertions.assertTrue( propertyManagementService.removeUnitOwnerFromUnit( buildingOwnerDto, unitDto ) );
+						}
+						
+					});
+					}
+					
+			}
+			
+		}
+		
+	
+	
 }
+
+
+
+
+
+
+
+
+
+

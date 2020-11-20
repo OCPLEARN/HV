@@ -395,7 +395,13 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	@Override
 	public boolean createBuildingOwner(BuildingOwnerDto buildingOwnerDto) {
 		
-		if (! contactService.createContact(buildingOwnerDto.getContact())){
+		if( buildingOwnerDto.getLoginUser() == null ) {
+			buildingOwnerDto.setLoginUser( new LoginUserDto() );
+		} else {
+			userService.createUser( buildingOwnerDto.getLoginUser() );
+			}
+		
+		if ( ! contactService.createContact(buildingOwnerDto.getContact()) ){
 			
 			return false; 
 		}
