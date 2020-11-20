@@ -362,3 +362,18 @@ ALTER TABLE unit ADD COLUMN unitType varchar(50);
 #18.11.2020
 ALTER TABLE buildingOwner DROP FOREIGN KEY fk_buildingOwner_loginUserId;  
 ALTER TABLE unit MODIFY usableFloorSpace DOUBLE(12,2); 
+
+# 2020 11 20
+CREATE VIEW `buildingowners_not_assiged` AS 
+SELECT buildingowner.id AS 'buildingowner.id'  FROM buildingOwner WHERE buildingowner.id NOT IN (
+SELECT DISTINCT bo.id FROM propertymanagement AS pm
+JOIN building AS bu
+	ON bu.propertyManagementId = pm.id
+JOIN unit un 
+	ON bu.id = un.buildingId
+JOIN unitownerlink uol
+	ON un.id = uol.unitId
+JOIN buildingOwner bo
+	ON uol.buildingOwnerId = bo.id
+WHERE un.unitType = 'BUILDING_UNIT'
+);
