@@ -279,7 +279,7 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 		buildingOwner.setLoginUser(loginUser);
 		
 		PropertyManagement propertyManagement = new PropertyManagement();
-		propertyManagement.setId(resultSet.getInt(BuildingOwnerDaoJdbc.TABLE_NAME_PREFIX + "propertyManagementId"));
+		propertyManagement.setId(resultSet.getInt(BuildingOwnerDaoJdbc.TABLE_NAME_PREFIX + ".propertyManagementId"));
 		buildingOwner.setPropertyManagement(propertyManagement);
 		
 		return buildingOwner;	

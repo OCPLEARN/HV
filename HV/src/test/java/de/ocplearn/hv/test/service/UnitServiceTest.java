@@ -79,7 +79,8 @@ public class UnitServiceTest {
 						.createContactDto( false, "Schwester", "Drei" ), 
 						TestObjectSupplier.getInstance()
 						.createLoginUserDto( Role.OWNER ),
-						new ArrayList<>()
+						new ArrayList<>(),
+						propertyManagementDto
 						);
 		
 		Assertions.assertTrue(this.propertyManagementService.createBuildingOwner(buildingOwnerDto));
