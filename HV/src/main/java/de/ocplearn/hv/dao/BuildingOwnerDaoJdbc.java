@@ -1,5 +1,6 @@
 package de.ocplearn.hv.dao;
 
+import java.awt.IllegalComponentStateException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,6 +22,7 @@ import de.ocplearn.hv.exceptions.DataAccessException;
 import de.ocplearn.hv.model.BuildingOwner;
 import de.ocplearn.hv.model.Contact;
 import de.ocplearn.hv.model.LoginUser;
+import de.ocplearn.hv.model.PropertyManagement;
 import de.ocplearn.hv.util.LoggerBuilder;
 import de.ocplearn.hv.util.SQLUtils;
 import de.ocplearn.hv.util.TablePageViewData;
@@ -35,7 +37,7 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 	public static final String TABLE_NAME_PREFIX = "bo";
 	public static final String COLUMNS = SQLUtils.createSQLString(
 			TABLE_NAME_PREFIX, 
-			Arrays.asList("id", "timeStmpAdd", "timeStmpEdit", "contactId", "loginUserId"), 
+			Arrays.asList("id", "timeStmpAdd", "timeStmpEdit", "contactId", "loginUserId", "propertyManagementId"), 
 			new ArrayList<String>()
 			);
 
@@ -48,6 +50,8 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 	private ContactDaoJdbc contactDaoJdbc;
 	
 	private LoginUserDaoJdbc loginUserDaoJdbc;
+	
+	private PropertyManagementDao propertyManagementDao;
 	
 	public BuildingOwnerDaoJdbc( @Qualifier("datasource1") DataSource datasource,
 			ContactDaoJdbc contactDaoJdbc,
@@ -68,8 +72,8 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 
 	private boolean insert(BuildingOwner buildingOwner){
 		
-		String sql = "INSERT INTO buildingowner (id,contactId,loginUserId) "
-				+ "VALUES ( null,?,?);";
+		String sql = "INSERT INTO buildingowner (id,contactId,loginUserId, propertyManagementId) "
+				+ "VALUES ( null,?,?,?);";
 		
         try(Connection con = this.datasource.getConnection();  
         	PreparedStatement stmt = con.prepareStatement(sql , Statement.RETURN_GENERATED_KEYS );) {	
@@ -78,6 +82,7 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
         	
             stmt.setInt(1, buildingOwner.getContact().getId() );
             stmt.setInt(2, buildingOwner.getLoginUser().getId() );
+            stmt.setInt(3, buildingOwner.getPropertyManagement().getId() );
             
             //System.out.println(sql);
             
@@ -102,7 +107,7 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 	
 	private boolean update(BuildingOwner buildingOwner){
 		
-		String sql = "UPDATE buildingowner SET contactId = ?, loginUserId = ?"
+		String sql = "UPDATE buildingowner SET contactId = ?, loginUserId = ?, propertyManagementId = ?"
 				+ " WHERE id = ?;";
 		
 		  try(Connection con = this.datasource.getConnection();
@@ -111,8 +116,10 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 			  //String coordinate = "POINT("+address.getLatitude()+", "+address.getLongitude()+"";
 			  
 	            stmt.setInt(1, buildingOwner.getContact().getId()  );
-	            stmt.setInt(1, buildingOwner.getLoginUser().getId()  );
-	            stmt.setInt(1, buildingOwner.getId()  );
+	            stmt.setInt(2, buildingOwner.getLoginUser().getId()  );
+	            stmt.setInt(3, buildingOwner.getPropertyManagement().getId() );
+	            stmt.setInt(4, buildingOwner.getId()  );
+	            
 
                 int rowsAffected = stmt.executeUpdate();
                 
@@ -176,7 +183,6 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 	public Optional<BuildingOwner> findByIdFull(int id) {
 		
 		BuildingOwner buildingOwner = null;
-		//TODO SELECT contact and loginUser
 		//String sql = "SELECT * FROM buildingowner WHERE id = ?;";
 		String sql = "SELECT " + COLUMNS + ", " + ContactDaoJdbc.COLUMNS + "," + LoginUserDaoJdbc.COLUMNS + "  FROM buildingOwner AS " + TABLE_NAME_PREFIX + " " 
 				+ "JOIN contact " + ContactDaoJdbc.TABLE_NAME_PREFIX + " ON bo.contactId = co.id "
@@ -197,6 +203,10 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 			buildingOwner = this.mapRowToBuildingOwner(resultSet);
 			buildingOwner.setContact( this.contactDaoJdbc.mapRowToContact(resultSet,buildingOwner.getContact() ) );
 			buildingOwner.setLoginUser( this.loginUserDaoJdbc.mapRowToLoginUser(resultSet, buildingOwner.getLoginUser()  ) );
+			
+			Optional<PropertyManagement> optional = this.propertyManagementDao.findById(buildingOwner.getPropertyManagement().getId());
+			if( ! optional.isPresent() ) throw new IllegalStateException("BuildingOwner without PropertyManagement");
+			buildingOwner.setPropertyManagement( optional.get() );
 		}
 		catch (SQLException e) {
 	    	e.printStackTrace(); 
@@ -268,6 +278,9 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 		loginUser.setId( resultSet.getInt( BuildingOwnerDaoJdbc.TABLE_NAME_PREFIX + ".loginUserId" ) );
 		buildingOwner.setLoginUser(loginUser);
 		
+		PropertyManagement propertyManagement = new PropertyManagement();
+		propertyManagement.setId(resultSet.getInt(BuildingOwnerDaoJdbc.TABLE_NAME_PREFIX + "propertyManagementId"));
+		buildingOwner.setPropertyManagement(propertyManagement);
 		
 		return buildingOwner;	
 	}

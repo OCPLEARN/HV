@@ -95,7 +95,7 @@ public class TestObjectSupplier {
 				loginUserDto = this.createLoginUserDto(Role.PROPERTY_MANAGER, v);
 				// #2 PM
 				PropertyManagementDto pmModel = this.createPropertyManagementDto(loginUserDto);
-				this.propertyManagementService.createPropertyManagement(propertyManagementDto);	// pm saved, lu saved
+				this.propertyManagementService.createPropertyManagement(pmModel);	// pm saved, lu saved
 				// #3 Building + Address + Building Unit
 				AddressDto buildingAddress = this.createAddressDto(AddressType.BUILDING_ADDRESS);
 				AddressDto unitAddress = this.createAddressDto(AddressType.PRIMARY_PRIVATE_ADDRESS);
@@ -111,10 +111,10 @@ public class TestObjectSupplier {
 
 				
 				// #4 BuildingOwner and assign 
-				BuildingOwnerDto sister1 = this.createBuildingOwnerDto();
+				BuildingOwnerDto sister1 = this.createBuildingOwnerDto( pmModel );
 				this.propertyManagementService.createBuildingOwner(sister1);	//sis 1 saved
 				this.propertyManagementService.assignBuildingOwnerToBuilding(sister1, buildingDto);
-				BuildingOwnerDto sister2 = this.createBuildingOwnerDto();
+				BuildingOwnerDto sister2 = this.createBuildingOwnerDto( pmModel );
 				this.propertyManagementService.createBuildingOwner(sister2);	// sis2 saved
 				this.propertyManagementService.assignBuildingOwnerToBuilding(sister2, buildingDto);				
 				
@@ -312,11 +312,21 @@ public class TestObjectSupplier {
 		buildingOwnerDto.setContact(createContactDto(true, this.partsBox.firstNameSupplier.get(), partsBox.lastNameSupplier.get(),partsBox.companyNameSupplier.get()));
 		buildingOwnerDto.setLoginUser(createLoginUserDto(Role.OWNER));
 		buildingOwnerDto.setBuildings(new ArrayList<BuildingDto>());
+		buildingOwnerDto.setPropertyManagement(createPropertyManagementDto());
 		
 		return buildingOwnerDto;
 		
 	}
 	
+	public BuildingOwnerDto createBuildingOwnerDto ( PropertyManagementDto propertyManagementDto ) {
+		
+		buildingOwnerDto = createBuildingOwnerDto();
+		buildingOwnerDto.setPropertyManagement( propertyManagementDto) ;
+		
+		return buildingOwnerDto;
+
+	}
+
 
 
 	

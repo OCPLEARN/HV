@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import de.ocplearn.hv.model.PropertyManagement;
+
 /**
  * Represents an owner of an unit or building
  */
@@ -17,6 +19,8 @@ public class BuildingOwnerDto implements Comparable<BuildingOwnerDto> {
 	
 	private List<BuildingDto> buildings;
 	
+	private PropertyManagementDto propertyManagement;
+	
 	/**
 	 * default constructor
 	 */
@@ -27,18 +31,19 @@ public class BuildingOwnerDto implements Comparable<BuildingOwnerDto> {
 	 * @param  buildingOwner
 	 */
 	public BuildingOwnerDto(BuildingOwnerDto buildingOwner) {
-		this( buildingOwner.getContact(), buildingOwner.getLoginUser(), buildingOwner.getBuildings() );
+		this( buildingOwner.getContact(), buildingOwner.getLoginUser(), buildingOwner.getBuildings(), buildingOwner.getPropertyManagement() );
 	}
 	
 	/**
 	 * @param contact
 	 * @param loginUser
 	 */
-	public BuildingOwnerDto(ContactDto contact, LoginUserDto loginUser, List<BuildingDto> buildings) {
+	public BuildingOwnerDto(ContactDto contact, LoginUserDto loginUser, List<BuildingDto> buildings, PropertyManagementDto propertyManagement) {
 		super();
 		this.contact = Objects.requireNonNull(contact, "Building needs Contact");
 		this.loginUser = Objects.requireNonNull(loginUser, "Building needs Contact");
 		this.buildings = buildings;
+		this.propertyManagement = propertyManagement;
 	}
 
 	/**
@@ -140,6 +145,16 @@ public class BuildingOwnerDto implements Comparable<BuildingOwnerDto> {
 	@Override
 	public String toString() {
 		return "BuildingOwner [id=" + id + ", contact=" + contact + ", loginUser=" + loginUser + "]";
+	}
+
+	public PropertyManagementDto getPropertyManagement() {
+		return propertyManagement;
+	}
+
+	public void setPropertyManagement(PropertyManagementDto propertyManagement) {
+		this.propertyManagement = propertyManagement;
 	}	
+	
+	
 	
 }

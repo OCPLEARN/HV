@@ -17,6 +17,11 @@ public class BuildingOwner implements Comparable<BuildingOwner> {
 	
 	private List<Building> buildings;
 	
+	private PropertyManagement propertyManagement;
+	
+	
+	
+
 	/**
 	 * default constructor
 	 */
@@ -27,18 +32,19 @@ public class BuildingOwner implements Comparable<BuildingOwner> {
 	 * @param  buildingOwner
 	 */
 	public BuildingOwner(BuildingOwner buildingOwner) {
-		this( buildingOwner.getContact(), buildingOwner.getLoginUser(), buildingOwner.getBuildings() );
+		this( buildingOwner.getContact(), buildingOwner.getLoginUser(), buildingOwner.getBuildings(), buildingOwner.getPropertyManagement() );
 	}
 	
 	/**
 	 * @param contact
 	 * @param loginUser
 	 */
-	public BuildingOwner(Contact contact, LoginUser loginUser, List<Building> buildings) {
+	public BuildingOwner(Contact contact, LoginUser loginUser, List<Building> buildings, PropertyManagement propertyManagement ) {
 		super();
 		this.contact = Objects.requireNonNull(contact, "Building needs Contact");
 		this.loginUser = Objects.requireNonNull(loginUser, "Building needs Contact");
 		this.buildings = buildings;
+		this.propertyManagement = propertyManagement;
 	}
 
 	/**
@@ -142,6 +148,12 @@ public class BuildingOwner implements Comparable<BuildingOwner> {
 		return "BuildingOwner [id=" + id + ", contact=" + contact + ", loginUser=" + loginUser + "]";
 	}
 	
-	
+	public PropertyManagement getPropertyManagement() {
+		return propertyManagement;
+	}
+
+	public void setPropertyManagement(PropertyManagement propertyManagement) {
+		this.propertyManagement = propertyManagement;
+	}
 	
 }
