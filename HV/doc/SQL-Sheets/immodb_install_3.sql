@@ -377,3 +377,9 @@ JOIN buildingOwner bo
 	ON uol.buildingOwnerId = bo.id
 WHERE un.unitType = 'BUILDING_UNIT'
 );
+
+# 2020 11 24
+ALTER TABLE buildingowner ADD COLUMN propertyManagementId INT NOT NULL;
+
+
+
