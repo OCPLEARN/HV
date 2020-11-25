@@ -19,4 +19,14 @@
 	 
 	 
 	 
+	# 2020 11 25
+	Folder structure for immodata
+	MACOSX: HOME/immodata respectively Windows: USERPROFILE/immodata	// set in HvApplication
+	
+		"aaatests"	// directory for personal tests
+		"backupdb"	// directory for DB backups
+		"log"		// directory for log files (set in util.LoggerBuilder)
+		"pm"		// directory for PopertyManagements (subdirectories for building, buildingOwner, images, etc.)
+		"tmp" 		// directory for temporal data
+	
 	
