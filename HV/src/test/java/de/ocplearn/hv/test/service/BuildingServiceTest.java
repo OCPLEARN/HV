@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import de.ocplearn.hv.dao.BuildingDao;
+import de.ocplearn.hv.dao.BuildingOwnerDaoJdbc;
 import de.ocplearn.hv.dto.AddressDto;
 import de.ocplearn.hv.dto.BuildingDto;
 import de.ocplearn.hv.dto.BuildingOwnerDto;
@@ -27,6 +30,7 @@ import de.ocplearn.hv.service.ContactService;
 import de.ocplearn.hv.service.PropertyManagementService;
 import de.ocplearn.hv.service.UserService;
 import de.ocplearn.hv.test.dao.AddressDaoTest;
+import de.ocplearn.hv.util.LoggerBuilder;
 import de.ocplearn.hv.util.StaticHelpers;
 
 @SpringBootTest
@@ -46,6 +50,8 @@ public class BuildingServiceTest {
 	
 	public static Supplier<LoginUserDto> loginUserDtoEmployeeSupplier = () -> {return new LoginUserDto("BuildingTest" + System.currentTimeMillis(), Role.EMPLOYEE, hashMap.get("hash") , hashMap.get("salt"), Locale.GERMANY);};
 	
+	private Logger logger = LoggerBuilder.getInstance().build(BuildingServiceTest.class);
+
 	
 	@Autowired
 	public BuildingServiceTest(BuildingDao buildingDao, PropertyManagementService propertyManagementService, UserService userService,BuildingMapper buildingMapper, ContactService contactService) {
@@ -59,6 +65,8 @@ public class BuildingServiceTest {
 	
 	@Test
 	public void testCreateBuilding() {
+		
+		logger.log(Level.INFO, "Guten Morgen, Ihr Lieben. Seid Ihr schön fleissig?");
 	
 		BuildingDto buildingDto = new BuildingDto();
 		AddressDto address = AddressDaoTest.testAddressDtoSupplier.get();

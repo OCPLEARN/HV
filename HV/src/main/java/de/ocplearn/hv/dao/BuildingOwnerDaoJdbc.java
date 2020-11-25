@@ -98,7 +98,7 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 		
         } catch (SQLException e) {
        	 e.printStackTrace(); 
-         logger.log(Level.WARNING, e.getMessage());
+         logger.log(Level.SEVERE, e.getMessage());
          throw new DataAccessException("Unable to insert BuildingOwner");
     }   
         

@@ -1,10 +1,13 @@
 package de.ocplearn.hv.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.FileHandler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
+
+import de.ocplearn.hv.HvApplication;
 
 public class LoggerBuilder {
 	
@@ -48,8 +51,24 @@ public class LoggerBuilder {
 	    }		
 	      
 		// add a FileHandler default pattern %h/java%u.log
+		// immodata/log/
+	    // define location for log files
+
 		try {
-			logger.addHandler(new FileHandler( "%h/"+ c.getName() +"%u.log", 1_048_576, 5 ,  true ));
+		
+		//	logger.addHandler(new FileHandler( "%h/"+ c.getName() +"%u.log", 1_048_576, 5 ,  true ));
+			logger.addHandler(new FileHandler( HvApplication.STORAGE_ENTRY_POINT_ABSOLUTE_PATH 
+											+  File.separatorChar 
+											+  "log"
+											+  File.separatorChar
+											+  c.getName() 
+											+  "%u.log", 
+											   1_048_576,
+											   5 , 
+											   true 
+											   ));
+	
+			
 		} catch (SecurityException e) {
 			e.printStackTrace(); System.exit(-1);
 		} catch (IOException e) {
