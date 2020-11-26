@@ -50,5 +50,9 @@ https://docs.spring.io/spring-security/site/docs/5.0.3.RELEASE/guides/html5/form
     	
 https://www.baeldung.com/spring-security-logout    	
 https://spring.io/guides/tutorials/spring-security-and-angular-js/
+
+- 20201126
+java argument for alternative application.properties location
+--spring.config.location=C:/users/andreas/application.properties
     	
     	

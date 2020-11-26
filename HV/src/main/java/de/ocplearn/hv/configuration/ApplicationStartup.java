@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import de.ocplearn.hv.util.LoggerBuilder;
 
+@Component
 public class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
 
 	@Value("${datavolume.storageEntryPoint}")
@@ -63,7 +64,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 	  String[] BASE_DIRECTORIES = {"aaatests", "backupdb", "log", "pm", "tmp" };
 	  //String storageEntryPointAbsolutePath = storageEntryPointAbsolutePath;
 	  
-	  System.out.println("storageEntryPointAbsolutePath =  " + storageEntryPointAbsolutePath);
+	  System.err.println("onApplicationEvent() - storageEntryPointAbsolutePath =  " + storageEntryPointAbsolutePath);
 	  
 	  if(!absolutePathExists()) {
 	  
