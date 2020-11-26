@@ -1,23 +1,56 @@
 package de.ocplearn.hv.configuration;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import javax.xml.crypto.Data;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-@Component
+import de.ocplearn.hv.util.LoggerBuilder;
+
 public class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
 
-@Autowired
-ConfigProperties configProperties;
-
+	@Value("${datavolume.storageEntryPoint}")
+	private  String storageEntryPoint;
+	@Value("${datavolume.storageEntryPointAbsolutePath}")
+	private  String storageEntryPointAbsolutePath;
 	
   /**
+	 * @return the storageEntryPoint
+	 */
+	private String getStorageEntryPoint() {
+		return storageEntryPoint;
+	}
+
+	/**
+	 * @param storageEntryPoint the storageEntryPoint to set
+	 */
+	private void setStorageEntryPoint(String storageEntryPoint) {
+		this.storageEntryPoint = storageEntryPoint;
+	}
+
+	/**
+	 * @return the storageEntryPointAbsolutePath
+	 */
+	private String getStorageEntryPointAbsolutePath() {
+		return storageEntryPointAbsolutePath;
+	}
+
+	/**
+	 * @param storageEntryPointAbsolutePath the storageEntryPointAbsolutePath to set
+	 */
+	private void setStorageEntryPointAbsolutePath(String storageEntryPointAbsolutePath) {
+		this.storageEntryPointAbsolutePath = storageEntryPointAbsolutePath;
+	}
+
+/**
    * This event is executed as late as conceivably possible to indicate that 
    * the application is ready to service requests.
    */
@@ -28,7 +61,9 @@ ConfigProperties configProperties;
 	  String environmentVariable;
 	  String userVariable;
 	  String[] BASE_DIRECTORIES = {"aaatests", "backupdb", "log", "pm", "tmp" };
-	  String storageEntryPointAbsolutePath = configProperties.getStorageEntryPointAbsolutePath();
+	  //String storageEntryPointAbsolutePath = storageEntryPointAbsolutePath;
+	  
+	  System.out.println("storageEntryPointAbsolutePath =  " + storageEntryPointAbsolutePath);
 	  
 	  if(!absolutePathExists()) {
 	  
@@ -43,34 +78,31 @@ ConfigProperties configProperties;
 				throw new IllegalStateException("Environment is neither MACOSX nor Windows. Buy a new computer!");
 			}		
 			// Get the entry point to data storage if not existent
-			File storageContainer = new File( System.getenv(environmentVariable) + File.separatorChar + configProperties.getStorageEntryPoint()  );
+			File storageContainer = new File( System.getenv(environmentVariable) + File.separatorChar + storageEntryPoint  );
 			storageEntryPointAbsolutePath = storageContainer.getAbsolutePath();
 	
 			if(!storageContainer.exists()) { 
 				System.out.println("No acces to data storage. Entry point not available.");
 				System.exit(1);
-				
 			}
-			
-			configProperties.setStorageEntryPointAbsolutePath(storageEntryPointAbsolutePath);
 	  	}
 	  
-			for(String directory : BASE_DIRECTORIES) {
-				File file = new File(storageEntryPointAbsolutePath + File.separatorChar + directory);
-				if ( ! file.exists() ) {
-					 
-					if( !(file.mkdir()) ) {
-						System.out.println("Could not create the following directory: " + directory);
-						System.exit(1);
-					}
+		for(String directory : BASE_DIRECTORIES) {
+			File file = new File(storageEntryPointAbsolutePath + File.separatorChar + directory);
+			if ( ! file.exists() ) {
+				 
+				if( !(file.mkdir()) ) {
+					System.out.println("Could not create the following directory: " + directory);
+					System.exit(1);
 				}
 			}
+		}
 	
     return;
   }
   
   	boolean absolutePathExists() {
-  		File file = new File( configProperties.getStorageEntryPoint() );
+  		File file = new File( storageEntryPointAbsolutePath );
   		return file.exists();
   	}
  

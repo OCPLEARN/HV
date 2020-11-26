@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 
 @Configuration
-@ConfigurationProperties(prefix = "dataVolume") /* dataVolume in application.properties*/
+@ConfigurationProperties(prefix = "datavolume") /* dataVolume in application.properties*/
 public class ConfigProperties {
 	
 

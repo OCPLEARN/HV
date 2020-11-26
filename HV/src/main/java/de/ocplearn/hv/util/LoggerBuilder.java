@@ -8,19 +8,22 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
 import de.ocplearn.hv.HvApplication;
 import de.ocplearn.hv.configuration.ConfigProperties;
+
 
 public class LoggerBuilder {
 	
 	private static LoggerBuilder instance = new LoggerBuilder();
 	
-	@Autowired
-	private ConfigProperties configProperties;
-	
 	private LoggerBuilder() {
-		
 	}
 	
 	/**
@@ -39,6 +42,8 @@ public class LoggerBuilder {
 	 * @return Logger
 	 * */
 	public Logger build( Class c ) {
+		
+		
 		
 		Logger logger = null;
 	
@@ -62,9 +67,12 @@ public class LoggerBuilder {
 	    // define location for log files
 
 		try {
-		
+//			if (configProperties == null) {
+//				System.out.println( "configProperties is null" );
+//			}	
 		//	logger.addHandler(new FileHandler( "%h/"+ c.getName() +"%u.log", 1_048_576, 5 ,  true ));
-			logger.addHandler(new FileHandler( configProperties.getStorageEntryPointAbsolutePath()
+			// "%h/" + "immodata"
+			logger.addHandler(new FileHandler( "%h/" + "immodata"
 											+  File.separatorChar 
 											+  "log"
 											+  File.separatorChar
