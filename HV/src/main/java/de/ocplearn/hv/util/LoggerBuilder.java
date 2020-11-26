@@ -7,11 +7,17 @@ import java.util.logging.FileHandler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import de.ocplearn.hv.HvApplication;
+import de.ocplearn.hv.configuration.ConfigProperties;
 
 public class LoggerBuilder {
 	
 	private static LoggerBuilder instance = new LoggerBuilder();
+	
+	@Autowired
+	private ConfigProperties configProperties;
 	
 	private LoggerBuilder() {
 		
@@ -35,6 +41,7 @@ public class LoggerBuilder {
 	public Logger build( Class c ) {
 		
 		Logger logger = null;
+	
 		
 		// load custom props
 	    InputStream stream = 
@@ -57,7 +64,7 @@ public class LoggerBuilder {
 		try {
 		
 		//	logger.addHandler(new FileHandler( "%h/"+ c.getName() +"%u.log", 1_048_576, 5 ,  true ));
-			logger.addHandler(new FileHandler( HvApplication.STORAGE_ENTRY_POINT_ABSOLUTE_PATH 
+			logger.addHandler(new FileHandler( configProperties.getStorageEntryPointAbsolutePath()
 											+  File.separatorChar 
 											+  "log"
 											+  File.separatorChar
