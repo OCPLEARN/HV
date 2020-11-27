@@ -18,6 +18,13 @@ import de.ocplearn.hv.util.LoggerBuilder;
 @Component
 public class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
 
+
+	@Autowired
+	LoggerConfig loggerConfig;
+	
+	@Autowired
+	DataSourceConfig dataSourceConfig;
+	
 	@Value("${datavolume.storageEntryPoint}")
 	private  String storageEntryPoint;
 	@Value("${datavolume.storageEntryPointAbsolutePath}")
@@ -58,6 +65,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
   @Override
   public void onApplicationEvent(final ApplicationReadyEvent event) {
  
+
 	  
 	  String environmentVariable;
 	  String userVariable;
@@ -65,7 +73,9 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 	  //String storageEntryPointAbsolutePath = storageEntryPointAbsolutePath;
 	  
 	  System.err.println("onApplicationEvent() - storageEntryPointAbsolutePath =  " + storageEntryPointAbsolutePath);
-	  
+	  System.err.println("DataSourceConfig : " + dataSourceConfig.getDriver_class_name());
+
+	
 	  if(!absolutePathExists()) {
 	  
 			if( File.separatorChar == '/') {

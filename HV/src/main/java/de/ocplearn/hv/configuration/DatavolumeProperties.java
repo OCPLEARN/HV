@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Configuration
 @ConfigurationProperties(prefix = "datavolume") /* dataVolume in application.properties*/
-public class ConfigProperties {
+public class DatavolumeProperties {
 	
 
 	private  String storageEntryPoint;

@@ -17,9 +17,72 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import de.ocplearn.hv.util.LoggerBuilder;
 
 @Configuration
+@ConfigurationProperties("database1.datasource")
 public class DataSourceConfig {
+	
+	private String jdbcUrl;
+	private String username;
+	private String password;
+	private String driver_class_name;
 
 	private Logger logger = LoggerBuilder.getInstance().build(DataSourceConfig.class);
+	
+	/**
+	 * @return the jdbcUrl
+	 */
+	public String getJdbcUrl() {
+		return jdbcUrl;
+	}
+
+	/**
+	 * @param jdbcUrl the jdbcUrl to set
+	 */
+	public void setJdbcUrl(String jdbcUrl) {
+		this.jdbcUrl = jdbcUrl;
+	}
+
+	/**
+	 * @return the username
+	 */
+	public String getUsername() {
+		return username;
+	}
+
+	/**
+	 * @param username the username to set
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	/**
+	 * @return the driver_class_name
+	 */
+	public String getDriver_class_name() {
+		return driver_class_name;
+	}
+
+	/**
+	 * @param driver_class_name the driver_class_name to set
+	 */
+	public void setDriver_class_name(String driver_class_name) {
+		this.driver_class_name = driver_class_name;
+	}
+	
 	
     @Bean(name = "datasource1")
     @ConfigurationProperties("database1.datasource")
