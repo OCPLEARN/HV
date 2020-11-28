@@ -1,7 +1,10 @@
 package de.ocplearn.hv;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -50,7 +53,8 @@ public class HvApplication {
 //		
 //		
 //	}
-	
+	@Autowired
+	private LoggerBuilder builder;
 	
 	public static void main(String[] args) {
 		

@@ -1,6 +1,7 @@
 package de.ocplearn.hv.configuration;
 
 import java.io.File;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.crypto.Data;
@@ -13,22 +14,28 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
+import de.ocplearn.hv.HvApplication;
 import de.ocplearn.hv.util.LoggerBuilder;
 
 @Component
 public class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
 
+	@Autowired
+	private LoggerBuilder builder;
+	private Logger logger;
 
 	@Autowired
 	LoggerConfig loggerConfig;
-	
-	@Autowired
-	DataSourceConfig dataSourceConfig;
 	
 	@Value("${datavolume.storageEntryPoint}")
 	private  String storageEntryPoint;
 	@Value("${datavolume.storageEntryPointAbsolutePath}")
 	private  String storageEntryPointAbsolutePath;
+
+//	@Autowired
+//	public ApplicationStartup() {
+//		this.logger = this.builder.build("de.ocplearn.hv.HvApplication");
+//	}
 	
   /**
 	 * @return the storageEntryPoint
@@ -64,8 +71,11 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
    */
   @Override
   public void onApplicationEvent(final ApplicationReadyEvent event) {
- 
 
+	  this.logger = this.builder.build("de.ocplearn.hv.HvApplication");
+	  this.logger.setLevel(Level.FINEST);
+	  // log a FINER message
+	  this.logger.log(Level.INFO, "HvApplication starting ...");
 	  
 	  String environmentVariable;
 	  String userVariable;
@@ -73,8 +83,6 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 	  //String storageEntryPointAbsolutePath = storageEntryPointAbsolutePath;
 	  
 	  System.err.println("onApplicationEvent() - storageEntryPointAbsolutePath =  " + storageEntryPointAbsolutePath);
-	  System.err.println("DataSourceConfig : " + dataSourceConfig.getDriver_class_name());
-
 	
 	  if(!absolutePathExists()) {
 	  

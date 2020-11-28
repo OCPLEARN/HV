@@ -8,9 +8,13 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -21,18 +25,45 @@ import de.ocplearn.hv.configuration.DataSourceConfig;
 import de.ocplearn.hv.configuration.LoggerConfig;
 
 
-
-public class LoggerBuilder {
+@Component
+public class LoggerBuilder implements ApplicationContextAware {
 	
-	private static LoggerBuilder instance = new LoggerBuilder();
+	private static ApplicationContext context;
 	
-	@Autowired
+    @Override
+    public void setApplicationContext(ApplicationContext context) throws BeansException {
+         
+        // store ApplicationContext reference to access required beans later on
+    	LoggerBuilder.context = context;
+    }	
+	
+	private static LoggerBuilder instance;
+	
+	static {
+		// load custom props
+	    InputStream stream = 
+	    		LoggerBuilder.class
+	    		.getClassLoader()
+	    		.getResourceAsStream("logging.properties");
+	    
+	    try {
+	          LogManager.getLogManager().readConfiguration(stream);
+	
+	    } catch (IOException e) {
+	          e.printStackTrace(); System.exit(-1);
+	    }	
+	    
+	      System.setProperty("java.util.logging.SimpleFormatter.format",
+	              "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS %4$-6s %2$s %5$s%6$s%n");	    
+	    
+	}
+	
 	private LoggerConfig loggerConfig;
 	
 	@Autowired
-	private DataSourceConfig dataSourceConfig;
-	
-	private LoggerBuilder() {
+	public LoggerBuilder(@Autowired LoggerConfig loggerConfig) {
+		this.loggerConfig = loggerConfig;
+		LoggerBuilder.instance = this;
 	}
 	
 	/**
@@ -41,7 +72,41 @@ public class LoggerBuilder {
 	 * @return LoggerBuilder
 	 * */
 	public static LoggerBuilder getInstance() {
+//		if ( LoggerBuilder.instance == null ) {
+//			//LoggerBuilder.instance = LoggerBuilder.appContext.getBean(LoggerBuilder.class);
+//		}
 		return instance;
+	}
+	
+	/**
+	 * Returns a combined ConsoleHandler and FileHandler Logger
+	 * 
+	 * @param from https://docs.oracle.com/javase/8/docs/api/
+		name - A name for the logger. This should be a dot-separated name and should
+ 		normally be based on the package name or class name of the subsystem, such as java.net or javax.swing 
+	 * @return Logger
+	 * */	
+	public Logger build( String name ) {
+		Logger logger = Logger.getLogger( name );
+		if(loggerConfig.getUseFileHandler().equalsIgnoreCase("TRUE")) {
+			try {
+				logger.addHandler(
+					new FileHandler(
+						loggerConfig.getFileHandlerLocation() +  File.separatorChar +  name +  "%u.log", 
+					   1_048_576,
+					   5 , 
+					   true 
+					 )
+				);
+			} catch (SecurityException e) {
+				e.printStackTrace(); System.exit(-1);
+			} catch (IOException e) {
+				e.printStackTrace();System.exit(-1);
+			}			
+		}
+	    logger.setLevel(Level.parse(loggerConfig.getlevel()));
+	    
+		return logger;		
 	}
 	
 	/**
@@ -51,56 +116,34 @@ public class LoggerBuilder {
 	 * @return Logger
 	 * */
 	public Logger build( Class c ) {
-		
-		System.err.println(dataSourceConfig.getJdbcUrl());
-		
-		Logger logger = null;
-	
-		
-		// load custom props
-	    InputStream stream = 
-	    		c
-	    		.getClassLoader()
-	    		.getResourceAsStream("logging.properties");
-	    
-	    try {
-	          LogManager.getLogManager().readConfiguration(stream);
-	          logger = Logger.getLogger(c.getName());
-	
-	    } catch (IOException e) {
-	          e.printStackTrace(); System.exit(-1);
-	    }		
-	      
-		// add a FileHandler default pattern %h/java%u.log
-		// immodata/log/
-	    // define location for log files
-	    System.err.println(loggerConfig.getUseFileHandler());
-	    if(loggerConfig.getUseFileHandler().equalsIgnoreCase("TRUE")) {
-	    
-		try {
-//			if (configProperties == null) {
-//				System.out.println( "configProperties is null" );
+		return this.build(c.getName());
+//		Logger logger = Logger.getLogger(c.getName());
+//
+//	    System.err.println( "LoggerBuilder build() called from " + c.getName() );
+//	    
+//	    if(loggerConfig.getUseFileHandler().equalsIgnoreCase("TRUE")) {
+//	    
+//			try {
+//		
+//			//	logger.addHandler(new FileHandler( "%h/"+ c.getName() +"%u.log", 1_048_576, 5 ,  true ));
+//				// "%h/" + "immodata"
+//				logger.addHandler(new FileHandler(loggerConfig.getFileHandlerLocation()
+//												+  File.separatorChar
+//												+  c.getName() 
+//												+  "%u.log", 
+//												   1_048_576,
+//												   5 , 
+//												   true 
+//												   ));
+//				
+//			} catch (SecurityException e) {
+//				e.printStackTrace(); System.exit(-1);
+//			} catch (IOException e) {
+//				e.printStackTrace();System.exit(-1);
 //			}	
-		//	logger.addHandler(new FileHandler( "%h/"+ c.getName() +"%u.log", 1_048_576, 5 ,  true ));
-			// "%h/" + "immodata"
-			logger.addHandler(new FileHandler(loggerConfig.getFileHandlerLocation()
-											+  File.separatorChar
-											+  c.getName() 
-											+  "%u.log", 
-											   1_048_576,
-											   5 , 
-											   true 
-											   ));
-	
-			
-		} catch (SecurityException e) {
-			e.printStackTrace(); System.exit(-1);
-		} catch (IOException e) {
-			e.printStackTrace();System.exit(-1);
-		}	
-	  }	
-	    logger.setLevel(Level.parse(loggerConfig.getlevel()));
-		return logger;
+//	  }	
+//	    logger.setLevel(Level.parse(loggerConfig.getlevel()));
+//		return logger;
 	}		
-	
+
 }
