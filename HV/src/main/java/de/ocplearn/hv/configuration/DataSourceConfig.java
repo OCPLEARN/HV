@@ -31,6 +31,7 @@ public class DataSourceConfig {
 	 * @return the jdbcUrl
 	 */
 	public String getJdbcUrl() {
+		System.out.println("DataSourceConfig getJdbcUrl() = " + jdbcUrl);
 		return jdbcUrl;
 	}
 
