@@ -72,17 +72,17 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
   @Override
   public void onApplicationEvent(final ApplicationReadyEvent event) {
 
-	  this.logger = this.builder.build("de.ocplearn.hv.HvApplication");
-	  this.logger.setLevel(Level.FINEST);
-	  // log a FINER message
-	  this.logger.log(Level.INFO, "HvApplication starting ...");
+//	  this.logger = this.builder.build("de.ocplearn.hv.HvApplication");
+//	  this.logger.setLevel(Level.FINEST);
+//	  // log a FINER message
+//	  this.logger.log(Level.INFO, "HvApplication starting ...");
 	  
 	  String environmentVariable;
 	  String userVariable;
 	  String[] BASE_DIRECTORIES = {"aaatests", "backupdb", "log", "pm", "tmp" };
 	  //String storageEntryPointAbsolutePath = storageEntryPointAbsolutePath;
 	  
-	  System.err.println("onApplicationEvent() - storageEntryPointAbsolutePath =  " + storageEntryPointAbsolutePath);
+	  //System.err.println("onApplicationEvent() - storageEntryPointAbsolutePath =  " + storageEntryPointAbsolutePath);
 	
 	  if(!absolutePathExists()) {
 	  

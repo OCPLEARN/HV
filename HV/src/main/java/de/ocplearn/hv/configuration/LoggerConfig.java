@@ -47,6 +47,7 @@ public class LoggerConfig {
 	 * @return the fileHandlerLocation
 	 */
 	public String getFileHandlerLocation() {
+		//System.out.println("getFileHandlerLocation() = " + this.fileHandlerLocation);
 		return fileHandlerLocation;
 	}
 

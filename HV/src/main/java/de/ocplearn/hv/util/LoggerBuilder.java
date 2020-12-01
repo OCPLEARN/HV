@@ -3,10 +3,16 @@ package de.ocplearn.hv.util;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
+import java.util.Formatter;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +34,20 @@ import de.ocplearn.hv.configuration.LoggerConfig;
 @Component
 public class LoggerBuilder implements ApplicationContextAware {
 	
+	/* API Print a brief summary of the LogRecord in a human readable format. */
+	private static SimpleFormatter formatter = new SimpleFormatter() {
+        private static final String format = "[%1$tF %1$tT] [%2$-7s] %3$s %n";
+
+        @Override
+        public synchronized String format(LogRecord lr) {
+            return String.format(format,
+                    new Date(lr.getMillis()),
+                    lr.getLevel().getLocalizedName(),
+                    lr.getMessage()
+            );		
+        }
+	};
+	
 	private static ApplicationContext context;
 	
     @Override
@@ -48,13 +68,14 @@ public class LoggerBuilder implements ApplicationContextAware {
 	    
 	    try {
 	          LogManager.getLogManager().readConfiguration(stream);
+	          //Logger logger = Logger.getLogger(name)
 	
 	    } catch (IOException e) {
 	          e.printStackTrace(); System.exit(-1);
 	    }	
 	    
-	      System.setProperty("java.util.logging.SimpleFormatter.format",
-	              "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS %4$-6s %2$s %5$s%6$s%n");	    
+//	    System.setProperty("java.util.logging.SimpleFormatter.format", 
+//	              "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS %4$-6s %2$s %5$s%6$s%n");	    
 	    
 	}
 	
@@ -88,22 +109,41 @@ public class LoggerBuilder implements ApplicationContextAware {
 	 * */	
 	public Logger build( String name ) {
 		Logger logger = Logger.getLogger( name );
+		
+		// #1 console handler
+		ConsoleHandler consoleHandler = new ConsoleHandler();
+		
+		logger.addHandler(consoleHandler);
+		
 		if(loggerConfig.getUseFileHandler().equalsIgnoreCase("TRUE")) {
 			try {
-				logger.addHandler(
-					new FileHandler(
+				
+				FileHandler fileHandler = new FileHandler(
 						loggerConfig.getFileHandlerLocation() +  File.separatorChar +  name +  "%u.log", 
-					   1_048_576,
-					   5 , 
-					   true 
-					 )
+						   1_048_576,
+						   5 , 
+						   true 
+						 );
+				
+				// #2 file handler
+				logger.addHandler(
+						fileHandler
 				);
+				
+				//fileHandler.setFormatter( LoggerBuilder.formatter );
+				
 			} catch (SecurityException e) {
 				e.printStackTrace(); System.exit(-1);
 			} catch (IOException e) {
 				e.printStackTrace();System.exit(-1);
 			}			
 		}
+		
+		//Handler[] handler = ;
+		for( Handler handler : logger.getHandlers() ) {
+			handler.setFormatter(formatter);
+		}
+		
 	    logger.setLevel(Level.parse(loggerConfig.getlevel()));
 	    
 		return logger;		
