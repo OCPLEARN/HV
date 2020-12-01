@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import de.ocplearn.hv.util.DBConnectionPool;
 import de.ocplearn.hv.util.LoggerBuilder;
 
 @SpringBootApplication
@@ -53,8 +54,15 @@ public class HvApplication {
 //		
 //		
 //	}
+	
+	// trigger LoggerBuilder creation
 	@Autowired
 	private LoggerBuilder builder;
+	
+	// trigger DBConnectionPool creation
+	@Autowired
+	private DBConnectionPool dBConnectionPool;
+	
 	
 	public static void main(String[] args) {
 		

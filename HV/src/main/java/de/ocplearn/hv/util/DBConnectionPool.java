@@ -14,17 +14,24 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import de.ocplearn.hv.configuration.DataSourceConfig;
 import de.ocplearn.hv.util.LoggerBuilder;
 
-
+@Component
 public class DBConnectionPool {
+	
+	//@Autowired
+	DataSourceConfig dataSourceConfig;
 	
 	private static Logger logger = LoggerBuilder.getInstance().build( DBConnectionPool.class );
 	
 	// connect to the server
-	private static final String jdbcUrlDbServer = "jdbc:mysql://localhost:3306";
-	private static final String dbUserServer = "root";
-	private static final String dbPasswordServer = "Pa$$w0rd";	
+	private static  String jdbcUrlDbServer =  "jdbc:mysql://localhost:3306";
+	private static  String dbUserServer = "root";
+	private static  String dbPasswordServer = "Pa$$w0rd";	
 
 	// database name
 	private static String dbName = "immodb";
@@ -85,17 +92,27 @@ public class DBConnectionPool {
     };	
 	
 	// pool instance
-	private static DBConnectionPool instance = new DBConnectionPool(initialConnectionCount);
+	private static DBConnectionPool instance; //= new DBConnectionPool(initialConnectionCount);
 
-    // Singleton
-    private DBConnectionPool( int connectionCount ) {
-		connList = new ArrayList<>( connectionCount );
+    // Singleton int connectionCount
+    public DBConnectionPool( @Autowired DataSourceConfig dataSourceConfig ) {
+    	this.dataSourceConfig = dataSourceConfig;
+
+		jdbcUrlDbServer = this.dataSourceConfig.getJdbcUrl();
+		dbUserServer = this.dataSourceConfig.getUsername();
+		dbPasswordServer = this.dataSourceConfig.getPassword();
+		
+		jdbcUrl = this.dataSourceConfig.getJdbcUrl();    	
+    	
+    	connList = new ArrayList<>( initialConnectionCount ); // initialConnectionCount
 		connListUsed = new ArrayList<>(  );
 		checkPoolSize();    
 		
 		// start pool checker thread
 		//Thread PoolChecker = new Thread( poolCheckRunnable );
 		//PoolChecker.run();
+		
+		instance = this;
     }
 
 
