@@ -16,6 +16,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import de.ocplearn.hv.util.AppLogger;
+import de.ocplearn.hv.util.LoggerBuilder;
 
 /**
  * Tests folder structure for immodata
@@ -24,13 +25,11 @@ import de.ocplearn.hv.util.AppLogger;
 //@ConfigurationProperties(prefix = "datavolume")
 public class ImmoDataTest {
 
-	private AppLogger appLogger; 	
 	private Logger logger;
 	
 	@Autowired
-	public ImmoDataTest(@Qualifier("FileAndConsoleLogger") AppLogger appLogger ) {
-		this.appLogger = appLogger;
-		this.logger = this.appLogger.build( ImmoDataTest.class );
+	public ImmoDataTest(@Autowired LoggerBuilder loggerBuilder ) {
+		this.logger = loggerBuilder.build("de.ocplearn.hv");
 	}
 	
 	@Value("${datavolume.storageEntryPoint}")
@@ -66,9 +65,15 @@ public class ImmoDataTest {
 	
 	@Test
 	public void test_datavolume_exists() {
-		//logger.log(Level.INFO, "just checking logging");
+		
 		File file = new File(storageEntryPointAbsolutePath);
 		Assertions.assertTrue(file.exists());
+		if ( file.exists() ) {
+			logger.log(Level.INFO,"datavolume ok" );
+		}else {
+			logger.log(Level.SEVERE,"datavolume missing" );
+		}
+		
 	}
 	
 }

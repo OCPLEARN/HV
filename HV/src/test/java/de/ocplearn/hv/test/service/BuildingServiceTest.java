@@ -61,6 +61,8 @@ public class BuildingServiceTest {
 		this.userService = userService;
 		this.propertyManagementService = propertyManagementService;
 		this.buildingDao = buildingDao;
+		// disable logging into de.ocplearn.hv
+		this.logger.setUseParentHandlers(false);
 	}
 	
 	@Test

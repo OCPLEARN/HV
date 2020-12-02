@@ -3,6 +3,7 @@ package de.ocplearn.hv.util;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.logging.ConsoleHandler;
@@ -36,15 +37,18 @@ public class LoggerBuilder implements ApplicationContextAware {
 	
 	/* API Print a brief summary of the LogRecord in a human readable format. */
 	private static SimpleFormatter formatter = new SimpleFormatter() {
-        private static final String format = "[%1$tF %1$tT] [%2$-7s] %3$s %n";
+        private static final String format = "[%1$tF %1$tT] [%2$-7s] class:%3$s method:%4$s msg:%5$s thrown:%6$s %n";
 
         @Override
         public synchronized String format(LogRecord lr) {
+        	
             return String.format(format,
-                    new Date(lr.getMillis()),
-                    lr.getLevel().getLocalizedName(),
-                    lr.getMessage()
-            );		
+                    Instant.now().toEpochMilli(),
+                    lr.getLevel().getLocalizedName(),		// 2
+                    lr.getSourceClassName(),lr.getSourceMethodName(),	// 3, 4
+                    lr.getMessage(),	// 5
+                    lr.getThrown() 		// 6
+            );	        			
         }
 	};
 	
@@ -109,6 +113,11 @@ public class LoggerBuilder implements ApplicationContextAware {
 	 * */	
 	public Logger build( String name ) {
 		Logger logger = Logger.getLogger( name );
+		
+		// check logger already built
+		if ( logger.getHandlers().length > 1 ) {
+			return logger;
+		}
 		
 		// #1 console handler
 		ConsoleHandler consoleHandler = new ConsoleHandler();

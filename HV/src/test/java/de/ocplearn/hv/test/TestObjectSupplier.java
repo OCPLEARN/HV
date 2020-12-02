@@ -7,6 +7,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,11 +34,14 @@ import de.ocplearn.hv.service.PropertyManagementService;
 import de.ocplearn.hv.service.UserService;
 import de.ocplearn.hv.test.dao.AddressDaoTest;
 import de.ocplearn.hv.test.dao.LoginUserDaoTest;
+import de.ocplearn.hv.util.LoggerBuilder;
 import de.ocplearn.hv.util.StaticHelpers;
 
 @SpringBootTest
 @Component
 public class TestObjectSupplier {
+	
+	private Logger logger;
 	
 	// list of PM test models
 	private static final Map<String, String> PM_MODELS;
@@ -78,11 +83,15 @@ public class TestObjectSupplier {
 	private TestObjectSupplier(
 			UserService userService,
 			@Qualifier("LoginUserDaoJdbc") LoginUserDao loginUserDao,
-			PropertyManagementService propertyManagementService
+			PropertyManagementService propertyManagementService,
+			@Autowired LoggerBuilder loggerBuilder
 			) {
+		this.logger = loggerBuilder.build("de.ocplearn.hv");
 		this.userService = userService;
 		this.loginUserDao = loginUserDao;
 		this.propertyManagementService = propertyManagementService;
+		
+		this.logger.log(Level.INFO,"check for models ...");
 		
 		PM_MODELS.forEach( (k, v) -> {
 			// k = model name
