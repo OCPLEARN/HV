@@ -81,12 +81,12 @@ public class AdminController {
 		
 		model.addAttribute("loginUsers", loginUserDtos);		
 		
-		return "/admin/users";
+		return "admin/users";
 	}
 	
 	@GetMapping("/page3")
 	public String adminPage3(){
-		return "/admin/page3";
+		return "admin/page3";
 	}
 	
 	@GetMapping("/users/delete")
@@ -112,7 +112,7 @@ public class AdminController {
 		LoginUserDto loginUserDto = userService.findUserByLoginUserName(loginUserName); 
 		model.addAttribute("loginUser", loginUserDto); //Definition of variable for Thymeleaf
 		
-		return "/admin/usersedit";
+		return "admin/usersedit";
 		
 	}
 	

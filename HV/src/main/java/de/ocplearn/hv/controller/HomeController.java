@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -37,6 +39,7 @@ import de.ocplearn.hv.service.PropertyManagementService;
 import de.ocplearn.hv.service.UserService;
 import de.ocplearn.hv.service.UserServiceImpl;
 import de.ocplearn.hv.util.CountryList;
+import de.ocplearn.hv.util.LoggerBuilder;
 import de.ocplearn.hv.util.RegistrationObject;
 import de.ocplearn.hv.util.StaticHelpers;
 
@@ -49,11 +52,17 @@ public class HomeController {
 	
 	private PropertyManagementService propertyManagementService;
 	
+	private Logger logger;
+	
 	@Autowired
-	public HomeController(UserService userService, ApplicationContext applicationContext, PropertyManagementService propertyManagementService) {
+	public HomeController(UserService userService,
+			ApplicationContext applicationContext,
+			PropertyManagementService propertyManagementService,
+			@Autowired LoggerBuilder loggerBuilder) {
 		this.userService = userService;
 		this.applicationContext = applicationContext;
 		this.propertyManagementService = propertyManagementService;
+		this.logger = loggerBuilder.build("de.ocplearn.hv");
 	}
 	
 	
@@ -65,13 +74,13 @@ public class HomeController {
 	
 	@GetMapping("/page2")
 	public String page2() {
-		return "/public/page2";
+		return "public/page2";
 	}
 	
 	
 	@GetMapping("/signin")
 	public String signIn() {
-		return "/public/signin";
+		return "public/signin";
 	}
 	
 	@ModelAttribute
@@ -96,7 +105,7 @@ public class HomeController {
 		model.addAttribute("countryList", countryList.getCountryNames());
 		model.addAttribute("PropertyManagementRegistrationFormCommand", propertyManagementRegistrationFormCommand);
 		
-		return "/public/register";
+		return "public/register";
 	}
 	
 	@PostMapping("/register")
@@ -107,21 +116,21 @@ public class HomeController {
 		
 		if(userService.loginUserExists(propertyManagementRegistrationFormCommand.getLoginUserName())) {
 			bindingResult.rejectValue("loginUserName", "register.username.validation.usernameexists", "Username is already registered.");
-			return "/public/register";
+			return "public/register";
 		}
 		
 		if ( !( propertyManagementRegistrationFormCommand.getInitialPassword().equals(propertyManagementRegistrationFormCommand.getRepeatedPassword())) ) {
 			bindingResult.rejectValue("repeatedPassword", "register.password.validation.repeaterror", "Repeated password doesn´t match first password");
 		
-			return "/public/register";
+			return "public/register";
 		}
 		
 		if(bindingResult.hasErrors()) {
-			return 	"/public/register";
+			return 	"public/register";
 				
 		} 	else {
 					createPropertyManagement(propertyManagementRegistrationFormCommand);
-				return "/public/signin";
+				return "public/signin";
 		}
 	}
 	
@@ -237,6 +246,12 @@ public class HomeController {
 		// TODO
 		//propertyManagementDto.setLoginUsers(loginUsers);
 
+		if (! this.propertyManagementService.createPropertyManagement(propertyManagementDto)) {
+			this.logger.log(Level.SEVERE, "pm registreation failed");
+			new RuntimeException("Registration of PropertyManagement failed!");
+		}
+		
+		this.logger.log(Level.INFO, "pm registered, id : " + propertyManagementDto.getId());
 		
 	}
 	
