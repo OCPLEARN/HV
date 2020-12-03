@@ -15,6 +15,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import org.apache.tomcat.jni.Time;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,15 +38,26 @@ public class LoggerBuilder implements ApplicationContextAware {
 	
 	/* API Print a brief summary of the LogRecord in a human readable format. */
 	private static SimpleFormatter formatter = new SimpleFormatter() {
+		
         private static final String format = "[%1$tF %1$tT] [%2$-7s] class:%3$s method:%4$s msg:%5$s thrown:%6$s %n";
 
+        // first [] represents Date in ISO 8601 (%1$tF) and Time in long since 1.1.1970 (%1$tF)
+        // second [] represents LogLevel with max number of 7 spaces
+        // https://dzone.com/articles/java-string-format-examples
+        // class: represents full information a class
+        // method: represents the method that calls the the logger
+        // msg: represents the supplied log message
+        // thrown: represents Throwable => Exception or null if no exception
+        
+        
         @Override
         public synchronized String format(LogRecord lr) {
         	
             return String.format(format,
                     Instant.now().toEpochMilli(),
                     lr.getLevel().getLocalizedName(),		// 2
-                    lr.getSourceClassName(),lr.getSourceMethodName(),	// 3, 4
+                    lr.getSourceClassName(),
+                    lr.getSourceMethodName(),	// 3, 4
                     lr.getMessage(),	// 5
                     lr.getThrown() 		// 6
             );	        			
@@ -85,7 +97,6 @@ public class LoggerBuilder implements ApplicationContextAware {
 	
 	private LoggerConfig loggerConfig;
 	
-	@Autowired
 	public LoggerBuilder(@Autowired LoggerConfig loggerConfig) {
 		this.loggerConfig = loggerConfig;
 		LoggerBuilder.instance = this;
@@ -102,6 +113,7 @@ public class LoggerBuilder implements ApplicationContextAware {
 //		}
 		return instance;
 	}
+	
 	
 	/**
 	 * Returns a combined ConsoleHandler and FileHandler Logger
@@ -123,6 +135,7 @@ public class LoggerBuilder implements ApplicationContextAware {
 		ConsoleHandler consoleHandler = new ConsoleHandler();
 		
 		logger.addHandler(consoleHandler);
+		
 		
 		if(loggerConfig.getUseFileHandler().equalsIgnoreCase("TRUE")) {
 			try {

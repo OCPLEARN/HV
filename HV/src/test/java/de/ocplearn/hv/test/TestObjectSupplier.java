@@ -79,6 +79,11 @@ public class TestObjectSupplier {
 
 	PartsBox partsBox = PartsBox.getInstance();
 	
+	
+	
+	private org.slf4j.Logger logger2 = org.slf4j.LoggerFactory.getLogger("de.ocplearn.hv");
+	
+	
 	@Autowired
 	private TestObjectSupplier(
 			UserService userService,
@@ -86,12 +91,15 @@ public class TestObjectSupplier {
 			PropertyManagementService propertyManagementService,
 			@Autowired LoggerBuilder loggerBuilder
 			) {
+		
 		this.logger = loggerBuilder.build("de.ocplearn.hv");
 		this.userService = userService;
 		this.loginUserDao = loginUserDao;
 		this.propertyManagementService = propertyManagementService;
 		
 		this.logger.log(Level.INFO,"check for models ...");
+		
+		logger2.info("Ich pribier mal aus"); // Test SLF4J logger
 		
 		PM_MODELS.forEach( (k, v) -> {
 			// k = model name
