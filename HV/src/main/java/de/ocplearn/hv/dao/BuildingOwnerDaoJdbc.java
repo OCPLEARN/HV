@@ -164,8 +164,9 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 	public Optional<BuildingOwner> findByIdPartial(int id) {
 		try(
 				Connection con = this.datasource.getConnection();
-				// TODO replace SELECT * by SELECT mapRowTo
-				PreparedStatement stmt = con.prepareStatement( "SELECT * FROM buildingowner WHERE id = ?;" );
+				
+				PreparedStatement stmt = con.prepareStatement( "SELECT " + COLUMNS + " FROM " + TABLE_NAME + 
+						" AS " + TABLE_NAME_PREFIX +" WHERE id = ?;" );
 				)
 		{
 			stmt.setInt(1, id );

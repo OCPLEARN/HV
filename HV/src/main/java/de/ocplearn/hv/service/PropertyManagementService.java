@@ -106,6 +106,7 @@ public interface PropertyManagementService {
 	
 	public BuildingOwnerDto findBuildingOwnerById (int buildingOwnerId);
 	
+	public List <BuildingOwnerDto> findBuildingOwnersByBuildingId(int buildingId);
 	
 	
 	// ASSIGN BUILDINGOWNERS TO BUILDING

@@ -68,8 +68,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 											UserService userService,
 											ContactService contactService,
 											LoginUserMapper loginUserMapper,
-											ContactMapper contactMapper,
-											
+											ContactMapper contactMapper,		
 											BuildingMapper buildingMapper,
 											BuildingOwnerMapper buildingOwnerMapper,
 											BuildingOwnerDao buildingOwnerDao,
@@ -260,7 +259,9 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		//TODO: check if building/unit is currently in use in any active rental contracts
 		if (findBuildingById(buildingDto.getId())!=null) {
 				if(contactService.deleteAddress(buildingDto.getAddress())) {
-					//TODO: delete UNITS from this Building	deleteUnit()
+					for (UnitDto unit : buildingDto.getUnits()) {
+						if (!deleteUnit(unit)) return false;
+					}
 				return buildingDao.deleteById(buildingDto.getId());
 				}else {
 					return false;
@@ -303,6 +304,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean removeBuildingOwnerFromBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
+		//TODO: check if owner still assigned to a unit, if so, delete that first
 		return buildingDao.removeBuildingOwnerFromBuilding(buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto, new CycleAvoidingMappingContext()), buildingMapper.buildingDtoToBuilding(buildingDto, new CycleAvoidingMappingContext()));
 	}
 
@@ -355,6 +357,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		}else {
 			return false;
 		}
+		//TODO: check if unitowner is already listed as buildingowner in the unit representing the building, if not, add it
 	}
 
 
@@ -383,8 +386,20 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public BuildingDto findBuildingById(int buildingId) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Building> opt = buildingDao.findByIdFull(buildingId);
+		if (opt.isPresent()) {
+		return buildingMapper.buildingToBuildingDto(opt.get(), new CycleAvoidingMappingContext());
+		}else {
+			return null;
+		}
+	}
+	
+	@Override
+	public List<BuildingOwnerDto> findBuildingOwnersByBuildingId(int buildingId) {
+		return buildingDao.findBuildingOwnerIdsByBuildingId(buildingId, BuildingDao.tablePageViewData)
+				.stream()
+				.map(id -> findBuildingOwnerById(id))
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -449,8 +464,13 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public UnitDto findUnitById(int unitId) {
-		// TODO Auto-generated method stub
-		return null;
+		//TODO: replace with findUnitByIdFull once it is implemented
+		Optional<Unit> opt = unitDao.findUnitByIdPartial(unitId);
+		if (opt.isPresent()) {
+		return unitMapper.unitToUnitDto(opt.get(),new CycleAvoidingMappingContext());
+		}else {
+			return null;
+		}
 	}
 
 

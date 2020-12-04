@@ -219,15 +219,15 @@ public class ContactDaoJdbc implements ContactDao {
 
 	@Override
 	public List<Contact> findRenterContactsOfUnit(Unit unit, TablePageViewData tablePageViewData) {
-//TODO: still needs RenterDaoJdbc and renter implemented
+
 		List<Contact> contactList = null;
-		String sql = "";
-//				"SELECT " + COLUMNS + " FROM " +  TABLE_NAME +" AS "+ TABLE_NAME_PREFIX +
-//				" INNER JOIN " + RenterDaoJdbc.TABLE_NAME + " AS " + RenterDaoJdbc.TABLE_NAME_PREFIX +
-//				" ON " + TABLE_NAME_PREFIX + ".id = " + RenterDaoJdbc.TABLE_NAME_PREFIX + ".contactId "
-//				+ " inner join " + UnitDaoJdbc.TABLE_NAME_RENTER_LINK + " AS " + UnitDaoJdbc.TABLE_NAME_PREFIX_RENTER_LINK +
-//				" ON " + UnitDaoJdbc.TABLE_NAME_PREFIX_RENTER_LINK + ".buildingOwnerId = " +  RenterDaoJdbc.TABLE_NAME_PREFIX 
-//				+ ".id" + " WHERE " + UnitDaoJdbc.TABLE_NAME_PREFIX_RENTER_LINK + ".unitId=?;";
+		String sql =
+				"SELECT " + COLUMNS + " FROM " +  TABLE_NAME +" AS "+ TABLE_NAME_PREFIX +
+				" INNER JOIN " + RenterDaoJdbc.TABLE_NAME + " AS " + RenterDaoJdbc.TABLE_NAME_PREFIX +
+				" ON " + TABLE_NAME_PREFIX + ".id = " + RenterDaoJdbc.TABLE_NAME_PREFIX + ".contactId "
+				+ " inner join " + UnitDaoJdbc.TABLE_NAME_RENTER_LINK + " AS " + UnitDaoJdbc.TABLE_NAME_PREFIX_RENTER_LINK +
+				" ON " + UnitDaoJdbc.TABLE_NAME_PREFIX_RENTER_LINK + ".buildingOwnerId = " +  RenterDaoJdbc.TABLE_NAME_PREFIX 
+				+ ".id" + " WHERE " + UnitDaoJdbc.TABLE_NAME_PREFIX_RENTER_LINK + ".unitId=?;";
 		
 		try ( Connection connection = datasource.getConnection();
 				PreparedStatement stmt = connection.prepareStatement(sql);) {
