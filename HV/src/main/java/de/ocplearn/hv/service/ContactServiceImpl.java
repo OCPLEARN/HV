@@ -1,5 +1,6 @@
 package de.ocplearn.hv.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
@@ -64,26 +65,46 @@ public class ContactServiceImpl implements ContactService{
 	
 	@Override
 	public List<ContactDto> findContactsByLastName(String lastName, TablePageViewData tablePageViewData) {
-		// TODO Auto-generated method stub
-		return null;
+		List <ContactDto> contactList = contactDao.findContactsByLastName(lastName, tablePageViewData)
+				.stream()
+				.map(contact -> contactMapper.contactToContactDto(contact))
+				.collect(Collectors.toList());
+		return contactList;
 	}
 
 	@Override
-	public List<ContactDto> findContactsOfUnit(Unit unit, TablePageViewData tablePageViewData) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ContactDto> findRenterContactsOfUnit(Unit unit, TablePageViewData tablePageViewData) {
+		List <ContactDto> contactList = contactDao.findRenterContactsOfUnit(unit, tablePageViewData)
+				.stream()
+				.map(contact -> contactMapper.contactToContactDto(contact))
+				.collect(Collectors.toList());
+		return contactList;
+		
+	}
+	
+	@Override
+	public List<ContactDto> findOwnerContactsOfUnit(Unit unit, TablePageViewData tablePageViewData) {
+		List <ContactDto> contactList = contactDao.findOwnerContactsOfUnit(unit, tablePageViewData)
+				.stream()
+				.map(contact -> contactMapper.contactToContactDto(contact))
+				.collect(Collectors.toList());
+		return contactList;
 	}
 
 	@Override
 	public List<ContactDto> findContactsIsCompany(boolean isCompany, TablePageViewData tablePageViewData) {
-		// TODO Auto-generated method stub
-		return null;
+		return contactDao.findContactsIsCompany(isCompany, tablePageViewData)
+				.stream()
+				.map(contact -> contactMapper.contactToContactDto(contact))
+				.collect(Collectors.toList());
 	}
 
 	@Override
 	public List<ContactDto> findContactsByCompanyName(String companyName, TablePageViewData tablePageViewData) {
-		// TODO Auto-generated method stub
-		return null;
+		return contactDao.findContactsByCompanyName(companyName, tablePageViewData)
+				.stream()
+				.map(contact -> contactMapper.contactToContactDto(contact))
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -93,8 +114,10 @@ public class ContactServiceImpl implements ContactService{
 
 	@Override
 	public List<AddressDto> findAddressesByContactId(int id, TablePageViewData tablePageViewData) {
-		// TODO Auto-generated method stub
-		return null;
+		return contactDao.findAddressesByContactId(id, tablePageViewData)
+				.stream()
+				.map(address -> addressMapper.addressToAddressDto(address))
+				.collect(Collectors.toList());
 	}
 	
 	@Override

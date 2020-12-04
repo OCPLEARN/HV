@@ -82,13 +82,22 @@ public interface ContactDao {
 	List<Contact> findContactsByLastName(String lastName, TablePageViewData tablePageViewData);
 	
 	/**
-	 * finds contacts assigned to units
+	 * finds contacts of all renters assigned to this unit
 	 * 
 	 * @param unit
 	 * @param TablePageViewData instance to select and sort the result
 	 * @return List<'Contact'>
 	 * */	
-	List<Contact> findContactsOfUnit(Unit unit, TablePageViewData tablePageViewData);
+	List<Contact> findRenterContactsOfUnit(Unit unit, TablePageViewData tablePageViewData);
+	
+	/**
+	 * finds contacts of all Owners assigned to this unit
+	 * 
+	 * @param unit
+	 * @param TablePageViewData instance to select and sort the result
+	 * @return List<'Contact'>
+	 * */	
+	List<Contact> findOwnerContactsOfUnit(Unit unit, TablePageViewData tablePageViewData);
 	
 	/**
 	 * finds contacts representing only companies or persons

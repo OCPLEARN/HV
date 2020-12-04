@@ -39,6 +39,29 @@ public class UnitDaoJdbc implements UnitDao {
 			new ArrayList<String>()
 			);
 	
+	
+	public static final String TABLE_NAME_OWNER_LINK = "unitownerlink";
+	public static final String TABLE_NAME_PREFIX_OWNER_LINK = "unol";
+	public static final String COLUMNS_OWNER_LINK = SQLUtils.createSQLString(
+			TABLE_NAME_PREFIX_OWNER_LINK, 
+			Arrays.asList(
+		"id", "timeStmpAdd", "timeStmpEdit", "unitId", "buildingOwnerId"),
+			new ArrayList<String>()
+			);
+	
+	public static final String TABLE_NAME_RENTER_LINK = "unitrenterlink";
+	public static final String TABLE_NAME_PREFIX_RENTER_LINK = "unrl";
+	public static final String COLUMNS_RENTER_LINK = SQLUtils.createSQLString(
+			TABLE_NAME_PREFIX_RENTER_LINK, 
+			Arrays.asList(
+		"id", "timeStmpAdd", "timeStmpEdit", "unitId", "renterId", 
+		"moveIn", "moveOut"),
+			new ArrayList<String>()
+			);
+	
+	
+	
+	
 	private DataSource dataSource;
 	
 	public Logger logger = LoggerBuilder.getInstance().build( PropertyManagementDaoJdbc.class );
