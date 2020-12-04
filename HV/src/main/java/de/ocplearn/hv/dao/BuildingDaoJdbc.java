@@ -440,7 +440,4 @@ public class BuildingDaoJdbc implements BuildingDao{
 		}			
 	}
 
-
-
-
 }
