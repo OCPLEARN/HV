@@ -96,14 +96,39 @@ public interface PropertyManagementService {
 	
 	// BUILDINGOWNERS CRUD
 	
+	/**
+	 * Creates a BuildingOwner
+	 * @param buildingOwnerDto
+	 * @return true, on success
+	 * */
 	public boolean createBuildingOwner(BuildingOwnerDto buildingOwnerDto);
 	
+	/**
+	 * Removes BuildingOwner by id
+	 * @param int
+	 * @return true, on success 
+	 * */
 	public boolean deleteBuildingOwnerById(int buildingOwnerDtoId);
 	
+	/**
+	 * Removes BuildingOwner 
+	 * @param buildingOwnerDto
+	 * @return true, on success 
+	 * */	
 	public boolean deleteBuildingOwner(BuildingOwnerDto buildingOwnerDto);
 	
+	/**
+	 * Saves BuildingOwner 
+	 * @param buildingOwnerDto
+	 * @return true, on success 
+	 * */	
 	public boolean updateBuildingOwner(BuildingOwnerDto buildingOwnerDto);
 	
+	/**
+	 * Finds BuildingOwner by id
+	 * @param int
+	 * @return BuildingOwnerDto
+	 * */
 	public BuildingOwnerDto findBuildingOwnerById (int buildingOwnerId);
 	
 	public List <BuildingOwnerDto> findBuildingOwnersByBuildingId(int buildingId);

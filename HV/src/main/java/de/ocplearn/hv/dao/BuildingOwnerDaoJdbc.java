@@ -185,9 +185,12 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 		
 		BuildingOwner buildingOwner = null;
 		//String sql = "SELECT * FROM buildingowner WHERE id = ?;";
-		String sql = "SELECT " + COLUMNS + ", " + ContactDaoJdbc.COLUMNS + "," + LoginUserDaoJdbc.COLUMNS + "  FROM buildingOwner AS " + TABLE_NAME_PREFIX + " " 
-				+ "JOIN contact " + ContactDaoJdbc.TABLE_NAME_PREFIX + " ON bo.contactId = co.id "
-				+ "JOIN loginuser " + LoginUserDaoJdbc.TABLE_NAME_PREFIX + " ON bo.loginUserId = lu.id "
+		String sql = "SELECT " + COLUMNS + ", " + ContactDaoJdbc.COLUMNS + "," + LoginUserDaoJdbc.COLUMNS + " "
+				+ "FROM "+TABLE_NAME+" AS " + TABLE_NAME_PREFIX + " " 
+				+ "INNER JOIN "+ContactDaoJdbc.TABLE_NAME+" AS " + ContactDaoJdbc.TABLE_NAME_PREFIX + " "
+						+ " ON "+TABLE_NAME_PREFIX+".contactId = "+ContactDaoJdbc.TABLE_NAME_PREFIX+".id "
+				+ "INNER JOIN "+LoginUserDaoJdbc.TABLE_NAME+" AS " + LoginUserDaoJdbc.TABLE_NAME_PREFIX + " "
+						+ "ON "+TABLE_NAME_PREFIX+".loginUserId = "+LoginUserDaoJdbc.TABLE_NAME_PREFIX+".id "
 				+ "WHERE bo.id = ?;";
 		
 		System.out.println("sql = " + sql);
