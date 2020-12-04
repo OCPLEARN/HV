@@ -145,6 +145,7 @@ public interface UserService {
     List<LoginUserDto> findAllLoginUsers(int indexStart, int rowCount, String orderBy, String orderDirection );  
 
     /**
+     * returns count of LoginUser 
      * 
      * @return int number of LoginUser objects in datastore
      * */
