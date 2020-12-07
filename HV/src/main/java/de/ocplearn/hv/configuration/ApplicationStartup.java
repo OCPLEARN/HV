@@ -27,7 +27,7 @@ import de.ocplearn.hv.util.LoggerBuilder;
 
 // ApplicationReadyEvent
 @Component
-public class ApplicationStartup implements ApplicationListener<ApplicationPreparedEvent> {
+public class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
 
 	private static final String[] BASE_DIRECTORIES = {"aaatests", "backupdb", "log", "pm", "tmp" };
 	
@@ -36,8 +36,8 @@ public class ApplicationStartup implements ApplicationListener<ApplicationPrepar
 	//LoggerBuilder builder;
 	
 	// trigger DBConnectionPool creation
-	@Autowired
-	private DBConnectionPool dBConnectionPool;		
+	//@Autowired
+	//private DBConnectionPool dBConnectionPool;		
 	
 	// trigger LoggerBuilder creation
 	//@Autowired
@@ -63,9 +63,10 @@ public class ApplicationStartup implements ApplicationListener<ApplicationPrepar
 		//this.logger = this.builder.build("de.ocplearn.hv.HvApplication");
 		//this.checkImmoDataDirectories2();
 		
-		System.err.println("storageEntryPointAbsolutePath:   "+storageEntryPointAbsolutePath);
-		if (storageEntryPointAbsolutePath == null) System.exit(-1);
-		this.checkImmoDataDirectories2();		
+		// delete
+//		System.err.println("storageEntryPointAbsolutePath:   "+storageEntryPointAbsolutePath);
+//		if (storageEntryPointAbsolutePath == null) System.exit(-1);
+//		this.checkImmoDataDirectories2();		
 	}
 	
   /**
@@ -101,7 +102,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationPrepar
    * the application is ready to service requests.
    */
   @Override
-  public void onApplicationEvent(final ApplicationPreparedEvent event) {
+  public void onApplicationEvent(final ApplicationReadyEvent event) {
 
 //	  this.logger = this.builder.build("de.ocplearn.hv.HvApplication");
 //	  this.logger.setLevel(Level.FINEST);
@@ -112,17 +113,15 @@ public class ApplicationStartup implements ApplicationListener<ApplicationPrepar
 	  
 	  //System.err.println("onApplicationEvent() - storageEntryPointAbsolutePath =  " + storageEntryPointAbsolutePath);
 	
-	  if(!absolutePathExists()) {
-		  this.checkImmoDataDirectories2();
-	  	}
+	  this.checkImmoDataDirectories2();
 
     return;
   }
   
-  	boolean absolutePathExists() {
-  		File file = new File( storageEntryPointAbsolutePath );
-  		return file.exists();
-  	}
+//  	boolean absolutePathExists() {
+//  		File file = new File( storageEntryPointAbsolutePath );
+//  		return file.exists();
+//  	}
  
   	
   	/**
@@ -139,7 +138,13 @@ public class ApplicationStartup implements ApplicationListener<ApplicationPrepar
   		
   		for(String directory : BASE_DIRECTORIES) {
 				try {
-				Files.createDirectory( storageContainer.resolve(directory) );
+					Path subPath = storageContainer.resolve(directory); // /var/local/immodata bkup, log, tmp
+						// /var/local/immodata/tmp
+					if ( ! Files.exists(subPath) ) {
+						
+						Path created = Files.createDirectory( subPath );	
+						System.err.println( "ApplicationStartup - creted subPath = " + created );
+					}
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.out.println("No acces to data storage. Entry point "+ directory +" could not be created.");
@@ -190,12 +195,6 @@ public class ApplicationStartup implements ApplicationListener<ApplicationPrepar
 		
   	}
   	
-  	/**
-  	 * initializes application before spring boot
-  	 * 
-  	 * */
-  	public static void init() {
-  		
-  	}
+
   	
 } 

@@ -56,7 +56,7 @@ public class LoggerBuilder {
         }
 	};
 	
-	private static LoggerBuilder instance;
+	private static LoggerBuilder instance; // new LoggerBuilder()
 	
 	static {
 		// load custom props
@@ -129,8 +129,6 @@ public class LoggerBuilder {
 				this.logDirChecked = true;
 			}
 		}
-		 
-		
 		
 		Logger logger = Logger.getLogger( name );
 		

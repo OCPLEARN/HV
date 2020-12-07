@@ -91,7 +91,7 @@ public class TestObjectSupplier {
 		this.loginUserDao = loginUserDao;
 		this.propertyManagementService = propertyManagementService;
 		
-		this.logger.log(Level.INFO,"check for models ...");
+		//this.logger.log(Level.INFO,"check for models ...");
 		
 		PM_MODELS.forEach( (k, v) -> {
 			// k = model name

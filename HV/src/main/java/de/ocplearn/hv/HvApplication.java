@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import de.ocplearn.hv.configuration.ApplicationStartup;
 import de.ocplearn.hv.util.DBConnectionPool;
 import de.ocplearn.hv.util.LoggerBuilder;
 
@@ -56,8 +57,11 @@ public class HvApplication {
 //		
 //	}
 	
+	@Autowired 
+	private ApplicationStartup applicationStartup;
 	
-	@Autowired LoggerBuilder builder;
+	@Autowired 
+	private LoggerBuilder builder;
 	
 	public static void main(String[] args) {
 		
