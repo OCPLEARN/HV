@@ -1,6 +1,10 @@
 package de.ocplearn.hv.configuration;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,23 +19,40 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import de.ocplearn.hv.HvApplication;
+import de.ocplearn.hv.util.DBConnectionPool;
 import de.ocplearn.hv.util.LoggerBuilder;
 
 @Component
 public class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
 
-	@Autowired
-	private LoggerBuilder builder;
-	private Logger logger;
-
-	@Autowired
-	LoggerConfig loggerConfig;
+	private static final String[] BASE_DIRECTORIES = {"aaatests", "backupdb", "log", "pm", "tmp" };
 	
+	// trigger LoggerBuilder creation
+	//@Autowired
+	//private LoggerBuilder builder;
+	// (1)
 	@Value("${datavolume.storageEntryPoint}")
 	private  String storageEntryPoint;
 	@Value("${datavolume.storageEntryPointAbsolutePath}")
 	private  String storageEntryPointAbsolutePath;
 
+	// (2) uses (1)
+	{
+		//this.checkImmoDataDirectories2();
+	}	
+	
+
+	// trigger DBConnectionPool creation
+	@Autowired
+	private DBConnectionPool dBConnectionPool;	
+
+	@Autowired
+	LoggerConfig loggerConfig;
+
+	@Autowired
+	private LoggerBuilder builder;
+//	private Logger logger;	
+	
 //	@Autowired
 //	public ApplicationStartup() {
 //		this.logger = this.builder.build("de.ocplearn.hv.HvApplication");
@@ -40,28 +61,28 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
   /**
 	 * @return the storageEntryPoint
 	 */
-	private String getStorageEntryPoint() {
+	public String getStorageEntryPoint() {
 		return storageEntryPoint;
 	}
 
 	/**
 	 * @param storageEntryPoint the storageEntryPoint to set
 	 */
-	private void setStorageEntryPoint(String storageEntryPoint) {
+	public void setStorageEntryPoint(String storageEntryPoint) {
 		this.storageEntryPoint = storageEntryPoint;
 	}
 
 	/**
 	 * @return the storageEntryPointAbsolutePath
 	 */
-	private String getStorageEntryPointAbsolutePath() {
+	public String getStorageEntryPointAbsolutePath() {
 		return storageEntryPointAbsolutePath;
 	}
 
 	/**
 	 * @param storageEntryPointAbsolutePath the storageEntryPointAbsolutePath to set
 	 */
-	private void setStorageEntryPointAbsolutePath(String storageEntryPointAbsolutePath) {
+	public void setStorageEntryPointAbsolutePath(String storageEntryPointAbsolutePath) {
 		this.storageEntryPointAbsolutePath = storageEntryPointAbsolutePath;
 	}
 
@@ -77,46 +98,14 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 //	  // log a FINER message
 //	  this.logger.log(Level.INFO, "HvApplication starting ...");
 	  
-	  String environmentVariable;
-	  String userVariable;
-	  String[] BASE_DIRECTORIES = {"aaatests", "backupdb", "log", "pm", "tmp" };
 	  //String storageEntryPointAbsolutePath = storageEntryPointAbsolutePath;
 	  
 	  //System.err.println("onApplicationEvent() - storageEntryPointAbsolutePath =  " + storageEntryPointAbsolutePath);
 	
 	  if(!absolutePathExists()) {
-	  
-			if( File.separatorChar == '/') {
-				userVariable = "USER";
-				environmentVariable = "HOME";
-				
-			}else if ( File.separatorChar == '\\' ){
-				userVariable = "USERDOMAIN";
-				environmentVariable = "USERPROFILE";
-			}else {
-				throw new IllegalStateException("Environment is neither MACOSX nor Windows. Buy a new computer!");
-			}		
-			// Get the entry point to data storage if not existent
-			File storageContainer = new File( System.getenv(environmentVariable) + File.separatorChar + storageEntryPoint  );
-			storageEntryPointAbsolutePath = storageContainer.getAbsolutePath();
-	
-			if(!storageContainer.exists()) { 
-				System.out.println("No acces to data storage. Entry point not available.");
-				System.exit(1);
-			}
+		  this.checkImmoDataDirectories2();
 	  	}
-	  
-		for(String directory : BASE_DIRECTORIES) {
-			File file = new File(storageEntryPointAbsolutePath + File.separatorChar + directory);
-			if ( ! file.exists() ) {
-				 
-				if( !(file.mkdir()) ) {
-					System.out.println("Could not create the following directory: " + directory);
-					System.exit(1);
-				}
-			}
-		}
-	
+
     return;
   }
   
@@ -125,4 +114,70 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
   		return file.exists();
   	}
  
+  	
+  	/**
+  	 * 20201207 fin
+  	 * checks for data storage by looking up application.properties variable 
+  	 * datavolume.storageEntryPointAbsolutePath via bean DataVolumeProperties
+  	 * */
+  	private void checkImmoDataDirectories2() {
+  		Path storageContainer = Paths.get( getStorageEntryPointAbsolutePath() );
+  		if ( !Files.exists(storageContainer) ) {
+			System.out.println("No acces to data storage. Entry point not available.");
+			System.exit(1);  			
+  		}
+  		
+  		for(String directory : BASE_DIRECTORIES) {
+				try {
+				Files.createDirectory( storageContainer.resolve(directory) );
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.out.println("No acces to data storage. Entry point "+ directory +" could not be created.");
+				System.exit(1);					
+			}
+		} 		
+  		
+  	}
+  	
+  	/**
+  	 * checks for data storage by looking up folder immodata in users home directory
+  	 * */
+  	private void checkImmoDataDirectories() {
+  			
+  	  String environmentVariable;
+  	  String userVariable;
+  		
+		if( File.separatorChar == '/') {
+			userVariable = "USER";
+			environmentVariable = "HOME";
+			
+		}else if ( File.separatorChar == '\\' ){
+			userVariable = "USERDOMAIN";
+			environmentVariable = "USERPROFILE";
+		}else {
+			throw new IllegalStateException("Environment is neither MACOSX nor Windows. Buy a new computer!");
+		}		
+		// Get the entry point to data storage if not existent
+		File storageContainer = new File( System.getenv(environmentVariable) + File.separatorChar + storageEntryPoint  );
+		storageEntryPointAbsolutePath = storageContainer.getAbsolutePath();
+
+		if(!storageContainer.exists()) { 
+			System.out.println("No acces to data storage. Entry point not available.");
+			System.exit(1);
+		}  	
+	
+		  // check for HV_IMMO_DATA directories
+		for(String directory : BASE_DIRECTORIES) {
+			File file = new File(storageEntryPointAbsolutePath + File.separatorChar + directory);
+			if ( ! file.exists() ) {
+				if( !(file.mkdir()) ) {
+					System.out.println("Could not create the following directory: " + directory);
+					System.exit(1);
+				}
+			System.out.println("ApplicationStartup - created = " + file.getAbsolutePath());
+			}
+		}		
+		
+  	}
+  	
 } 

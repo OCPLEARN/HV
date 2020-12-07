@@ -55,13 +55,7 @@ public class HvApplication {
 //		
 //	}
 	
-	// trigger LoggerBuilder creation
-	@Autowired
-	private LoggerBuilder builder;
-	
-	// trigger DBConnectionPool creation
-	@Autowired
-	private DBConnectionPool dBConnectionPool;
+
 	
 	
 	public static void main(String[] args) {
