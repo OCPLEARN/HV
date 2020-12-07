@@ -148,7 +148,7 @@ public class Unit implements Comparable<Unit>{
 
 	public Unit() {
 		super();
-		// TODO Auto-generated constructor stub
+	
 	}
 
 	@Override

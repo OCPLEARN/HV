@@ -218,9 +218,75 @@ public class ContactDaoJdbc implements ContactDao {
 	}
 
 	@Override
-	public List<Contact> findContactsOfUnit(Unit unit, TablePageViewData tablePageViewData) {
-		throw new UnsupportedOperationException("needs to be implemented");
+	public List<Contact> findRenterContactsOfUnit(Unit unit, TablePageViewData tablePageViewData) {
+
+		List<Contact> contactList = null;
+		String sql =
+				"SELECT " + COLUMNS + " FROM " +  TABLE_NAME +" AS "+ TABLE_NAME_PREFIX +
+				" INNER JOIN " + RenterDaoJdbc.TABLE_NAME + " AS " + RenterDaoJdbc.TABLE_NAME_PREFIX +
+				" ON " + TABLE_NAME_PREFIX + ".id = " + RenterDaoJdbc.TABLE_NAME_PREFIX + ".contactId "
+				+ " inner join " + UnitDaoJdbc.TABLE_NAME_RENTER_LINK + " AS " + UnitDaoJdbc.TABLE_NAME_PREFIX_RENTER_LINK +
+				" ON " + UnitDaoJdbc.TABLE_NAME_PREFIX_RENTER_LINK + ".buildingOwnerId = " +  RenterDaoJdbc.TABLE_NAME_PREFIX 
+				+ ".id" + " WHERE " + UnitDaoJdbc.TABLE_NAME_PREFIX_RENTER_LINK + ".unitId=?;";
+		
+		try ( Connection connection = datasource.getConnection();
+				PreparedStatement stmt = connection.prepareStatement(sql);) {
+			stmt.setInt(1, unit.getId());
+			ResultSet resultSet = stmt.executeQuery(sql);
+			
+			while (resultSet.next()) {
+				contactList = new ArrayList<>();
+				Contact contact = this.mapRowToContact(resultSet);
+				contact.setAddresses(findAddressesByContactId(contact.getId(), tablePageViewData));
+				contactList.add(contact);
+				
+			}
+			return contactList;
+
+		} catch (SQLException e) {
+			 e.printStackTrace(); 
+	            logger.log(Level.WARNING, e.getMessage());
+	            throw new DataAccessException("Unable to get Data from DB.");
+		}
+	
 	}
+	
+	@Override
+	public List<Contact> findOwnerContactsOfUnit(Unit unit, TablePageViewData tablePageViewData) {
+		
+		List<Contact> contactList = null;
+		String sql = 
+				"SELECT " + COLUMNS + " FROM " +  TABLE_NAME +" AS "+ TABLE_NAME_PREFIX +
+				" INNER JOIN " + BuildingOwnerDaoJdbc.TABLE_NAME + " AS " + BuildingOwnerDaoJdbc.TABLE_NAME_PREFIX +
+				" ON " + TABLE_NAME_PREFIX + ".id = " + BuildingOwnerDaoJdbc.TABLE_NAME_PREFIX + ".contactId "
+				+ " inner join " + UnitDaoJdbc.TABLE_NAME_OWNER_LINK + " AS " + UnitDaoJdbc.TABLE_NAME_PREFIX_OWNER_LINK +
+				" ON " + UnitDaoJdbc.TABLE_NAME_PREFIX_OWNER_LINK + ".buildingOwnerId = " +  BuildingOwnerDaoJdbc.TABLE_NAME_PREFIX 
+				+ ".id" + " WHERE " + UnitDaoJdbc.TABLE_NAME_PREFIX_OWNER_LINK + ".unitId=?;";
+		
+		try ( Connection connection = datasource.getConnection();
+				PreparedStatement stmt = connection.prepareStatement(sql);) {
+			stmt.setInt(1, unit.getId());
+			ResultSet resultSet = stmt.executeQuery(sql);
+			
+			while (resultSet.next()) {
+				contactList = new ArrayList<>();
+				Contact contact = this.mapRowToContact(resultSet);
+				contact.setAddresses(findAddressesByContactId(contact.getId(), tablePageViewData));
+				contactList.add(contact);
+				
+			}
+			return contactList;
+
+		} catch (SQLException e) {
+			 e.printStackTrace(); 
+	            logger.log(Level.WARNING, e.getMessage());
+	            throw new DataAccessException("Unable to get Data from DB.");
+		}
+	
+	
+	
+	}
+	
 
 	@Override
 	public List<Contact> findContactsIsCompany(boolean isCompany, TablePageViewData tablePageViewData) {
@@ -256,9 +322,37 @@ public class ContactDaoJdbc implements ContactDao {
 
 	@Override
 	public List<Contact> findContactsByCompanyName(String companyName, TablePageViewData tablePageViewData) {
-		// TODO Auto-generated method stub
-		return null;
+		try(Connection connection = datasource.getConnection();
+				PreparedStatement stmt = connection.prepareStatement("SELECT " + COLUMNS + " FROM contact AS " + TABLE_NAME_PREFIX 
+						+ " ORDER BY ? ?"
+						+ " LIMIT ?,?"
+						+ " WHERE companyName = ?;");){
+			
+			
+			stmt.setString(1, tablePageViewData.getOrderBy());
+			stmt.setString(2, tablePageViewData.getOrderByDirection());
+			stmt.setInt(3, tablePageViewData.getOffset());
+			stmt.setInt(4, tablePageViewData.getRowCount());	
+			stmt.setString(5, companyName);
+			ResultSet resultSet = stmt.executeQuery();
+			List<Contact> contactList= new ArrayList<Contact>();
+			while(resultSet.next()) {
+				Contact contact = new Contact();
+
+				contact = this.mapRowToContact(resultSet);
+				
+				contactList.add(contact);
+			}
+			
+			return contactList;
+			
+		} catch (SQLException e) {
+			 e.printStackTrace(); 
+             logger.log(Level.WARNING, e.getMessage());
+             throw new DataAccessException("Unable to get Data from DB.");
+		}
 	}
+
 
 	@Override
 	public List<Contact> getAllContacts(TablePageViewData tablePageViewData) {

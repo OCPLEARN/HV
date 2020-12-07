@@ -151,9 +151,8 @@ public class BuildingDaoJdbc implements BuildingDao{
 	
 	@Override
 	public boolean deleteById(int buildingId) {
-		// TODO please code check, Dominik
 
-		String sql = "DELETE * FROM building WHERE id = ?";
+		String sql = "DELETE * FROM " + TABLE_NAME +" WHERE id = ?";
 		
 		try (
 			Connection connection = dataSource.getConnection();
@@ -278,7 +277,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 	
 	@Override
 	public List<Integer> findBuildingOwnerIdsByBuildingId(int buildingId, TablePageViewData tablePageViewData) {
-		// TODO exchange SQL hardcode with SQLUtils code
+		
 		
 //		SELECT buildingOwnerId 					Auswahl Spalte buildingOwnerId
 //		FROM unitOwnerLink 						aus Tabelle unitOwnerLink
@@ -286,10 +285,12 @@ public class BuildingDaoJdbc implements BuildingDao{
 //		ON unit.id = unitOwnerLink.unitId  		ON (Vorbedingung) Spalte unit.id = Spalte unitOwnerLink.unitId
 //		WHERE  unit.buildingId = 1 ;			(in der Vorauswahl von ON wird gesucht WHERE unit.buildinId =...
 		
-		String sql = "SELECT unitownerlink.buildingOwnerId FROM unitownerlink as unitownerlink" 
-					+ "INNER JOIN unit as unit"
-					+ "ON unit.id = unitownerlink.unitId"
-					+ "WHERE unit.buildingId = ? AND unit.unitType='BUILDING_UNIT';";
+		String sql = "SELECT "+UnitDaoJdbc.TABLE_NAME_PREFIX_OWNER_LINK +".buildingOwnerId FROM " +
+					UnitDaoJdbc.TABLE_NAME_OWNER_LINK +" AS "+ UnitDaoJdbc.TABLE_NAME_PREFIX_OWNER_LINK 
+					+ " INNER JOIN "+UnitDaoJdbc.TABLE_NAME +" AS "+ UnitDaoJdbc.TABLE_NAME_PREFIX
+					+ " ON "+UnitDaoJdbc.TABLE_NAME_PREFIX+".id = " +UnitDaoJdbc.TABLE_NAME_PREFIX +".unitId"
+					+ " WHERE " +UnitDaoJdbc.TABLE_NAME_PREFIX +".buildingId = ? AND +"
+					+ UnitDaoJdbc.TABLE_NAME_PREFIX+".unitType='BUILDING_UNIT';";
 					
 					
 		
@@ -316,9 +317,8 @@ public class BuildingDaoJdbc implements BuildingDao{
 
 	@Override
 	public List<Building> getAllBuildingsOfPropertyManagementById(int propertyManangementId) {
-		// TODO change SQL to STATIC FIELDS AND CALL mapToRow(resultSet) instead while loop code
 		
-		String sql = "SELECT * FROM building WHERE building.propertyManagementId = ?;";
+		String sql = "SELECT "+ COLUMNS + " FROM " +TABLE_NAME + " AS " +TABLE_NAME_PREFIX+" WHERE "+TABLE_NAME_PREFIX + ".propertyManagementId = ?;";
 		
 		List<Building> buildingList = new ArrayList<>();
 		
@@ -330,23 +330,8 @@ public class BuildingDaoJdbc implements BuildingDao{
 			ResultSet resultSet = stmt.executeQuery();
 			
 			while(resultSet.next()) {
-				PropertyManagement propertyManagement = new PropertyManagement();
-				propertyManagement.setId(propertyManangementId);
-				Address address = new Address();
-				address.setId(resultSet.getInt("addressId"));
-				
-				Building building = new Building();
-				building.setId(resultSet.getInt( "id" ));
-				building.setPropertyManagement( propertyManagement );
-				building.setName(resultSet.getString( "name" ));	
-				building.setNote(resultSet.getString("note"));
-				building.setBuildingType(BuildingType.valueOf(resultSet.getString("buildingType")));
-			//	building.setAddress(addressDao.findById(resultSet.getInt("addressId")).get());
-				building.setAddress(address);
-				building.setUnits(new HashSet<Unit>());
-				building.setTransactions(new HashSet<Transaction>());
-				building.setOwners(new ArrayList<BuildingOwner>());
-				
+				Building building = mapRowToBuilding(resultSet);
+				building.setAddress(addressDao.findById(resultSet.getInt(TABLE_NAME_PREFIX+".addressId")).get());
 				buildingList.add(building);
 			}
 			
@@ -397,8 +382,27 @@ public class BuildingDaoJdbc implements BuildingDao{
 	
 	@Override
 	public boolean removeBuildingOwnerFromBuilding(BuildingOwner buildingOwner, Building building) {
-		// TODO Auto-generated method stub
-		return false;
+		int unitId = unitDao.getBuildingUnitFull(building.getId()).getId();
+		
+		String sql = "DELETE FROM " + UnitDaoJdbc.TABLE_NAME_OWNER_LINK + " WHERE " + 
+					UnitDaoJdbc.TABLE_NAME_OWNER_LINK + ".unitId = ? AND " + 
+					UnitDaoJdbc.TABLE_NAME_OWNER_LINK + ".buildingOwnerId = ?;";
+		
+		try (
+				Connection connection = dataSource.getConnection();
+				PreparedStatement stmt = connection.prepareStatement(sql);
+				) {
+				stmt.setInt( 1, unitId );
+				stmt.setInt( 1, buildingOwner.getId() );
+				return (stmt.executeUpdate() > 0) ?  true :  false;
+				
+			}catch(SQLException e) {
+				 e.printStackTrace(); 
+				    logger.log(Level.WARNING, e.getMessage());
+				    throw new DataAccessException("Unable to get Data from DB."); 
+			}
+		
+		
 	}
 
 
@@ -421,7 +425,8 @@ public class BuildingDaoJdbc implements BuildingDao{
 					building.setAddress(optAddress.get());
 				}
 				
-				// TODO Set<Unit> missing
+				building.setUnits(unitDao.findUnitsByBuildingIdFull(id));
+			
 				
 				return Optional.of(building);
 			} else {
@@ -434,8 +439,5 @@ public class BuildingDaoJdbc implements BuildingDao{
 			    throw new DataAccessException("Unable to get Data from DB.");            
 		}			
 	}
-
-
-
 
 }

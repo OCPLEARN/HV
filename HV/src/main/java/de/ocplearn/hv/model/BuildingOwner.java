@@ -117,6 +117,14 @@ public class BuildingOwner implements Comparable<BuildingOwner> {
 		this.buildings.remove(building);
 	}
 	
+	public PropertyManagement getPropertyManagement() {
+		return propertyManagement;
+	}
+
+	public void setPropertyManagement(PropertyManagement propertyManagement) {
+		this.propertyManagement = propertyManagement;
+	}	
+	
 	@Override
 	public boolean equals( Object o ) {
 		if ( this == o )return true;
@@ -148,12 +156,6 @@ public class BuildingOwner implements Comparable<BuildingOwner> {
 		return "BuildingOwner [id=" + id + ", contact=" + contact + ", loginUser=" + loginUser + "]";
 	}
 	
-	public PropertyManagement getPropertyManagement() {
-		return propertyManagement;
-	}
 
-	public void setPropertyManagement(PropertyManagement propertyManagement) {
-		this.propertyManagement = propertyManagement;
-	}
 	
 }

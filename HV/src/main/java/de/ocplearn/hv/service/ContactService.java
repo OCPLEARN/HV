@@ -41,8 +41,15 @@ public interface ContactService {
 	 * @param TablePageViewData instance to select and sort the result
 	 * @return List<'ContactDto'>  
 	 */	
-	List<ContactDto> findContactsOfUnit( Unit unit, TablePageViewData tablePageViewData );
-
+	List<ContactDto> findRenterContactsOfUnit( Unit unit, TablePageViewData tablePageViewData );
+	
+	/**
+	 * Finds by unit
+	 * @param Unit
+	 * @param TablePageViewData instance to select and sort the result
+	 * @return List<'ContactDto'>  
+	 */	
+	List<ContactDto> findOwnerContactsOfUnit( Unit unit, TablePageViewData tablePageViewData );
 	/**
 	 * Finds all contacts, which are companies or persons
 	 * @param true will find all company contacts

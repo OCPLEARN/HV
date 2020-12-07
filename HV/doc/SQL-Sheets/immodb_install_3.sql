@@ -380,6 +380,17 @@ WHERE un.unitType = 'BUILDING_UNIT'
 
 # 2020 11 24
 ALTER TABLE buildingowner ADD COLUMN propertyManagementId INT NOT NULL;
-
+# 20201204
+ALTER TABLE renter ADD COLUMN propertyManagementId INT NOT NULL;
+# 20201204
+ALTER TABLE `immodb`.`renter` 
+ADD CONSTRAINT `fk_renter_propertyManagementId`
+  FOREIGN KEY (`propertyManagementId`)
+  REFERENCES `immodb`.`propertymanagement` (`id`);
+# 20201204
+ALTER TABLE `immodb`.`buildingowner` 
+ADD CONSTRAINT `fk_buildingowner_propertyManagementId`
+  FOREIGN KEY (`propertyManagementId`)
+  REFERENCES `immodb`.`propertymanagement` (`id`);
 
 
