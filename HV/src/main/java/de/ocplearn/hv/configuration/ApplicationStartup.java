@@ -12,7 +12,10 @@ import javax.xml.crypto.Data;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationContextInitializedEvent;
+import org.springframework.boot.context.event.ApplicationPreparedEvent;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.context.event.ApplicationStartingEvent;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
@@ -22,10 +25,19 @@ import de.ocplearn.hv.HvApplication;
 import de.ocplearn.hv.util.DBConnectionPool;
 import de.ocplearn.hv.util.LoggerBuilder;
 
+// ApplicationReadyEvent
 @Component
-public class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
+public class ApplicationStartup implements ApplicationListener<ApplicationPreparedEvent> {
 
 	private static final String[] BASE_DIRECTORIES = {"aaatests", "backupdb", "log", "pm", "tmp" };
+	
+	// trigger LoggerBuilder creation
+	//@Autowired 
+	//LoggerBuilder builder;
+	
+	// trigger DBConnectionPool creation
+	@Autowired
+	private DBConnectionPool dBConnectionPool;		
 	
 	// trigger LoggerBuilder creation
 	//@Autowired
@@ -38,25 +50,23 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 
 	// (2) uses (1)
 	{
-		//this.checkImmoDataDirectories2();
+//		System.err.println("storageEntryPointAbsolutePath:   "+storageEntryPointAbsolutePath);
+//		if (storageEntryPointAbsolutePath == null) System.exit(-1);
+//		this.checkImmoDataDirectories2();
 	}	
-	
-
-	// trigger DBConnectionPool creation
-	@Autowired
-	private DBConnectionPool dBConnectionPool;	
 
 	@Autowired
 	LoggerConfig loggerConfig;
-
-	@Autowired
-	private LoggerBuilder builder;
-//	private Logger logger;	
 	
-//	@Autowired
-//	public ApplicationStartup() {
-//		this.logger = this.builder.build("de.ocplearn.hv.HvApplication");
-//	}
+	@Autowired
+	public ApplicationStartup( ) {
+		//this.logger = this.builder.build("de.ocplearn.hv.HvApplication");
+		//this.checkImmoDataDirectories2();
+		
+		System.err.println("storageEntryPointAbsolutePath:   "+storageEntryPointAbsolutePath);
+		if (storageEntryPointAbsolutePath == null) System.exit(-1);
+		this.checkImmoDataDirectories2();		
+	}
 	
   /**
 	 * @return the storageEntryPoint
@@ -91,7 +101,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
    * the application is ready to service requests.
    */
   @Override
-  public void onApplicationEvent(final ApplicationReadyEvent event) {
+  public void onApplicationEvent(final ApplicationPreparedEvent event) {
 
 //	  this.logger = this.builder.build("de.ocplearn.hv.HvApplication");
 //	  this.logger.setLevel(Level.FINEST);
@@ -178,6 +188,14 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 			}
 		}		
 		
+  	}
+  	
+  	/**
+  	 * initializes application before spring boot
+  	 * 
+  	 * */
+  	public static void init() {
+  		
   	}
   	
 } 

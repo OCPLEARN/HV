@@ -26,7 +26,7 @@ public class DBConnectionPool {
 	//@Autowired
 	DataSourceConfig dataSourceConfig;
 	
-	private static Logger logger = LoggerBuilder.getInstance().build( DBConnectionPool.class );
+	private static Logger logger;// = LoggerBuilder.getInstance().build( DBConnectionPool.class );
 	
 	// connect to the server
 	private static  String jdbcUrlDbServer =  "jdbc:mysql://localhost:3306";
@@ -111,6 +111,8 @@ public class DBConnectionPool {
 		// start pool checker thread
 		//Thread PoolChecker = new Thread( poolCheckRunnable );
 		//PoolChecker.run();
+		
+		this.logger = LoggerBuilder.getInstance().build( DBConnectionPool.class );
 		
 		instance = this;
     }
