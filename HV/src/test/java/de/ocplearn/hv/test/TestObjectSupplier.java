@@ -97,7 +97,7 @@ public class TestObjectSupplier {
 		this.loginUserDao = loginUserDao;
 		this.propertyManagementService = propertyManagementService;
 		
-		this.logger.log(Level.INFO,"check for models ...");
+		//this.logger.log(Level.INFO,"check for models ...");
 		
 		logger2.info("Ich pribier mal aus"); // Test SLF4J logger
 		

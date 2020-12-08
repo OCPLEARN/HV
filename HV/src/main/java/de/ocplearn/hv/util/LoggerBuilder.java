@@ -3,9 +3,10 @@ package de.ocplearn.hv.util;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
-import java.util.Date;
-import java.util.Formatter;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
@@ -15,26 +16,14 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import org.apache.tomcat.jni.Time;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import de.ocplearn.hv.HvApplication;
-import de.ocplearn.hv.configuration.DataSourceConfig;
 import de.ocplearn.hv.configuration.LoggerConfig;
 
 
 @Component
-public class LoggerBuilder implements ApplicationContextAware {
+public class LoggerBuilder {
 	
 	/* API Print a brief summary of the LogRecord in a human readable format. */
 	private static SimpleFormatter formatter = new SimpleFormatter() {
@@ -64,16 +53,7 @@ public class LoggerBuilder implements ApplicationContextAware {
         }
 	};
 	
-	private static ApplicationContext context;
-	
-    @Override
-    public void setApplicationContext(ApplicationContext context) throws BeansException {
-         
-        // store ApplicationContext reference to access required beans later on
-    	LoggerBuilder.context = context;
-    }	
-	
-	private static LoggerBuilder instance;
+	private static LoggerBuilder instance; // new LoggerBuilder()
 	
 	static {
 		// load custom props
@@ -94,10 +74,15 @@ public class LoggerBuilder implements ApplicationContextAware {
 //	              "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS %4$-6s %2$s %5$s%6$s%n");	    
 	    
 	}
-	
+
+	// all *logger* properties from application context
 	private LoggerConfig loggerConfig;
 	
-	public LoggerBuilder(@Autowired LoggerConfig loggerConfig) {
+	// set to true if log directory has been checked
+	private boolean logDirChecked = false;
+	
+	@Autowired
+	public LoggerBuilder( @Autowired LoggerConfig loggerConfig) {
 		this.loggerConfig = loggerConfig;
 		LoggerBuilder.instance = this;
 	}
@@ -124,6 +109,25 @@ public class LoggerBuilder implements ApplicationContextAware {
 	 * @return Logger
 	 * */	
 	public Logger build( String name ) {
+		
+		if ( ! this.logDirChecked ) {
+			
+			Path pathToLogDir = Paths.get( loggerConfig.getFileHandlerLocation() ); 
+			
+			if ( !Files.exists( pathToLogDir )
+					) {
+				try {
+					Files.createDirectories( pathToLogDir );
+					System.err.println("Logger - build() created missing log directory!");
+				} catch (IOException e) {
+					e.printStackTrace();
+					System.out.println("No acces to data storage. Entry point not available.");
+					System.exit(1);  						
+				}
+				this.logDirChecked = true;
+			}
+		}
+		
 		Logger logger = Logger.getLogger( name );
 		
 		// check logger already built
@@ -177,7 +181,7 @@ public class LoggerBuilder implements ApplicationContextAware {
 	 * @param c Class for which Logger is provided
 	 * @return Logger
 	 * */
-	public Logger build( Class c ) {
+	public <T> Logger build(Class<T> c ) {
 		return this.build(c.getName());
 //		Logger logger = Logger.getLogger(c.getName());
 //

@@ -69,7 +69,7 @@ public class ImmoDataTest {
 		File file = new File(storageEntryPointAbsolutePath);
 		Assertions.assertTrue(file.exists());
 		if ( file.exists() ) {
-			logger.log(Level.INFO,"datavolume ok" );
+			//logger.log(Level.INFO,"datavolume ok" );
 		}else {
 			logger.log(Level.SEVERE,"datavolume missing" );
 		}

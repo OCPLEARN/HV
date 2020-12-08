@@ -5,9 +5,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import de.ocplearn.hv.configuration.ApplicationStartup;
 import de.ocplearn.hv.util.DBConnectionPool;
 import de.ocplearn.hv.util.LoggerBuilder;
 
@@ -55,14 +57,11 @@ public class HvApplication {
 //		
 //	}
 	
-	// trigger LoggerBuilder creation
-	@Autowired
+	@Autowired 
+	private ApplicationStartup applicationStartup;
+	
+	@Autowired 
 	private LoggerBuilder builder;
-	
-	// trigger DBConnectionPool creation
-	@Autowired
-	private DBConnectionPool dBConnectionPool;
-	
 	
 	public static void main(String[] args) {
 		

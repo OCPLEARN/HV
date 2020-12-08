@@ -25,7 +25,7 @@ public class DataSourceConfig {
 	private String password;
 	private String driver_class_name;
 
-	private Logger logger = LoggerBuilder.getInstance().build(DataSourceConfig.class);
+	private Logger logger; // = LoggerBuilder.getInstance().build(DataSourceConfig.class);
 	
 	/**
 	 * @return the jdbcUrl
