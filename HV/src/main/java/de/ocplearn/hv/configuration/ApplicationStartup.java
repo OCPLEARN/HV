@@ -19,6 +19,9 @@ import org.springframework.boot.context.event.ApplicationStartingEvent;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.ContextStartedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import de.ocplearn.hv.HvApplication;
@@ -26,7 +29,9 @@ import de.ocplearn.hv.util.DBConnectionPool;
 import de.ocplearn.hv.util.LoggerBuilder;
 
 // ApplicationReadyEvent
+//@Configuration
 @Component
+//@Order(0)
 public class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
 
 	private static final String[] BASE_DIRECTORIES = {"aaatests", "backupdb", "log", "pm", "tmp" };
@@ -58,7 +63,6 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 	@Autowired
 	LoggerConfig loggerConfig;
 	
-	@Autowired
 	public ApplicationStartup( ) {
 		//this.logger = this.builder.build("de.ocplearn.hv.HvApplication");
 		//this.checkImmoDataDirectories2();
@@ -102,6 +106,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
    * the application is ready to service requests.
    */
   @Override
+  //@EventListener
   public void onApplicationEvent(final ApplicationReadyEvent event) {
 
 //	  this.logger = this.builder.build("de.ocplearn.hv.HvApplication");
@@ -112,7 +117,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 	  //String storageEntryPointAbsolutePath = storageEntryPointAbsolutePath;
 	  
 	  //System.err.println("onApplicationEvent() - storageEntryPointAbsolutePath =  " + storageEntryPointAbsolutePath);
-	
+	  //System.err.println("ApplicationStartup - checkImmoDataDirectories2() ");
 	  this.checkImmoDataDirectories2();
 
     return;
@@ -130,6 +135,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
   	 * datavolume.storageEntryPointAbsolutePath via bean DataVolumeProperties
   	 * */
   	private void checkImmoDataDirectories2() {
+  		
   		Path storageContainer = Paths.get( getStorageEntryPointAbsolutePath() );
   		if ( !Files.exists(storageContainer) ) {
 			System.out.println("No acces to data storage. Entry point not available.");
@@ -143,7 +149,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 					if ( ! Files.exists(subPath) ) {
 						
 						Path created = Files.createDirectory( subPath );	
-						System.err.println( "ApplicationStartup - creted subPath = " + created );
+						System.err.println( "ApplicationStartup - created subPath = " + created );
 					}
 			} catch (IOException e) {
 				e.printStackTrace();

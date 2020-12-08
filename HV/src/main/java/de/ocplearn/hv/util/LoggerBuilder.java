@@ -110,23 +110,23 @@ public class LoggerBuilder {
 	 * */	
 	public Logger build( String name ) {
 		
-		if ( ! this.logDirChecked ) {
-			
-			Path pathToLogDir = Paths.get( loggerConfig.getFileHandlerLocation() ); 
-			
-			if ( !Files.exists( pathToLogDir )
-					) {
-				try {
-					Files.createDirectories( pathToLogDir );
-					System.err.println("Logger - build() created missing log directory!");
-				} catch (IOException e) {
-					e.printStackTrace();
-					System.out.println("No acces to data storage. Entry point not available.");
-					System.exit(1);  						
-				}
-				this.logDirChecked = true;
-			}
-		}
+//		if ( ! this.logDirChecked ) {
+//			
+//			Path pathToLogDir = Paths.get( loggerConfig.getFileHandlerLocation() ); 
+//			
+//			if ( !Files.exists( pathToLogDir )
+//					) {
+//				try {
+//					Files.createDirectories( pathToLogDir );
+//					System.err.println("Logger - build() created missing log directory!");
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//					System.out.println("No acces to data storage. Entry point not available.");
+//					System.exit(1);  						
+//				}
+//				this.logDirChecked = true;
+//			}
+//		}
 		
 		Logger logger = Logger.getLogger( name );
 		

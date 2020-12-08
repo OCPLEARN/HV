@@ -57,8 +57,8 @@ public class HvApplication {
 //		
 //	}
 	
-	@Autowired 
-	private ApplicationStartup applicationStartup;
+	//@Autowired 
+	//private ApplicationStartup applicationStartup;
 	
 	@Autowired 
 	private LoggerBuilder builder;
