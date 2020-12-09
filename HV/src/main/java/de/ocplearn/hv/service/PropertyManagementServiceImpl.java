@@ -311,8 +311,32 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean assignAllUnitsToOneOwner(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		//if any buildingOwners exist for this Building, remove all existing buildingOwners from this building
+		for(BuildingOwnerDto buildingOwnerDto2: buildingDto.getOwners()) {
+		if (! buildingDao.removeBuildingOwnerFromBuilding(buildingOwnerMapper.buildingOwnerDtoToBuildingOwner
+				(buildingOwnerDto2, new CycleAvoidingMappingContext()), 
+				buildingMapper.buildingDtoToBuilding(buildingDto, new CycleAvoidingMappingContext()))) {
+			return false;
+		}
+		
+		}
+		//if any UnitOwners exist for Units of this Building, remove all existing UnitOwners from these Units
+		for (UnitDto unitDto:buildingDto.getUnits()) {
+			if(! buildingDao.removeOwnerFromUnit(buildingOwnerMapper.buildingOwnerDtoToBuildingOwner
+					(buildingOwnerDto, new CycleAvoidingMappingContext()),
+					unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext()))){
+				return false;
+			}
+		}
+		//assign new BuildingOwner to the unit representing the Buildingownership
+		if (!assignBuildingOwnerToBuilding(buildingOwnerDto, buildingDto))return false;
+		
+		//assign new Buildingowner to all Units in this Building
+		for (UnitDto unitDto:buildingDto.getUnits()) {
+			if (!assignUnitOwnerToUnit(buildingOwnerDto, unitDto)) return false;
+		}
+		return true;
 	}
 
 

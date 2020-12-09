@@ -140,6 +140,17 @@ public interface PropertyManagementService {
 	
 	public boolean removeBuildingOwnerFromBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto);
 	
+	
+	
+	/**
+	 * when creating a new building - without existing owners in either units or building - this method can be used to assign all 
+	 * units of this building to the BuildingOwner given as Parameter in this method. If any owners are already assigned to either a unit 
+	 * or the building they will be deleted.
+	 * 
+	 * @param buildingOwnerDto
+	 * @param buildingDto
+	 * @return
+	 */
 	public boolean assignAllUnitsToOneOwner(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto);
 	
 	
