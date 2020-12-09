@@ -371,7 +371,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 
 	@Override
-	public boolean assignUnitRenterToUnit(RenterDto renterDto, UnitDto unitDto) {
+	public boolean assignRenterToUnit(RenterDto renterDto, UnitDto unitDto) {
 		// TODO Auto-generated method stub
 		return false;
 	}

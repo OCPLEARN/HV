@@ -163,7 +163,7 @@ public interface PropertyManagementService {
 	
 	//  ASSIGN RENTER TO UNIT
 	
-	public boolean assignUnitRenterToUnit (RenterDto renterDto, UnitDto unitDto);
+	public boolean assignRenterToUnit (RenterDto renterDto, UnitDto unitDto);
 	
 	public boolean removeRenterFromUnit (RenterDto renterDto, UnitDto unitDto);
 	
