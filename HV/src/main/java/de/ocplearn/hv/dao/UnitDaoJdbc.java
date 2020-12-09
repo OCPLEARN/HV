@@ -15,12 +15,14 @@ import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
+import de.ocplearn.hv.dto.RenterDto;
+import de.ocplearn.hv.dto.UnitDto;
 import de.ocplearn.hv.exceptions.DataAccessException;
 import de.ocplearn.hv.model.Address;
 import de.ocplearn.hv.model.Building;
+import de.ocplearn.hv.model.Renter;
 import de.ocplearn.hv.model.Unit;
 import de.ocplearn.hv.model.UnitType;
 import de.ocplearn.hv.util.LoggerBuilder;
@@ -319,5 +321,30 @@ public class UnitDaoJdbc implements UnitDao {
 		    throw new DataAccessException("Unable to get Data from DB.");            
 		}
 		return units;
+	}
+
+
+	@Override
+	public boolean assignRenterToUnit(Renter renter, Unit unit) {
+		
+		String sql = "INSERT INTO "+ UnitDaoJdbc.TABLE_NAME_PREFIX_RENTER_LINK +" (id, unitId, renterId ) VALUES ( NULL, ?, ? ); ";
+		try( Connection con = this.dataSource.getConnection();
+				 PreparedStatement stmt = con.prepareStatement( sql );
+				) {
+			
+			stmt.setInt(1, unit.getId());
+			stmt.setInt(2, renter.getId());
+			
+			if (stmt.executeUpdate() !=1) {
+				return false;
+			}
+			// ok 1 row affected
+			return true;
+			
+		} catch (SQLException e) {
+		    e.printStackTrace(); 
+		    logger.log(Level.WARNING, e.getMessage());
+		    throw new DataAccessException("Unable to insert Data into  DB.");            
+		}
 	}
 }
