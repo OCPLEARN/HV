@@ -25,6 +25,7 @@ import de.ocplearn.hv.mapper.ContactMapper;
 import de.ocplearn.hv.mapper.CycleAvoidingMappingContext;
 import de.ocplearn.hv.mapper.LoginUserMapper;
 import de.ocplearn.hv.mapper.PropertyManagementMapper;
+import de.ocplearn.hv.mapper.RenterMapper;
 import de.ocplearn.hv.mapper.UnitMapper;
 import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.BuildingOwner;
@@ -62,6 +63,8 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	
 	private UnitMapper unitMapper;
 		
+	private RenterMapper renterMapper;
+	
 	@Autowired
 	public PropertyManagementServiceImpl ( 	PropertyManagementDao propertyManagementDao,
 											PropertyManagementMapper propertyManagementMapper,
@@ -72,7 +75,8 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 											BuildingMapper buildingMapper,
 											BuildingOwnerMapper buildingOwnerMapper,
 											BuildingOwnerDao buildingOwnerDao,
-											UnitMapper unitMapper
+											UnitMapper unitMapper,
+											RenterMapper renterMapper
 											
 										) {
 		
@@ -88,6 +92,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		this.buildingOwnerDao = buildingOwnerDao;
 		//this.unitDao = unitDao;
 		this.unitMapper = unitMapper;
+		this.renterMapper = renterMapper;
 		}
 	
 	
@@ -396,10 +401,10 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean assignRenterToUnit(RenterDto renterDto, UnitDto unitDto) {
-		
-		
-		
-		return false;
+		return this.unitDao.assignRenterToUnit(
+				this.renterMapper.RenterDtoToRenter(renterDto),
+				this.unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext())
+				);
 	}
 
 
