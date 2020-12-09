@@ -178,7 +178,12 @@ public interface PropertyManagementService {
 	
 	public boolean removeRenterFromUnit (RenterDto renterDto, UnitDto unitDto);
 	
-
+	/**
+	 * creates or updates given renter
+	 * @param RenterDto
+	 * @return true on success
+	 * */
+	boolean saveRenter( RenterDto renterDto );
 	
 	
 	

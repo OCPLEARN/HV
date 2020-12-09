@@ -393,4 +393,5 @@ ADD CONSTRAINT `fk_buildingowner_propertyManagementId`
   FOREIGN KEY (`propertyManagementId`)
   REFERENCES `immodb`.`propertymanagement` (`id`);
 
-
+# 20201209 
+ALTER TABLE renter DROP FOREIGN KEY fk_renter_loginUserId;

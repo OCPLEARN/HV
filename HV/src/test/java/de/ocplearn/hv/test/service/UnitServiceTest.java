@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import de.ocplearn.hv.dto.BuildingDto;
 import de.ocplearn.hv.dto.BuildingOwnerDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
+import de.ocplearn.hv.dto.RenterDto;
 import de.ocplearn.hv.dto.UnitDto;
 import de.ocplearn.hv.model.BuildingType;
 import de.ocplearn.hv.model.Role;
@@ -25,9 +26,15 @@ public class UnitServiceTest {
 	
 	PropertyManagementService propertyManagementService; 
 	
+	TestObjectSupplier testObjectSupplier;
+	
 	@Autowired
-	public UnitServiceTest( PropertyManagementService propertyManagementService ) {
+	public UnitServiceTest( 
+			PropertyManagementService propertyManagementService,
+			TestObjectSupplier testObjectSupplier
+			) {
 		this.propertyManagementService = propertyManagementService;
+		this.testObjectSupplier = testObjectSupplier;
 	}
 
 	
@@ -97,15 +104,38 @@ public class UnitServiceTest {
 						System.out.println( "buildings of BuildingOwner: " + buildingOwnerDto.getBuildings() );
 						Assertions.assertTrue( propertyManagementService.removeUnitOwnerFromUnit( buildingOwnerDto, unitDto ) );
 						}
-						
 					});
-					}
-					
+				}
 			}
-			
 		}
 		
 	
+	
+	@Test
+	public void testAssignUnitRenterToUnit_givenModel2_returnBooleanTrue() {
+		
+		// get model 1
+		PropertyManagementDto propertyManagementDto = TestObjectSupplier.getInstance().getModel("Model1");
+		
+		// create renter
+		RenterDto renterDto = new RenterDto();
+		renterDto.setPropertyManagement(propertyManagementDto);
+		
+		// contact
+		renterDto.setContact(this.testObjectSupplier.createContactDto(false, "Max", "Mustermann"));
+		
+		// loginuser
+		renterDto.setLoginUser(null);
+		
+		// save renter
+		Assertions.assertTrue(this.propertyManagementService.saveRenter(renterDto));
+		
+		
+		
+		
+		
+		
+	}	
 	
 }
 

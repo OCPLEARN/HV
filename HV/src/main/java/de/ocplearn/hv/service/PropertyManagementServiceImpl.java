@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import de.ocplearn.hv.dao.BuildingDao;
 import de.ocplearn.hv.dao.BuildingOwnerDao;
 import de.ocplearn.hv.dao.PropertyManagementDao;
+import de.ocplearn.hv.dao.RenterDao;
 import de.ocplearn.hv.dao.UnitDao;
 import de.ocplearn.hv.dto.BuildingDto;
 import de.ocplearn.hv.dto.BuildingOwnerDto;
@@ -62,7 +63,9 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	private UnitDao unitDao;
 	
 	private UnitMapper unitMapper;
-		
+	
+	private RenterDao renterDao;
+	
 	private RenterMapper renterMapper;
 	
 	@Autowired
@@ -76,7 +79,8 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 											BuildingOwnerMapper buildingOwnerMapper,
 											BuildingOwnerDao buildingOwnerDao,
 											UnitMapper unitMapper,
-											RenterMapper renterMapper
+											RenterMapper renterMapper,
+											RenterDao renterDao
 											
 										) {
 		
@@ -93,6 +97,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		//this.unitDao = unitDao;
 		this.unitMapper = unitMapper;
 		this.renterMapper = renterMapper;
+		this.renterDao = renterDao;
 		}
 	
 	
@@ -511,6 +516,11 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		Optional<PropertyManagement> opt =  this.propertyManagementDao.findByPrimaryLoginUserId(loginUserDto.getId());
 		if ( ! opt.isPresent() ) return null;
 		return this.findPropertyManagementbyId( opt.get().getId() );
+	}
+
+	@Override
+	public boolean saveRenter(RenterDto renterDto) {
+		return this.renterDao.save( this.renterMapper.RenterDtoToRenter(renterDto) );
 	}
 
 
