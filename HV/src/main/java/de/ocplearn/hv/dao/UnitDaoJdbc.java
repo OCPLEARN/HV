@@ -361,21 +361,23 @@ public class UnitDaoJdbc implements UnitDao {
 	
 //	SQL #remove renter from unitrenterlink ( for method removeRenterFromUnit() )
 //	DELETE FROM unitrenterlink WHERE unitid=21 AND renterid=2;
-
+	
+	
 	@Override
 	public boolean removeRenterFromUnit(Renter renter, Unit unit) {
 		// TODO Auto-generated method stub
 		
 		String sql = "DELETE FROM "	+ UnitDaoJdbc.TABLE_NAME_RENTER_LINK
-					+ " WHERE "		+ UnitDaoJdbc.TABLE_NAME_PREFIX_RENTER_LINK + ".renterId=" + renter.getId() 
-					+ "AND "		+ UnitDaoJdbc.TABLE_NAME_PREFIX_RENTER_LINK + ".unitId=" + unit.getId()
-					+ ";"; 
+					+ " WHERE renterId= ? AND unitId= ? ;"; 
+		
 		
 		try( Connection connection = dataSource.getConnection();
 			 PreparedStatement stmt = connection.prepareStatement(sql) ){
 			
+			stmt.setInt(1,  renter.getId() );
+			stmt.setInt(2,  unit.getId() );
 			
-			
+			return ( stmt.executeUpdate() > 0 ) ? true : false;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -383,6 +385,5 @@ public class UnitDaoJdbc implements UnitDao {
 			throw new DataAccessException("Unable to change data in DB");
 		}
 		
-		return false;
 	}
 }
