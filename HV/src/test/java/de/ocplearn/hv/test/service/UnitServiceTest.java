@@ -1,5 +1,7 @@
 package de.ocplearn.hv.test.service;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -124,6 +126,21 @@ public class UnitServiceTest {
 		// get model 1
 		PropertyManagementDto propertyManagementDto = TestObjectSupplier.getInstance().getModel("Model2");
 		
+		List<BuildingDto> buildings = this.propertyManagementService.findBuildingsByPropertyManagement(propertyManagementDto.getId());
+		BuildingDto buildingDto = null;
+		for( BuildingDto build : buildings ) {
+			if (build.getName().equals("House Model2")) {
+				buildingDto = build;
+				break;
+			}		// 'House Model2'
+		}
+		// House 2 found
+		Assertions.assertTrue(buildingDto!= null);
+		// find unit OG right
+//		buildingDto.getUnits().stream()
+//			.filter(un -> un.getUnitName().equals("OG right"))
+//			.reduce()
+		
 		// create renter
 		RenterDto renterDto = new RenterDto();
 		renterDto.setPropertyManagement(propertyManagementDto);
@@ -137,7 +154,7 @@ public class UnitServiceTest {
 		// save renter
 		Assertions.assertTrue(this.propertyManagementService.saveRenter(renterDto));
 		
-		
+		//this.propertyManagementService.assignRenterToUnit(renterDto, );
 		
 	}	
 	
