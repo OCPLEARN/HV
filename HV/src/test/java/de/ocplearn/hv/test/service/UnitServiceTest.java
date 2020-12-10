@@ -111,11 +111,18 @@ public class UnitServiceTest {
 		
 	
 	
+	/**
+	 * (1) Assigns a renter to model2
+	 * (2) Renter rents building 1, unit 1st, floor right
+	 * (3) Rental ends
+	 * (4) Renter is removed from model 2 
+	 *  
+	 * */
 	@Test
 	public void testAssignUnitRenterToUnit_givenModel2_returnBooleanTrue() {
 		
 		// get model 1
-		PropertyManagementDto propertyManagementDto = TestObjectSupplier.getInstance().getModel("Model1");
+		PropertyManagementDto propertyManagementDto = TestObjectSupplier.getInstance().getModel("Model2");
 		
 		// create renter
 		RenterDto renterDto = new RenterDto();
@@ -129,9 +136,6 @@ public class UnitServiceTest {
 		
 		// save renter
 		Assertions.assertTrue(this.propertyManagementService.saveRenter(renterDto));
-		
-		
-		
 		
 		
 		
