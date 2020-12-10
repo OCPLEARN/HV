@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -60,6 +61,18 @@ public class UnitDaoJdbc implements UnitDao {
 		"moveIn", "moveOut"),
 			new ArrayList<String>()
 			);
+	
+	
+	
+	public static final String TABLE_NAME_RENTER = "renter";
+	public static final String TABLE_NAME_PREFIX_RENTER = "re";
+	public static final String COLUMNS_RENTER = SQLUtils.createSQLString( 
+						TABLE_NAME_PREFIX_RENTER, 
+						Arrays.asList( "id" ),
+						new ArrayList<String>()
+						);
+	
+	
 	
 	
 	
@@ -373,23 +386,65 @@ public class UnitDaoJdbc implements UnitDao {
 
 	
 	
-////////////////////////
-//public static final String TABLE_NAME_RENTER_LINK = "unitrenterlink";
-//public static final String TABLE_NAME_PREFIX_RENTER_LINK = "unrl";
-//public static final String COLUMNS_RENTER_LINK = SQLUtils.createSQLString(
-//TABLE_NAME_PREFIX_RENTER_LINK, 
-//Arrays.asList(
-//"id", "timeStmpAdd", "timeStmpEdit", "unitId", "renterId", 
-//"moveIn", "moveOut"),
-//new ArrayList<String>()
-//);
-////////////////////
 
-// SQL 
+// SQL # find units by renter id
+	
+//	SELECT * FROM unit AS un
+//	JOIN renter AS re
+//	JOIN unitrenterlink AS unrl
+//	ON re.id = unrl.renterid
+//	WHERE un.id = unrl.unitid AND re.id = 2 ;
+
+
 
 	@Override
 	public Set<Unit> findUnitsByRenterId(int renterId) {
 		// TODO Auto-generated method stub
+		
+		String sql = "SELECT * FROM " + TABLE_NAME + " AS " + TABLE_NAME_PREFIX
+					+ " JOIN renter AS re"
+					+ " JOIN " + TABLE_NAME_RENTER_LINK + " AS " + TABLE_NAME_PREFIX_RENTER_LINK 
+					+ " ON re.id = " + COLUMNS_RENTER_LINK + ".unitid"
+					+ " WHERE " + TABLE_NAME_PREFIX + ".id = ?;";
+		
+		
+		try( Connection connection = dataSource.getConnection();
+			 PreparedStatement stmt = connection.prepareStatement(sql);){
+			
+			stmt.setInt(1, renterId);
+			
+			ResultSet resultSet = stmt.executeQuery(sql);
+			
+			Set<Unit> units = new HashSet<Unit>();
+			
+			for(Unit unit : units) {
+				unit.setId(id);
+				unit.set
+			}
+			
+		}catch( SQLException e) {
+			e.printStackTrace();
+			logger.log( Level.WARNING, e.getMessage() );
+			throw new DataAccessException("Unable to read data in DB");
+		}
+		
+		
 		return null;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
