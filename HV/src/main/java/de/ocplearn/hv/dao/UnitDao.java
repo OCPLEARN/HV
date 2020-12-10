@@ -57,6 +57,14 @@ public interface UnitDao {
 	Set<Unit> findUnitsByBuildingIdFull (int buildingId);
 	
 	/**
+	 * finds all units that are assigned to one renter id
+	 * @param building id
+	 * @return Set of Units
+	 * */
+	Set<Unit> findUnitsByRenterId (int renterId);
+	
+	
+	/**
 	 * Assigns a Renter to a unit. If unit is of type BUILDING_UNIT, the whole building is rented.
 	 * @param Renter
 	 * @param Unit

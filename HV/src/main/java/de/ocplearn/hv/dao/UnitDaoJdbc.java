@@ -347,25 +347,9 @@ public class UnitDaoJdbc implements UnitDao {
 		    throw new DataAccessException("Unable to insert Data into  DB.");            
 		}
 	}
-////////////////////////
-//	public static final String TABLE_NAME_RENTER_LINK = "unitrenterlink";
-//	public static final String TABLE_NAME_PREFIX_RENTER_LINK = "unrl";
-//	public static final String COLUMNS_RENTER_LINK = SQLUtils.createSQLString(
-//			TABLE_NAME_PREFIX_RENTER_LINK, 
-//			Arrays.asList(
-//		"id", "timeStmpAdd", "timeStmpEdit", "unitId", "renterId", 
-//		"moveIn", "moveOut"),
-//			new ArrayList<String>()
-//			);
-////////////////////
-	
-//	SQL #remove renter from unitrenterlink ( for method removeRenterFromUnit() )
-//	DELETE FROM unitrenterlink WHERE unitid=21 AND renterid=2;
-	
-	
+
 	@Override
 	public boolean removeRenterFromUnit(Renter renter, Unit unit) {
-		// TODO Auto-generated method stub
 		
 		String sql = "DELETE FROM "	+ UnitDaoJdbc.TABLE_NAME_RENTER_LINK
 					+ " WHERE renterId= ? AND unitId= ? ;"; 
@@ -385,5 +369,27 @@ public class UnitDaoJdbc implements UnitDao {
 			throw new DataAccessException("Unable to change data in DB");
 		}
 		
+	}
+
+	
+	
+////////////////////////
+//public static final String TABLE_NAME_RENTER_LINK = "unitrenterlink";
+//public static final String TABLE_NAME_PREFIX_RENTER_LINK = "unrl";
+//public static final String COLUMNS_RENTER_LINK = SQLUtils.createSQLString(
+//TABLE_NAME_PREFIX_RENTER_LINK, 
+//Arrays.asList(
+//"id", "timeStmpAdd", "timeStmpEdit", "unitId", "renterId", 
+//"moveIn", "moveOut"),
+//new ArrayList<String>()
+//);
+////////////////////
+
+// SQL 
+
+	@Override
+	public Set<Unit> findUnitsByRenterId(int renterId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
