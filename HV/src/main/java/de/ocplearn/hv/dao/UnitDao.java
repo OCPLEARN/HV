@@ -65,4 +65,7 @@ public interface UnitDao {
 	 * */
 	boolean assignRenterToUnit (Renter renter, Unit unit);
 	
+	
+	boolean removeRenterFromUnit(Renter renter, Unit unit);
+	
 }
