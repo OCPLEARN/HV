@@ -17,6 +17,10 @@ public class Building implements Comparable<Building>{
 	
 	private List<BuildingOwner> owners;
 	
+	private Ownership ownership;
+		
+	private boolean wegType;
+	
 	// statt  des Feldes private List<BuildingOwner> owners;
 	// kann man eine Methode der folgenden Art einbauen
 	// private List<BuildingOwner> getBuildingOwners(){return new ArrayList();}
