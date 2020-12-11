@@ -289,6 +289,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean assignBuildingOwnerToBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
+		// TODO anpassen Ownership1
 		Unit unit = this.unitDao.getBuildingUnitFull(buildingDto.getId());
 		if(unit!=null) {
 			
@@ -397,6 +398,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean removeUnitOwnerFromUnit(BuildingOwnerDto buildingOwnerDto, UnitDto unitDto) {
+		// TODO anpassen Ownership1
 		return this.buildingDao.removeOwnerFromUnit( 
 			this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto, new CycleAvoidingMappingContext()) ,
 			this.unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext())
@@ -475,12 +477,14 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean deleteBuildingOwnerById(int buildingOwnerDtoId) {
+		//TODO anpassen Ownership1
 		return this.buildingOwnerDao.delete(buildingOwnerDtoId);
 	}
 
 
 	@Override
 	public boolean deleteBuildingOwner(BuildingOwnerDto buildingOwnerDto) {
+		//TODO anpassen Ownership1
 		return this.buildingOwnerDao.delete( this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto,new CycleAvoidingMappingContext()) );
 	}
 
