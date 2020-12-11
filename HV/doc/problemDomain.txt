@@ -69,3 +69,6 @@ Spezoial Abrechnungsmodell	- m2
 Building
 allocationKey für Wasser	Verbrauch Wasseruhr / Verbrauch Gesamtes Building	=> Faktor
 allocationKey für Grundsteuer	qm Wohnung	    / qm gesamtes Haus			=> Faktor
+
+# 20201212
+use case : device sends resource data, after unit has been deleted

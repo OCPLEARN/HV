@@ -23,6 +23,8 @@ import de.ocplearn.hv.dto.UnitDto;
 import de.ocplearn.hv.exceptions.DataAccessException;
 import de.ocplearn.hv.model.Address;
 import de.ocplearn.hv.model.Building;
+import de.ocplearn.hv.model.BuildingOwner;
+import de.ocplearn.hv.model.Ownership;
 import de.ocplearn.hv.model.Renter;
 import de.ocplearn.hv.model.Unit;
 import de.ocplearn.hv.model.UnitType;
@@ -429,16 +431,39 @@ public class UnitDaoJdbc implements UnitDao {
 //			for(Unit unit : units) {
 //				unit.setId(id);
 //				unit.set
-			}
-			
 		}catch( SQLException e) {
 			e.printStackTrace();
 			logger.log( Level.WARNING, e.getMessage() );
 			throw new DataAccessException("Unable to read data in DB");
 		}
 		
-		
 		return null;
+	}
+
+
+	@Override
+	public Optional<Ownership> getOwnership(Unit unit, BuildingOwner buildingOwner) {
+		
+		String sql = "SELECT "+COLUMNS_OWNER_LINK+" from "+TABLE_NAME_OWNER_LINK+" AS "+TABLE_NAME_PREFIX_OWNER_LINK+" "
+				+ "WHERE "+TABLE_NAME_PREFIX_OWNER_LINK+".unitId = ? AND "+TABLE_NAME_PREFIX_OWNER_LINK+".buildingOwnerId = ?";
+		try( Connection connection = dataSource.getConnection();
+				 PreparedStatement stmt = connection.prepareStatement(sql);){
+			stmt.setInt(1, unit.getId());
+			stmt.setInt(2, buildingOwner.getId());
+			
+			ResultSet resultSet = stmt.executeQuery(sql);
+			
+			if ( resultSet.next() ) {
+				Ownership ownership = new Ownership(unit, buildingOwner, resultSet.getDouble(TABLE_NAME_PREFIX_OWNER_LINK + ".share"));	
+				return Optional.of(ownership);
+			}
+			return Optional.empty();
+		}
+		catch( SQLException e) {
+			e.printStackTrace();
+			logger.log( Level.WARNING, e.getMessage() );
+			throw new DataAccessException("Unable to read data from DB");
+		}		
 	}
 }
 

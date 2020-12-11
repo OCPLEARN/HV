@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import de.ocplearn.hv.model.BuildingType;
+import de.ocplearn.hv.model.Ownership;
 
 public class BuildingDto implements Comparable<BuildingDto>{
 	
@@ -20,6 +21,10 @@ public class BuildingDto implements Comparable<BuildingDto>{
 	
 	private List<BuildingOwnerDto> owners;
 	
+	private List<Ownership> ownerships;
+	
+	private boolean wegType;	
+	
 	private Set<UnitDto> units;
 	
 	private Set<TransactionDto> transactions;
@@ -27,7 +32,6 @@ public class BuildingDto implements Comparable<BuildingDto>{
 	private PropertyManagementDto propertyManagement;
 	
 	private String note;
-	
 
 	public BuildingDto() {
 		super();
@@ -35,7 +39,7 @@ public class BuildingDto implements Comparable<BuildingDto>{
 
 	public BuildingDto(String name, AddressDto address, BuildingType buildingType,
 			List<BuildingOwnerDto> owners, Set<UnitDto> units, Set<TransactionDto> transactions, PropertyManagementDto propertyManagement,
-			String note) {
+			String note, boolean wegType,  List<Ownership> ownerships) {
 		super();
 		
 		this.name = name;
@@ -46,6 +50,8 @@ public class BuildingDto implements Comparable<BuildingDto>{
 		this.transactions = transactions;
 		this.propertyManagement = propertyManagement;
 		this.note = note;
+		this.wegType = wegType;
+		this.ownerships = ownerships;		
 	}
 
 	/**
@@ -177,6 +183,34 @@ public class BuildingDto implements Comparable<BuildingDto>{
 	public void setNote(String note) {
 		this.note = note;
 	}
+	
+	/**
+	 * @return the ownerships
+	 */
+	public List<Ownership> getOwnerships() {
+		return ownerships;
+	}
+
+	/**
+	 * @param ownerships the ownerships to set
+	 */
+	public void setOwnerships(List<Ownership> ownerships) {
+		this.ownerships = ownerships;
+	}
+
+	/**
+	 * @return the wegType
+	 */
+	public boolean isWegType() {
+		return wegType;
+	}
+
+	/**
+	 * @param wegType the wegType to set
+	 */
+	public void setWegType(boolean wegType) {
+		this.wegType = wegType;
+	}
 
 	@Override
 	public int hashCode() {
@@ -227,13 +261,6 @@ public class BuildingDto implements Comparable<BuildingDto>{
 	public int compareTo(BuildingDto o) {
 		 return	this.getAddress().compareTo(o.getAddress());
 	}
-
-
-
-
-
-
-
 
 }
 	

@@ -5,6 +5,8 @@ import java.util.Set;
 
 import de.ocplearn.hv.dto.RenterDto;
 import de.ocplearn.hv.dto.UnitDto;
+import de.ocplearn.hv.model.BuildingOwner;
+import de.ocplearn.hv.model.Ownership;
 import de.ocplearn.hv.model.Renter;
 import de.ocplearn.hv.model.Unit;
 import de.ocplearn.hv.util.TablePageViewData;
@@ -75,5 +77,12 @@ public interface UnitDao {
 	
 	
 	boolean removeRenterFromUnit(Renter renter, Unit unit);
+	
+	/**
+	 * Returns Ownership entry for given owner and unit
+	 * @param Unit of type BUILDING_UNIT
+	 * @return Ownership
+	 * */
+	Optional<Ownership> getOwnership( Unit unit, BuildingOwner buildingOwner );
 	
 }

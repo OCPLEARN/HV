@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +25,7 @@ import de.ocplearn.hv.model.Address;
 import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.BuildingOwner;
 import de.ocplearn.hv.model.BuildingType;
+import de.ocplearn.hv.model.Ownership;
 import de.ocplearn.hv.model.PropertyManagement;
 import de.ocplearn.hv.model.Transaction;
 import de.ocplearn.hv.model.Unit;
@@ -231,7 +233,9 @@ public class BuildingDaoJdbc implements BuildingDao{
 		
 		building.setNote( resultSet.getString( BuildingDaoJdbc.TABLE_NAME_PREFIX + ".note" ) );
 	
-				
+		// List of Ownership
+		building.setOwnerships( new ArrayList<Ownership>());		
+		
 		return building;
 	}
 	
@@ -273,6 +277,29 @@ public class BuildingDaoJdbc implements BuildingDao{
 	    logger.log(Level.WARNING, e.getMessage());
 	    throw new DataAccessException("Unable to get Data from DB.");            
 	    }
+	}
+	
+	/**
+	 * returns a List of Ownership instances
+	 * */
+	private List<Ownership> getOwnerships( Building building  ){
+		// return 
+		List<Ownership> ownerships = new ArrayList<>();
+
+		List<BuildingOwner> owners = building.getOwners();
+		
+		for ( BuildingOwner owner : owners ) {
+			//SELECT * FROM uol WHERE 
+			Set<Unit> units = building.getUnits();
+			for ( Unit unit : units ) {
+				Optional<Ownership> onwerInfo = this.unitDao.getOwnership(unit, owner);
+				if ( onwerInfo.isPresent() ) {
+					ownerships.add(onwerInfo.get());
+				}  
+			} 
+		}
+
+		return ownerships;
 	}
 	
 	@Override
@@ -427,6 +454,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 				
 				building.setUnits(unitDao.findUnitsByBuildingIdFull(id));
 			
+				building.setOwnerships(this.getOwnerships(building));
 				
 				return Optional.of(building);
 			} else {

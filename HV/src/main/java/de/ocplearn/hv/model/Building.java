@@ -17,7 +17,7 @@ public class Building implements Comparable<Building>{
 	
 	private List<BuildingOwner> owners;
 	
-	private Ownership ownership;
+	private List<Ownership> ownerships;
 		
 	private boolean wegType;
 	
@@ -39,10 +39,10 @@ public class Building implements Comparable<Building>{
 	public Building() {
 		super();
 	}
-
+	
 	public Building(String name, Address address, BuildingType buildingType,
 			List<BuildingOwner> owners, Set<Unit> units, Set<Transaction> transactions, PropertyManagement propertyManagement,
-			String note) {
+			String note, boolean wegType,  List<Ownership> ownerships ) { 
 		super();
 		
 		this.name = name;
@@ -53,6 +53,8 @@ public class Building implements Comparable<Building>{
 		this.transactions = transactions;
 		this.propertyManagement = propertyManagement;
 		this.note = note;
+		this.wegType = wegType;
+		this.ownerships = ownerships;
 	}
 
 	/**
@@ -184,6 +186,34 @@ public class Building implements Comparable<Building>{
 	 */
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	/**
+	 * @return the ownerships
+	 */
+	public List<Ownership> getOwnerships() {
+		return ownerships;
+	}
+
+	/**
+	 * @param ownerships the ownerships to set
+	 */
+	public void setOwnerships(List<Ownership> ownerships) {
+		this.ownerships = ownerships;
+	}
+
+	/**
+	 * @return the wegType
+	 */
+	public boolean isWegType() {
+		return wegType;
+	}
+
+	/**
+	 * @param wegType the wegType to set
+	 */
+	public void setWegType(boolean wegType) {
+		this.wegType = wegType;
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package de.ocplearn.hv.model;
 
+import java.util.List;
+
 public class Ownership {
 	
 	private final Unit unit;
@@ -18,7 +20,31 @@ public class Ownership {
 	}
 
 	
-	public static List getAllOwnersWithShares() {}
+	public static List getAllOwnersWithShares() { return null; }
+
+
+	/**
+	 * @return the unit
+	 */
+	public Unit getUnit() {
+		return unit;
+	}
+
+
+	/**
+	 * @return the buildingOwner
+	 */
+	public BuildingOwner getBuildingOwner() {
+		return buildingOwner;
+	}
+
+
+	/**
+	 * @return the ownershipShare
+	 */
+	public Double getOwnershipShare() {
+		return ownershipShare;
+	}
 	
 	
 	
