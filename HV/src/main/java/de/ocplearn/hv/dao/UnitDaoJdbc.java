@@ -397,14 +397,23 @@ public class UnitDaoJdbc implements UnitDao {
 
 
 
+	
+//	SELECT un.id, ... FROM unit AS un
+//	JOIN unitrenterlink AS unrl
+//	ON un.id = unrl.unitid
+//	JOIN renter AS re
+//	ON re.id = unrl.renterid
+//	WHERE un.id = unrl.unitid AND re.id = 3 ;
+	
+	
+	
 	@Override
 	public Set<Unit> findUnitsByRenterId(int renterId) {
 		// TODO Auto-generated method stub
 		
-		String sql = "SELECT * FROM " + TABLE_NAME + " AS " + TABLE_NAME_PREFIX
-					+ " JOIN renter AS re"
-					+ " JOIN " + TABLE_NAME_RENTER_LINK + " AS " + TABLE_NAME_PREFIX_RENTER_LINK 
-					+ " ON re.id = " + COLUMNS_RENTER_LINK + ".unitid"
+		String sql = "SELECT " + COLUMNS + " FROM " + UnitDaoJdbc.TABLE_NAME + " AS " + UnitDaoJdbc.TABLE_NAME_PREFIX
+					+ " JOIN " + UnitDaoJdbc.TABLE_NAME_RENTER_LINK + " AS " + UnitDaoJdbc.TABLE_NAME_PREFIX_RENTER_LINK
+					+ " ON " + UnitDaoJdbc.TABLE_NAME_PREFIX + ".id = "
 					+ " WHERE " + TABLE_NAME_PREFIX + ".id = ?;";
 		
 		
@@ -417,9 +426,9 @@ public class UnitDaoJdbc implements UnitDao {
 			
 			Set<Unit> units = new HashSet<Unit>();
 			
-			for(Unit unit : units) {
-				unit.setId(id);
-				unit.set
+//			for(Unit unit : units) {
+//				unit.setId(id);
+//				unit.set
 			}
 			
 		}catch( SQLException e) {
@@ -437,8 +446,31 @@ public class UnitDaoJdbc implements UnitDao {
 
 
 
+//
+//public static final String TABLE_NAME = "unit";
+//public static final String TABLE_NAME_PREFIX = "un";
+//public static final String COLUMNS = SQLUtils.createSQLString(
+//		TABLE_NAME_PREFIX, 
+//		Arrays.asList(
+//	"id", "timeStmpAdd", "timeStmpEdit", "buildingId", "unitName",
+//	"addressId", "usableFloorSpace", "constructionYear", "note", "unitType"	),
+//		new ArrayList<String>()
+//		);
+//
 
-
+//
+//public static final String TABLE_NAME_RENTER_LINK = "unitrenterlink";
+//public static final String TABLE_NAME_PREFIX_RENTER_LINK = "unrl";
+//public static final String COLUMNS_RENTER_LINK = SQLUtils.createSQLString(
+//		TABLE_NAME_PREFIX_RENTER_LINK, 
+//		Arrays.asList(
+//	"id", "timeStmpAdd", "timeStmpEdit", "unitId", "renterId", 
+//	"moveIn", "moveOut"),
+//		new ArrayList<String>()
+//		);
+//
+//
+//
 
 
 
