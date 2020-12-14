@@ -395,3 +395,11 @@ ADD CONSTRAINT `fk_buildingowner_propertyManagementId`
 
 # 20201209 
 ALTER TABLE renter DROP FOREIGN KEY fk_renter_loginUserId;
+
+# 20201210
+ALTER TABLE building ADD COLUMN WEG_FLAG bit(1) DEFAULT 0;
+#ALTER TABLE building DROP COLUMN WEG_FLAG;
+ALTER TABLE unitownerlink ADD COLUMN share DECIMAL(6,4); 
+
+#20201214
+ALTER TABLE unitownerlink CHANGE share buildingShare DECIMAL(6,4);

@@ -387,7 +387,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	public boolean assignUnitOwnerToUnit(BuildingOwnerDto buildingOwnerDto, UnitDto unitDto) {
 		BuildingOwner buildingOwner = buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto, new CycleAvoidingMappingContext());
 		Unit unit = unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext());
-		if( buildingDao.addOwnerToUnit(buildingOwner,unit)){
+		if( buildingDao.addOwnerToUnit(buildingOwner,unit, 0.0)){ 	// buildingShare 0.0 will be replaced by method setOwnership() in PMService
 			return true;
 		}else {
 			return false;
@@ -525,6 +525,25 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	@Override
 	public boolean saveRenter(RenterDto renterDto) {
 		return this.renterDao.save( this.renterMapper.RenterDtoToRenter(renterDto) );
+	}
+
+
+	@Override
+	public boolean setOwnership(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto, UnitDto unitDto,
+			double buildingShare) {
+		// TODO Auto-generated method stub
+		
+		
+		
+		
+		return false;
+	}
+
+
+	@Override
+	public boolean removeOwnership(BuildingOwnerDto buildingOwnerDto, UnitDto unitDto) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 

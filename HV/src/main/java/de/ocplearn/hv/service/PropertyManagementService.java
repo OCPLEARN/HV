@@ -140,7 +140,10 @@ public interface PropertyManagementService {
 	
 	public boolean removeBuildingOwnerFromBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto);
 	
+	public boolean setOwnership( BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto, UnitDto unitDto, double buildingShare );
 	
+	public boolean removeOwnership( BuildingOwnerDto buildingOwnerDto, UnitDto unitDto );
+
 	
 	/**
 	 * when creating a new building - without existing owners in either units or building - this method can be used to assign all 

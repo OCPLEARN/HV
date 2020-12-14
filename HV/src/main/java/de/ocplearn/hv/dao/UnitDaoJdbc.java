@@ -50,7 +50,7 @@ public class UnitDaoJdbc implements UnitDao {
 	public static final String COLUMNS_OWNER_LINK = SQLUtils.createSQLString(
 			TABLE_NAME_PREFIX_OWNER_LINK, 
 			Arrays.asList(
-		"id", "timeStmpAdd", "timeStmpEdit", "unitId", "buildingOwnerId"),
+		"id", "timeStmpAdd", "timeStmpEdit", "unitId", "buildingOwnerId", "buildingShare"),
 			new ArrayList<String>()
 			);
 	
@@ -454,7 +454,7 @@ public class UnitDaoJdbc implements UnitDao {
 			ResultSet resultSet = stmt.executeQuery(sql);
 			
 			if ( resultSet.next() ) {
-				Ownership ownership = new Ownership(unit, buildingOwner, resultSet.getDouble(TABLE_NAME_PREFIX_OWNER_LINK + ".share"));	
+				Ownership ownership = new Ownership(unit, buildingOwner, resultSet.getDouble(TABLE_NAME_PREFIX_OWNER_LINK + ".buildingShare"));	
 				return Optional.of(ownership);
 			}
 			return Optional.empty();

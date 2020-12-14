@@ -69,11 +69,11 @@ public interface BuildingDao {
 	 
 	 boolean removeBuildingOwnerFromBuilding(BuildingOwner buildingOwner, Building building);
 
-	 boolean addOwnerToUnit(BuildingOwner buildingOwner, Unit unit);
+	 boolean addOwnerToUnit(BuildingOwner buildingOwner, Unit unit, double buildingShare);
 	 
 	 boolean removeOwnerFromUnit(BuildingOwner buildingOwner, Unit unit);
 
-	
+	 boolean updateOwnership( BuildingOwner buildingOwner, Unit unit, double buildingShare );
 	
 	
 

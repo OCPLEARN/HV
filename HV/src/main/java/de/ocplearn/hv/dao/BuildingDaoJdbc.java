@@ -46,6 +46,8 @@ public class BuildingDaoJdbc implements BuildingDao{
 			new ArrayList<String>()
 			);
 	
+	
+	
 	private DataSource dataSource;
 	
 	private AddressDao addressDao;
@@ -292,9 +294,9 @@ public class BuildingDaoJdbc implements BuildingDao{
 			//SELECT * FROM uol WHERE 
 			Set<Unit> units = building.getUnits();
 			for ( Unit unit : units ) {
-				Optional<Ownership> onwerInfo = this.unitDao.getOwnership(unit, owner);
-				if ( onwerInfo.isPresent() ) {
-					ownerships.add(onwerInfo.get());
+				Optional<Ownership> ownerInfo = this.unitDao.getOwnership(unit, owner);
+				if ( ownerInfo.isPresent() ) {
+					ownerships.add(ownerInfo.get());
 				}  
 			} 
 		}
@@ -375,14 +377,15 @@ public class BuildingDaoJdbc implements BuildingDao{
 
 	
 	@Override
-	public boolean addOwnerToUnit(BuildingOwner buildingOwner, Unit unit) {
+	public boolean addOwnerToUnit(BuildingOwner buildingOwner, Unit unit, double buildingShare) {
 
-		String sql = "INSERT INTO unitownerlink (unitId, buildingOwnerId) VALUE (?, ?);";
+		String sql = "INSERT INTO unitownerlink (unitId, buildingOwnerId, buildingShare) VALUE (?, ?, ?);";
 		try( Connection connection = dataSource.getConnection();
 				 PreparedStatement stmt = connection.prepareStatement(sql);
 		){
 			stmt.setInt(1, unit.getId());
 			stmt.setInt(2, buildingOwner.getId());
+			stmt.setDouble(3, buildingShare);
 			return stmt.executeUpdate() == 1 ? true : false; 			
 		}catch( SQLException e ) {
 			e.printStackTrace(); 
@@ -468,4 +471,43 @@ public class BuildingDaoJdbc implements BuildingDao{
 		}			
 	}
 
+
+	@Override
+	public boolean updateOwnership(BuildingOwner buildingOwner, Unit unit, double buildingShare) {
+		// UPDATE unitownerlink SET buildingshare=? WHERE buildingid=? AND unitid=?;
+
+		String sql = "UPDATE "  + UnitDaoJdbc.TABLE_NAME_OWNER_LINK + "SET buildingShare=? WHERE buildingId=? AND unitId=?;" ;
+
+		
+		try( Connection connection = dataSource.getConnection();
+				PreparedStatement stmt = connection.prepareStatement(sql);
+				){
+				
+			stmt.setDouble(1, buildingShare);
+			stmt.setInt(2, unit.getId());			// this must be a buildingUnit 
+			stmt.setInt(3, buildingOwner.getId());
+			
+			return true;
+			
+		}catch(SQLException e) {
+		    e.printStackTrace(); 
+		    logger.log(Level.WARNING, e.getMessage());
+		    throw new DataAccessException("Unable to get Data from DB.");
+
+		}
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -8,15 +8,15 @@ public class Ownership {
 	
 	private final BuildingOwner buildingOwner;
 	
-	private Double ownershipShare;
+	private Double buildingShare;
 	
 	// TODO business logik Test: ergeben die einzelnen BuildingOwner - shares pro building 100% ?
 
-	public Ownership(Unit unit, BuildingOwner buildingOwner, Double ownershipShare) {
+	public Ownership(Unit unit, BuildingOwner buildingOwner, Double buildingShare) {
 		super();
 		this.unit = unit;
 		this.buildingOwner = buildingOwner;
-		this.ownershipShare = ownershipShare;
+		this.buildingShare = buildingShare;
 	}
 
 	
@@ -40,10 +40,10 @@ public class Ownership {
 
 
 	/**
-	 * @return the ownershipShare
+	 * @return the buildingShare
 	 */
-	public Double getOwnershipShare() {
-		return ownershipShare;
+	public Double getBuildingShare() {
+		return buildingShare;
 	}
 	
 	
