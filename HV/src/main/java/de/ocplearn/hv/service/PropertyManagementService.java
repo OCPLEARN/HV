@@ -1,5 +1,6 @@
 package de.ocplearn.hv.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -136,25 +137,15 @@ public interface PropertyManagementService {
 	
 	// ASSIGN BUILDINGOWNERS TO BUILDING
 	
-	public boolean assignBuildingOwnerToBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto);
+//	public boolean assignBuildingOwnerToBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto);
+	
+//	public boolean assignBuildingOwnerToBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto, UnitDto unitDto);
 	
 	public boolean removeBuildingOwnerFromBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto);
 	
-	public boolean setOwnership( BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto, UnitDto unitDto, double buildingShare );
+	public boolean setOwnership( BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto, UnitDto unitDto, double buildingShare , LocalDate shareStart);
 	
-	public boolean removeOwnership( BuildingOwnerDto buildingOwnerDto, UnitDto unitDto );
 
-	
-	/**
-	 * when creating a new building - without existing owners in either units or building - this method can be used to assign all 
-	 * units of this building to the BuildingOwner given as Parameter in this method. If any owners are already assigned to either a unit 
-	 * or the building they will be deleted.
-	 * 
-	 * @param buildingOwnerDto
-	 * @param buildingDto
-	 * @return
-	 */
-	public boolean assignAllUnitsToOneOwner(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto);
 	
 	
 	// UNITS CRUD
@@ -167,12 +158,6 @@ public interface PropertyManagementService {
 	
 	public UnitDto findUnitById(int unitId);
 	
-	
-	//  ASSIGN BUILDINGOWNERS TO UNIT
-
-	public boolean assignUnitOwnerToUnit (BuildingOwnerDto buildingOwnerDto, UnitDto unitDto);
-	
-	public boolean removeUnitOwnerFromUnit (BuildingOwnerDto buildingOwnerDto, UnitDto unitDto);
 	
 	
 	//  ASSIGN RENTER TO UNIT

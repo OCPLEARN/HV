@@ -1,5 +1,6 @@
 package de.ocplearn.hv.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -287,30 +288,30 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	}
 
 
-	@Override
-	public boolean assignBuildingOwnerToBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
-		// TODO anpassen Ownership1
-		Unit unit = this.unitDao.getBuildingUnitFull(buildingDto.getId());
-		if(unit!=null) {
-			
-			UnitDto buildingUnit = unitMapper.unitToUnitDto(unit,new CycleAvoidingMappingContext());
-			if(buildingUnit.getUnitType()!=UnitType.BUILDING_UNIT) {
-				throw new IllegalStateException("not a BUILDING_UNIT id: " + buildingUnit.getId());
-			}
-			if(this.assignUnitOwnerToUnit(buildingOwnerDto, buildingUnit)) {
-				buildingOwnerDto.addBuilding(buildingDto);
-				buildingDto.addOwners(buildingOwnerDto);
-				return true;
-			}else {
-				return false;
-			}
-		}else {
-			System.out.println("assignBuildingOwnerToBuilding unit is null");
-			return false;
-			
-		}
-		
-	}
+//	@Override
+//	public boolean assignBuildingOwnerToBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
+//		// TODO anpassen Ownership1
+//		Unit unit = this.unitDao.getBuildingUnitFull(buildingDto.getId());
+//		if(unit!=null) {
+//			
+//			UnitDto buildingUnit = unitMapper.unitToUnitDto(unit,new CycleAvoidingMappingContext());
+//			if(buildingUnit.getUnitType()!=UnitType.BUILDING_UNIT) {
+//				throw new IllegalStateException("not a BUILDING_UNIT id: " + buildingUnit.getId());
+//			}
+//			if(this.assignUnitOwnerToUnit(buildingOwnerDto, buildingUnit)) {
+//				buildingOwnerDto.addBuilding(buildingDto);
+//				buildingDto.addOwners(buildingOwnerDto);
+//				return true;
+//			}else {
+//				return false;
+//			}
+//		}else {
+//			System.out.println("assignBuildingOwnerToBuilding unit is null");
+//			return false;
+//			
+//		}
+//		
+//	}
 
 
 	@Override
@@ -319,36 +320,36 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		return buildingDao.removeBuildingOwnerFromBuilding(buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto, new CycleAvoidingMappingContext()), buildingMapper.buildingDtoToBuilding(buildingDto, new CycleAvoidingMappingContext()));
 	}
 
-
-	@Override
-	public boolean assignAllUnitsToOneOwner(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
-		
-		//if any buildingOwners exist for this Building, remove all existing buildingOwners from this building
-		for(BuildingOwnerDto buildingOwnerDto2: buildingDto.getOwners()) {
-		if (! buildingDao.removeBuildingOwnerFromBuilding(buildingOwnerMapper.buildingOwnerDtoToBuildingOwner
-				(buildingOwnerDto2, new CycleAvoidingMappingContext()), 
-				buildingMapper.buildingDtoToBuilding(buildingDto, new CycleAvoidingMappingContext()))) {
-			return false;
-		}
-		
-		}
-		//if any UnitOwners exist for Units of this Building, remove all existing UnitOwners from these Units
-		for (UnitDto unitDto:buildingDto.getUnits()) {
-			if(! buildingDao.removeOwnerFromUnit(buildingOwnerMapper.buildingOwnerDtoToBuildingOwner
-					(buildingOwnerDto, new CycleAvoidingMappingContext()),
-					unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext()))){
-				return false;
-			}
-		}
-		//assign new BuildingOwner to the unit representing the Buildingownership
-		if (!assignBuildingOwnerToBuilding(buildingOwnerDto, buildingDto))return false;
-		
-		//assign new Buildingowner to all Units in this Building
-		for (UnitDto unitDto:buildingDto.getUnits()) {
-			if (!assignUnitOwnerToUnit(buildingOwnerDto, unitDto)) return false;
-		}
-		return true;
-	}
+//
+//	@Override
+//	public boolean assignAllUnitsToOneOwner(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
+//		
+//		//if any buildingOwners exist for this Building, remove all existing buildingOwners from this building
+//		for(BuildingOwnerDto buildingOwnerDto2: buildingDto.getOwners()) {
+//		if (! buildingDao.removeBuildingOwnerFromBuilding(buildingOwnerMapper.buildingOwnerDtoToBuildingOwner
+//				(buildingOwnerDto2, new CycleAvoidingMappingContext()), 
+//				buildingMapper.buildingDtoToBuilding(buildingDto, new CycleAvoidingMappingContext()))) {
+//			return false;
+//		}
+//		
+//		}
+//		//if any UnitOwners exist for Units of this Building, remove all existing UnitOwners from these Units
+//		for (UnitDto unitDto:buildingDto.getUnits()) {
+//			if(! buildingDao.removeOwnerFromUnit(buildingOwnerMapper.buildingOwnerDtoToBuildingOwner
+//					(buildingOwnerDto, new CycleAvoidingMappingContext()),
+//					unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext()))){
+//				return false;
+//			}
+//		}
+//		//assign new BuildingOwner to the unit representing the Buildingownership
+//		if (!assignBuildingOwnerToBuilding(buildingOwnerDto, buildingDto))return false;
+//		
+//		//assign new Buildingowner to all Units in this Building
+//		for (UnitDto unitDto:buildingDto.getUnits()) {
+//			if (!assignUnitOwnerToUnit(buildingOwnerDto, unitDto)) return false;
+//		}
+//		return true;
+//	}
 
 
 	@Override
@@ -383,27 +384,27 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	}
 
 
-	@Override
-	public boolean assignUnitOwnerToUnit(BuildingOwnerDto buildingOwnerDto, UnitDto unitDto) {
-		BuildingOwner buildingOwner = buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto, new CycleAvoidingMappingContext());
-		Unit unit = unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext());
-		if( buildingDao.addOwnerToUnit(buildingOwner,unit, 0.0)){ 	// buildingShare 0.0 will be replaced by method setOwnership() in PMService
-			return true;
-		}else {
-			return false;
-		}
-		//TODO: check if unitowner is already listed as buildingowner in the unit representing the building, if not, add it
-	}
-
-
-	@Override
-	public boolean removeUnitOwnerFromUnit(BuildingOwnerDto buildingOwnerDto, UnitDto unitDto) {
-		// TODO anpassen Ownership1
-		return this.buildingDao.removeOwnerFromUnit( 
-			this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto, new CycleAvoidingMappingContext()) ,
-			this.unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext())
-		);
-	}
+//	@Override
+//	public boolean assignUnitOwnerToUnit(BuildingOwnerDto buildingOwnerDto, UnitDto unitDto) {
+//		BuildingOwner buildingOwner = buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto, new CycleAvoidingMappingContext());
+//		Unit unit = unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext());
+//		if( buildingDao.addOwnerToUnit(buildingOwner,unit, 0.0)){ 	// buildingShare 0.0 will be replaced by method setOwnership() in PMService
+//			return true;
+//		}else {
+//			return false;
+//		}
+//		//TODO: check if unitowner is already listed as buildingowner in the unit representing the building, if not, add it
+//	}
+//
+//
+//	@Override
+//	public boolean removeUnitOwnerFromUnit(BuildingOwnerDto buildingOwnerDto, UnitDto unitDto) {
+//		// TODO anpassen Ownership1
+//		return this.buildingDao.removeOwnerFromUnit( 
+//			this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto, new CycleAvoidingMappingContext()) ,
+//			this.unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext())
+//		);
+//	}
 
 
 	@Override
@@ -530,21 +531,40 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean setOwnership(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto, UnitDto unitDto,
-			double buildingShare) {
+			double buildingShare, LocalDate shareStart) {
 		// TODO Auto-generated method stub
+		// 1. set LocalDate - test Date from DB , wenn gleich dann nur KorrekturEintrag
+		//										, neuer Eintrag => new shareStart
+		//
+		// 2. WEG Flag? 	wenn ja:	- check unit != unitDto Building (IllegalState)
+		//								- get Set<Unit>
+		//								- get List<Ownerships>
+		//								- set Owner.setOwnerships
+		//								-  check Ownerships == 100%
+		//								-  save with new Date		
 		
 		
+		
+		
+		// 					wenn nein: 	- check unitDto == unitDto-Building? (IllegalState)
+		// 								-  getList<Owner>
+		//								-  get List<Ownership>
+		//								-  set Owner.setOwnership
+		//								-  check Ownerships == 100%
+		//								-  save with new Date
 		
 		
 		return false;
 	}
+//
+//
+//	@Override
+//	public boolean assignBuildingOwnerToBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto,
+//			UnitDto unitDto) {
+//		// TODO Auto-generated method stub
+//		return false;
+//	}
 
-
-	@Override
-	public boolean removeOwnership(BuildingOwnerDto buildingOwnerDto, UnitDto unitDto) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 
 

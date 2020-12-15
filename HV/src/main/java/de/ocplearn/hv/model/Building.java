@@ -15,9 +15,9 @@ public class Building implements Comparable<Building>{
 	
 	private BuildingType buildingType;
 	
-	private List<BuildingOwner> owners;
+	private List<BuildingOwner> owners; // nur aktuelle Owner / wird bei setOwnership ein Owner auf 0% gesetzt, muss er aus owners gelöscht werden
 	
-	private List<Ownership> ownerships;
+	private List<Ownership> ownerships; // inkl. archivierter Einträge
 		
 	private boolean wegType;
 	
