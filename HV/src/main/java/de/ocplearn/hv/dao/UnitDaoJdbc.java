@@ -1,6 +1,7 @@
 package de.ocplearn.hv.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -50,7 +51,7 @@ public class UnitDaoJdbc implements UnitDao {
 	public static final String COLUMNS_OWNER_LINK = SQLUtils.createSQLString(
 			TABLE_NAME_PREFIX_OWNER_LINK, 
 			Arrays.asList(
-		"id", "timeStmpAdd", "timeStmpEdit", "unitId", "buildingOwnerId", "buildingShare"),
+		"id", "timeStmpAdd", "timeStmpEdit", "unitId", "buildingOwnerId", "buildingShare", "shareStart", "shareEnd"),
 			new ArrayList<String>()
 			);
 	
@@ -454,7 +455,16 @@ public class UnitDaoJdbc implements UnitDao {
 			ResultSet resultSet = stmt.executeQuery(sql);
 			
 			if ( resultSet.next() ) {
-				Ownership ownership = new Ownership(unit, buildingOwner, resultSet.getDouble(TABLE_NAME_PREFIX_OWNER_LINK + ".buildingShare"));	
+				java.sql.Date shareStart = resultSet.getDate( TABLE_NAME_PREFIX_OWNER_LINK + ".shareStart" );
+				java.sql.Date shareEnd = resultSet.getDate( TABLE_NAME_PREFIX_OWNER_LINK + ".shareEnd" );
+				
+				
+				Ownership ownership = new Ownership( unit, 
+													buildingOwner, 
+													resultSet.getDouble( TABLE_NAME_PREFIX_OWNER_LINK + ".buildingShare" ),
+													shareStart == null ? null : shareStart.toLocalDate(),
+													shareEnd == null ? null : shareEnd.toLocalDate()													
+													);	
 				return Optional.of(ownership);
 			}
 			return Optional.empty();
@@ -464,6 +474,13 @@ public class UnitDaoJdbc implements UnitDao {
 			logger.log( Level.WARNING, e.getMessage() );
 			throw new DataAccessException("Unable to read data from DB");
 		}		
+	}
+
+
+	@Override
+	public boolean saveOwnership(Ownership ownership) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
 

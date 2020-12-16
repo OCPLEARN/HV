@@ -31,6 +31,7 @@ import de.ocplearn.hv.mapper.RenterMapper;
 import de.ocplearn.hv.mapper.UnitMapper;
 import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.BuildingOwner;
+import de.ocplearn.hv.model.Ownership;
 import de.ocplearn.hv.model.PropertyManagement;
 import de.ocplearn.hv.model.Unit;
 import de.ocplearn.hv.model.UnitType;
@@ -530,13 +531,59 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 
 	@Override
-	public boolean setOwnership(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto, UnitDto unitDto,
-			double buildingShare, LocalDate shareStart) {
+	public boolean setOwnership( BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto, UnitDto unitDto,
+			double buildingShare, LocalDate shareStart ) {
 		// TODO Auto-generated method stub
-		// 1. set LocalDate - test Date from DB , wenn gleich dann nur KorrekturEintrag
+		
+		
+		
+		// 1. set LocalDate - test Date from DB , wenn gleich dann nur KorrekturEintrag (keine Änderung des shareEnd Datums)
 		//										, neuer Eintrag => new shareStart
-		//
+		Ownership currentOwnership = null;
+		
+		for( Ownership ownership : buildingDto.getOwnerships() ) {
+			if( ( ownership.getBuildingOwner().getId() == buildingOwnerDto.getId() ) && ( ownership.getShareEnd()  == null ) ) 			
+	
+				currentOwnership = ownership;
+										
+					if( ownership.getShareStart().isEqual(shareStart) ) {
+						
+						ownership.setBuildingShare(buildingShare);
+						ownership.setShareStart(shareStart);
+										
+						return unitDao.saveOwnership(ownership);
+				}
+		}
+		
+		currentOwnership.setShareEnd(shareStart.minusDays(1));
+		unitDao.saveOwnership( currentOwnership );
+		
+		
 		// 2. WEG Flag? 	wenn ja:	- check unit != unitDto Building (IllegalState)
+
+		if(buildingDto.isWegType() ) { 	
+			
+			if( unitDto.equals(UnitType.BUILDING_UNIT)) throw new IllegalStateException("Wrong unit type supplied"); 
+						
+		} else { 
+			
+			if( ! unitDto.equals(UnitType.BUILDING_UNIT)) throw new IllegalStateException("Wrong unit type supplied");
+		}
+			
+		
+		// Neue currentOwnership aus dem übergebenen ObjectDto
+		currentOwnership = new Ownership( this.unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext() ), 
+				  this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto, new CycleAvoidingMappingContext() ),
+				  buildingShare, shareStart, null);
+		
+	
+		unitDao.saveOwnership( currentOwnership );
+		
+		buildingDto.getOwnerships().add(currentOwnership); // aktualisierter Zustand für den Caller
+		
+		
+		
+		
 		//								- get Set<Unit>
 		//								- get List<Ownerships>
 		//								- set Owner.setOwnerships

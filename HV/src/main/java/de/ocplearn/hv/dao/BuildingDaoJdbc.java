@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -377,7 +378,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 
 	
 	@Override
-	public boolean addOwnerToUnit(BuildingOwner buildingOwner, Unit unit, double buildingShare) {
+	public boolean addOwnerToUnit(BuildingOwner buildingOwner, Unit unit, double buildingShare, LocalDate startShare) {
 
 		String sql = "INSERT INTO unitownerlink (unitId, buildingOwnerId, buildingShare) VALUE (?, ?, ?);";
 		try( Connection connection = dataSource.getConnection();
@@ -412,6 +413,9 @@ public class BuildingDaoJdbc implements BuildingDao{
 	
 	@Override
 	public boolean removeBuildingOwnerFromBuilding(BuildingOwner buildingOwner, Building building) {
+		
+		if(building.isWegType()) return false;
+		
 		int unitId = unitDao.getBuildingUnitFull(building.getId()).getId();
 		
 		String sql = "DELETE FROM " + UnitDaoJdbc.TABLE_NAME_OWNER_LINK + " WHERE " + 

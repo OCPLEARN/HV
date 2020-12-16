@@ -1,5 +1,6 @@
 package de.ocplearn.hv.dao;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,7 +70,7 @@ public interface BuildingDao {
 	 
 	 boolean removeBuildingOwnerFromBuilding(BuildingOwner buildingOwner, Building building);
 
-	 boolean addOwnerToUnit(BuildingOwner buildingOwner, Unit unit, double buildingShare);
+	 boolean addOwnerToUnit(BuildingOwner buildingOwner, Unit unit, double buildingShare, LocalDate startShare);
 	 
 	 boolean removeOwnerFromUnit(BuildingOwner buildingOwner, Unit unit);
 

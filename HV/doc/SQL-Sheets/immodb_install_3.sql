@@ -403,3 +403,6 @@ ALTER TABLE unitownerlink ADD COLUMN share DECIMAL(6,4);
 
 #20201214
 ALTER TABLE unitownerlink CHANGE share buildingShare DECIMAL(6,4);
+
+ALTER TABLE unitownerlink ADD COLUMN shareStart Date;
+ALTER TABLE unitownerlink ADD COLUMN shareEnd Date;

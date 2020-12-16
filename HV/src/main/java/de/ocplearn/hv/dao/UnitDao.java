@@ -85,4 +85,6 @@ public interface UnitDao {
 	 * */
 	Optional<Ownership> getOwnership( Unit unit, BuildingOwner buildingOwner );
 	
+	boolean saveOwnership( Ownership ownership );
+	
 }
