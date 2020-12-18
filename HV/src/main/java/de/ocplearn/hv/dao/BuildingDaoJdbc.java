@@ -273,6 +273,10 @@ public class BuildingDaoJdbc implements BuildingDao{
 //			// TODO setTransactions
 //			building.setTransactions(new HashSet<Transaction>());			
 			
+			// set ownership list for building)
+			//building.setOwnerships( );
+			building.getOwnerships().addAll( this.getOwnerships(building) );
+			
 			buildingList.add( building );		
 		}
 		
