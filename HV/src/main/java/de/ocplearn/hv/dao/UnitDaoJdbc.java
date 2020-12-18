@@ -131,12 +131,12 @@ public class UnitDaoJdbc implements UnitDao {
 	}
 
 
-	private Unit mapRowToUnit(ResultSet resultSet) throws SQLException{
+	public Unit mapRowToUnit(ResultSet resultSet) throws SQLException{
 		return mapRowToUnit(resultSet, new Unit());
 	}
 
 
-	private Unit mapRowToUnit(ResultSet resultSet, Unit unit) throws SQLException{
+	public Unit mapRowToUnit(ResultSet resultSet, Unit unit) throws SQLException{
 		unit.setId(resultSet.getInt( UnitDaoJdbc.TABLE_NAME_PREFIX + ".id"));
 		
 		Building building = new Building();

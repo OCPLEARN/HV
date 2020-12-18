@@ -106,19 +106,21 @@ public class UnitServiceTest {
 					unitsDto.forEach( unitDto -> {
 						if( unitDto.getUnitType() == UnitType.BUILDING_UNIT ) { 
 							
-						// new owner	
-						OwnershipDto ownership2 = new OwnershipDto(unitDto, buildingOwnerDto, 0.4, LocalDate.of(2021, 1, 1),null);
-						Assertions.assertTrue(this.propertyManagementService.setOwnership(ownership2, buildingDto));
-						// old
-						OwnershipDto ownership1 = buildingDto.getOwnerships().get(0);
-						ownership1.setBuildingShare(0.6);
-						ownership1.setShareStart(LocalDate.of(2021, 1, 1));
-						Assertions.assertTrue(this.propertyManagementService.setOwnership(ownership1, buildingDto));
+							// old
+							OwnershipDto ownership1 = buildingDto.getOwnerships().get(0);
+							ownership1.setBuildingShare(0.6);
+							ownership1.setShareStart(LocalDate.of(2021, 1, 1));
+							Assertions.assertTrue(this.propertyManagementService.setOwnership(ownership1, buildingDto));						
 							
-							
-//						Assertions.assertTrue( propertyManagementService.assignUnitOwnerToUnit( buildingOwnerDto, unitDto ) );
-//						System.out.println( "buildings of BuildingOwner: " + buildingOwnerDto.getBuildings() );
-//						Assertions.assertTrue( propertyManagementService.removeUnitOwnerFromUnit( buildingOwnerDto, unitDto ) );
+							// new owner	
+							OwnershipDto ownership2 = new OwnershipDto(unitDto, buildingOwnerDto, 0.4, LocalDate.of(2021, 1, 1),null);
+							Assertions.assertTrue(this.propertyManagementService.setOwnership(ownership2, buildingDto));
+	
+								
+								
+	//						Assertions.assertTrue( propertyManagementService.assignUnitOwnerToUnit( buildingOwnerDto, unitDto ) );
+	//						System.out.println( "buildings of BuildingOwner: " + buildingOwnerDto.getBuildings() );
+	//						Assertions.assertTrue( propertyManagementService.removeUnitOwnerFromUnit( buildingOwnerDto, unitDto ) );
 						}
 					});
 				}

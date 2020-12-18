@@ -60,8 +60,11 @@ public class BuildingDaoJdbc implements BuildingDao{
 	@Autowired
 	private AddressDaoJdbc addressDaoJdbc; 
 	
-	//@Autowired
-	//private UnitDaoJdbc unitDaoJdbc;
+	@Autowired
+	private BuildingOwnerDaoJdbc builingOwnerDaoJdbc; 	
+	
+	@Autowired
+	private UnitDaoJdbc unitDaoJdbc;
 	
 	private PropertyManagementDaoJdbc propertyManagementDaoJdbc;
 	
@@ -69,14 +72,18 @@ public class BuildingDaoJdbc implements BuildingDao{
 		
 	
 	
+	
 	@Autowired // DB einbinden über Autowire mit Qualifier Implementierung von AddressDao mit Qualifier spezifiziert
 	public BuildingDaoJdbc( @Qualifier ("datasource1") DataSource dataSource, 
 							@Qualifier("AddressDaoJdbc") AddressDao addressDao, 
+							@Qualifier("BuildingOwnerDaoJdbc") BuildingOwnerDaoJdbc builingOwnerDaoJdbc,
+							
 							PropertyManagementDaoJdbc propertyManagementDaoJdbc
 							) {
 		this.dataSource = dataSource;
 		this.addressDao = addressDao;
-		//this.unitDaoJdbc = unitDaoJdbc;
+		this.builingOwnerDaoJdbc = builingOwnerDaoJdbc;
+		this.unitDaoJdbc = unitDaoJdbc;
 		this.propertyManagementDaoJdbc = propertyManagementDaoJdbc;
 		//this.unitDao = unitDao;
 	}
@@ -296,18 +303,57 @@ public class BuildingDaoJdbc implements BuildingDao{
 		// return 
 		List<Ownership> ownerships = new ArrayList<>();
 
-		List<BuildingOwner> owners = building.getOwners();
+		// building has no owners!!
+		//List<BuildingOwner> owners = building.getOwners();		
 		
-		for ( BuildingOwner owner : owners ) {
-			//SELECT * FROM uol WHERE 
-			Set<Unit> units = building.getUnits();
-			for ( Unit unit : units ) {
-				Optional<Ownership> ownerInfo = this.unitDao.getOwnership(unit, owner);
-				if ( ownerInfo.isPresent() ) {
-					ownerships.add(ownerInfo.get());
-				}  
-			} 
-		}
+		// all units of building
+		//Set<Unit> units = this.unitDao.findUnitsByBuildingIdFull(building.getId());
+		
+		String sql_All_UOL_Entries = "SELECT "+UnitDaoJdbc.COLUMNS+","
+				+ " "+UnitDaoJdbc.COLUMNS_OWNER_LINK+","
+				+ " "+BuildingOwnerDaoJdbc.COLUMNS+" "
+				+ "FROM "+ UnitDaoJdbc.TABLE_NAME +" AS "+UnitDaoJdbc.TABLE_NAME_PREFIX+" "
+				+ "INNER JOIN "+UnitDaoJdbc.TABLE_NAME_OWNER_LINK+" AS "+UnitDaoJdbc.TABLE_NAME_PREFIX_OWNER_LINK+" "
+				+ "ON "+UnitDaoJdbc.TABLE_NAME_PREFIX+".id = "+UnitDaoJdbc.TABLE_NAME_PREFIX_OWNER_LINK+".unitId  "
+				+ "INNER JOIN "+BuildingOwnerDaoJdbc.TABLE_NAME+" AS "+BuildingOwnerDaoJdbc.TABLE_NAME_PREFIX+" "
+				+ "ON "+UnitDaoJdbc.TABLE_NAME_PREFIX_OWNER_LINK+".buildingOwnerId = "+BuildingOwnerDaoJdbc.TABLE_NAME_PREFIX+".id "
+				+ "WHERE "+UnitDaoJdbc.TABLE_NAME_PREFIX+".buildingId = ? ";
+		try( Connection conn = this.dataSource.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(sql_All_UOL_Entries)){
+			
+			stmt.setInt(1,building.getId());
+			
+			System.err.println("sql_All_UOL_Entries = " + sql_All_UOL_Entries);
+			
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				//owners.add(this.builingOwnerDaoJdbc.mapRowToBuildingOwner(rs));
+				Ownership os = new Ownership(this.unitDaoJdbc.mapRowToUnit(rs),
+						this.builingOwnerDaoJdbc.mapRowToBuildingOwner(rs),
+						rs.getDouble("uol.buildingShare"),
+						(rs.getDate("uol.shareStart")).toLocalDate(),
+						(rs.getDate("uol.shareEnd")).toLocalDate());
+				ownerships.add(os);
+			}
+			
+		}catch (SQLException e) {
+		    e.printStackTrace(); 
+		    logger.log(Level.WARNING, e.getMessage());
+		    throw new DataAccessException("Unable to get Data from DB.");            
+		 }
+		
+
+		
+//		for ( BuildingOwner owner : owners ) {
+//			//SELECT * FROM uol WHERE 
+//			Set<Unit> units = building.getUnits();
+//			for ( Unit unit : units ) {
+//				Optional<Ownership> ownerInfo = this.unitDao.getOwnership(unit, owner);
+//				if ( ownerInfo.isPresent() ) {
+//					ownerships.add(ownerInfo.get());
+//				}  
+//			} 
+//		}
 
 		return ownerships;
 	}
