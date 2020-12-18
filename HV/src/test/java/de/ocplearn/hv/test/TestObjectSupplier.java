@@ -1,5 +1,6 @@
 package de.ocplearn.hv.test;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -7,7 +8,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeSet;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,7 @@ import de.ocplearn.hv.dto.BuildingDto;
 import de.ocplearn.hv.dto.BuildingOwnerDto;
 import de.ocplearn.hv.dto.ContactDto;
 import de.ocplearn.hv.dto.LoginUserDto;
+import de.ocplearn.hv.dto.OwnershipDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.dto.TransactionDto;
 import de.ocplearn.hv.dto.UnitDto;
@@ -125,15 +126,19 @@ public class TestObjectSupplier {
 				this.propertyManagementService.createUnit(unitDto_BUILDING);
 				System.out.println("######### buiding unit id =   " + unitDto_BUILDING.getId() );
 				//System.out.println("bo1 : " + bo1);
-
+				
 				
 				// #4 BuildingOwner and assign 
 				BuildingOwnerDto sister1 = this.createBuildingOwnerDto( pmModel );
 				this.propertyManagementService.createBuildingOwner(sister1);	//sis 1 saved
-				this.propertyManagementService.assignBuildingOwnerToBuilding(sister1, buildingDto);
+				
+				OwnershipDto ownership1 = new OwnershipDto(unitDto_BUILDING, sister1, 0.5, LocalDate.of(1980, 4, 5), null  );
+				this.propertyManagementService.setOwnership(ownership1, buildingDto);
+				
 				BuildingOwnerDto sister2 = this.createBuildingOwnerDto( pmModel );
 				this.propertyManagementService.createBuildingOwner(sister2);	// sis2 saved
-				this.propertyManagementService.assignBuildingOwnerToBuilding(sister2, buildingDto);				
+				OwnershipDto ownership2 = new OwnershipDto(unitDto_BUILDING, sister2, 0.5, LocalDate.of(1980, 4, 5), null  );
+				this.propertyManagementService.setOwnership(ownership2, buildingDto);			
 				
 				// units
 				switch(v) {
@@ -158,7 +163,9 @@ public class TestObjectSupplier {
 						this.propertyManagementService.createUnit(unitDto_BUILDING3);
 						System.out.println("######### buiding unit id =   " + unitDto_BUILDING3.getId() );
 						//assign buildingowner to building
-						this.propertyManagementService.assignBuildingOwnerToBuilding(sister1, buildingDto3);
+						OwnershipDto ownership3 = new OwnershipDto(unitDto_BUILDING3, sister1, 1.0, LocalDate.of(1990, 1, 1), null  );
+						this.propertyManagementService.setOwnership(ownership3, buildingDto3);
+						
 						//units
 						String[] unitNames =  {"EG left", "EG right", "OG1 left", "OG1 right", "OG2 left", "OG2, right", "OG3 left", "OG3, right"};
 						for (String s: unitNames) {
@@ -197,8 +204,10 @@ public class TestObjectSupplier {
 						UnitDto unitDto_BUILDING2 = new UnitDto( buildingDto2, "BUILDING_UNIT building 2", addressDto, 50000.00, 1980, "warehouse 13", UnitType.BUILDING_UNIT );
 						this.propertyManagementService.createUnit(unitDto_BUILDING2);
 						System.out.println("######### buiding unit id =   " + unitDto_BUILDING2.getId() );
-						//assign buildingowner to building
-						this.propertyManagementService.assignBuildingOwnerToBuilding(sister2, buildingDto2);	
+						//assign buildingowner to building	
+						OwnershipDto ownership4 = new OwnershipDto(unitDto_BUILDING2, sister2, 1.0, LocalDate.of(2000, 1, 1), null  );
+						this.propertyManagementService.setOwnership(ownership4, buildingDto2);
+						
 						
 						
 						

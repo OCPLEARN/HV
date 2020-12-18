@@ -7,9 +7,9 @@ public class Ownership {
 	
 	private int id;
 	
-	private final Unit unit;
+	private Unit unit;
 	
-	private final BuildingOwner buildingOwner;
+	private BuildingOwner buildingOwner;
 	
 	private Double buildingShare;
 	
@@ -24,6 +24,11 @@ public class Ownership {
 
 	
 	public static List getAllOwnersWithShares() { return null; }
+
+	
+	public Ownership() {
+		super();
+	}
 
 
 	public Ownership(Unit unit, BuildingOwner buildingOwner, Double buildingShare, LocalDate shareStart,

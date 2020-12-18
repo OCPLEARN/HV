@@ -18,6 +18,7 @@ import de.ocplearn.hv.dto.BuildingDto;
 import de.ocplearn.hv.dto.BuildingOwnerDto;
 import de.ocplearn.hv.dto.ContactDto;
 import de.ocplearn.hv.dto.LoginUserDto;
+import de.ocplearn.hv.dto.OwnershipDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.dto.RenterDto;
 import de.ocplearn.hv.dto.UnitDto;
@@ -26,6 +27,7 @@ import de.ocplearn.hv.mapper.BuildingOwnerMapper;
 import de.ocplearn.hv.mapper.ContactMapper;
 import de.ocplearn.hv.mapper.CycleAvoidingMappingContext;
 import de.ocplearn.hv.mapper.LoginUserMapper;
+import de.ocplearn.hv.mapper.OwnershipMapper;
 import de.ocplearn.hv.mapper.PropertyManagementMapper;
 import de.ocplearn.hv.mapper.RenterMapper;
 import de.ocplearn.hv.mapper.UnitMapper;
@@ -51,6 +53,8 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	private ContactService contactService; 
 	
 	private ContactMapper contactMapper;
+	
+	private OwnershipMapper ownershipMapper;
 	
 	@Autowired
 	private BuildingDao buildingDao;
@@ -79,6 +83,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 											ContactMapper contactMapper,		
 											BuildingMapper buildingMapper,
 											BuildingOwnerMapper buildingOwnerMapper,
+											OwnershipMapper ownershipMapper,
 											BuildingOwnerDao buildingOwnerDao,
 											UnitMapper unitMapper,
 											RenterMapper renterMapper,
@@ -100,6 +105,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		this.unitMapper = unitMapper;
 		this.renterMapper = renterMapper;
 		this.renterDao = renterDao;
+		this.ownershipMapper = ownershipMapper;
 		}
 	
 	
@@ -318,6 +324,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	@Override
 	public boolean removeBuildingOwnerFromBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto) {
 		//TODO: check if owner still assigned to a unit, if so, delete that first
+		//TODO: need method to remove owner from units as well to be able to remove from WEG true/false
 		return buildingDao.removeBuildingOwnerFromBuilding(buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto, new CycleAvoidingMappingContext()), buildingMapper.buildingDtoToBuilding(buildingDto, new CycleAvoidingMappingContext()));
 	}
 
@@ -529,16 +536,21 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		return this.renterDao.save( this.renterMapper.RenterDtoToRenter(renterDto) );
 	}
 
-
+	@Override
+	public boolean setOwnership(OwnershipDto ownership, BuildingDto building) {
+		return this.setOwnership(ownership.getBuildingOwner(), building, ownership.getUnit(), 
+				ownership.getBuildingShare(), ownership.getShareStart());
+	}
+	
 	@Override
 	public boolean setOwnership( BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto, UnitDto unitDto,
 			double buildingShare, LocalDate shareStart ) {
 		
 		// 1. set LocalDate - test Date from DB , wenn gleich dann nur KorrekturEintrag (keine Änderung des shareEnd Datums)
 		//										, neuer Eintrag => new shareStart
-		Ownership currentOwnership = null;
+		OwnershipDto currentOwnership = null;
 		
-		for( Ownership ownership : buildingDto.getOwnerships() ) {
+		for( OwnershipDto ownership : buildingDto.getOwnerships() ) {
 			if( ( ownership.getBuildingOwner().getId() == buildingOwnerDto.getId() ) && ( ownership.getShareEnd()  == null ) ) {			
 				//	find active entry
 				currentOwnership = ownership;
@@ -548,7 +560,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 					ownership.setBuildingShare(buildingShare);
 					ownership.setShareStart(shareStart);
 					
-					return unitDao.saveOwnership(ownership);
+					return unitDao.saveOwnership(ownershipMapper.ownershipDtoToOwnership(ownership));
 				}
 				break;	// can only be 1 entry for this owner
 			}
@@ -556,8 +568,15 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		
 		// is change  ownership entry
 		// (1) change current entry
-		currentOwnership.setShareEnd(shareStart.minusDays(1));
-		unitDao.saveOwnership( currentOwnership );
+		
+		if(currentOwnership!=null) {
+			
+			currentOwnership.setShareEnd(shareStart.minusDays(1));
+			unitDao.saveOwnership( ownershipMapper.ownershipDtoToOwnership(currentOwnership) );
+		}
+		
+		
+	
 		
 		// 2. WEG Flag? 	wenn ja:	- check unit != unitDto Building (IllegalState)
 		// check of given unit
@@ -571,11 +590,9 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		}
 		
 		// (2: )Neue currentOwnership aus dem übergebenen ObjectDto
-		currentOwnership = new Ownership( this.unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext() ), 
-				  this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto, new CycleAvoidingMappingContext() ),
-				  buildingShare, shareStart, null);
+		currentOwnership = new OwnershipDto(unitDto, buildingOwnerDto, buildingShare, shareStart, null);
 	
-		unitDao.saveOwnership( currentOwnership );
+		unitDao.saveOwnership( ownershipMapper.ownershipDtoToOwnership(currentOwnership) );
 		
 		// (3) add new ownership to buildings  list of ownerships
 		buildingDto.getOwnerships().add(currentOwnership); // aktualisierter Zustand für den Caller

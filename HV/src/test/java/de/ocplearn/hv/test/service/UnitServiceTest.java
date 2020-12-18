@@ -2,6 +2,7 @@ package de.ocplearn.hv.test.service;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -11,8 +12,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.fasterxml.jackson.databind.ser.std.ClassSerializer;
+
 import de.ocplearn.hv.dto.BuildingDto;
 import de.ocplearn.hv.dto.BuildingOwnerDto;
+import de.ocplearn.hv.dto.OwnershipDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.dto.RenterDto;
 import de.ocplearn.hv.dto.UnitDto;
@@ -102,9 +106,18 @@ public class UnitServiceTest {
 					unitsDto.forEach( unitDto -> {
 						if( unitDto.getUnitType() == UnitType.BUILDING_UNIT ) { 
 							
-						Assertions.assertTrue( propertyManagementService.assignUnitOwnerToUnit( buildingOwnerDto, unitDto ) );
-						System.out.println( "buildings of BuildingOwner: " + buildingOwnerDto.getBuildings() );
-						Assertions.assertTrue( propertyManagementService.removeUnitOwnerFromUnit( buildingOwnerDto, unitDto ) );
+						OwnershipDto ownership2 = new OwnershipDto(unitDto, buildingOwnerDto, 0.4, LocalDate.of(2021, 1, 1),null);
+						Assertions.assertTrue(this.propertyManagementService.setOwnership(ownership2, buildingDto));
+						
+						OwnershipDto ownership1 = buildingDto.getOwnerships().get(0);
+						ownership1.setBuildingShare(0.6);
+						ownership1.setShareStart(LocalDate.of(2021, 1, 1));
+						Assertions.assertTrue(this.propertyManagementService.setOwnership(ownership1, buildingDto));
+							
+							
+//						Assertions.assertTrue( propertyManagementService.assignUnitOwnerToUnit( buildingOwnerDto, unitDto ) );
+//						System.out.println( "buildings of BuildingOwner: " + buildingOwnerDto.getBuildings() );
+//						Assertions.assertTrue( propertyManagementService.removeUnitOwnerFromUnit( buildingOwnerDto, unitDto ) );
 						}
 					});
 				}

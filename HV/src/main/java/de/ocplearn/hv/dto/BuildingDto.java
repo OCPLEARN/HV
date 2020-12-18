@@ -4,10 +4,8 @@ package de.ocplearn.hv.dto;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import de.ocplearn.hv.model.BuildingType;
-import de.ocplearn.hv.model.Ownership;
 
 public class BuildingDto implements Comparable<BuildingDto>{
 	
@@ -21,7 +19,7 @@ public class BuildingDto implements Comparable<BuildingDto>{
 	
 	private List<BuildingOwnerDto> owners;
 	
-	private List<Ownership> ownerships;
+	private List<OwnershipDto> ownerships;
 	
 	private boolean wegType;	
 	
@@ -39,7 +37,7 @@ public class BuildingDto implements Comparable<BuildingDto>{
 
 	public BuildingDto(String name, AddressDto address, BuildingType buildingType,
 			List<BuildingOwnerDto> owners, Set<UnitDto> units, Set<TransactionDto> transactions, PropertyManagementDto propertyManagement,
-			String note, boolean wegType,  List<Ownership> ownerships) {
+			String note, boolean wegType,  List<OwnershipDto> ownerships) {
 		super();
 		
 		this.name = name;
@@ -187,14 +185,14 @@ public class BuildingDto implements Comparable<BuildingDto>{
 	/**
 	 * @return the ownerships
 	 */
-	public List<Ownership> getOwnerships() {
+	public List<OwnershipDto> getOwnerships() {
 		return ownerships;
 	}
 
 	/**
 	 * @param ownerships the ownerships to set
 	 */
-	public void setOwnerships(List<Ownership> ownerships) {
+	public void setOwnerships(List<OwnershipDto> ownerships) {
 		this.ownerships = ownerships;
 	}
 

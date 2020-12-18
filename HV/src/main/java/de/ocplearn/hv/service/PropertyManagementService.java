@@ -8,6 +8,7 @@ import de.ocplearn.hv.dto.BuildingDto;
 import de.ocplearn.hv.dto.BuildingOwnerDto;
 import de.ocplearn.hv.dto.ContactDto;
 import de.ocplearn.hv.dto.LoginUserDto;
+import de.ocplearn.hv.dto.OwnershipDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.dto.RenterDto;
 import de.ocplearn.hv.dto.UnitDto;
@@ -145,6 +146,7 @@ public interface PropertyManagementService {
 	
 	public boolean setOwnership( BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto, UnitDto unitDto, double buildingShare , LocalDate shareStart);
 	
+	public boolean setOwnership(OwnershipDto ownership, BuildingDto building);
 
 	
 	
