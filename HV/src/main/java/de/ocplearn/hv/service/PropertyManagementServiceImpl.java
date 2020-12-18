@@ -555,14 +555,15 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 				//	find active entry
 				currentOwnership = ownership;
 				// is this just a fix or a real change
-				if( ownership.getShareStart().isEqual(shareStart) ) {
-					// is correction entry
-					currentOwnership.setBuildingShare(buildingShare);
-					currentOwnership.setShareStart(shareStart);
-					
-					return unitDao.saveOwnership(ownershipMapper.ownershipDtoToOwnership(currentOwnership, new CycleAvoidingMappingContext()));
-				}
-				break;	// can only be 1 entry for this owner
+				//if( ownership.getShareStart().isEqual(shareStart) ) {
+//				if( shareStart.isAfter(ownership.getShareStart()) ) {
+//					// is correction entry
+//					currentOwnership.setBuildingShare(buildingShare);
+//					currentOwnership.setShareStart(shareStart);
+//					
+//					return unitDao.saveOwnership(ownershipMapper.ownershipDtoToOwnership(currentOwnership, new CycleAvoidingMappingContext()));
+//				}
+				break ;	// can only be 1 entry for this owner
 			}
 		}
 		
@@ -570,13 +571,9 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		// (1) change current entry
 		
 		if(currentOwnership!=null) {
-			
 			currentOwnership.setShareEnd(shareStart.minusDays(1));
 			unitDao.saveOwnership( ownershipMapper.ownershipDtoToOwnership(currentOwnership, new CycleAvoidingMappingContext()) );
 		}
-		
-		
-	
 		
 		// 2. WEG Flag? 	wenn ja:	- check unit != unitDto Building (IllegalState)
 		// check of given unit
