@@ -610,7 +610,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		//								-  check Ownerships == 100%
 		//								-  save with new Date
 		
-		return false;
+		return true;
 	}
 //
 //
