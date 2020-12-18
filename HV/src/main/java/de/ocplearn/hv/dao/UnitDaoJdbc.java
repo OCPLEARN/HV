@@ -488,7 +488,7 @@ public class UnitDaoJdbc implements UnitDao {
 	}
 	private boolean insertOwnership(Ownership ownership) {                       
 		String sql = "INSERT INTO " + TABLE_NAME_OWNER_LINK 
-				+" (id, unidId, buildingOwnerId, buildingShare, shareStart, shareEnd)"
+				+" (id, unitId, buildingOwnerId, buildingShare, shareStart, shareEnd)"
 				+ " VALUES " 
 				+ "( null, ?,?,?,?,?);";
 		
