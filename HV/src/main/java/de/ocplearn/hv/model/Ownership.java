@@ -95,6 +95,20 @@ public class Ownership {
 		return id;
 	}
 
+	/**
+	 * @param unit the unit to set
+	 */
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
+
+	/**
+	 * @param buildingOwner the buildingOwner to set
+	 */
+	public void setBuildingOwner(BuildingOwner buildingOwner) {
+		this.buildingOwner = buildingOwner;
+	}
+
 
 	/**
 	 * @param id the id to set
@@ -102,13 +116,11 @@ public class Ownership {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
-	
 
-
-	
-	
-	
-	
+	@Override
+	public String toString() {
+		return "Ownership [id=" + id + ", unit=" + unit + ", buildingOwner=" + buildingOwner + ", buildingShare="
+				+ buildingShare + ", shareStart=" + shareStart + ", shareEnd=" + shareEnd + "]";
+	}
 
 }

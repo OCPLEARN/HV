@@ -1,5 +1,6 @@
 package de.ocplearn.hv.mapper;
 
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -13,9 +14,9 @@ public interface OwnershipMapper {
 	
 	OwnershipMapper INSTANCE = Mappers.getMapper(OwnershipMapper.class);
 	
-	OwnershipDto ownershipToOwnershipDto (Ownership ownership);
+	OwnershipDto ownershipToOwnershipDto (Ownership ownership, @Context CycleAvoidingMappingContext context);
 	
-	Ownership ownershipDtoToOwnership(OwnershipDto ownershipDto);
+	Ownership ownershipDtoToOwnership(OwnershipDto ownershipDto, @Context CycleAvoidingMappingContext context);
 	
 	
 

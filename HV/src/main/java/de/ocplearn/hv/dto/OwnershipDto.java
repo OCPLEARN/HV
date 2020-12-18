@@ -138,7 +138,11 @@ public class OwnershipDto {
 		return true;
 	}
 	
-	
-	
+
+	@Override
+	public String toString() {
+		return "OwnershipDto [id=" + id + ", unit=" + unit + ", buildingOwner=" + buildingOwner + ", buildingShare="
+				+ buildingShare + ", shareStart=" + shareStart + ", shareEnd=" + shareEnd + "]";
+	}	
 	
 }

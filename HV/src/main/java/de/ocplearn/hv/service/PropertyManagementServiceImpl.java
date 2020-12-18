@@ -557,10 +557,10 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 				// is this just a fix or a real change
 				if( ownership.getShareStart().isEqual(shareStart) ) {
 					// is correction entry
-					ownership.setBuildingShare(buildingShare);
-					ownership.setShareStart(shareStart);
+					currentOwnership.setBuildingShare(buildingShare);
+					currentOwnership.setShareStart(shareStart);
 					
-					return unitDao.saveOwnership(ownershipMapper.ownershipDtoToOwnership(ownership));
+					return unitDao.saveOwnership(ownershipMapper.ownershipDtoToOwnership(currentOwnership, new CycleAvoidingMappingContext()));
 				}
 				break;	// can only be 1 entry for this owner
 			}
@@ -572,7 +572,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		if(currentOwnership!=null) {
 			
 			currentOwnership.setShareEnd(shareStart.minusDays(1));
-			unitDao.saveOwnership( ownershipMapper.ownershipDtoToOwnership(currentOwnership) );
+			unitDao.saveOwnership( ownershipMapper.ownershipDtoToOwnership(currentOwnership, new CycleAvoidingMappingContext()) );
 		}
 		
 		
@@ -582,17 +582,17 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		// check of given unit
 		if(buildingDto.isWegType() ) { 	
 			// WEG set: unit must not be a building unit
-			if( unitDto.equals(UnitType.BUILDING_UNIT)) throw new IllegalStateException("Wrong unit type supplied"); 
+			if( (unitDto.getUnitType() ==UnitType.BUILDING_UNIT)) throw new IllegalStateException("Wrong unit type supplied"); 
 						
 		} else { 
 			// not WEG: unit must be building unit
-			if( ! unitDto.equals(UnitType.BUILDING_UNIT)) throw new IllegalStateException("Wrong unit type supplied");
+			if( ! (unitDto.getUnitType() == UnitType.BUILDING_UNIT)) throw new IllegalStateException("Wrong unit type supplied");
 		}
 		
 		// (2: )Neue currentOwnership aus dem übergebenen ObjectDto
 		currentOwnership = new OwnershipDto(unitDto, buildingOwnerDto, buildingShare, shareStart, null);
 	
-		unitDao.saveOwnership( ownershipMapper.ownershipDtoToOwnership(currentOwnership) );
+		unitDao.saveOwnership( ownershipMapper.ownershipDtoToOwnership(currentOwnership, new CycleAvoidingMappingContext()) );
 		
 		// (3) add new ownership to buildings  list of ownerships
 		buildingDto.getOwnerships().add(currentOwnership); // aktualisierter Zustand für den Caller
