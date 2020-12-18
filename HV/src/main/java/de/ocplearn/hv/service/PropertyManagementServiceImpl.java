@@ -533,56 +533,52 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	@Override
 	public boolean setOwnership( BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto, UnitDto unitDto,
 			double buildingShare, LocalDate shareStart ) {
-		// TODO Auto-generated method stub
-		
-		
 		
 		// 1. set LocalDate - test Date from DB , wenn gleich dann nur KorrekturEintrag (keine Änderung des shareEnd Datums)
 		//										, neuer Eintrag => new shareStart
 		Ownership currentOwnership = null;
 		
 		for( Ownership ownership : buildingDto.getOwnerships() ) {
-			if( ( ownership.getBuildingOwner().getId() == buildingOwnerDto.getId() ) && ( ownership.getShareEnd()  == null ) ) 			
-	
+			if( ( ownership.getBuildingOwner().getId() == buildingOwnerDto.getId() ) && ( ownership.getShareEnd()  == null ) ) {			
+				//	find active entry
 				currentOwnership = ownership;
-										
-					if( ownership.getShareStart().isEqual(shareStart) ) {
-						
-						ownership.setBuildingShare(buildingShare);
-						ownership.setShareStart(shareStart);
-										
-						return unitDao.saveOwnership(ownership);
+				// is this just a fix or a real change
+				if( ownership.getShareStart().isEqual(shareStart) ) {
+					// is correction entry
+					ownership.setBuildingShare(buildingShare);
+					ownership.setShareStart(shareStart);
+					
+					return unitDao.saveOwnership(ownership);
 				}
+				break;	// can only be 1 entry for this owner
+			}
 		}
 		
+		// is change  ownership entry
+		// (1) change current entry
 		currentOwnership.setShareEnd(shareStart.minusDays(1));
 		unitDao.saveOwnership( currentOwnership );
 		
-		
 		// 2. WEG Flag? 	wenn ja:	- check unit != unitDto Building (IllegalState)
-
+		// check of given unit
 		if(buildingDto.isWegType() ) { 	
-			
+			// WEG set: unit must not be a building unit
 			if( unitDto.equals(UnitType.BUILDING_UNIT)) throw new IllegalStateException("Wrong unit type supplied"); 
 						
 		} else { 
-			
+			// not WEG: unit must be building unit
 			if( ! unitDto.equals(UnitType.BUILDING_UNIT)) throw new IllegalStateException("Wrong unit type supplied");
 		}
-			
 		
-		// Neue currentOwnership aus dem übergebenen ObjectDto
+		// (2: )Neue currentOwnership aus dem übergebenen ObjectDto
 		currentOwnership = new Ownership( this.unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext() ), 
 				  this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto, new CycleAvoidingMappingContext() ),
 				  buildingShare, shareStart, null);
-		
 	
 		unitDao.saveOwnership( currentOwnership );
 		
+		// (3) add new ownership to buildings  list of ownerships
 		buildingDto.getOwnerships().add(currentOwnership); // aktualisierter Zustand für den Caller
-		
-		
-		
 		
 		//								- get Set<Unit>
 		//								- get List<Ownerships>
@@ -590,16 +586,12 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		//								-  check Ownerships == 100%
 		//								-  save with new Date		
 		
-		
-		
-		
 		// 					wenn nein: 	- check unitDto == unitDto-Building? (IllegalState)
 		// 								-  getList<Owner>
 		//								-  get List<Ownership>
 		//								-  set Owner.setOwnership
 		//								-  check Ownerships == 100%
 		//								-  save with new Date
-		
 		
 		return false;
 	}

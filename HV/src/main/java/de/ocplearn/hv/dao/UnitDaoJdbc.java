@@ -482,11 +482,11 @@ public class UnitDaoJdbc implements UnitDao {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	private boolean insertOwnership(Ownership ownership) {
+		return false;	
+	}
+	
 }
-
-
-
-
 
 //
 //public static final String TABLE_NAME = "unit";
@@ -513,12 +513,3 @@ public class UnitDaoJdbc implements UnitDao {
 //
 //
 //
-
-
-
-
-
-
-
-
-
