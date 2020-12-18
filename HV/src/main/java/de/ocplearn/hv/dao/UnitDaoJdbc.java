@@ -479,11 +479,73 @@ public class UnitDaoJdbc implements UnitDao {
 
 	@Override
 	public boolean saveOwnership(Ownership ownership) {
-		// TODO Auto-generated method stub
-		return false;
+		if (ownership.getId()!=0) {
+			return updateOwnership(ownership);
+		}else {
+			return insertOwnership(ownership);
+		}
+		
 	}
-	private boolean insertOwnership(Ownership ownership) {
-		return false;	
+	private boolean insertOwnership(Ownership ownership) {                       
+		String sql = "INSERT INTO " + TABLE_NAME_OWNER_LINK 
+				+" (id, unidId, buildingOwnerId, buildingShare, shareStart, shareEnd)"
+				+ " VALUES " 
+				+ "( null, ?,?,?,?,?);";
+		
+		try ( Connection connection = this.dataSource.getConnection(); 
+			  PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); ){
+			
+			stmt.setInt(1, ownership.getUnit().getId());
+			stmt.setInt(2, ownership.getBuildingOwner().getId());
+			stmt.setDouble(3, ownership.getBuildingShare());
+			stmt.setDate(4, Date.valueOf(ownership.getShareStart()));
+			stmt.setDate(5, Date.valueOf(ownership.getShareEnd()));
+			
+			
+		
+			if (stmt.executeUpdate() != 1) return false;
+			else {
+				ResultSet resultSet = stmt.getGeneratedKeys();	
+				resultSet.next();
+				ownership.setId(resultSet.getInt(1));
+				
+				return true;
+			}
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.log(Level.WARNING, e.getMessage());
+			throw new DataAccessException("Unable to get Data from DB. " + e.getMessage());		
+        }
+		
+	}
+	
+	private boolean updateOwnership (Ownership ownership) {
+		
+		String sql = "UPDATE " + TABLE_NAME_OWNER_LINK + " SET unidId=?, buildingOwnerId=?, buildingShare=?, "
+					+ "	shareStart=?, shareEnd=?;";
+		
+		try ( Connection connection = this.dataSource.getConnection(); 
+				  PreparedStatement stmt = connection.prepareStatement(sql); ){
+			
+			stmt.setInt(1, ownership.getUnit().getId());
+			stmt.setInt(2, ownership.getBuildingOwner().getId());
+			stmt.setDouble(3, ownership.getBuildingShare());
+			stmt.setDate(4, Date.valueOf(ownership.getShareStart()));
+			stmt.setDate(5, Date.valueOf(ownership.getShareEnd()));
+			
+			if (stmt.executeUpdate() != 1) {
+				return false;
+			}else {
+				return true;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.log(Level.WARNING, e.getMessage());
+			throw new DataAccessException("Unable to get Data from DB. " + e.getMessage());		
+        }
+		
 	}
 	
 }

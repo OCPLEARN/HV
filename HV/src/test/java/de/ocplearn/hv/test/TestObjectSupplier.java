@@ -316,6 +316,7 @@ public class TestObjectSupplier {
 		buildingDto.setPropertyManagement( propertyManagementDto );
 		buildingDto.setNote("Do not enter");
 		buildingDto.setBuildingType(BuildingType.APARTMENT_BUILDING);
+		buildingDto.setWegType(false);
 		return buildingDto;		
 	}
 	

@@ -43,7 +43,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 			TABLE_NAME_PREFIX, 
 			Arrays.asList(
 		"id", "timeStmpAdd", "timeStmpEdit", "propertyManagementId", "buildingName",
-		"addressId", "buildingType", "note"	),
+		"addressId", "buildingType", "note", "WEG_FLAG"	),
 			new ArrayList<String>()
 			);
 	
@@ -94,7 +94,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 
 
 	private boolean insert(Building building) {
-		String sql = "INSERT INTO building (propertyManagementId, buildingName, addressId, buildingType, note) values (?,?,?,?,?);"; 
+		String sql = "INSERT INTO building (propertyManagementId, buildingName, addressId, buildingType, note, WEG_FLAG) values (?,?,?,?,?,?);"; 
 
 		try ( Connection connection = this.dataSource.getConnection(); 
 				  PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); ){
@@ -104,6 +104,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 			stmt.setInt(3, building.getAddress().getId());
 			stmt.setString(4, building.getBuildingType().toString());
 			stmt.setString(5, building.getNote());
+			stmt.setBoolean(6, building.isWegType());
 			
 
 			if (stmt.executeUpdate() !=1) {
@@ -125,7 +126,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 	
 	
 	private boolean update(Building building) {
-		String sql = "UPDATE building SET propertyManagementId=?, buildingName=?, addressId=?, buildingType=?, note=? WHERE id =?;"; 
+		String sql = "UPDATE building SET propertyManagementId=?, buildingName=?, addressId=?, buildingType=?, note=?, WEG_FLAG=? WHERE id =?;"; 
 		
 		  try(Connection con = this.dataSource.getConnection();
 					PreparedStatement stmt = con.prepareStatement(sql);) {
@@ -135,6 +136,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 				stmt.setString(4, building.getBuildingType().toString());
 				stmt.setString(5, building.getNote());
 				stmt.setInt(6, building.getId());
+				stmt.setBoolean(7, building.isWegType());
 				
 				 int rowsAffected = stmt.executeUpdate();
 	                
@@ -235,7 +237,8 @@ public class BuildingDaoJdbc implements BuildingDao{
 		building.setTransactions(new HashSet<Transaction>());
 		
 		building.setNote( resultSet.getString( BuildingDaoJdbc.TABLE_NAME_PREFIX + ".note" ) );
-	
+		
+		building.setWegType(resultSet.getBoolean(BuildingDaoJdbc.TABLE_NAME_PREFIX + ".WEG_FLAG"));
 		// List of Ownership
 		building.setOwnerships( new ArrayList<Ownership>());		
 		
