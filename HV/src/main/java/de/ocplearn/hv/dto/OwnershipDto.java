@@ -141,8 +141,8 @@ public class OwnershipDto {
 
 	@Override
 	public String toString() {
-		return "OwnershipDto [id=" + id + ", unit=" + unit + ", buildingOwner=" + buildingOwner + ", buildingShare="
+		return "Ownership [id=" + id + ", unit=" + unit.getId() + ", buildingOwner=" + buildingOwner.getId() + ", buildingShare="
 				+ buildingShare + ", shareStart=" + shareStart + ", shareEnd=" + shareEnd + "]";
-	}	
+	}
 	
 }

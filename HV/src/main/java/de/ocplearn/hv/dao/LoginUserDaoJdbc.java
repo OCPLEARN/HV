@@ -149,7 +149,7 @@ public class LoginUserDaoJdbc implements LoginUserDao {
 	        		PreparedStatement stmt = con.prepareStatement( "DELETE FROM loginUser WHERE loginUserName = ?;" );) {
 	                
 	                stmt.setString(1, loginUserName  );
-	                System.out.println("loginUserName" + loginUserName);
+	                //System.out.println("loginUserName" + loginUserName);
 	            return (stmt.executeUpdate()==1)?true:false;
 	               
 	                
@@ -283,7 +283,7 @@ public class LoginUserDaoJdbc implements LoginUserDao {
                     hash = rs.getBytes("passwHash");
                     salt = rs.getBytes("salt");
                 }else{
-                    System.out.println("user not found!");
+                    //System.out.println("user not found!");
                     return false;
                 }
 

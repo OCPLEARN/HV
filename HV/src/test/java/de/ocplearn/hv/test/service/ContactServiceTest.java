@@ -84,7 +84,7 @@ public class ContactServiceTest {
 		propertyManagementDto.setPrimaryContact(testContact);
 		//System.out.println("testContact.getId() " + testContact.getId());
 		propertyManagementDto.setCompanyContact(testContact);
-		System.out.println("propertyManagementDto.getCompanyContact().getId() :" + propertyManagementDto.getCompanyContact().getId());
+		//System.out.println("propertyManagementDto.getCompanyContact().getId() :" + propertyManagementDto.getCompanyContact().getId());
 
 		Assertions.assertTrue(propertyManagementService.createPropertyManagement(propertyManagementDto));
 			
@@ -163,8 +163,8 @@ public class ContactServiceTest {
 		tablePageViewData.setOrderByDirection("ASC");
 		tablePageViewData.setRowCount(10);
 		List <ContactDto> contactList = contactService.getAllContacts(tablePageViewData);
-		System.out.println(contactList);
-		System.out.println("HOW MANY: "+contactList.size());
+		//System.out.println(contactList);
+		//System.out.println("HOW MANY: "+contactList.size());
 		Assertions.assertTrue(contactList!= null);
 		
 	}

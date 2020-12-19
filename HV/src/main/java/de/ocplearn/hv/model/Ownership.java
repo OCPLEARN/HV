@@ -119,7 +119,7 @@ public class Ownership {
 
 	@Override
 	public String toString() {
-		return "Ownership [id=" + id + ", unit=" + unit + ", buildingOwner=" + buildingOwner + ", buildingShare="
+		return "Ownership [id=" + id + ", unit=" + unit.getId() + ", buildingOwner=" + buildingOwner.getId() + ", buildingShare="
 				+ buildingShare + ", shareStart=" + shareStart + ", shareEnd=" + shareEnd + "]";
 	}
 

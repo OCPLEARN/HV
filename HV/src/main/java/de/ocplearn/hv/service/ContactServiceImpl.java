@@ -176,9 +176,9 @@ public class ContactServiceImpl implements ContactService{
 		
 		for(AddressDto addressDto : contactDto.getAddresses()) {
 			if( ! contactDao.deleteAddressFromContact(addressDto.getId()) )  return false;			// deletes address id from link table
-			System.out.println("Verknüpfung gelöscht");
+			//System.out.println("Verknüpfung gelöscht");
 			if( ! addressDao.delete(addressMapper.addressDtoToAddress(addressDto)) ) return false;	// deletes address from address table
-			System.out.println("Adresse gelöscht");
+			//System.out.println("Adresse gelöscht");
 
 		}
 		if( ! contactDao.deleteContactById(contactMapper.contactDtoToContact(contactDto).getId())) return false;

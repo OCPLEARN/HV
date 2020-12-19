@@ -68,8 +68,7 @@ public class UnitServiceTest {
 				
 				Assertions.assertTrue(propertyManagementService.createUnit(unitDto));		
 				Assertions.assertTrue(propertyManagementService.deleteUnit(unitDto));
-				
-				
+
 			}	
 		}
 	}
@@ -124,7 +123,6 @@ public class UnitServiceTest {
 		OwnershipDto ownership1 = new OwnershipDto(buildingUnitDto,oldBuildingOwnerDto, 0.6,LocalDate.of(2021, 1, 1),null);
 		//ownership1.setBuildingShare(0.6);
 		//ownership1.setShareStart(LocalDate.of(2021, 1, 1));
-		
 		Assertions.assertTrue(this.propertyManagementService.setOwnership(ownership1, hallBuilding));						
 		
 		// new owner	

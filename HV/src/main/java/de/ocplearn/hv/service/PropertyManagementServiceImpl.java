@@ -118,11 +118,11 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		
 		
 		PropertyManagement propertyManagement = propertyManagementMapper.propertyManagementDtoToPropertyManagement(propertyManagementDto);
-		System.out.println("CREATE: "+propertyManagement);
+		//System.out.println("CREATE: "+propertyManagement);
 		if(	propertyManagementDao.save(propertyManagement)) {
-			System.out.println("======");
-			System.out.println(propertyManagement.getPrimaryLoginUser().getId());
-			System.out.println(propertyManagement.getPrimaryLoginUser());
+			//System.out.println("======");
+			//System.out.println(propertyManagement.getPrimaryLoginUser().getId());
+			//System.out.println(propertyManagement.getPrimaryLoginUser());
 		propertyManagementDto.setId(propertyManagement.getId());
 		return true;
 	}else
@@ -183,11 +183,11 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 			
 			List <LoginUserDto> loginuserDtos = new ArrayList<LoginUserDto>();
 			List <Integer> userIds = getLoginUserIdsFromPropertyManagement(propertyManagementDto);
-			System.out.println("userIds SERVICEIMPL" + userIds);
+			//System.out.println("userIds SERVICEIMPL" + userIds);
 			for (int i:userIds) {
 				loginuserDtos.add(userService.findUserById(i));
 			}
-			System.out.println("findPropertyManagementbyId SERVICEIMPL" + loginuserDtos);
+			//System.out.println("findPropertyManagementbyId SERVICEIMPL" + loginuserDtos);
 			propertyManagementDto.setLoginUsers(loginuserDtos);
 			return propertyManagementDto;
 		}else {

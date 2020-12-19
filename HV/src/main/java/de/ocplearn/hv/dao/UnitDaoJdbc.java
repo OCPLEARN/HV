@@ -173,7 +173,7 @@ public class UnitDaoJdbc implements UnitDao {
 				+ "values (?,?,?,?,?,?,?);";
 		try ( Connection connection = this.dataSource.getConnection(); 
 				  PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); ){
-			System.out.println("private boolean insert(Unit unit)" + unit);
+			//System.out.println("private boolean insert(Unit unit)" + unit);
 			stmt.setInt(1, unit.getBuilding().getId());
 			stmt.setString(2, unit.getUnitName());
 			stmt.setInt(3, unit.getAddress().getId());
@@ -526,7 +526,7 @@ public class UnitDaoJdbc implements UnitDao {
 //		String sql = "UPDATE " + TABLE_NAME_OWNER_LINK + " SET unidId=?, buildingOwnerId=?, buildingShare=?, "
 //					+ "	shareStart=?, shareEnd=?;";
 
-		String sql = "UPDATE " + TABLE_NAME_OWNER_LINK + " SET unidId=?, buildingOwnerId=?, buildingShare=?, "
+		String sql = "UPDATE " + TABLE_NAME_OWNER_LINK + " SET unitId=?, buildingOwnerId=?, buildingShare=?, "
 		+ "	shareStart=?, shareEnd=? WHERE id = ?;";		
 		
 		try ( Connection connection = this.dataSource.getConnection(); 

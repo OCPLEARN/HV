@@ -100,11 +100,17 @@ public class TestObjectSupplier {
 		//logger2.info("Ich pribier mal aus"); // Test SLF4J logger
 		
 		PM_MODELS.forEach( (k, v) -> {
+			System.err.println("----------K="+k+" V="+v+"----------");
 			// k = model name
 			// v = userModel1 loginUserName 
 			LoginUserDto loginUserDto = this.userService.findUserByLoginUserName(v);
 
 			if (loginUserDto == null) {
+				
+				/* -------------------------------------------------------------
+				 * House Modelx Apartment 4 Units
+				 * -------------------------------------------------------------
+				 */
 				
 				// #1 loginUser
 				loginUserDto = this.createLoginUserDto(Role.PROPERTY_MANAGER, v);
@@ -124,25 +130,29 @@ public class TestObjectSupplier {
 				//System.out.println("######### buiding unit id =   " + unitDto_BUILDING.getId() );
 				//System.out.println("bo1 : " + bo1);
 				
-				
 				// #4 BuildingOwner and assign 
 				BuildingOwnerDto sister1 = this.createBuildingOwnerDto( pmModel );
 				this.propertyManagementService.createBuildingOwner(sister1);	//sis 1 saved
 				
 				OwnershipDto ownership1 = new OwnershipDto(unitDto_BUILDING, sister1, 0.5, LocalDate.of(1980, 4, 5), null  );
-				buildingDto.getOwnerships().add(ownership1);
+				//buildingDto.getOwnerships().add(ownership1);
 				this.propertyManagementService.setOwnership(ownership1, buildingDto);
 				
 				BuildingOwnerDto sister2 = this.createBuildingOwnerDto( pmModel );
 				this.propertyManagementService.createBuildingOwner(sister2);	// sis2 saved
 				OwnershipDto ownership2 = new OwnershipDto(unitDto_BUILDING, sister2, 0.5, LocalDate.of(1980, 4, 5), null  );
-				buildingDto.getOwnerships().add(ownership2);
+				//buildingDto.getOwnerships().add(ownership2);
 				this.propertyManagementService.setOwnership(ownership2, buildingDto);			
 				
 				// units
 				switch(v) {
 					case "userModel3" : {
 						// L
+						/* -------------------------------------------------------------
+						 * House 3 Modelx Apartment -Skyscraper 12-
+						 * -------------------------------------------------------------
+						 */						
+						
 						BuildingDto buildingDto3 = this.createBuildingDto( pmModel );
 						buildingDto3.setName("House 3 " + k);
 						AddressDto addressDto = new AddressDto(partsBox.streetSupplier.get(), 
@@ -157,14 +167,15 @@ public class TestObjectSupplier {
 								AddressType.BUILDING_ADDRESS);
 						buildingDto3.setAddress(addressDto);;
 						this.propertyManagementService.createBuilding(buildingDto3);	// building saved
+						
 						//  BUILDING unit for building 3
 						UnitDto unitDto_BUILDING3 = new UnitDto( buildingDto3, "BUILDING_UNIT building 2", addressDto, 45000.00, 2000, "Skyscraper 12", UnitType.BUILDING_UNIT );
 						this.propertyManagementService.createUnit(unitDto_BUILDING3);
-						System.out.println("######### buiding unit id =   " + unitDto_BUILDING3.getId() );
+						//System.out.println("######### buiding unit id =   " + unitDto_BUILDING3.getId() );
 						//assign buildingowner to building
 						OwnershipDto ownership3 = new OwnershipDto(unitDto_BUILDING3, sister1, 1.0, LocalDate.of(1990, 1, 1), null  );
-						buildingDto3.getOwnerships().add(ownership3);
-						this.propertyManagementService.setOwnership(ownership3, buildingDto3);
+						//buildingDto3.getOwnerships().add(ownership3);
+						this.propertyManagementService.setOwnership(ownership3, buildingDto3); 
 						
 						//units
 						String[] unitNames =  {"EG left", "EG right", "OG1 left", "OG1 right", "OG2 left", "OG2, right", "OG3 left", "OG3, right"};
@@ -172,7 +183,7 @@ public class TestObjectSupplier {
 							UnitDto unitDto_unit = new UnitDto( buildingDto3, s, addressDto, 80.25, 1977, "note", UnitType.APARTMENT_UNIT );
 							this.propertyManagementService.createUnit(unitDto_unit);
 							
-						}
+						 }
 						UnitDto unitDto_unit = new UnitDto( buildingDto3, "garage", addressDto, 175.00, 1985, "parking", UnitType.PARKING_UNIT );
 						this.propertyManagementService.createUnit(unitDto_unit);
 						
@@ -180,7 +191,10 @@ public class TestObjectSupplier {
 					}
 					case "userModel2" :{ 
 						// M				
-						
+						/* -------------------------------------------------------------
+						 * House 2 Modelx HALL -Warehouse-
+						 * -------------------------------------------------------------
+						 */							
 						BuildingDto buildingDto2 = this.createBuildingDto( pmModel );
 						buildingDto2.setName("House 2 " + k);
 						buildingDto2.setBuildingType(BuildingType.HALL);
@@ -202,7 +216,7 @@ public class TestObjectSupplier {
 						//System.out.println("######### buiding unit id =   " + unitDto_BUILDING2.getId() );
 						//assign buildingowner to building	
 						OwnershipDto ownership4 = new OwnershipDto(unitDto_BUILDING2, sister2, 1.0, LocalDate.of(2000, 1, 1), null  );
-						buildingDto2.getOwnerships().add(ownership4);
+						//buildingDto2.getOwnerships().add(ownership4);
 						this.propertyManagementService.setOwnership(ownership4, buildingDto2);
 						
 					}

@@ -199,7 +199,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 			) {
 				stmt.setInt(1, id );
 				
-				System.out.println("BuidlingDao - findByIdPartial()  sql = \n" + stmt.toString());
+				//System.out.println("BuidlingDao - findByIdPartial()  sql = \n" + stmt.toString());
 				
 				ResultSet resultSet = stmt.executeQuery();
 				
@@ -337,7 +337,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 						rs.getDouble(""+UnitDaoJdbc.TABLE_NAME_PREFIX_OWNER_LINK+".buildingShare"),
 						(rs.getDate(""+UnitDaoJdbc.TABLE_NAME_PREFIX_OWNER_LINK+".shareStart")).toLocalDate(),
 						ld != null ? ld : null);
-				os.setId(rs.getInt( ""+UnitDaoJdbc.TABLE_NAME_OWNER_LINK+".id" ));
+				os.setId(rs.getInt( ""+UnitDaoJdbc.TABLE_NAME_PREFIX_OWNER_LINK+".id" ));
 				ownerships.add(os);
 			}
 			

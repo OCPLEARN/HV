@@ -193,7 +193,7 @@ public class BuildingOwnerDaoJdbc implements BuildingOwnerDao {
 						+ "ON "+TABLE_NAME_PREFIX+".loginUserId = "+LoginUserDaoJdbc.TABLE_NAME_PREFIX+".id "
 				+ "WHERE bo.id = ?;";
 		
-		System.out.println("sql = " + sql);
+		//System.out.println("sql = " + sql);
 		
 		try(
 				Connection con = this.datasource.getConnection();

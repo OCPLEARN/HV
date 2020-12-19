@@ -75,7 +75,7 @@ public class UserServiceTest {
 	 */
 	@Test
 	public void testCreateUser() {
-		System.out.println("testing UserService insert ...");
+		//System.out.println("testing UserService insert ...");
 
 		LoginUserDto adminUser = getLoginUser();
 
@@ -94,7 +94,7 @@ public class UserServiceTest {
 	 */
 	@Test
 	public void testUpdateUser() {
-		System.out.println("testing UserService update ...");
+		//System.out.println("testing UserService update ...");
 
 		// Given
 		// LoginUser u = us.findUserById(1);
