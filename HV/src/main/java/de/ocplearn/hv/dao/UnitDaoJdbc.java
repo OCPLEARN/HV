@@ -482,10 +482,10 @@ public class UnitDaoJdbc implements UnitDao {
 		
 		//System.err.println("UnitDao saveOwnership() : currentOwnership = " + ownership);
 		
-		if (ownership.getId()!=0) {
-			return updateOwnership(ownership);
-		}else {
+		if (ownership.getId()==0) {
 			return insertOwnership(ownership);
+		}else {
+			return updateOwnership(ownership);
 		}
 		
 	}
@@ -523,8 +523,11 @@ public class UnitDaoJdbc implements UnitDao {
 	
 	private boolean updateOwnership (Ownership ownership) {
 		
+//		String sql = "UPDATE " + TABLE_NAME_OWNER_LINK + " SET unidId=?, buildingOwnerId=?, buildingShare=?, "
+//					+ "	shareStart=?, shareEnd=?;";
+
 		String sql = "UPDATE " + TABLE_NAME_OWNER_LINK + " SET unidId=?, buildingOwnerId=?, buildingShare=?, "
-					+ "	shareStart=?, shareEnd=?;";
+		+ "	shareStart=?, shareEnd=? WHERE id = ?;";		
 		
 		try ( Connection connection = this.dataSource.getConnection(); 
 				  PreparedStatement stmt = connection.prepareStatement(sql); ){
@@ -534,6 +537,7 @@ public class UnitDaoJdbc implements UnitDao {
 			stmt.setDouble(3, ownership.getBuildingShare());
 			stmt.setDate(4, Date.valueOf(ownership.getShareStart()));
 			stmt.setDate(5, ownership.getShareEnd() == null ? null :  Date.valueOf(ownership.getShareEnd()) );
+			stmt.setInt(6, ownership.getId() );
 			
 			if (stmt.executeUpdate() != 1) {
 				return false;

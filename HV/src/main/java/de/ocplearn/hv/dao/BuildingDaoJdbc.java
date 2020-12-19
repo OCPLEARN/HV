@@ -336,8 +336,8 @@ public class BuildingDaoJdbc implements BuildingDao{
 						this.builingOwnerDaoJdbc.mapRowToBuildingOwner(rs),
 						rs.getDouble(""+UnitDaoJdbc.TABLE_NAME_PREFIX_OWNER_LINK+".buildingShare"),
 						(rs.getDate(""+UnitDaoJdbc.TABLE_NAME_PREFIX_OWNER_LINK+".shareStart")).toLocalDate(),
-						ld != null ? ld : null)
-						;
+						ld != null ? ld : null);
+				os.setId(rs.getInt( ""+UnitDaoJdbc.TABLE_NAME_OWNER_LINK+".id" ));
 				ownerships.add(os);
 			}
 			

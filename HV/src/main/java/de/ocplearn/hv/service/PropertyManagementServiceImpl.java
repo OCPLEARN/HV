@@ -132,9 +132,9 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	@Override
 	public boolean deletePropertyManagement(PropertyManagementDto propertyManagementDto) {
 
-		System.out.println("=====");
-		System.out.println(propertyManagementDto.getPrimaryLoginUser().getId());
-		System.out.println(propertyManagementDto.getPrimaryContact().toString());
+		//System.out.println("=====");
+		//System.out.println(propertyManagementDto.getPrimaryLoginUser().getId());
+		//System.out.println(propertyManagementDto.getPrimaryContact().toString());
 		
 		boolean deleteOk = true;
 		
@@ -151,17 +151,17 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		}
 		
 		if ( ! propertyManagementDao.delete(propertyManagement)) deleteOk = false;
-		 System.out.println("delete 2 ok : " + deleteOk);
+		 //System.out.println("delete 2 ok : " + deleteOk);
 		
 		if ( ! userService.deleteUser(propertyManagementDto.getPrimaryLoginUser()) ) deleteOk = false;
-		 System.out.println("delete 1 ok : " + deleteOk);
+		 //System.out.println("delete 1 ok : " + deleteOk);
 		
 		if ( ! contactService.deleteContactById(propertyManagement.getPrimaryContact().getId())) deleteOk = false;
-		 System.out.println("PrimaryContact gelöscht " + deleteOk);
+		 //System.out.println("PrimaryContact gelöscht " + deleteOk);
 		 
 		if ( ! contactService.deleteContactById(propertyManagement.getCompanyContact().getId())) deleteOk = false;
 		
-		System.out.println("CompanyContact gelöscht " + deleteOk);
+		//System.out.println("CompanyContact gelöscht " + deleteOk);
 
 		// TODO success notification to deleting person
 		return deleteOk;
@@ -365,9 +365,9 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		if(unitDto.getAddress().getId()==0) {
 			if(!contactService.createAddress(unitDto.getAddress())) return false;
 		}
-		System.out.println("public boolean createUnit(UnitDto unitDto)" + unitDto);
+		//System.out.println("public boolean createUnit(UnitDto unitDto)" + unitDto);
 		Unit unit = unitMapper.unitDtoToUnit(unitDto, new CycleAvoidingMappingContext());
-		System.out.println("this.unitMapper.UnitDtoToUnit(unitDto)" + unit);
+		//System.out.println("this.unitMapper.UnitDtoToUnit(unitDto)" + unit);
 		
 	
 		
@@ -472,9 +472,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		}
 		
 		BuildingOwner buildingOwner = this.buildingOwnerMapper.buildingOwnerDtoToBuildingOwner(buildingOwnerDto,new CycleAvoidingMappingContext());
-		
 	
-		
 		if (this.buildingOwnerDao.save( buildingOwner )) {
 			buildingOwnerDto.setId(buildingOwner.getId());
 			return true;
@@ -592,16 +590,16 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		}
 		
 		// (2: )Neue currentOwnership aus dem übergebenen ObjectDto
-		currentOwnership = new OwnershipDto(unitDto, buildingOwnerDto, buildingShare, shareStart, null);
+		OwnershipDto newOwnership = new OwnershipDto(unitDto, buildingOwnerDto, buildingShare, shareStart, null);
 	
-		Ownership saved = ownershipMapper.ownershipDtoToOwnership(currentOwnership, new CycleAvoidingMappingContext());
+		Ownership saved = ownershipMapper.ownershipDtoToOwnership(newOwnership, new CycleAvoidingMappingContext());
 		
 		unitDao.saveOwnership( saved );
 		// set identity
-		currentOwnership.setId(saved.getId());
+		newOwnership.setId(saved.getId());
 		
 		// (3) add new ownership to buildings  list of ownerships
-		//buildingDto.getOwnerships().add(currentOwnership); // aktualisierter Zustand für den Caller
+		buildingDto.getOwnerships().add(newOwnership); // aktualisierter Zustand für den Caller
 		
 		//								- get Set<Unit>
 		//								- get List<Ownerships>
