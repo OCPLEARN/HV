@@ -80,10 +80,7 @@ public class TestObjectSupplier {
 
 	PartsBox partsBox = PartsBox.getInstance();
 	
-	
-	
 	private org.slf4j.Logger logger2 = org.slf4j.LoggerFactory.getLogger("de.ocplearn.hv");
-	
 	
 	@Autowired
 	private TestObjectSupplier(
@@ -100,7 +97,7 @@ public class TestObjectSupplier {
 		
 		//this.logger.log(Level.INFO,"check for models ...");
 		
-		logger2.info("Ich pribier mal aus"); // Test SLF4J logger
+		//logger2.info("Ich pribier mal aus"); // Test SLF4J logger
 		
 		PM_MODELS.forEach( (k, v) -> {
 			// k = model name
@@ -124,7 +121,7 @@ public class TestObjectSupplier {
 				// unit 1 BUILDING
 				UnitDto unitDto_BUILDING = new UnitDto( buildingDto, "BUILDING_UNIT name", buildingAddress, 1000.00, 1962, "note", UnitType.BUILDING_UNIT );
 				this.propertyManagementService.createUnit(unitDto_BUILDING);
-				System.out.println("######### buiding unit id =   " + unitDto_BUILDING.getId() );
+				//System.out.println("######### buiding unit id =   " + unitDto_BUILDING.getId() );
 				//System.out.println("bo1 : " + bo1);
 				
 				
@@ -180,10 +177,6 @@ public class TestObjectSupplier {
 						this.propertyManagementService.createUnit(unitDto_unit);
 						
 						
-						
-						
-						
-						
 					}
 					case "userModel2" :{ 
 						// M				
@@ -206,15 +199,11 @@ public class TestObjectSupplier {
 						//  BUILDING unit for building 2
 						UnitDto unitDto_BUILDING2 = new UnitDto( buildingDto2, "BUILDING_UNIT building 2", addressDto, 50000.00, 1980, "warehouse 13", UnitType.BUILDING_UNIT );
 						this.propertyManagementService.createUnit(unitDto_BUILDING2);
-						System.out.println("######### buiding unit id =   " + unitDto_BUILDING2.getId() );
+						//System.out.println("######### buiding unit id =   " + unitDto_BUILDING2.getId() );
 						//assign buildingowner to building	
 						OwnershipDto ownership4 = new OwnershipDto(unitDto_BUILDING2, sister2, 1.0, LocalDate.of(2000, 1, 1), null  );
 						buildingDto2.getOwnerships().add(ownership4);
 						this.propertyManagementService.setOwnership(ownership4, buildingDto2);
-						
-						
-						
-						
 						
 					}
 					case "userModel1" : {
@@ -254,7 +243,7 @@ public class TestObjectSupplier {
 		 
 			Optional<LoginUser> opt = loginUserDao.findUserByLoginUserName(randomName);
 			if ( opt.isPresent() ) {
-				System.out.println("### LoginUserName already exists!");
+				//System.out.println("### LoginUserName already exists!");
 				throw new RuntimeException("### random LoginUserName already exists!");
 			}
 			loginUserDto.setLoginUserName(randomName);
@@ -358,19 +347,5 @@ public class TestObjectSupplier {
 		return buildingOwnerDto;
 
 	}
-
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }

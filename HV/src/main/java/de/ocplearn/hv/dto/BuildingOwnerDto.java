@@ -92,7 +92,7 @@ public class BuildingOwnerDto implements Comparable<BuildingOwnerDto> {
 	 * @return the buildings (as unmodifiable list)
 	 */
 	public List<BuildingDto> getBuildings() {
-		return Collections.unmodifiableList(buildings) ;
+		return this.buildings;
 	}
 
 	/**

@@ -98,33 +98,34 @@ public class UnitServiceTest {
 		
 		Assertions.assertTrue(this.propertyManagementService.createBuildingOwner(buildingOwnerDto));
 		
+		// find hall building
+		BuildingDto hallBuilding = null;
 		for( BuildingDto buildingDto : buildingsDto ) {	
-			
 			if ( buildingDto.getBuildingType() == BuildingType.HALL ) {
-				
-				Set<UnitDto> unitsDto = buildingDto.getUnits();
-					unitsDto.forEach( unitDto -> {
-						if( unitDto.getUnitType() == UnitType.BUILDING_UNIT ) { 
-							
-							// old
-							OwnershipDto ownership1 = buildingDto.getOwnerships().get(0);
-							ownership1.setBuildingShare(0.6);
-							ownership1.setShareStart(LocalDate.of(2021, 1, 1));
-							Assertions.assertTrue(this.propertyManagementService.setOwnership(ownership1, buildingDto));						
-							
-							// new owner	
-							OwnershipDto ownership2 = new OwnershipDto(unitDto, buildingOwnerDto, 0.4, LocalDate.of(2021, 1, 1),null);
-							Assertions.assertTrue(this.propertyManagementService.setOwnership(ownership2, buildingDto));
-	
-								
-								
-	//						Assertions.assertTrue( propertyManagementService.assignUnitOwnerToUnit( buildingOwnerDto, unitDto ) );
-	//						System.out.println( "buildings of BuildingOwner: " + buildingOwnerDto.getBuildings() );
-	//						Assertions.assertTrue( propertyManagementService.removeUnitOwnerFromUnit( buildingOwnerDto, unitDto ) );
-						}
-					});
-				}
+				hallBuilding = buildingDto;
+				break;
 			}
+		}
+		
+		// get units from hall
+		Set<UnitDto> unitsDto = hallBuilding.getUnits();
+		UnitDto buildingUnitDto = null;
+		for( UnitDto u : unitsDto ) {
+			if ( u.getUnitType() == UnitType.BUILDING_UNIT  ) {
+				buildingUnitDto = u;
+			}
+		}
+		
+		// old
+		OwnershipDto ownership1 = hallBuilding.getOwnerships().get(0);	// 1 owner
+		ownership1.setBuildingShare(0.6);
+		ownership1.setShareStart(LocalDate.of(2021, 1, 1));
+		Assertions.assertTrue(this.propertyManagementService.setOwnership(ownership1, hallBuilding));						
+		
+		// new owner	
+		OwnershipDto ownership2 = new OwnershipDto(buildingUnitDto, buildingOwnerDto, 0.4, LocalDate.of(2021, 1, 1),null);
+		Assertions.assertTrue(this.propertyManagementService.setOwnership(ownership2, hallBuilding));			
+		
 		}
 		
 	

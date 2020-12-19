@@ -118,7 +118,7 @@ public class Building implements Comparable<Building>{
 	 * @return the owners
 	 */
 	public List<BuildingOwner> getOwners() {
-		return Collections.unmodifiableList(owners);
+		return this.owners;
 	}
 
 	/**

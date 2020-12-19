@@ -64,14 +64,12 @@ public class BuildingDaoJdbc implements BuildingDao{
 	private BuildingOwnerDaoJdbc builingOwnerDaoJdbc; 	
 	
 	@Autowired
+	@Lazy
 	private UnitDaoJdbc unitDaoJdbc;
 	
 	private PropertyManagementDaoJdbc propertyManagementDaoJdbc;
 	
 	public Logger logger = LoggerBuilder.getInstance().build( PropertyManagementDaoJdbc.class );
-		
-	
-	
 	
 	@Autowired // DB einbinden über Autowire mit Qualifier Implementierung von AddressDao mit Qualifier spezifiziert
 	public BuildingDaoJdbc( @Qualifier ("datasource1") DataSource dataSource, 
@@ -83,7 +81,7 @@ public class BuildingDaoJdbc implements BuildingDao{
 		this.dataSource = dataSource;
 		this.addressDao = addressDao;
 		this.builingOwnerDaoJdbc = builingOwnerDaoJdbc;
-		this.unitDaoJdbc = unitDaoJdbc;
+		//this.unitDaoJdbc = unitDaoJdbc;
 		this.propertyManagementDaoJdbc = propertyManagementDaoJdbc;
 		//this.unitDao = unitDao;
 	}
@@ -317,22 +315,29 @@ public class BuildingDaoJdbc implements BuildingDao{
 				+ "ON "+UnitDaoJdbc.TABLE_NAME_PREFIX+".id = "+UnitDaoJdbc.TABLE_NAME_PREFIX_OWNER_LINK+".unitId  "
 				+ "INNER JOIN "+BuildingOwnerDaoJdbc.TABLE_NAME+" AS "+BuildingOwnerDaoJdbc.TABLE_NAME_PREFIX+" "
 				+ "ON "+UnitDaoJdbc.TABLE_NAME_PREFIX_OWNER_LINK+".buildingOwnerId = "+BuildingOwnerDaoJdbc.TABLE_NAME_PREFIX+".id "
-				+ "WHERE "+UnitDaoJdbc.TABLE_NAME_PREFIX+".buildingId = ? ";
+				+ "WHERE "+UnitDaoJdbc.TABLE_NAME_PREFIX +".buildingId = ? ";
 		try( Connection conn = this.dataSource.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(sql_All_UOL_Entries)){
 			
 			stmt.setInt(1,building.getId());
 			
-			System.err.println("sql_All_UOL_Entries = " + sql_All_UOL_Entries);
+			//System.err.println("sql_All_UOL_Entries = " + sql_All_UOL_Entries);
 			
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				//owners.add(this.builingOwnerDaoJdbc.mapRowToBuildingOwner(rs));
+				
+				// (rs.getDate(""+UnitDaoJdbc.TABLE_NAME_PREFIX_OWNER_LINK+".shareEnd")).toLocalDate())
+				java.sql.Date sqlDate = rs.getDate(""+UnitDaoJdbc.TABLE_NAME_PREFIX_OWNER_LINK+".shareEnd");
+				LocalDate ld = null;
+				if (sqlDate != null) { ld = sqlDate.toLocalDate(); }
+				
 				Ownership os = new Ownership(this.unitDaoJdbc.mapRowToUnit(rs),
 						this.builingOwnerDaoJdbc.mapRowToBuildingOwner(rs),
-						rs.getDouble("uol.buildingShare"),
-						(rs.getDate("uol.shareStart")).toLocalDate(),
-						(rs.getDate("uol.shareEnd")).toLocalDate());
+						rs.getDouble(""+UnitDaoJdbc.TABLE_NAME_PREFIX_OWNER_LINK+".buildingShare"),
+						(rs.getDate(""+UnitDaoJdbc.TABLE_NAME_PREFIX_OWNER_LINK+".shareStart")).toLocalDate(),
+						ld != null ? ld : null)
+						;
 				ownerships.add(os);
 			}
 			

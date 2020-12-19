@@ -571,6 +571,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		// (1) change current entry
 		
 		if(currentOwnership!=null) {
+			System.err.println("currentOwnership was found " + currentOwnership);
 			currentOwnership.setShareEnd(shareStart.minusDays(1));
 			unitDao.saveOwnership( ownershipMapper.ownershipDtoToOwnership(currentOwnership, new CycleAvoidingMappingContext()) );
 		}
@@ -589,7 +590,11 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		// (2: )Neue currentOwnership aus dem übergebenen ObjectDto
 		currentOwnership = new OwnershipDto(unitDto, buildingOwnerDto, buildingShare, shareStart, null);
 	
-		unitDao.saveOwnership( ownershipMapper.ownershipDtoToOwnership(currentOwnership, new CycleAvoidingMappingContext()) );
+		Ownership saved = ownershipMapper.ownershipDtoToOwnership(currentOwnership, new CycleAvoidingMappingContext());
+		
+		unitDao.saveOwnership( saved );
+		// set identity
+		currentOwnership.setId(saved.getId());
 		
 		// (3) add new ownership to buildings  list of ownerships
 		buildingDto.getOwnerships().add(currentOwnership); // aktualisierter Zustand für den Caller
