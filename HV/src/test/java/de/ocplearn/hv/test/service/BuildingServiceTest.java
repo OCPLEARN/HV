@@ -92,9 +92,9 @@ public class BuildingServiceTest {
 		buildingDto.setNote("this is an office building");
 		buildingDto.setOwners(new ArrayList<BuildingOwnerDto>());
 		
-		System.out.println("testCreateBuilding" + buildingDto);
+		//System.out.println("testCreateBuilding" + buildingDto);
 		Building building = buildingMapper.buildingDtoToBuilding(buildingDto, new CycleAvoidingMappingContext());
-		System.out.println("testCreateBuilding2" + building);
+		//System.out.println("testCreateBuilding2" + building);
 		Assertions.assertTrue(buildingDao.save(building));
 		
 		

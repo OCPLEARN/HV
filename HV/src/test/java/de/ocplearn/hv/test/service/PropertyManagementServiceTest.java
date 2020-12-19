@@ -155,7 +155,7 @@ public class PropertyManagementServiceTest {
 		
 		// Deletes propertyManagementDto created in Test (1)
 		Assertions.assertTrue( propertyManagementService.deletePropertyManagement( propertyManagementDto ) );
-		System.out.println("TESTDELETE: "+propertyManagementDto);
+		//System.out.println("TESTDELETE: "+propertyManagementDto);
 		
 	}
 	
@@ -194,7 +194,7 @@ public class PropertyManagementServiceTest {
 		propertyManagementDto.setPaymentType(PaymentType.SUPER_PRO);
 		Assertions.assertTrue(propertyManagementService.updatePropertyManagement(propertyManagementDto));
 		Assertions.assertTrue(propertyManagementDto.getPaymentType().toString().equals(PaymentType.SUPER_PRO.toString()));
-		System.out.println("TESTUPDATE: "+propertyManagementDto);
+		//System.out.println("TESTUPDATE: "+propertyManagementDto);
 	}
 	
 	@Test
@@ -210,7 +210,7 @@ public class PropertyManagementServiceTest {
 	@Test
 	@Order(5)
 	public void testAddLoginUserToPropertyMgmt_givenLoginUser_boolean() {
-		System.out.println("Test 5");
+		//System.out.println("Test 5");
 		
 		Assertions.assertTrue(userService.createUser(employee) );
 		Assertions.assertTrue(userService.createUser(employee2) );		
@@ -225,8 +225,8 @@ public class PropertyManagementServiceTest {
 	@Test
 	@Order(6)
 	public void testLoginUserListAvailable_givenPropertyMGMT_boolean() {
-		System.out.println("Test 6");
-		System.out.println("testLoginUserListAvailable_givenPropertyMGMT_boolean" + propertyManagementDto.getLoginUsers());
+		//System.out.println("Test 6");
+		//System.out.println("testLoginUserListAvailable_givenPropertyMGMT_boolean" + propertyManagementDto.getLoginUsers());
 		
 		Assertions.assertTrue(propertyManagementDto.getLoginUsers().size()>0);
 		
@@ -235,7 +235,7 @@ public class PropertyManagementServiceTest {
 	@Test
 	@Order(7)
 	public void testRemoveLoginUserFromPropertyMgmt_givenLoginUser_boolean() {
-		System.out.println("Test 7");
+		//System.out.println("Test 7");
 		 
 		Assertions.assertTrue(propertyManagementService.removeLoginUserFromPropertyManagement(employee, propertyManagementDto));
 		Assertions.assertTrue(propertyManagementService.removeLoginUserFromPropertyManagement(employee2, propertyManagementDto));

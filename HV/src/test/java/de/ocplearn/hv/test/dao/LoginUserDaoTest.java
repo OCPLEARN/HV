@@ -87,7 +87,7 @@ public class LoginUserDaoTest {
 		Optional<LoginUser> opt = loginUserDao.findUserByLoginUserName(loginUserName);
 		//LoginUserDto nameToTest = userService.findUserByLoginUserName(name.toString());
 		if ( opt.isPresent() ) {
-			System.out.println("### LoginUserName already exists!");
+			//System.out.println("### LoginUserName already exists!");
 			throw new RuntimeException("### random LoginUserName already exists!");
 		}	
 		
@@ -120,7 +120,7 @@ public class LoginUserDaoTest {
 		// (1) insert
 		LoginUserDto loginUserDto = this.buildLoginUser( "Pa$$w0rd" );
 		
-        System.out.println("### creating user : " + loginUserDto.getLoginUserName());
+        //System.out.println("### creating user : " + loginUserDto.getLoginUserName());
         
         boolean created = loginUserDao.save( loginUserMapper.loginUserDtoToLoginUser(loginUserDto) );
 		
@@ -147,7 +147,7 @@ public class LoginUserDaoTest {
 	 * */
 	public void testDelete() {
 		LoginUserDto loginUserDto = this.buildLoginUser("Pa$$w0rd");
-		System.out.println("### build and delete user by reference : " + loginUserDto.getLoginUserName());
+		//System.out.println("### build and delete user by reference : " + loginUserDto.getLoginUserName());
 		
         boolean updated = loginUserDao.save( loginUserMapper.loginUserDtoToLoginUser(loginUserDto) );
         Assertions.assertTrue(updated);     		
@@ -169,7 +169,7 @@ public class LoginUserDaoTest {
 	 * */
 	public void testDeleteByName() {
 		LoginUserDto loginUserDto = this.buildLoginUser("Pa$$w0rd");
-		System.out.println("### build and delete user by name : " + loginUserDto.getLoginUserName());
+		//System.out.println("### build and delete user by name : " + loginUserDto.getLoginUserName());
 
         boolean updated = loginUserDao.save( loginUserMapper.loginUserDtoToLoginUser(loginUserDto) );
         Assertions.assertTrue(updated);  		
@@ -187,7 +187,7 @@ public class LoginUserDaoTest {
 	public void validateUser() {
 		String password = "jhks&52?!#;;..";
 		LoginUserDto loginUserDto = this.buildLoginUser(password);
-		System.out.println("### build and validate user : " + loginUserDto.getLoginUserName());
+		//System.out.println("### build and validate user : " + loginUserDto.getLoginUserName());
 
         boolean updated = loginUserDao.save( loginUserMapper.loginUserDtoToLoginUser(loginUserDto) );
         Assertions.assertTrue(updated); 		

@@ -110,7 +110,7 @@ public class UserServiceTest {
 			// Then
 			Assertions.assertEquals(role, loginUserDto.getRole()); // both should be same
 		} else {
-			System.out.println("!!! check findUserById(1) !!! table empty?");
+			//System.out.println("!!! check findUserById(1) !!! table empty?");
 			Assertions.assertEquals(true, false);
 		}
 
@@ -192,13 +192,13 @@ public class UserServiceTest {
 		
 				List<LoginUserDto> loginUserDtoList = userService.findAllLoginUsers(0, 300, "loginUserName", "ASC");
 		
-		System.out.print(loginUserDtoList.toString().toLowerCase());
-		System.out.println("XXXXXX");
+		//System.out.print(loginUserDtoList.toString().toLowerCase());
+		//System.out.println("XXXXXX");
 		
 		List<LoginUserDto> loginUserDtoList2 = loginUserDtoList.stream()
 				.sorted((T1,T2)->{return T1.getLoginUserName().toLowerCase().compareTo(T2.getLoginUserName().toLowerCase());}).collect(Collectors.toList());
 		
-		System.out.println(loginUserDtoList2);
+		//System.out.println(loginUserDtoList2);
 		
 		//System.out.print(loginUserDtoList.stream().sorted().collect(Collectors.toList()).toString().toLowerCase());
 		

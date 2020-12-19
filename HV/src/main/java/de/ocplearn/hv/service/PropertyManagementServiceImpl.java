@@ -567,11 +567,13 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 			}
 		}
 		
+		System.out.println("PM setOwnership() : curr active found " + currentOwnership);
+		
 		// is change  ownership entry
 		// (1) change current entry
 		
 		if(currentOwnership!=null) {
-			System.err.println("currentOwnership was found " + currentOwnership);
+			System.out.println("PM setOwnership() : curr active adjusted!");	
 			currentOwnership.setShareEnd(shareStart.minusDays(1));
 			unitDao.saveOwnership( ownershipMapper.ownershipDtoToOwnership(currentOwnership, new CycleAvoidingMappingContext()) );
 		}
@@ -580,11 +582,13 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		// check of given unit
 		if(buildingDto.isWegType() ) { 	
 			// WEG set: unit must not be a building unit
-			if( (unitDto.getUnitType() ==UnitType.BUILDING_UNIT)) throw new IllegalStateException("Wrong unit type supplied"); 
+			if( (unitDto.getUnitType() ==UnitType.BUILDING_UNIT)) 
+				throw new IllegalStateException("PM setOwnership() is WEG : Wrong unit type supplied"); 
 						
 		} else { 
 			// not WEG: unit must be building unit
-			if( ! (unitDto.getUnitType() == UnitType.BUILDING_UNIT)) throw new IllegalStateException("Wrong unit type supplied");
+			if( ! (unitDto.getUnitType() == UnitType.BUILDING_UNIT)) 
+				throw new IllegalStateException("PM setOwnership() not WEG: Wrong unit type supplied");
 		}
 		
 		// (2: )Neue currentOwnership aus dem übergebenen ObjectDto
@@ -597,7 +601,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		currentOwnership.setId(saved.getId());
 		
 		// (3) add new ownership to buildings  list of ownerships
-		buildingDto.getOwnerships().add(currentOwnership); // aktualisierter Zustand für den Caller
+		//buildingDto.getOwnerships().add(currentOwnership); // aktualisierter Zustand für den Caller
 		
 		//								- get Set<Unit>
 		//								- get List<Ownerships>

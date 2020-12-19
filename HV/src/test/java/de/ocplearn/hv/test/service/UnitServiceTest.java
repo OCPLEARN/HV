@@ -80,6 +80,7 @@ public class UnitServiceTest {
 	@Test
 	public void testAssignUnitOwnerToUnit_givenModel3_returnBooleanTrue() {
 		
+		// get Modle2
 		PropertyManagementDto propertyManagementDto = TestObjectSupplier.getInstance().getModel("Model3");
 		
 		// Model 3 HALL owned by one sister -> add the other sister
@@ -98,7 +99,7 @@ public class UnitServiceTest {
 		
 		Assertions.assertTrue(this.propertyManagementService.createBuildingOwner(buildingOwnerDto));
 		
-		// find hall building
+		// find hall building in Model3
 		BuildingDto hallBuilding = null;
 		for( BuildingDto buildingDto : buildingsDto ) {	
 			if ( buildingDto.getBuildingType() == BuildingType.HALL ) {
@@ -113,13 +114,17 @@ public class UnitServiceTest {
 		for( UnitDto u : unitsDto ) {
 			if ( u.getUnitType() == UnitType.BUILDING_UNIT  ) {
 				buildingUnitDto = u;
+				break;
 			}
 		}
 		
-		// old
-		OwnershipDto ownership1 = hallBuilding.getOwnerships().get(0);	// 1 owner
-		ownership1.setBuildingShare(0.6);
-		ownership1.setShareStart(LocalDate.of(2021, 1, 1));
+		// adjust old entry
+		BuildingOwnerDto oldBuildingOwnerDto = (hallBuilding.getOwnerships().get(0)).getBuildingOwner();
+		//OwnershipDto ownership1 = hallBuilding.getOwnerships().get(0);	// 1 owner
+		OwnershipDto ownership1 = new OwnershipDto(buildingUnitDto,oldBuildingOwnerDto, 0.6,LocalDate.of(2021, 1, 1),null);
+		//ownership1.setBuildingShare(0.6);
+		//ownership1.setShareStart(LocalDate.of(2021, 1, 1));
+		
 		Assertions.assertTrue(this.propertyManagementService.setOwnership(ownership1, hallBuilding));						
 		
 		// new owner	
