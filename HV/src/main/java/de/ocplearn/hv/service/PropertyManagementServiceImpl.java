@@ -565,13 +565,13 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 			}
 		}
 		
-		System.out.println("PM setOwnership() : curr active found " + currentOwnership);
+		System.err.println("PM setOwnership() : curr active found " + currentOwnership);
 		
 		// is change  ownership entry
 		// (1) change current entry
 		
 		if(currentOwnership!=null) {
-			System.out.println("PM setOwnership() : curr active adjusted!");	
+			System.err.println("PM setOwnership() : curr active adjusted!");	
 			currentOwnership.setShareEnd(shareStart.minusDays(1));
 			unitDao.saveOwnership( ownershipMapper.ownershipDtoToOwnership(currentOwnership, new CycleAvoidingMappingContext()) );
 		}

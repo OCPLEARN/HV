@@ -144,7 +144,7 @@ public class ContactDaoJdbc implements ContactDao {
 
 	@Override
 	public boolean deleteContactById(int id) {
-		System.out.println("deleteContactById (Parameter Id= " + id + ")");
+		//System.out.println("deleteContactById (Parameter Id= " + id + ")");
 		try(Connection connection = datasource.getConnection();
 				PreparedStatement stmt = connection.prepareStatement("DELETE FROM contact WHERE id = ?;");){
 			stmt.setInt(1, id);

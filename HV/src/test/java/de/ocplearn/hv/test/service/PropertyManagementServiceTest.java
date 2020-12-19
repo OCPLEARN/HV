@@ -162,7 +162,7 @@ public class PropertyManagementServiceTest {
 	@Test
 	@Order(3)
 	public void testUpdatePropertyManagament_givenUpdatedPropertyManagementDto_boolean() {
-		System.out.println("Test 3");
+		//System.out.println("Test 3");
 		PaymentType paymentType = PaymentType.STARTER;
 		
 		HashMap<String, byte[]> hashMap = StaticHelpers.createHash("Pa$$w0rd", null);
@@ -200,7 +200,7 @@ public class PropertyManagementServiceTest {
 	@Test
 	@Order(4)
 	public void testFindPropertyManagament_givenPropertyManagementDtoId_boolean(){
-		System.out.println("Test 4");
+		//System.out.println("Test 4");
 		PropertyManagementDto findPropertyManagement = propertyManagementService.findPropertyManagementbyId(propertyManagementDto.getId());
 		Assertions.assertTrue(findPropertyManagement.getId()!=0);
 		System.out.println(findPropertyManagement);
