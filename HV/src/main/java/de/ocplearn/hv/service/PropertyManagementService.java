@@ -148,7 +148,12 @@ public interface PropertyManagementService {
 	
 	public boolean setOwnership(OwnershipDto ownership, BuildingDto building, boolean removeOwnership);
 
-	
+	/**
+	 * returns true if share of all Ownerships equals 100%
+	 * @param buildingDto
+	 * @return boolean
+	 */
+	public boolean validateOwnerships(BuildingDto buildingDto);
 	
 	// UNITS CRUD
 	
@@ -158,6 +163,11 @@ public interface PropertyManagementService {
 	
 	public boolean updateUnit(UnitDto unitDto);
 	
+	/**
+	 * 
+	 * @param unitId
+	 * @return
+	 */
 	public UnitDto findUnitById(int unitId);
 	
 	

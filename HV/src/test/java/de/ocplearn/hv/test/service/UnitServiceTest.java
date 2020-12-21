@@ -117,17 +117,34 @@ public class UnitServiceTest {
 			}
 		}
 		
+		LocalDate today = LocalDate.now();
+		
+
+		
 		// adjust old entry
 		BuildingOwnerDto oldBuildingOwnerDto = (hallBuilding.getOwnerships().get(0)).getBuildingOwner();
 		//OwnershipDto ownership1 = hallBuilding.getOwnerships().get(0);	// 1 owner
-		OwnershipDto ownership1 = new OwnershipDto(buildingUnitDto,oldBuildingOwnerDto, 0.6,LocalDate.of(2021, 1, 1),null);
+		OwnershipDto ownership1 = new OwnershipDto(buildingUnitDto,oldBuildingOwnerDto, 0.6, today,null);
 		//ownership1.setBuildingShare(0.6);
 		//ownership1.setShareStart(LocalDate.of(2021, 1, 1));
-		Assertions.assertTrue(this.propertyManagementService.setOwnership(ownership1, hallBuilding));						
+		Assertions.assertTrue(this.propertyManagementService.setOwnership(ownership1, hallBuilding, false));						
 		
 		// new owner	
-		OwnershipDto ownership2 = new OwnershipDto(buildingUnitDto, buildingOwnerDto, 0.4, LocalDate.of(2021, 1, 1),null);
-		Assertions.assertTrue(this.propertyManagementService.setOwnership(ownership2, hallBuilding));			
+		OwnershipDto ownership2 = new OwnershipDto(buildingUnitDto, buildingOwnerDto, 0.4, today, null);
+		Assertions.assertTrue(this.propertyManagementService.setOwnership(ownership2, hallBuilding, false));			
+		
+		// Change Date
+		LocalDate tommorrow = today.plusYears(1);
+		// remove ownership2
+		ownership2.setShareStart( tommorrow );
+		Assertions.assertTrue( this.propertyManagementService.setOwnership(ownership2, hallBuilding, true) );			
+
+		// set owenrship1 to 1.00
+		ownership1.setShareStart( tommorrow );
+		ownership1.setBuildingShare(1.00);
+		
+		Assertions.assertTrue( this.propertyManagementService.setOwnership(ownership1, hallBuilding, false) );			
+
 		
 		}
 		

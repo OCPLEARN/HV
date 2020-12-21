@@ -537,7 +537,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	@Override
 	public boolean setOwnership(OwnershipDto ownership, BuildingDto building, boolean removeOwnership) {
 		return this.setOwnership(ownership.getBuildingOwner(), building, ownership.getUnit(), 
-				ownership.getBuildingShare(), ownership.getShareStart());
+				ownership.getBuildingShare(),  ownership.getShareStart(), removeOwnership);
 	}
 	
 	@Override
@@ -627,7 +627,22 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 //	}
 
 
-
+@Override
+public boolean validateOwnerships(BuildingDto buildingDto) {
+	
+	if( ! buildingDto.isWegType() ) {
+		
+		List<OwnershipDto> ownershipsDto = buildingDto.getOwnerships();
+		
+		for( Double share : ownershipsDto ) {
+			
+			
+		}
+		
+	}
+	
+	return false;
+}
 
 	
 	 

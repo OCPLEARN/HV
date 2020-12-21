@@ -136,13 +136,13 @@ public class TestObjectSupplier {
 				
 				OwnershipDto ownership1 = new OwnershipDto(unitDto_BUILDING, sister1, 0.5, LocalDate.of(1980, 4, 5), null  );
 				//buildingDto.getOwnerships().add(ownership1);
-				this.propertyManagementService.setOwnership(ownership1, buildingDto);
+				this.propertyManagementService.setOwnership(ownership1, buildingDto, false);
 				
 				BuildingOwnerDto sister2 = this.createBuildingOwnerDto( pmModel );
 				this.propertyManagementService.createBuildingOwner(sister2);	// sis2 saved
 				OwnershipDto ownership2 = new OwnershipDto(unitDto_BUILDING, sister2, 0.5, LocalDate.of(1980, 4, 5), null  );
 				//buildingDto.getOwnerships().add(ownership2);
-				this.propertyManagementService.setOwnership(ownership2, buildingDto);			
+				this.propertyManagementService.setOwnership(ownership2, buildingDto, false);			
 				
 				// units
 				switch(v) {
@@ -175,7 +175,7 @@ public class TestObjectSupplier {
 						//assign buildingowner to building
 						OwnershipDto ownership3 = new OwnershipDto(unitDto_BUILDING3, sister1, 1.0, LocalDate.of(1990, 1, 1), null  );
 						//buildingDto3.getOwnerships().add(ownership3);
-						this.propertyManagementService.setOwnership(ownership3, buildingDto3); 
+						this.propertyManagementService.setOwnership(ownership3, buildingDto3, false); 
 						
 						//units
 						String[] unitNames =  {"EG left", "EG right", "OG1 left", "OG1 right", "OG2 left", "OG2, right", "OG3 left", "OG3, right"};
@@ -217,7 +217,7 @@ public class TestObjectSupplier {
 						//assign buildingowner to building	
 						OwnershipDto ownership4 = new OwnershipDto(unitDto_BUILDING2, sister2, 1.0, LocalDate.of(2000, 1, 1), null  );
 						//buildingDto2.getOwnerships().add(ownership4);
-						this.propertyManagementService.setOwnership(ownership4, buildingDto2);
+						this.propertyManagementService.setOwnership(ownership4, buildingDto2, false);
 						
 					}
 					case "userModel1" : {
