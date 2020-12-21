@@ -144,9 +144,9 @@ public interface PropertyManagementService {
 	
 	public boolean removeBuildingOwnerFromBuilding(BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto);
 	
-	public boolean setOwnership( BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto, UnitDto unitDto, double buildingShare , LocalDate shareStart);
+	public boolean setOwnership( BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto, UnitDto unitDto, double buildingShare , LocalDate shareStart, boolean removeOwnership);
 	
-	public boolean setOwnership(OwnershipDto ownership, BuildingDto building);
+	public boolean setOwnership(OwnershipDto ownership, BuildingDto building, boolean removeOwnership);
 
 	
 	

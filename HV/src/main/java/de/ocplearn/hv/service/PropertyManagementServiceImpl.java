@@ -535,14 +535,14 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	}
 
 	@Override
-	public boolean setOwnership(OwnershipDto ownership, BuildingDto building) {
+	public boolean setOwnership(OwnershipDto ownership, BuildingDto building, boolean removeOwnership) {
 		return this.setOwnership(ownership.getBuildingOwner(), building, ownership.getUnit(), 
 				ownership.getBuildingShare(), ownership.getShareStart());
 	}
 	
 	@Override
 	public boolean setOwnership( BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto, UnitDto unitDto,
-			double buildingShare, LocalDate shareStart ) {
+			double buildingShare, LocalDate shareStart, boolean removeOwnership ) {
 		
 		// 1. set LocalDate - test Date from DB , wenn gleich dann nur KorrekturEintrag (keine Änderung des shareEnd Datums)
 		//										, neuer Eintrag => new shareStart
@@ -574,6 +574,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 			System.err.println("PM setOwnership() : curr active adjusted!");	
 			currentOwnership.setShareEnd(shareStart.minusDays(1));
 			unitDao.saveOwnership( ownershipMapper.ownershipDtoToOwnership(currentOwnership, new CycleAvoidingMappingContext()) );
+			if (removeOwnership) return true;
 		}
 		
 		// 2. WEG Flag? 	wenn ja:	- check unit != unitDto Building (IllegalState)
