@@ -133,6 +133,10 @@ public class UnitServiceTest {
 		OwnershipDto ownership2 = new OwnershipDto(buildingUnitDto, buildingOwnerDto, 0.4, today, null);
 		Assertions.assertTrue(this.propertyManagementService.setOwnership(ownership2, hallBuilding, false));			
 		
+		Assertions.assertTrue(this.propertyManagementService.validateOwnerships(hallBuilding));
+		Assertions.assertEquals(1.0, this.propertyManagementService.getTotalValueOfOwnerships(hallBuilding));
+		
+		
 		// Change Date
 		LocalDate tommorrow = today.plusYears(1);
 		// remove ownership2

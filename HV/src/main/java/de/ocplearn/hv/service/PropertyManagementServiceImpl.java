@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -630,20 +632,59 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 @Override
 public boolean validateOwnerships(BuildingDto buildingDto) {
 	
-	if( ! buildingDto.isWegType() ) {
 		
 		List<OwnershipDto> ownershipsDto = buildingDto.getOwnerships();
 		
-		for( Double share : ownershipsDto ) {
-			
-			
-		}
+		double sumShares = ownershipsDto.stream().filter( os -> os.getShareEnd() == null )	
+							  .flatMap( os -> Stream.of( os.getBuildingShare() ) ) 	// flatmap holt ein Attribut aus dem Object und gibt dieses als neuen Stream zurück
+
+							  // Variante 1 reduce() normal
+							  //  .reduce(0.0, (Double d1, Double d2) -> d1 + d2);		// Initialwert 0.0 und den Streamwert
+							  // erster Aufruf: d1 = 0.0 und d2 = erster Wert aus Stream
+							  // zweiter und weitere Aufrufe d1 = d1+d2(gespeichert) und d2 = der nächste Wert aus dem Stream
+							  
+							  // Variante 2 reduce() mit Methodenreferenz
+							  .reduce(0.0, Double::sum);							// statische methode sum() aus der class Double
 		
-	}
+		return sumShares == 1 ? true : false;
+}
+
+@Override
+public double getTotalValueOfOwnerships(BuildingDto buildingDto) {
+
+	List<OwnershipDto> ownershipsDto = buildingDto.getOwnerships();
 	
-	return false;
+	
+	Optional<Double> sumShares = ownershipsDto.stream().filter( os -> os.getShareEnd() == null )
+													   .flatMap( os -> Stream.of( os.getBuildingShare() ) ) 
+													   .reduce( Double::sum);
+	
+	
+	return sumShares.isPresent() ? sumShares.get() : 0.0;
 }
 
 	
 	 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

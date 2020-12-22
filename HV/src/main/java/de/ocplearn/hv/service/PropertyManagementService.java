@@ -155,6 +155,16 @@ public interface PropertyManagementService {
 	 */
 	public boolean validateOwnerships(BuildingDto buildingDto);
 	
+	
+	/** returns if Ownerships are existent and returns a not validated share
+	 * 
+	 * 
+	 * @param buildingDto
+	 * @return
+	 */
+	public double getTotalValueOfOwnerships( BuildingDto buildingDto);
+	
+	
 	// UNITS CRUD
 	
 	public boolean createUnit(UnitDto unitDto);
