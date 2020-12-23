@@ -1,5 +1,6 @@
 package de.ocplearn.hv.dao;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -77,6 +78,8 @@ public interface UnitDao {
 	boolean saveUnitRental (UnitRental unitRental);
 	
 	Optional<UnitRental> getUnitRental(Unit unit, Renter renter);
+	
+	List<UnitRental> unitRentals(Unit unit);
 	
 	/**
 	 * Returns Ownership entry for given owner and unit

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
@@ -91,12 +92,15 @@ public class UnitDaoJdbc implements UnitDao {
 	
 	private AddressDao addressDao;
 	
+	private RenterDaoJdbc renterDaoJdbc;
+	
 	@Autowired
-	public UnitDaoJdbc(DataSource dataSource,AddressDao addressDao) {
+	public UnitDaoJdbc(DataSource dataSource,AddressDao addressDao, RenterDaoJdbc renterDaoJdbc) {
 		super();
 		this.dataSource = dataSource;
 		//this.buildingDao = buildingDao;
 		this.addressDao = addressDao;
+		this.renterDaoJdbc = renterDaoJdbc;
 	}
 
 
@@ -453,7 +457,8 @@ public class UnitDaoJdbc implements UnitDao {
 		return null;
 	}
 
-
+	
+	
 	@Override
 	public Optional<Ownership> getOwnership(Unit unit, BuildingOwner buildingOwner) {
 		
@@ -599,5 +604,74 @@ public class UnitDaoJdbc implements UnitDao {
 		throw new DataAccessException("Unable to get Data from DB. " + e.getMessage());		
     }
 }
+	@Override
+	public List<UnitRental> unitRentals(Unit unit) {
+		
+		List<UnitRental> unitRentals=new ArrayList<>();
+		
+		String sql="SELECT "+ COLUMNS_RENTER_LINK +" , " + COLUMNS_RENTER +
+				" FROM " + TABLE_NAME_RENTER + 
+				" AS " + TABLE_NAME_PREFIX_RENTER + 
+				" INNER JOIN " + TABLE_NAME_RENTER_LINK + 
+				" AS " + TABLE_NAME_PREFIX_RENTER_LINK +
+				" WHERE " +TABLE_NAME_PREFIX_RENTER_LINK +".id = ?;";
+		
+		try ( Connection connection = this.dataSource.getConnection(); 
+				  PreparedStatement stmt = connection.prepareStatement(sql); ){
+			
+			stmt.setInt(1, unit.getId());
+			
+			ResultSet resultSet = stmt.executeQuery();
+			while(resultSet.next()) {
+				UnitRental unitRental = new UnitRental(unit, renterDaoJdbc.mapRowToRenter(resultSet), 
+								resultSet.getDate(TABLE_NAME_PREFIX_RENTER+".moveIn").toLocalDate(),
+								resultSet.getDate(TABLE_NAME_PREFIX_RENTER+".moveOut")
+								==null?null:resultSet.getDate(TABLE_NAME_PREFIX_RENTER+".moveOut").toLocalDate());
+				
+				unitRentals.add(unitRental);
+			}
+			
+			return unitRentals;
+			
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.log(Level.WARNING, e.getMessage());
+			throw new DataAccessException("Unable to get Data from DB. " + e.getMessage());		
+	    }
+	}
+	
+	@Override
+	public Optional<UnitRental> getUnitRental(Unit unit, Renter renter) {
+		String sql = "SELECT " + COLUMNS_RENTER_LINK + " FROM " +
+					TABLE_NAME_RENTER_LINK +
+					" AS " + TABLE_NAME_PREFIX_RENTER_LINK +
+					" WHERE " +TABLE_NAME_PREFIX_RENTER_LINK +".unitId = ? "+
+					" AND " + TABLE_NAME_PREFIX_RENTER_LINK + ".renterId=?;";
+		
+		try ( Connection connection = this.dataSource.getConnection(); 
+				  PreparedStatement stmt = connection.prepareStatement(sql); ){
+			
+			stmt.setInt(1, unit.getId());
+			stmt.setInt(2, renter.getId());
+			
+			ResultSet resultSet = stmt.executeQuery(sql);
+				if(resultSet.next()) {
+				UnitRental unitRental = new UnitRental(unit, renter, 
+						resultSet.getDate(TABLE_NAME_PREFIX_RENTER+".moveIn").toLocalDate(),
+						resultSet.getDate(TABLE_NAME_PREFIX_RENTER+".moveOut")
+						==null?null:resultSet.getDate(TABLE_NAME_PREFIX_RENTER+".moveOut").toLocalDate());
+			
+				return Optional.of(unitRental);
+				}
+				return Optional.empty();
+				
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.log(Level.WARNING, e.getMessage());
+			throw new DataAccessException("Unable to get Data from DB. " + e.getMessage());		
+	    }
+	}
 }
 
