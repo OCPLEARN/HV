@@ -89,7 +89,7 @@ public class RenterDaoJdbc implements RenterDao {
         	//String coordinate = "POINT("+address.getLatitude()+", "+address.getLongitude()+"";
         	
             stmt.setInt(1, renter.getContact().getId() );
-            stmt.setInt(2, renter.getLoginUser().getId() );
+            stmt.setInt(2, renter.getLoginUser() == null ? 0 : renter.getLoginUser().getId() );
             stmt.setInt(3, renter.getPropertyManagement().getId() );
             
             //System.out.println(sql);
@@ -125,7 +125,7 @@ public class RenterDaoJdbc implements RenterDao {
 			  
 	            stmt.setInt(1, renter.getContact().getId()  );
 	            stmt.setInt(2, renter.getLoginUser().getId()  );
-	            stmt.setInt(3, renter.getPropertyManagement().getId() );
+	            stmt.setInt(3, renter.getLoginUser() == null ? 0 : renter.getLoginUser().getId());
 	            stmt.setInt(4, renter.getId()  );
 	            
 

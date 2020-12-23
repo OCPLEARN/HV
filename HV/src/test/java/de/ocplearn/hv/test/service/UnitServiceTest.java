@@ -20,6 +20,7 @@ import de.ocplearn.hv.dto.OwnershipDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.dto.RenterDto;
 import de.ocplearn.hv.dto.UnitDto;
+import de.ocplearn.hv.dto.UnitRentalDto;
 import de.ocplearn.hv.model.BuildingType;
 import de.ocplearn.hv.model.Role;
 import de.ocplearn.hv.model.Unit;
@@ -156,48 +157,88 @@ public class UnitServiceTest {
 	
 	/**
 	 * (1) Assigns a renter to model2
-	 * (2) Renter rents building 1, unit 1st, floor right
+	 * (2) Renter rents building 1, unit 1st, floor right (OG right)
 	 * (3) Rental ends
 	 * (4) Renter is removed from model 2 
 	 *  
 	 * */
-//	@Test
-//	public void testAssignUnitRenterToUnit_givenModel2_returnBooleanTrue() {
-//		
-//		// get model 1
-//		PropertyManagementDto propertyManagementDto = TestObjectSupplier.getInstance().getModel("Model2");
-//		
-//		List<BuildingDto> buildings = this.propertyManagementService.findBuildingsByPropertyManagement(propertyManagementDto.getId());
-//		BuildingDto buildingDto = null;
-//		for( BuildingDto build : buildings ) {
-//			if (build.getName().equals("House Model2")) {
-//				buildingDto = build;
-//				break;
-//			}		// 'House Model2'
-//		}
-//		// House 2 found
-//		Assertions.assertTrue(buildingDto!= null);
-//		// find unit OG right
-////		buildingDto.getUnits().stream()
-////			.filter(un -> un.getUnitName().equals("OG right"))
-////			.reduce()
-//		
-//		// create renter
-//		RenterDto renterDto = new RenterDto();
-//		renterDto.setPropertyManagement(propertyManagementDto);
-//		
-//		// contact
-//		renterDto.setContact(this.testObjectSupplier.createContactDto(false, "Max", "Mustermann"));
-//		
-//		// loginuser
-//		renterDto.setLoginUser(null);
-//		
-//		// save renter
-//		Assertions.assertTrue(this.propertyManagementService.saveRenter(renterDto));
-//		
-//		//this.propertyManagementService.assignRenterToUnit(renterDto, );
-//		
-//	}	
+	@Test
+	public void testAssignUnitRenterToUnit_givenModel2_returnBooleanTrue() {
+		
+		// get model 1
+		PropertyManagementDto propertyManagementDto = TestObjectSupplier.getInstance().getModel("Model2");
+		
+		List<BuildingDto> buildings = this.propertyManagementService.findBuildingsByPropertyManagement(propertyManagementDto.getId());
+		BuildingDto buildingDto = null;
+		for( BuildingDto build : buildings ) {
+			if (build.getName().equals("House Model2")) {
+				buildingDto = build;
+				break;
+			}		// 'House Model2'
+		}
+		// get Building unit
+		UnitDto buildingUnit = null;
+		UnitDto unitOGRight = null;
+		for ( UnitDto unit : buildingDto.getUnits() ) {
+			if ( unit.getUnitType().equals(UnitType.BUILDING_UNIT) ) {
+				buildingUnit = unit;
+			}else if ( unit.getUnitName().equals("OG right") ) {
+				unitOGRight = unit;
+			}
+		}
+		
+		Assertions.assertNotNull(buildingUnit);
+		Assertions.assertNotNull(unitOGRight);
+		
+		// House 2 found
+		Assertions.assertTrue(buildingDto!= null);
+		// find unit OG right
+//		buildingDto.getUnits().stream()
+//			.filter(un -> un.getUnitName().equals("OG right"))
+//			.reduce()
+		
+		// create renter A
+		RenterDto renterDto = new RenterDto();
+		renterDto.setPropertyManagement(propertyManagementDto);
+		// contact
+		renterDto.setContact( this.testObjectSupplier.createContactDto(false, "Max", "Mustermann") );
+		// loginuser
+		renterDto.setLoginUser(null);
+		// save renter
+		Assertions.assertTrue(this.propertyManagementService.saveRenter(renterDto));
+		
+		//this.propertyManagementService.assignRenterToUnit(renterDto, );
+		UnitRentalDto unitRental = new UnitRentalDto();
+		unitRental.setRenter(renterDto);	
+		unitRental.setUnit( unitOGRight );
+		unitRental.setMoveIn(LocalDate.now());
+		
+		// set unitRental: renter A rents OG right
+		Assertions.assertTrue(this.propertyManagementService.setUnitRental(unitRental)); 
+		
+		// rental ends
+		unitRental.setMoveOut((LocalDate.now()).plusMonths(6));
+		Assertions.assertTrue(this.propertyManagementService.setUnitRental(unitRental)); 
+		
+		// create renter B
+		RenterDto renterBDto = new RenterDto();
+		renterBDto.setPropertyManagement(propertyManagementDto);
+		// renterBDto
+		renterBDto.setContact(this.testObjectSupplier.createContactDto(false, "Peter", "Parker"));
+		// loginuser
+		renterBDto.setLoginUser(null);
+		// save renter
+		Assertions.assertTrue(this.propertyManagementService.saveRenter(renterBDto));				
+		
+		// rental for renter B one week after renter A moves out
+		UnitRentalDto unitRentalB = new UnitRentalDto();
+		unitRentalB.setRenter(renterBDto);	
+		unitRentalB.setUnit( unitOGRight );
+		unitRentalB.setMoveIn( (LocalDate.now()).plusMonths(6).plusWeeks(1) );		
+		
+		// save rental
+		Assertions.assertTrue(this.propertyManagementService.setUnitRental(unitRentalB));	
+	}	
 	
 }
 

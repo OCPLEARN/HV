@@ -34,11 +34,14 @@ import de.ocplearn.hv.mapper.OwnershipMapper;
 import de.ocplearn.hv.mapper.PropertyManagementMapper;
 import de.ocplearn.hv.mapper.RenterMapper;
 import de.ocplearn.hv.mapper.UnitMapper;
+import de.ocplearn.hv.mapper.UnitRentalMapper;
 import de.ocplearn.hv.model.Building;
 import de.ocplearn.hv.model.BuildingOwner;
 import de.ocplearn.hv.model.Ownership;
 import de.ocplearn.hv.model.PropertyManagement;
+import de.ocplearn.hv.model.Renter;
 import de.ocplearn.hv.model.Unit;
+import de.ocplearn.hv.model.UnitRental;
 import de.ocplearn.hv.model.UnitType;
 
 @Service
@@ -75,13 +78,15 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 	private RenterDao renterDao;
 
 	private RenterMapper renterMapper;
+	
+	private UnitRentalMapper unitRentalMapper;
 
 	@Autowired
 	public PropertyManagementServiceImpl(PropertyManagementDao propertyManagementDao,
 			PropertyManagementMapper propertyManagementMapper, UserService userService, ContactService contactService,
 			LoginUserMapper loginUserMapper, ContactMapper contactMapper, BuildingMapper buildingMapper,
 			BuildingOwnerMapper buildingOwnerMapper, OwnershipMapper ownershipMapper, BuildingOwnerDao buildingOwnerDao,
-			UnitMapper unitMapper, RenterMapper renterMapper, RenterDao renterDao
+			UnitMapper unitMapper, RenterMapper renterMapper, RenterDao renterDao, UnitRentalMapper unitRentalMapper
 
 	) {
 
@@ -100,6 +105,7 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 		this.renterMapper = renterMapper;
 		this.renterDao = renterDao;
 		this.ownershipMapper = ownershipMapper;
+		this.unitRentalMapper = unitRentalMapper;
 	}
 
 	@Override
@@ -535,7 +541,15 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean saveRenter(RenterDto renterDto) {
-		return this.renterDao.save(this.renterMapper.RenterDtoToRenter(renterDto));
+		if ( renterDto.getContact().getId() == 0 ) {	// if a new renter is created
+			if (! this.contactService.createContact(renterDto.getContact())) return false;
+		}
+		Renter renter  = this.renterMapper.RenterDtoToRenter(renterDto);
+		if (this.renterDao.save(renter)) {
+			renterDto.setId(renter.getId());
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -571,13 +585,13 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 			}
 		}
 
-		System.err.println("PM setOwnership() : curr active found " + currentOwnership);
+		//System.err.println("PM setOwnership() : curr active found " + currentOwnership);
 
 		// is change ownership entry
 		// (1) change current entry
 
 		if (currentOwnership != null) {
-			System.err.println("PM setOwnership() : curr active adjusted!");
+			//System.err.println("PM setOwnership() : curr active adjusted!");
 			currentOwnership.setShareEnd(shareStart.minusDays(1));
 			unitDao.saveOwnership(
 					ownershipMapper.ownershipDtoToOwnership(currentOwnership, new CycleAvoidingMappingContext()));
@@ -669,7 +683,11 @@ public class PropertyManagementServiceImpl implements PropertyManagementService 
 
 	@Override
 	public boolean setUnitRental(UnitRentalDto unitRental) {
-		
+		UnitRental unitRentalModel = this.unitRentalMapper.unitRentalDtoToUnitRental(unitRental);
+		if ( this.unitDao.saveUnitRental( unitRentalModel )) {
+			unitRental.setId( unitRentalModel.getId() );
+			return true;
+		}
 		return false;
 	}
 

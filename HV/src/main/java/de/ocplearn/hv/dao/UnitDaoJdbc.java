@@ -350,7 +350,7 @@ public class UnitDaoJdbc implements UnitDao {
 	
 	private boolean insertUnitRental(UnitRental unitRental) {
 		
-		String sql = "INSERT INTO "+ UnitDaoJdbc.TABLE_NAME_PREFIX_RENTER_LINK +" (id, unitId, renterId, moveIn, moveOut )"
+		String sql = "INSERT INTO "+ UnitDaoJdbc.TABLE_NAME_RENTER_LINK +" (id, unitId, renterId, moveIn, moveOut )"
 				+ " VALUES ( NULL, ?, ?, ?, ? ); ";
 		try( Connection con = this.dataSource.getConnection();
 				 PreparedStatement stmt = con.prepareStatement( sql, PreparedStatement.RETURN_GENERATED_KEYS);
