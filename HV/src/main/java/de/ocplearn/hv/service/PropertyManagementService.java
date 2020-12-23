@@ -12,7 +12,9 @@ import de.ocplearn.hv.dto.OwnershipDto;
 import de.ocplearn.hv.dto.PropertyManagementDto;
 import de.ocplearn.hv.dto.RenterDto;
 import de.ocplearn.hv.dto.UnitDto;
+import de.ocplearn.hv.dto.UnitRentalDto;
 import de.ocplearn.hv.model.PropertyManagement;
+import de.ocplearn.hv.model.UnitRental;
 
 
 /**
@@ -147,6 +149,10 @@ public interface PropertyManagementService {
 	public boolean setOwnership( BuildingOwnerDto buildingOwnerDto, BuildingDto buildingDto, UnitDto unitDto, double buildingShare , LocalDate shareStart, boolean removeOwnership);
 	
 	public boolean setOwnership(OwnershipDto ownership, BuildingDto building, boolean removeOwnership);
+	
+	//Assign Renters to Unit
+	
+	public boolean setUnitRental(UnitRentalDto unitRental);
 
 	/**
 	 * returns true if share of all Ownerships equals 100%
@@ -184,9 +190,9 @@ public interface PropertyManagementService {
 	
 	//  ASSIGN RENTER TO UNIT
 	
-	public boolean assignRenterToUnit (RenterDto renterDto, UnitDto unitDto);
-	
-	public boolean removeRenterFromUnit (RenterDto renterDto, UnitDto unitDto);
+//	public boolean assignRenterToUnit (RenterDto renterDto, UnitDto unitDto);
+//	
+//	public boolean removeRenterFromUnit (RenterDto renterDto, UnitDto unitDto);
 	
 	/**
 	 * creates or updates given renter

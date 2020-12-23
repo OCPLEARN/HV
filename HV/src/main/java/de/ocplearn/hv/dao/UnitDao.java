@@ -9,6 +9,7 @@ import de.ocplearn.hv.model.BuildingOwner;
 import de.ocplearn.hv.model.Ownership;
 import de.ocplearn.hv.model.Renter;
 import de.ocplearn.hv.model.Unit;
+import de.ocplearn.hv.model.UnitRental;
 import de.ocplearn.hv.util.TablePageViewData;
 
 public interface UnitDao {
@@ -73,10 +74,9 @@ public interface UnitDao {
 	 * @return true on success
 	 * 
 	 * */
-	boolean assignRenterToUnit (Renter renter, Unit unit);
+	boolean saveUnitRental (UnitRental unitRental);
 	
-	
-	boolean removeRenterFromUnit(Renter renter, Unit unit);
+	Optional<UnitRental> getUnitRental(Unit unit, Renter renter);
 	
 	/**
 	 * Returns Ownership entry for given owner and unit

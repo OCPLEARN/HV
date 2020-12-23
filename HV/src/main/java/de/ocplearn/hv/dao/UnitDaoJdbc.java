@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -28,6 +29,7 @@ import de.ocplearn.hv.model.BuildingOwner;
 import de.ocplearn.hv.model.Ownership;
 import de.ocplearn.hv.model.Renter;
 import de.ocplearn.hv.model.Unit;
+import de.ocplearn.hv.model.UnitRental;
 import de.ocplearn.hv.model.UnitType;
 import de.ocplearn.hv.util.LoggerBuilder;
 import de.ocplearn.hv.util.SQLUtils;
@@ -340,21 +342,29 @@ public class UnitDaoJdbc implements UnitDao {
 	}
 
 
-	@Override
-	public boolean assignRenterToUnit(Renter renter, Unit unit) {
+
+	
+	private boolean insertUnitRental(UnitRental unitRental) {
 		
-		String sql = "INSERT INTO "+ UnitDaoJdbc.TABLE_NAME_PREFIX_RENTER_LINK +" (id, unitId, renterId ) VALUES ( NULL, ?, ? ); ";
+		String sql = "INSERT INTO "+ UnitDaoJdbc.TABLE_NAME_PREFIX_RENTER_LINK +" (id, unitId, renterId, moveIn, moveOut )"
+				+ " VALUES ( NULL, ?, ?, ?, ? ); ";
 		try( Connection con = this.dataSource.getConnection();
-				 PreparedStatement stmt = con.prepareStatement( sql );
+				 PreparedStatement stmt = con.prepareStatement( sql, PreparedStatement.RETURN_GENERATED_KEYS);
 				) {
 			
-			stmt.setInt(1, unit.getId());
-			stmt.setInt(2, renter.getId());
+			stmt.setInt(1, unitRental.getUnit().getId());
+			stmt.setInt(2, unitRental.getRenter().getId());
+			stmt.setDate(3, Date.valueOf(unitRental.getMoveIn()));
+			stmt.setDate(4,(unitRental.getMoveOut()==null?null:Date.valueOf(unitRental.getMoveOut())));
 			
+						
 			if (stmt.executeUpdate() !=1) {
 				return false;
 			}
-			// ok 1 row affected
+			
+			ResultSet resultSet = stmt.getGeneratedKeys();	
+			resultSet.next();
+			unitRental.setId(resultSet.getInt(1)); 
 			return true;
 			
 		} catch (SQLException e) {
@@ -364,28 +374,30 @@ public class UnitDaoJdbc implements UnitDao {
 		}
 	}
 
-	@Override
-	public boolean removeRenterFromUnit(Renter renter, Unit unit) {
-		
-		String sql = "DELETE FROM "	+ UnitDaoJdbc.TABLE_NAME_RENTER_LINK
-					+ " WHERE renterId= ? AND unitId= ? ;"; 
-		
-		
-		try( Connection connection = dataSource.getConnection();
-			 PreparedStatement stmt = connection.prepareStatement(sql) ){
-			
-			stmt.setInt(1,  renter.getId() );
-			stmt.setInt(2,  unit.getId() );
-			
-			return ( stmt.executeUpdate() > 0 ) ? true : false;
-			
-		}catch(SQLException e) {
-			e.printStackTrace();
-			logger.log( Level.WARNING, e.getMessage() );
-			throw new DataAccessException("Unable to change data in DB");
-		}
-		
-	}
+	//old design, switched to updated dates to indicate old entries
+	
+//	@Override
+//	public boolean removeRenterFromUnit(Renter renter, Unit unit) {
+//		
+//		String sql = "DELETE FROM "	+ UnitDaoJdbc.TABLE_NAME_RENTER_LINK
+//					+ " WHERE renterId= ? AND unitId= ? ;"; 
+//		
+//		
+//		try( Connection connection = dataSource.getConnection();
+//			 PreparedStatement stmt = connection.prepareStatement(sql) ){
+//			
+//			stmt.setInt(1,  renter.getId() );
+//			stmt.setInt(2,  unit.getId() );
+//			
+//			return ( stmt.executeUpdate() > 0 ) ? true : false;
+//			
+//		}catch(SQLException e) {
+//			e.printStackTrace();
+//			logger.log( Level.WARNING, e.getMessage() );
+//			throw new DataAccessException("Unable to change data in DB");
+//		}
+//		
+//	}
 
 	
 	
@@ -552,31 +564,40 @@ public class UnitDaoJdbc implements UnitDao {
         }
 		
 	}
-	
+	@Override
+	public boolean saveUnitRental(UnitRental unitRental) {
+		if(unitRental.getId()!=0) {
+			return updateUnitRental(unitRental);
+		}else {
+			return insertUnitRental(unitRental);
+		}
+	}
+
+
+	private boolean updateUnitRental(UnitRental unitRental) {
+		String sql = "UPDATE " + TABLE_NAME_RENTER_LINK + " SET unitId=?, renterId=?, moveIn=?, moveOut=? WHERE id=?;";
+		
+		try ( Connection connection = this.dataSource.getConnection(); 
+				  PreparedStatement stmt = connection.prepareStatement(sql); ){
+		
+		
+		stmt.setInt(1, unitRental.getUnit().getId());
+		stmt.setInt(2, unitRental.getRenter().getId());
+		stmt.setDate(3, Date.valueOf(unitRental.getMoveIn()));
+		stmt.setDate(4,(unitRental.getMoveOut()==null?null:Date.valueOf(unitRental.getMoveOut())));
+		stmt.setInt(5, unitRental.getId());
+		
+		if (stmt.executeUpdate() != 1) {
+			return false;
+		}else {
+			return true;
+		}
+		
+	} catch (SQLException e) {
+		e.printStackTrace();
+		logger.log(Level.WARNING, e.getMessage());
+		throw new DataAccessException("Unable to get Data from DB. " + e.getMessage());		
+    }
+}
 }
 
-//
-//public static final String TABLE_NAME = "unit";
-//public static final String TABLE_NAME_PREFIX = "un";
-//public static final String COLUMNS = SQLUtils.createSQLString(
-//		TABLE_NAME_PREFIX, 
-//		Arrays.asList(
-//	"id", "timeStmpAdd", "timeStmpEdit", "buildingId", "unitName",
-//	"addressId", "usableFloorSpace", "constructionYear", "note", "unitType"	),
-//		new ArrayList<String>()
-//		);
-//
-
-//
-//public static final String TABLE_NAME_RENTER_LINK = "unitrenterlink";
-//public static final String TABLE_NAME_PREFIX_RENTER_LINK = "unrl";
-//public static final String COLUMNS_RENTER_LINK = SQLUtils.createSQLString(
-//		TABLE_NAME_PREFIX_RENTER_LINK, 
-//		Arrays.asList(
-//	"id", "timeStmpAdd", "timeStmpEdit", "unitId", "renterId", 
-//	"moveIn", "moveOut"),
-//		new ArrayList<String>()
-//		);
-//
-//
-//
